@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "eventstand-3c145"
+  },
+  "targets": {
+    "eventstand-3c145": {
+      "hosting": {
+        "eventstand": [
+          "eventstand-3c145"
+        ]
+      }
+    }
   }
 }
