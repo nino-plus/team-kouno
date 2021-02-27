@@ -9,4 +9,5 @@ export interface Event {
   thumbnailURL: string;
   description: string;
   category: string;
+  participantCount: number;
 }

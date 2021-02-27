@@ -108,7 +108,7 @@
         <deer-crop-trigger
           [options]="{
             aspectRatio: 16 / 9,
-            oldImageUrl: oldImageUrl
+            oldImageUrl: oldImageUrl || 'assets/images/default-image.jpg'
           }"
           (image)="onCroppedImage($event)"
         ></deer-crop-trigger>

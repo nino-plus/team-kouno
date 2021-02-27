@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { take } from 'rxjs/operators';
+import { User } from 'src/app/interfaces/user';
+import { AuthService } from 'src/app/services/auth.service';
+import { EventService } from 'src/app/services/event.service';
+import * as firebase from 'firebase';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-event-form',
@@ -42,13 +49,56 @@ export class EventFormComponent implements OnInit {
     { value: '総合' },
   ];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private eventService: EventService,
+    private snackBar: MatSnackBar,
+    private router: Router
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.authService.user$.pipe(take(1)).subscribe((user: User) => {
+      this.uid = user.uid;
+    });
+  }
 
   onCroppedImage(image: string): void {
     this.imageFile = image;
   }
 
-  submit(): void {}
+  async submit(): Promise<void> {
+    this.isProcessing = true;
+    const formData = this.form.value;
+    console.log(formData);
+    const eventData = {
+      name: formData.name,
+      description: formData.description,
+      category: formData.category,
+      ownerId: this.uid,
+      participantCount: 0,
+      startAt: formData.startAt,
+      exitAt: formData.exitAt,
+      createdAt: firebase.default.firestore.Timestamp.now(),
+    };
+
+    if (this.imageFile !== undefined) {
+      await this.eventService
+        .createEvent(eventData, this.imageFile)
+        .then(() => {
+          this.snackBar.open('イベントを作成しました！');
+          this.router.navigateByUrl('/');
+        })
+        .finally(() => (this.isProcessing = false));
+    } else {
+      const defaultImage = 'assets/images/default-image.jpg';
+      await this.eventService
+        .createEvent(eventData, defaultImage)
+        .then(() => {
+          this.snackBar.open('イベントを作成しました！');
+          this.router.navigateByUrl('/');
+        })
+        .finally(() => (this.isProcessing = false));
+    }
+  }
 }
