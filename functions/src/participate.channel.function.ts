@@ -62,6 +62,9 @@ async function addUserToParticipantList(
   }
 
   await db.doc(`events/${eventId}/participants/${currentUserId}`).set(userData);
+  await db.doc(`events/${eventId}`).update({
+    participantCount: admin.firestore.FieldValue.increment(1),
+  });
 }
 
 export const getChannelToken = functions
@@ -77,7 +80,7 @@ export const getChannelToken = functions
     }
     functions.logger.info(data, '24');
 
-    const eventId = data.eventName;
+    const eventId = data.eventId;
     if (!eventId || typeof eventId !== 'string') {
       throw new functions.https.HttpsError(
         'invalid-argument',
@@ -92,7 +95,7 @@ export const getChannelToken = functions
     return { eventId, token, currentUserId };
   });
 
-function generateToken(eventName: string, userId: string): any {
+function generateToken(eventId: string, userId: string): any {
   if (!appID) {
     throw new Error('Agora app ID is required');
   }
@@ -101,10 +104,10 @@ function generateToken(eventName: string, userId: string): any {
     throw new Error('Agora app secret is required');
   }
 
-  if (!eventName) {
+  if (!eventId) {
     throw new functions.https.HttpsError(
       'invalid-argument',
-      'event name is required'
+      'event Id is required'
     );
   }
 
@@ -121,7 +124,7 @@ function generateToken(eventName: string, userId: string): any {
   const token = RtcTokenBuilder.buildTokenWithAccount(
     appID,
     appSecret,
-    eventName,
+    eventId,
     userId,
     role,
     privilegeExpiredTs
