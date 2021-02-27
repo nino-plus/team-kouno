@@ -182,7 +182,7 @@ export class AgoraService {
 
   getParticipants(eventId: string): Observable<User[]> {
     return this.db
-      .collection<User>(`channels/${eventId}/participants`)
+      .collection<User>(`events/${eventId}/participants`)
       .valueChanges();
   }
 }

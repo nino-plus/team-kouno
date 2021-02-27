@@ -9,9 +9,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { AgoraService } from 'src/app/services/agora.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { EventService } from 'src/app/services/event.service';
 
 @Component({
   selector: 'app-stream',
@@ -22,9 +24,6 @@ export class StreamComponent implements OnInit, OnDestroy {
   @Input() uid: string;
   @Input() eventId: string;
   user$: Observable<User> = this.authService.user$;
-  channelId$: Observable<string> = this.route.paramMap.pipe(
-    map((params) => params.get('channelId'))
-  );
   players: any;
 
   isJoin: boolean;
@@ -34,13 +33,15 @@ export class StreamComponent implements OnInit, OnDestroy {
   isPublishScreen: boolean;
 
   participants$: Observable<User[]>;
+  event$: Observable<Event>;
 
   constructor(
     private authService: AuthService,
     private route: ActivatedRoute,
     private agoraService: AgoraService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private eventService: EventService
   ) {}
 
   ngOnDestroy(): void {
@@ -59,6 +60,7 @@ export class StreamComponent implements OnInit, OnDestroy {
     });
     this.participants$ = this.agoraService.getParticipants(this.eventId);
     this.players = true;
+    this.event$ = this.eventService.getEvent(this.eventId);
   }
 
   async leaveChannel(): Promise<void> {

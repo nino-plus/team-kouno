@@ -1,6 +1,6 @@
 <div class="channel">
-  <p class="channel__title">meeting room</p>
-  <ng-container *ngIf="user$ | async as user">
+  <ng-container *ngIf="event$ | async as event">
+    <p class="channel__title">{{ event.name }}</p>
     <!-- <div class="channel__camera">
         <ng-template #nobady>
           <p class="channel__title">まだだれもいません</p>
