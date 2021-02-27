@@ -1,13 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { HomeRoutingModule } from './home-routing.module';
-import { HomeComponent } from './home/home.component';
-import { MatToolbarModule } from '@angular/material/toolbar';
+import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { EventCardComponent } from './event-card/event-card.component';
-
+import { HomeRoutingModule } from './home-routing.module';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [HomeComponent, EventCardComponent],
@@ -16,7 +14,7 @@ import { EventCardComponent } from './event-card/event-card.component';
     HomeRoutingModule,
     MatToolbarModule,
     MatButtonModule,
-    MatTabsModule
-  ]
+    MatTabsModule,
+  ],
 })
-export class HomeModule { }
+export class HomeModule {}

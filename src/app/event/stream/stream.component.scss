@@ -1,0 +1,122 @@
+.channel {
+  min-height: 100%;
+  background: #1a1f23;
+  position: relative;
+
+  &__title {
+    position: absolute;
+    top: 0;
+    left: 1;
+    right: 1;
+    text-align: center;
+    color: #fff;
+    padding: 24px;
+    position: absolute;
+  }
+  &__camera {
+    min-height: 80vh;
+  }
+  &__default {
+    width: 60px;
+    height: 60px;
+    display: grid;
+    place-items: center;
+    grid-template-columns: auto;
+  }
+}
+
+.actions {
+  position: fixed;
+  bottom: 0;
+  left: 1;
+  right: 1;
+  width: 100%;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  &__btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(to right, rgba(#fff, 0.038), rgba(#eee, 0.038));
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 16px;
+    color: #fff;
+    transition: all 0.5s 0.1s ease;
+    display: grid;
+    place-items: center;
+    position: relative;
+    cursor: pointer;
+    z-index: 0;
+    &:before {
+      content: "";
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: linear-gradient(
+        to right,
+        rgba(#fff, 0.038),
+        rgba(#eee, 0.038)
+      );
+      position: absolute;
+      z-index: -1;
+      left: 0;
+      transition: all 0.25s ease;
+    }
+    &:after {
+      content: "";
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: linear-gradient(to right, #6464f5, #4d49fd);
+      position: absolute;
+      z-index: -2;
+      left: 0;
+      opacity: 0;
+      transition: all 0.25s ease;
+    }
+    &:hover:before {
+      opacity: 0;
+    }
+    &:hover:after {
+      opacity: 1;
+    }
+  }
+}
+
+.all-players {
+  display: flex;
+}
+
+.player {
+  /* height: 320px; */
+  min-height: 100%;
+  display: grid;
+  gap: 32px;
+  /* grid-template-rows: auto; */
+  &--1-player {
+    grid-template-columns: 1fr;
+  }
+  &--2-player {
+    grid-template-columns: 1fr 1fr;
+  }
+  &--more-player {
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 300px;
+  }
+}
+
+.player-name {
+  margin: 8px 0;
+}
+
+#remote-player-list {
+  margin-left: 20px;
+}
+@media (max-width: 640px) {
+  .player {
+    width: 320px;
+    height: 240px;
+  }
+}
