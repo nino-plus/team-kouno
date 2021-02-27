@@ -1,5 +1,5 @@
 @import "~@angular/material/theming";
-@import '/styles/_custom-style.scss';
+@import "_custom-style.scss";
 
 @include mat-core();
 
@@ -27,7 +27,9 @@ body {
 body {
   margin: 0;
   padding-top: 56px;
-  font-family: 'Avenir','Helvetica Neue','Helvetica','Arial','Hiragino Sans','ヒラギノ角ゴシック',YuGothic,'Yu Gothic','メイリオ', Meiryo,'ＭＳ Ｐゴシック','MS PGothic',sans-serif;
+  font-family: "Avenir", "Helvetica Neue", "Helvetica", "Arial", "Hiragino Sans",
+    "ヒラギノ角ゴシック", YuGothic, "Yu Gothic", "メイリオ", Meiryo,
+    "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
 }
 a {
   color: inherit;
@@ -56,4 +58,10 @@ button {
 }
 input {
   outline: none;
+}
+.agora_video_player {
+  min-height: 300px !important;
+}
+.video_player {
+  background-color: transparent;
 }

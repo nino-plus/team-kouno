@@ -1,23 +1,23 @@
 <div class="channel">
   <p class="channel__title">meeting room</p>
   <ng-container *ngIf="user$ | async as user">
-    <div class="container container--channel">
-      <!-- <div class="channel__camera">
+    <!-- <div class="channel__camera">
         <ng-template #nobady>
           <p class="channel__title">まだだれもいません</p>
         </ng-template>
       </div> -->
 
-      <ng-container *ngIf="players">
-        <div class="channel__default">
-          <div>
-            <p id="local-player-name" class="player-name"></p>
-            <div id="local-player" class="player"></div>
-          </div>
-          <div id="remote-player-list"></div>
-        </div>
-      </ng-container>
-    </div>
+    <ng-container *ngIf="players">
+      <div id="local-player" class="player player--more-player"></div>
+    </ng-container>
+
+    <!-- <div class="channel__default">
+      <div>
+        <p id="local-player-name" class="player-name"></p>
+        <div id="local-player" class="player"></div>
+      </div>
+      <div id="remote-player-list"></div>
+    </div> -->
 
     <div class="actions">
       <ng-template #video>

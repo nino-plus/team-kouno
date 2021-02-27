@@ -60,7 +60,7 @@ export class AgoraService {
         // `;
 
         const remoteTrack = user.videoTrack;
-        remoteTrack.play('local-player');
+        remoteTrack.play('local-player', { fit: 'contain' });
       }
       if (mediaType === 'audio') {
         user.audioTrack.play();
@@ -97,7 +97,7 @@ export class AgoraService {
     const client = this.getClient();
 
     this.localTracks.videoTrack = await AgoraRTC.createCameraVideoTrack();
-    this.localTracks.videoTrack.play('local-player');
+    await this.localTracks.videoTrack.play('local-player', { fit: 'contain' });
 
     await client.publish([this.localTracks.videoTrack]);
   }
