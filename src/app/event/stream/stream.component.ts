@@ -1,4 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -12,7 +18,7 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './stream.component.html',
   styleUrls: ['./stream.component.scss'],
 })
-export class StreamComponent implements OnInit {
+export class StreamComponent implements OnInit, OnDestroy {
   @Input() uid: string;
   @Input() eventId: string;
   user$: Observable<User> = this.authService.user$;
@@ -21,6 +27,7 @@ export class StreamComponent implements OnInit {
   );
   players: any;
 
+  isJoin: boolean;
   isProcessing: boolean;
   isPublishVideo: boolean;
   isPublishMicrophone: boolean;
@@ -36,21 +43,34 @@ export class StreamComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {}
 
+  ngOnDestroy(): void {
+    if (this.isJoin) {
+      this.agoraService.leaveAgoraChannel(this.eventId);
+    }
+  }
+
   ngOnInit(): void {
     this.streamInit();
   }
 
   streamInit() {
-    this.agoraService.joinAgoraChannel(this.uid, this.eventId);
+    this.agoraService.joinAgoraChannel(this.uid, this.eventId).then(() => {
+      this.isJoin = true;
+    });
     this.participants$ = this.agoraService.getParticipants(this.eventId);
     this.players = true;
   }
 
   async leaveChannel(): Promise<void> {
-    this.agoraService.leaveAgoraChannel(this.eventId).then(() => {
-      this.snackBar.open('退室しました');
-    });
-    this.router.navigateByUrl('/');
+    this.agoraService
+      .leaveAgoraChannel(this.eventId)
+      .then(() => {
+        this.isJoin = false;
+        this.snackBar.open('退室しました');
+      })
+      .finally(() => {
+        this.router.navigateByUrl('/');
+      });
   }
 
   async publishAudio(): Promise<void> {
@@ -95,5 +115,18 @@ export class StreamComponent implements OnInit {
       this.snackBar.open('画面共有をオフにしました');
       this.isPublishScreen = false;
     });
+  }
+
+  @HostListener('window:beforeunload')
+  beforeUnloadHandler() {
+    if (this.isJoin) {
+      this.agoraService.leaveAgoraChannel(this.eventId);
+    }
+  }
+  @HostListener('window:unload')
+  unloadHandler() {
+    if (this.isJoin) {
+      this.agoraService.leaveAgoraChannel(this.eventId);
+    }
   }
 }
