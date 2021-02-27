@@ -37,7 +37,7 @@
 
       <button
         *ngIf="isPublishVideo; else video"
-        class="actions__btn"
+        class="actions__btn actions__btn--active"
         (click)="unPublishVideo()"
       >
         <mat-icon class="actions__icon">videocam_off</mat-icon>
@@ -45,16 +45,16 @@
 
       <ng-template #microphone>
         <button class="actions__btn" (click)="publishAudio()">
-          <mat-icon class="actions__icon">volume_up</mat-icon>
+          <mat-icon class="actions__icon">volume_off</mat-icon>
         </button>
       </ng-template>
 
       <button
         *ngIf="isPublishMicrophone; else microphone"
-        class="actions__btn"
+        class="actions__btn actions__btn--active"
         (click)="unPublishAudio()"
       >
-        <mat-icon class="actions__icon">volume_off</mat-icon>
+        <mat-icon class="actions__icon">volume_up</mat-icon>
       </button>
 
       <ng-template #screen>
@@ -65,13 +65,13 @@
 
       <button
         *ngIf="isPublishScreen; else screen"
-        class="actions__btn"
+        class="actions__btn actions__btn--active"
         (click)="unPublishScreen()"
       >
         <mat-icon class="actions__icon">desktop_access_disabled</mat-icon>
       </button>
 
-      <button class="actions__btn" (click)="leaveChannel()">
+      <button class="actions__btn actions__btn--exit" (click)="leaveChannel()">
         <mat-icon class="actions__icon">exit_to_app</mat-icon>
       </button>
     </div>
