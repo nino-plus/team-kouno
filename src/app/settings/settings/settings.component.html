@@ -16,48 +16,32 @@
         </div>
 
         <div class="settings__info">
-          <div class="settings__id">
-            <p class="settings__label">ユーザーID</p>
-            <p class="settings__value">{{ user.uid }}</p>
-          </div>
+          <p class="settings__id">
+            <span class="settings__label">ユーザーID</span>{{ user.uid }}
+          </p>
 
           <div class="settings__name">
-            <p class="settings__label">ユーザー名</p>
-            <div class="settings__value">
-              <mat-form-field appearance="outline">
-                <input
-                  matInput
-                  autocomplete="off"
-                  formControlName="name"
-                  required
-                  #name
-                />
-                <mat-hint align="end"
-                  >{{ form.get("name").value.length }} /
-                  {{ nameMaxLength }}</mat-hint
-                >
-                <mat-error *ngIf="form.get('name').hasError('maxlength')"
-                  >最大{{ nameMaxLength }}文字です。</mat-error
-                >
-                <mat-error *ngIf="form.get('name').hasError('required')">
-                  必須入力です。
-                </mat-error>
-              </mat-form-field>
-            </div>
+            <span class="settings__label">ユーザー名</span>
+            <mat-form-field appearance="outline">
+              <input
+                class="settings__input"
+                matInput
+                autocomplete="off"
+                formControlName="name"
+                required
+                #name
+              />
+            </mat-form-field>
           </div>
+          <button
+            class="setting__update-button"
+            [disabled]="form.invalid || form.pristine"
+            mat-raised-button
+            color="primary"
+          >
+            更新
+          </button>
         </div>
-      </div>
-      <div class="actions">
-        <button type="button" mat-button class="actions__back" routerLink="/">
-          戻る
-        </button>
-        <button
-          [disabled]="form.invalid || form.pristine || isProcessing"
-          mat-raised-button
-          color="primary"
-        >
-          更新
-        </button>
       </div>
     </form>
   </ng-container>
