@@ -7,6 +7,11 @@ const routes: Routes = [
     pathMatch: 'full',
     loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
   },
+  {
+    path: 'settings',
+    pathMatch: 'full',
+    loadChildren: () => import('./Settings/Settings.module').then((m) => m.SettingsModule),
+  },
 ];
 
 @NgModule({

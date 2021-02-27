@@ -1,0 +1,25 @@
+@import "custom-style";
+
+:host {
+  box-sizing: border-box;
+  display: block;
+  min-height: 100%;
+}
+
+.settings {
+  padding: 24px;
+  max-width: 100%;
+  text-align: center;
+  &__title {
+    color: $color-font;
+  }
+  &__profile {
+    background-color: $color-bg-gray;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  &__info {
+    padding: 24px;
+    text-align: left;
+  }
+}

@@ -12,4 +12,10 @@ export class UserService {
   getUserData(uid: string): Observable<User> {
     return this.db.doc<User>(`users/${uid}`).valueChanges();
   }
+
+  async updateUser(user: Omit<User, 'createdAt'>): Promise<void> {
+    await this.db.doc<User>(`users/${user.uid}`).update({
+      ...user,
+    });
+  }
 }
