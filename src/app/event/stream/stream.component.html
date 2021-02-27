@@ -1,1 +1,46 @@
-<p>stream works!</p>
+<div class="channel">
+  <p class="channel__title">meeting room</p>
+  <ng-container *ngIf="user$ | async as user">
+    <div class="container container--channel">
+      <div class="channel__camera">
+        <ng-template #nobady>
+          <p class="channel__title">まだだれもいません</p>
+        </ng-template>
+      </div>
+
+      <ng-container *ngIf="players; else nobady">
+        <div class="all-players">
+          <div>
+            <p id="local-player-name" class="player-name"></p>
+            <div id="local-player" class="player"></div>
+          </div>
+          <div id="remote-player-list"></div>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="actions">
+      <button class="actions__btn" (click)="publishVideo()">
+        <mat-icon class="actions__icon">videocam</mat-icon>
+      </button>
+      <button class="actions__btn" (click)="unPublishVideo()">
+        <mat-icon class="actions__icon">videocam_off</mat-icon>
+      </button>
+      <button class="actions__btn" (click)="publishAudio()">
+        <mat-icon class="actions__icon">volume_up</mat-icon>
+      </button>
+      <button class="actions__btn" (click)="unPublishAudio()">
+        <mat-icon class="actions__icon">volume_off</mat-icon>
+      </button>
+      <button class="actions__btn" (click)="publishScreen()">
+        <mat-icon class="actions__icon">desktop_windows</mat-icon>
+      </button>
+      <button class="actions__btn" (click)="unPublishScreen()">
+        <mat-icon class="actions__icon">desktop_access_disabled</mat-icon>
+      </button>
+      <button class="actions__btn" (click)="leaveChannel()">
+        <mat-icon class="actions__icon">exit_to_app</mat-icon>
+      </button>
+    </div>
+  </ng-container>
+</div>
