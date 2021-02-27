@@ -12,6 +12,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { EventCalendarComponent } from './event-calendar/event-calendar.component';
 import { FormsModule } from '@angular/forms';
 import { CalendarCommonModule, CalendarMonthModule } from 'angular-calendar';
+import { CalendarModule } from 'angular-calendar';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import { CalendarCommonModule, CalendarMonthModule } from 'angular-calendar';
     FormsModule,
     CalendarCommonModule,
     CalendarMonthModule,
+    CalendarModule,
+    MatIconModule,
   ],
 })
 export class HomeModule {}
