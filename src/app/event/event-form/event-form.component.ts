@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { take } from 'rxjs/operators';
 import { User } from 'src/app/interfaces/user';
@@ -99,6 +99,14 @@ export class EventFormComponent implements OnInit {
           this.router.navigateByUrl('/');
         })
         .finally(() => (this.isProcessing = false));
+    }
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any): void {
+    if (this.form.dirty) {
+      $event.preventDefault();
+      $event.returnValue = '作業中の内容が失われますがよろしいですか？';
     }
   }
 }
