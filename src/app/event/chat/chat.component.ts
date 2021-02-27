@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Chat } from 'src/app/interfaces/chat';
+import { Observable } from 'rxjs';
+import { Chat, ChatWithUser } from 'src/app/interfaces/chat';
 import { AuthService } from 'src/app/services/auth.service';
 import { ChatService } from 'src/app/services/chat.service';
 
@@ -13,6 +14,7 @@ export class ChatComponent implements OnInit {
   @Input() eventId: string;
   uid = this.authService.uid;
   form = new FormControl();
+  chats$: Observable<ChatWithUser[]>;
 
   constructor(
     private chatService: ChatService,
@@ -27,5 +29,11 @@ export class ChatComponent implements OnInit {
     this.form.reset();
   }
 
-  ngOnInit(): void {}
+  deleteChat(chatId): void {
+    this.chatService.deleteChat(this.eventId, chatId);
+  }
+
+  ngOnInit(): void {
+    this.chats$ = this.chatService.getChatsWithUser(this.eventId);
+  }
 }
