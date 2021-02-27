@@ -1,5 +1,5 @@
 @import "~@angular/material/theming";
-@import "/styles/_custom-style.scss";
+@import "custom-style";
 @import "~@danielmoncada/angular-datetime-picker/assets/style/picker.min.css";
 
 @include mat-core();
