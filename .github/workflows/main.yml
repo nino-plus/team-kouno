@@ -12,7 +12,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@master
       - name: Install Dependencies
-        run: npm install
+        run: npm install && cd functions && npm install && cd ../
       - name: Build
         run: npm run build
       - name: Archive Production Artifact
@@ -32,6 +32,8 @@ jobs:
         with:
           name: dist
           path: dist
+      - name: Install Dependencies
+        run: cd functions && npm install
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
