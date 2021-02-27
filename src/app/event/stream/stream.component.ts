@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -13,6 +13,8 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./stream.component.scss'],
 })
 export class StreamComponent implements OnInit {
+  @Input() userid: string;
+  @Input() eventId: string;
   uid: string;
   user$: Observable<User> = this.authService.user$;
   channelId$: Observable<string> = this.route.paramMap.pipe(
@@ -43,13 +45,13 @@ export class StreamComponent implements OnInit {
   streamInit() {
     this.channelId = this.route.snapshot.params.channelId;
     this.uid = this.route.snapshot.params.uid;
-    this.agoraService.joinAgoraChannel(this.uid, this.channelId);
-    this.participants$ = this.agoraService.getParticipants(this.channelId);
+    this.agoraService.joinAgoraChannel(this.userid, this.eventId);
+    this.participants$ = this.agoraService.getParticipants(this.eventId);
     this.players = true;
   }
 
   async leaveChannel(): Promise<void> {
-    this.agoraService.leaveAgoraChannel(this.channelId).then(() => {
+    this.agoraService.leaveAgoraChannel(this.eventId).then(() => {
       this.snackBar.open('退室しました');
     });
     this.router.navigateByUrl('/');

@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { EventComponent } from './event/event.component';
 import { StreamComponent } from './stream/stream.component';
 import { EventFormComponent } from './event-form/event-form.component';
+import { EventRoomComponent } from './event-room/event-room.component';
 
 const routes: Routes = [
   {
@@ -11,7 +12,7 @@ const routes: Routes = [
   },
   {
     path: ':channelId/:uid',
-    component: StreamComponent,
+    component: EventRoomComponent,
   },
   {
     path: '',

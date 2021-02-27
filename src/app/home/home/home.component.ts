@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/interfaces/user';
@@ -16,11 +15,6 @@ export class HomeComponent implements OnInit {
   user$: Observable<User> = this.authService.user$;
   event$: Observable<Event[]> = this.eventService.getEvents();
 
-  channelControl = new FormControl('', [
-    Validators.required,
-    Validators.maxLength(30),
-  ]);
-
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -29,8 +23,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  joinChannel(uid: string): void {
-    const channelId = this.channelControl.value;
-    this.router.navigateByUrl(`/event/${channelId}/${uid}`);
+  joinChannel(eventId: string, uid: string): void {
+    this.router.navigateByUrl(`/event/${eventId}/${uid}`);
   }
 }
