@@ -1,8 +1,12 @@
 <div class="event">
   <div class="event__header">
     <img [src]="data.event.thumbnailURL" alt="" class="event__img" />
-    <p class="event__category">
-      {{ data.event.category }}
+    <p class="event__reserve">
+      現在
+      {{
+        data.event.reserveUserCount ? data.event.reserveUserCount : 0
+      }}
+      人が参加予定❤️
     </p>
   </div>
 
@@ -18,7 +22,12 @@
       </div>
 
       <div class="event__detail">
+        <p class="event__category">{{ data.event.category }}</p>
         <p class="event__name">{{ data.event.name }}</p>
+
+        <mat-divider></mat-divider>
+
+        <p class="event__info-heading">イベント詳細</p>
         <p class="event__info">{{ data.event.description }}</p>
       </div>
     </div>
