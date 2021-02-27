@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Event } from '../interfaces/event';
 import * as firebase from 'firebase';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -32,5 +33,13 @@ export class EventService {
       .ref(`events/${eventId}`)
       .putString(file, firebase.default.storage.StringFormat.DATA_URL);
     return result.ref.getDownloadURL();
+  }
+
+  getEvents(): Observable<Event[]> {
+    return this.db.collection<Event>(`events`).valueChanges();
+  }
+
+  getEvent(eventId: string): Observable<Event> {
+    return this.db.doc<Event>(`events/${eventId}`).valueChanges();
   }
 }
