@@ -11,6 +11,7 @@ export interface Event {
   thumbnailURL: string;
   description: string;
   category: string;
-  participantCount: number;
+  participantCount?: number;
   participants?: User[];
+  reserveUserCount?: number;
 }
