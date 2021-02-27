@@ -1,9 +1,5 @@
 @import 'custom-style';
 .card {
-  display: grid;
-  gap: 24px;
-  padding: 16px 100px 32px;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   cursor: pointer;
   &__content {
     border-radius: 10px;

@@ -30,6 +30,8 @@
   }
   &__icon {
     transform: translateY(-1px);
+    box-shadow: none;
+    background: center / cover no-repeat;
   }
   &__login-button {
     font-weight: bold;
