@@ -9,10 +9,15 @@
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
   "private": true,
   "dependencies": {
-    "@angular/animations": "~11.2.1",
-    "@angular/cdk": "^11.2.1",
+    "@angular/animations": "^11.2.3",
+    "@angular/cdk": "^11.2.2",
     "@angular/common": "~11.2.1",
     "@angular/compiler": "~11.2.1",
     "@angular/core": "~11.2.1",
@@ -22,18 +27,28 @@
     "@angular/platform-browser": "~11.2.1",
     "@angular/platform-browser-dynamic": "~11.2.1",
     "@angular/router": "~11.2.1",
+    "@danielmoncada/angular-datetime-picker": "^11.0.0",
+    "@deer-inc/ngx-croppie": "0.0.17",
+    "croppie": "^2.6.5",
+    "firebase": "^7.0.0 || ^8.0.0",
+    "moment": "^2.29.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
-    "zone.js": "~0.11.3",
-    "firebase": "^7.0.0 || ^8.0.0"
+    "zone.js": "~0.11.3"
   },
   "devDependencies": {
+    "@angular-devkit/architect": ">= 0.900 < 0.1200",
     "@angular-devkit/build-angular": "~0.1102.1",
     "@angular/cli": "~11.2.1",
     "@angular/compiler-cli": "~11.2.1",
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.11.1",
     "codelyzer": "^6.0.0",
+    "firebase-tools": "^8.0.0",
+    "fuzzy": "^0.1.3",
+    "husky": "^5.1.1",
+    "inquirer": "^6.2.2",
+    "inquirer-autocomplete-prompt": "^1.0.1",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~6.1.0",
@@ -41,15 +56,12 @@
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
+    "open": "^7.0.3",
+    "prettier": "2.2.1",
+    "pretty-quick": "^3.1.0",
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
-    "typescript": "~4.1.2",
-    "@angular-devkit/architect": ">= 0.900 < 0.1200",
-    "firebase-tools": "^8.0.0",
-    "fuzzy": "^0.1.3",
-    "inquirer": "^6.2.2",
-    "inquirer-autocomplete-prompt": "^1.0.1",
-    "open": "^7.0.3"
+    "typescript": "~4.1.2"
   }
 }

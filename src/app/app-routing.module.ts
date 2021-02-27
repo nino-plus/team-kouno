@@ -10,12 +10,18 @@ const routes: Routes = [
   {
     path: 'settings',
     pathMatch: 'full',
-    loadChildren: () => import('./Settings/Settings.module').then((m) => m.SettingsModule),
+    loadChildren: () =>
+      import('./Settings/Settings.module').then((m) => m.SettingsModule),
+  },
+  {
+    path: 'event',
+    loadChildren: () =>
+      import('./event/event.module').then((m) => m.EventModule),
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
