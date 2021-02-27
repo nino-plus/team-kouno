@@ -12,6 +12,11 @@ const routes: Routes = [
     pathMatch: 'full',
     loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
   },
+  {
+    path: 'event',
+    loadChildren: () =>
+      import('./event/event.module').then((m) => m.EventModule),
+  },
 ];
 
 @NgModule({

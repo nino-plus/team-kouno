@@ -1,10 +1,29 @@
 <div class="card">
-  <div (click)="openDetailDialog()" class="card__content" *ngFor="let event of events">
-    <img [src]="event.image" alt="" class="card__img" />
+  <div (click)="openDetailDialog(event)" class="card__content">
+    <img [src]="event.thumbnailURL" alt="" class="card__img" />
+
     <div class="card__body">
-      <p class="card__date">{{ event.eventDate }}</p>
-      <p class="card__title">{{ event.title }}</p>
-      <p class="card__info">{{ event.info }}</p>
+      <div class="card__date-wrap">
+        <p class="card__date">
+          {{ event.startAt.toDate() | date: 'M/dd' }}
+        </p>
+        <p class="card__day">
+          {{ event.startAt.toDate() | date: 'E' }}
+        </p>
+      </div>
+
+      <span class="pipe"></span>
+
+      <div class="card__detail">
+        <p class="card__startAt">
+          {{ event.startAt.toDate() | date: 'HH:mm〜' }}
+        </p>
+        <p class="card__category">
+          {{ event.category }}
+        </p>
+        <p class="card__name">{{ event.name }}</p>
+        <p class="card__info">{{ event.description }}</p>
+      </div>
     </div>
   </div>
 </div>

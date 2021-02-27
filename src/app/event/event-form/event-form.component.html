@@ -1,1 +1,138 @@
-<p>event-form works!</p>
+<div class="container container--event-form">
+  <div class="heading">
+    <h2 class="heading__text">イベント作成 🖋</h2>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form-group">
+    <div class="form-grid">
+      <p class="form-grid__label">イベント名</p>
+      <mat-form-field class="form-field" appearance="outline">
+        <input
+          matInput
+          formControlName="name"
+          #name
+          required
+          autocomplete="off"
+          placeholder="イベント名を入力してください"
+        />
+        <mat-hint align="end">
+          {{ form.get("name").value.length }} /
+          {{ NAME_MAX_LENGTH }}
+        </mat-hint>
+        <mat-error *ngIf="form.get('name').hasError('maxlength')"
+          >最大{{ NAME_MAX_LENGTH }}文字です。</mat-error
+        >
+        <mat-error *ngIf="form.get('name').hasError('required')">
+          必須入力です。
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-grid">
+      <p class="form-grid__label">カテゴリー</p>
+      <mat-form-field class="form-field" appearance="outline">
+        <mat-select formControlName="category">
+          <mat-option
+            *ngFor="let category of categoryGroup"
+            [value]="category.value"
+          >
+            {{ category.value }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="form-grid">
+      <p class="form-grid__label">イベント詳細</p>
+      <mat-form-field class="form-field" appearance="outline">
+        <input
+          matInput
+          autocomplete="off"
+          formControlName="description"
+          [maxlength]="DESCRIPTION_MAX_LENGTH"
+          required
+          placeholder="イベントの説明文を入力してください"
+        />
+        <mat-hint align="end"
+          >{{ form.get("description").value.length }} /
+          {{ DESCRIPTION_MAX_LENGTH }}</mat-hint
+        >
+        <mat-error *ngIf="form.get('description').hasError('maxlength')"
+          >最大{{ DESCRIPTION_MAX_LENGTH }}文字です。</mat-error
+        >
+        <mat-error *ngIf="form.get('description').hasError('required')">
+          必須入力です。
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-grid">
+      <p class="form-grid__label">開始時間</p>
+      <mat-form-field class="form-field" appearance="outline">
+        <input
+          matInput
+          placeholder="イベントの開始時間を選択してください"
+          formControlName="startAt"
+          autocomplete="off"
+          required
+          [owlDateTimeTrigger]="dt1"
+          [owlDateTime]="dt1"
+        />
+        <owl-date-time [pickerType]="'both'" #dt1></owl-date-time>
+        <mat-error *ngIf="form.get('startAt').hasError('required')"
+          >必須入力です</mat-error
+        >
+      </mat-form-field>
+    </div>
+
+    <div class="form-grid">
+      <p class="form-grid__label">終了時間</p>
+      <mat-form-field class="form-field" appearance="outline">
+        <input
+          matInput
+          placeholder="イベントの終了時間を選択してください"
+          formControlName="exitAt"
+          autocomplete="off"
+          [owlDateTimeTrigger]="dt2"
+          [owlDateTime]="dt2"
+        />
+        <owl-date-time [pickerType]="'both'" #dt2></owl-date-time>
+      </mat-form-field>
+    </div>
+
+    <div class="form-grid">
+      <p class="form-grid__label">サムネイル画像</p>
+      <div class="form-grid__cropper">
+        <deer-crop-trigger
+          [options]="{
+            aspectRatio: 16 / 9,
+            oldImageUrl: oldImageUrl || 'assets/images/default-image.jpg'
+          }"
+          (image)="onCroppedImage($event)"
+        ></deer-crop-trigger>
+
+        <div class="form-grid__hint">
+          <mat-icon class="form-grid__icon">done</mat-icon>
+          <p>対応ファイル形式：PNG,JPG,JPEG</p>
+        </div>
+        <div class="form-grid__hint">
+          <mat-icon class="form-grid__icon">done</mat-icon>
+          <p>ファイルサイズ：3MB以内</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" mat-flat-button class="actions__back">戻る</button>
+      <button
+        [disabled]="form.invalid || form.pristine || isProcessing"
+        mat-raised-button
+        color="primary"
+      >
+        作成
+      </button>
+    </div>
+  </form>
+</div>
