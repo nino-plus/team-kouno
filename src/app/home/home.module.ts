@@ -7,7 +7,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { EventCardComponent } from './event-card/event-card.component';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [HomeComponent, EventCardComponent],
@@ -16,7 +18,11 @@ import { EventCardComponent } from './event-card/event-card.component';
     HomeRoutingModule,
     MatToolbarModule,
     MatButtonModule,
-    MatTabsModule
-  ]
+    MatTabsModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+  ],
 })
-export class HomeModule { }
+export class HomeModule {}

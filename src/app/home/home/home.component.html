@@ -9,7 +9,47 @@
   </div>
 </section>
 <mat-tab-group mat-align-tabs="center">
-
   <mat-tab label="イベント一覧"><app-event-card></app-event-card></mat-tab>
   <mat-tab label="Second">Content 2</mat-tab>
 </mat-tab-group>
+<div class="meeting" *ngIf="user$ | async as user; else login">
+  <p class="meeting__msg">
+    チャンネルの名前を設定して<strong>ミーティングを開催</strong>をクリックしてください。
+  </p>
+
+  <form (ngSubmit)="joinChannel(user.uid)" class="meeting__form-wrap">
+    <mat-form-field appearance="outline" class="meeting__form">
+      <input
+        matInput
+        autocomplete="off"
+        [formControl]="channelControl"
+        placeholder="チャンネル名を入力してください"
+        type="text"
+        required
+      />
+      <mat-hint align="end">{{ channelControl.value.length }}/30文字</mat-hint>
+      <mat-error *ngIf="channelControl.hasError('required')"
+        >必須入力です</mat-error
+      >
+      <mat-error *ngIf="channelControl.hasError('maxlength')"
+        >最大文字数を超えています</mat-error
+      >
+    </mat-form-field>
+
+    <div class="meeting__form-btn-wrap">
+      <button
+        mat-button
+        class="meeting__btn"
+        type="submit"
+        [disabled]="channelControl.invalid || channelControl.pristine"
+      >
+        ミーティングを開催
+      </button>
+
+      <button mat-button type="button" routerLink="">戻る</button>
+    </div>
+  </form>
+</div>
+<ng-template #login>
+  <p>ログインしてください</p>
+</ng-template>
