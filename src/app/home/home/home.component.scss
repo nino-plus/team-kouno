@@ -1,4 +1,4 @@
-@import "custom-style";
+@import 'custom-style';
 
 :host {
   box-sizing: border-box;
@@ -14,7 +14,7 @@
     width: 100%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    background: center / cover no-repeat url("/assets/images/");
+    background: center / cover no-repeat url('/assets/images/');
   }
   &__img {
     width: 100%;
@@ -42,4 +42,10 @@
     background-color: rgba(0, 0, 0, 0.068);
     border: 2px solid white;
   }
+}
+.event-grid {
+  display: grid;
+  gap: 24px;
+  padding: 16px 100px 32px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 }
