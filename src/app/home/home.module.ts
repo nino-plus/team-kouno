@@ -9,9 +9,17 @@ import { HomeComponent } from './home/home.component';
 import { EventDetailDialogComponent } from './event-detail-dialog/event-detail-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
+import { EventCalendarComponent } from './event-calendar/event-calendar.component';
+import { FormsModule } from '@angular/forms';
+import { CalendarCommonModule, CalendarMonthModule } from 'angular-calendar';
 
 @NgModule({
-  declarations: [HomeComponent, EventCardComponent, EventDetailDialogComponent],
+  declarations: [
+    HomeComponent,
+    EventCardComponent,
+    EventDetailDialogComponent,
+    EventCalendarComponent,
+  ],
   imports: [
     CommonModule,
     HomeRoutingModule,
@@ -20,6 +28,9 @@ import { MatDividerModule } from '@angular/material/divider';
     MatTabsModule,
     MatDialogModule,
     MatDividerModule,
+    FormsModule,
+    CalendarCommonModule,
+    CalendarMonthModule,
   ],
 })
 export class HomeModule {}

@@ -1,6 +1,7 @@
 @import '~@angular/material/theming';
 @import 'custom-style';
 @import '~@danielmoncada/angular-datetime-picker/assets/style/picker.min.css';
+@import '../node_modules/angular-calendar/css/angular-calendar.css';
 
 @include mat-core();
 
