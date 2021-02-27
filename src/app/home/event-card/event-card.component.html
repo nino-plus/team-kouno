@@ -1,1 +1,10 @@
-<p>event-card works!</p>
+<div class="card">
+  <div (click)="openDetailDialog()" class="card__content" *ngFor="let event of events">
+    <img [src]="event.image" alt="" class="card__img" />
+    <div class="card__body">
+      <p class="card__date">{{ event.eventDate }}</p>
+      <p class="card__title">{{ event.title }}</p>
+      <p class="card__info">{{ event.info }}</p>
+    </div>
+  </div>
+</div>
