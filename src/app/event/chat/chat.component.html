@@ -2,17 +2,15 @@
   <p class="chat__heading">コメント</p>
   <mat-divider></mat-divider>
   <div class="chat__item" *ngFor=""></div>
-  <div class="container">
-    <div class="inner">
-      <mat-form-field appearance="fill">
-        <textarea
-          placeholder="コメントを追加"
-          [formControl]="form"
-          matTextareaAutosize
-          matInput
-        ></textarea>
-        <mat-icon (click)="createChat()" matSuffix>send</mat-icon>
-      </mat-form-field>
-    </div>
+  <div class="chat__form">
+    <mat-form-field appearance="fill">
+      <textarea
+        placeholder="コメントを追加"
+        [formControl]="form"
+        matTextareaAutosize
+        matInput
+      ></textarea>
+      <mat-icon (click)="createChat()" matSuffix>send</mat-icon>
+    </mat-form-field>
   </div>
 </div>

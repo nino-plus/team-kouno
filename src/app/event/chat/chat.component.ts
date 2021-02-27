@@ -21,8 +21,10 @@ export class ChatComponent implements OnInit {
 
   createChat(): void {
     if (this.form.value) {
-      this.chatService.createChat(this.eventId, this.uid, this.form.value);
+      const chat = { chatBody: this.form.value };
+      this.chatService.createChat(this.eventId, this.uid, chat);
     }
+    this.form.reset();
   }
 
   ngOnInit(): void {}
