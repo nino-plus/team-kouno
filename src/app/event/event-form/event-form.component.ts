@@ -69,17 +69,19 @@ export class EventFormComponent implements OnInit {
     this.authService.user$.pipe(take(1)).subscribe((user: User) => {
       this.uid = user.uid;
     });
-    this.event$.subscribe((event) => {
-      this.event = event;
-      this.oldImageUrl = event.thumbnailURL;
-      this.form.patchValue({
-        title: event.name || '',
-        description: event.description || '',
-        startAt: event.startAt,
-        exitAt: event.exitAt,
-        category: event.category,
+    if (this.event) {
+      this.event$.subscribe((event) => {
+        this.event = event;
+        this.oldImageUrl = event.thumbnailURL;
+        this.form.patchValue({
+          title: event.name || '',
+          description: event.description || '',
+          startAt: event.startAt,
+          exitAt: event.exitAt,
+          category: event.category,
+        });
       });
-    });
+    }
   }
 
   onCroppedImage(image: string): void {
