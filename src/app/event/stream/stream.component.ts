@@ -89,6 +89,9 @@ export class StreamComponent implements OnInit, OnDestroy {
   }
 
   async publishVideo(): Promise<void> {
+    if (this.isPublishScreen) {
+      await this.agoraService.unpublishScreen();
+    }
     this.agoraService.publishVideo().then(() => {
       this.snackBar.open('カメラをオンにしました');
       this.isPublishVideo = true;
@@ -104,6 +107,9 @@ export class StreamComponent implements OnInit, OnDestroy {
   }
 
   async publishScreen(): Promise<void> {
+    if (this.isPublishVideo) {
+      await this.agoraService.unpublishVideo();
+    }
     this.agoraService.publishScreen().then(() => {
       this.snackBar.open('画面共有をオンにしました');
       this.isPublishScreen = true;
