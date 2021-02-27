@@ -97,7 +97,6 @@ export class AgoraService {
     const client = this.getClient();
 
     this.localTracks.videoTrack = await AgoraRTC.createCameraVideoTrack();
-    this.snackBar.open('カメラをオンにしました');
     this.localTracks.videoTrack.play('local-player');
 
     await client.publish([this.localTracks.videoTrack]);

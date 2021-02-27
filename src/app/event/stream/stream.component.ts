@@ -20,14 +20,13 @@ export class StreamComponent implements OnInit {
   );
   channelId: string;
   players: any;
-  isProcessing: boolean;
 
-  participants$: Observable<User[]> = this.channelId$.pipe(
-    switchMap((params) => {
-      this.channelId = params;
-      return this.agoraService.getParticipants(this.channelId);
-    })
-  );
+  isProcessing: boolean;
+  isPublishVideo: boolean;
+  isPublishMicrophone: boolean;
+  isPublishScreen: boolean;
+
+  participants$: Observable<User[]>;
 
   constructor(
     private authService: AuthService,
@@ -38,18 +37,14 @@ export class StreamComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap
-      .pipe(
-        take(1),
-        tap((param) => {
-          this.channelId = param.get('channelId');
-          this.uid = param.get('uid');
-        })
-      )
-      .toPromise()
-      .then(() => {
-        this.agoraService.joinAgoraChannel(this.uid, this.channelId);
-      });
+    this.streamInit();
+  }
+
+  streamInit() {
+    this.channelId = this.route.snapshot.params.channelId;
+    this.uid = this.route.snapshot.params.uid;
+    this.agoraService.joinAgoraChannel(this.uid, this.channelId);
+    this.participants$ = this.agoraService.getParticipants(this.channelId);
     this.players = true;
   }
 
@@ -63,6 +58,7 @@ export class StreamComponent implements OnInit {
   async publishAudio(): Promise<void> {
     this.agoraService.publishMicrophone().then(() => {
       this.snackBar.open('音声をオンにしました');
+      this.isPublishMicrophone = true;
     });
     this.players = true;
   }
@@ -70,27 +66,36 @@ export class StreamComponent implements OnInit {
   async unPublishAudio(): Promise<void> {
     this.agoraService.unpublishMicrophone().then(() => {
       this.snackBar.open('音声をミュートしました');
+      this.isPublishMicrophone = false;
     });
   }
 
   async publishVideo(): Promise<void> {
-    this.agoraService.publishVideo();
+    this.agoraService.publishVideo().then(() => {
+      this.snackBar.open('カメラをオンにしました');
+      this.isPublishVideo = true;
+    });
     this.players = true;
   }
 
   async unPublishVideo(): Promise<void> {
-    this.agoraService.unpublishVideo();
+    this.agoraService.unpublishVideo().then(() => {
+      this.snackBar.open('カメラをオフにしました');
+      this.isPublishVideo = false;
+    });
   }
 
   async publishScreen(): Promise<void> {
     this.agoraService.publishScreen().then(() => {
       this.snackBar.open('画面共有をオンにしました');
+      this.isPublishScreen = true;
     });
   }
 
   async unPublishScreen(): Promise<void> {
     this.agoraService.unpublishScreen().then(() => {
       this.snackBar.open('画面共有をオフにしました');
+      this.isPublishScreen = false;
     });
   }
 }
