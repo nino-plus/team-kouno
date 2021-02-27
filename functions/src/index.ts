@@ -3,3 +3,5 @@ import * as admin from 'firebase-admin';
 admin.initializeApp(functions.config().firebase);
 
 export * from './user.function';
+export * from './participate.channel.function';
+export * from './leave.channel.function';
