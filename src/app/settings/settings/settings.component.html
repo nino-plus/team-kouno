@@ -1,14 +1,14 @@
 <div class="settings">
   <h1 class="settings__title">プロフィール編集</h1>
   <ng-container *ngIf="user$ | async as user">
-    <form [formGroup]="form" (ngSubmit)="updateUser()">
+    <form [formGroup]="form">
       <div class="settings__profile">
         <div class="settings__avatar" matTooltip="画像を設定">
           <div class="settings__cropper">
             <deer-crop-trigger
               [options]="{
                 aspectRatio: 1 / 1,
-                oldImageUrl: oldImageUrl
+                oldImageUrl: imageFile
               }"
               (image)="onCroppedImage($event)"
             ></deer-crop-trigger>
@@ -34,6 +34,7 @@
             </mat-form-field>
           </div>
           <button
+            (click)="updateUser()"
             class="setting__update-button"
             [disabled]="form.invalid || form.pristine"
             mat-raised-button

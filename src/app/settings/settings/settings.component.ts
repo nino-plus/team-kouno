@@ -14,7 +14,6 @@ import { UserService } from 'src/app/services/user.service';
 export class SettingsComponent implements OnInit {
   readonly nameMaxLength = 20;
   user: User;
-  oldImageUrl = '';
   imageFile: string;
   form = this.fb.group({
     name: ['', [Validators.required, Validators.maxLength(this.nameMaxLength)]],
@@ -31,7 +30,7 @@ export class SettingsComponent implements OnInit {
   ngOnInit(): void {
     this.user$.subscribe((user) => {
       this.user = user;
-      this.oldImageUrl = user.avatarURL;
+      this.imageFile = user.avatarURL;
       this.form.patchValue({
         ...user,
       });
@@ -42,13 +41,12 @@ export class SettingsComponent implements OnInit {
     this.imageFile = image;
   }
 
-  updateUser(): void {
-    const formData = this.form.value;
+  updateUser() {
     this.userService
       .updateUser({
         uid: this.user.uid,
         avatarURL: this.imageFile,
-        name: formData.name,
+        name: this.form.value.name,
       })
       .then(() => this.snackBar.open('ユーザー情報を更新しました'));
   }
