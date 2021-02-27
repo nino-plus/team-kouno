@@ -6,15 +6,20 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { EventCardComponent } from './event-card/event-card.component';
 import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home/home.component';
+import { EventDetailDialogComponent } from './event-detail-dialog/event-detail-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
-  declarations: [HomeComponent, EventCardComponent],
+  declarations: [HomeComponent, EventCardComponent, EventDetailDialogComponent],
   imports: [
     CommonModule,
     HomeRoutingModule,
     MatToolbarModule,
     MatButtonModule,
     MatTabsModule,
+    MatDialogModule,
+    MatDividerModule,
   ],
 })
 export class HomeModule {}

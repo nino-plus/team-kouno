@@ -6,6 +6,7 @@ import * as firebase from 'firebase';
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { ReserveUid } from '../interfaces/reserve-uid';
 
 @Injectable({
   providedIn: 'root',
@@ -70,6 +71,17 @@ export class EventService {
         merge: true,
       }
     );
+  }
+
+  async reserveEvent(event: Event, uid: string): Promise<void> {
+    this.db
+      .doc<ReserveUid>(`events/${event.eventId}/reserveUids/${uid}`)
+      .set({
+        uid,
+        eventId: event.eventId,
+      })
+      .then(() => this.snackBar.open('イベントを予約しました'))
+      .finally(() => this.router.navigateByUrl('/'));
   }
 
   async deleteEvent(eventId: string): Promise<void> {
