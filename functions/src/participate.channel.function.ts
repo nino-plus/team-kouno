@@ -19,37 +19,37 @@ export const participateChannel = functions
       );
     }
 
-    const channelId = data.channelName;
-    if (!channelId || typeof channelId !== 'string') {
+    const eventId = data.eventId;
+    if (!eventId || typeof eventId !== 'string') {
       throw new functions.https.HttpsError(
         'invalid-argument',
-        '`channelId` is required'
+        '`eventId` is required'
       );
     }
 
-    const isOwner = currentUserId === channelId;
-    if (!isOwner && !isOpenChannel(channelId)) {
+    const isOwner = currentUserId === eventId;
+    if (!isOwner && !isOpenChannel(eventId)) {
       throw new functions.https.HttpsError(
         'failed-precondition',
-        'channel is not open'
+        'event is not open'
       );
     }
 
-    await addUserToParticipantList(channelId, currentUserId);
+    await addUserToParticipantList(eventId, currentUserId);
 
-    const token = generateToken(channelId, currentUserId);
+    const token = generateToken(eventId, currentUserId);
 
-    return { channelId, token, userId: currentUserId };
+    return { eventId, token, userId: currentUserId };
   });
 
-async function isOpenChannel(channelId: string): Promise<boolean> {
-  const ss = await db.collection('channels').doc(channelId).get();
-  const channelState = ss.data()?.state ?? '';
-  return channelState !== 'open' && channelState !== 'live';
+async function isOpenChannel(eventId: string): Promise<boolean> {
+  const ss = await db.collection('events').doc(eventId).get();
+  const eventState = ss.data()?.state ?? '';
+  return eventState !== 'open' && eventState !== 'live';
 }
 
 async function addUserToParticipantList(
-  channelId: string,
+  eventId: string,
   currentUserId: string
 ) {
   const ssUser = await db.collection('users').doc(currentUserId).get();
@@ -61,11 +61,7 @@ async function addUserToParticipantList(
     );
   }
 
-  await db.doc(`channels/${channelId}`).set({ channelId });
-
-  await db
-    .doc(`channels/${channelId}/participants/${currentUserId}`)
-    .set(userData);
+  await db.doc(`events/${eventId}/participants/${currentUserId}`).set(userData);
 }
 
 export const getChannelToken = functions
@@ -81,22 +77,22 @@ export const getChannelToken = functions
     }
     functions.logger.info(data, '24');
 
-    const channelId = data.channelName;
-    if (!channelId || typeof channelId !== 'string') {
+    const eventId = data.eventName;
+    if (!eventId || typeof eventId !== 'string') {
       throw new functions.https.HttpsError(
         'invalid-argument',
-        '`channelId` is required'
+        '`eventId` is required'
       );
     }
-    functions.logger.info(channelId, '33');
+    functions.logger.info(eventId, '33');
 
-    const token = generateToken(channelId, currentUserId);
+    const token = generateToken(eventId, currentUserId);
     functions.logger.info(token, '36');
 
-    return { channelId, token, currentUserId };
+    return { eventId, token, currentUserId };
   });
 
-function generateToken(channelName: string, userId: string): any {
+function generateToken(eventName: string, userId: string): any {
   if (!appID) {
     throw new Error('Agora app ID is required');
   }
@@ -105,10 +101,10 @@ function generateToken(channelName: string, userId: string): any {
     throw new Error('Agora app secret is required');
   }
 
-  if (!channelName) {
+  if (!eventName) {
     throw new functions.https.HttpsError(
       'invalid-argument',
-      'Channel name is required'
+      'event name is required'
     );
   }
 
@@ -125,7 +121,7 @@ function generateToken(channelName: string, userId: string): any {
   const token = RtcTokenBuilder.buildTokenWithAccount(
     appID,
     appSecret,
-    channelName,
+    eventName,
     userId,
     role,
     privilegeExpiredTs

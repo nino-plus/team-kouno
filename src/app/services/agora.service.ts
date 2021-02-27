@@ -31,10 +31,10 @@ export class AgoraService {
     private db: AngularFirestore
   ) {}
 
-  async joinAgoraChannel(uid: string, channelName: string) {
+  async joinAgoraChannel(uid: string, eventId: string) {
     const client = this.getClient();
     const callable = this.fnc.httpsCallable('participateChannel');
-    await callable({ channelName })
+    await callable({ eventId })
       .toPromise()
       .catch((error) => {
         console.log(error);
@@ -43,7 +43,7 @@ export class AgoraService {
     if (!uid) {
       throw new Error('channel name is required.');
     }
-    const token: any = await this.getToken(channelName);
+    const token: any = await this.getToken(eventId);
 
     client.on('user-published', async (user, mediaType) => {
       await client.subscribe(user, mediaType);
@@ -67,14 +67,14 @@ export class AgoraService {
       }
     });
 
-    await client.join(this.agoraAppId, channelName, token.token, uid);
+    await client.join(this.agoraAppId, eventId, token.token, uid);
   }
 
-  async leaveAgoraChannel(channelId: string): Promise<void> {
+  async leaveAgoraChannel(eventId: string): Promise<void> {
     const client = this.getClient();
     await this.unpublishAgora();
     await client.leave();
-    await this.leaveFromSession(channelId);
+    await this.leaveFromSession(eventId);
   }
 
   async publishMicrophone(): Promise<void> {
@@ -132,9 +132,9 @@ export class AgoraService {
     }
   }
 
-  async getToken(channelName): Promise<string> {
+  async getToken(eventId): Promise<string> {
     const callable = this.fnc.httpsCallable('getChannelToken');
-    const agoraToken = await callable({ channelName })
+    const agoraToken = await callable({ eventId })
       .toPromise()
       .catch((error) => {
         this.router.navigate(['/']);
@@ -161,12 +161,12 @@ export class AgoraService {
     }
   }
 
-  async leaveFromSession(channelName: string): Promise<void> {
+  async leaveFromSession(eventId: string): Promise<void> {
     const callable = this.fnc.httpsCallable('leaveFromSession');
-    await callable({ channelName })
+    await callable({ eventId })
       .toPromise()
       .catch((error) => {
-        console.log(channelName);
+        console.log(eventId);
         console.log(error);
         this.router.navigate(['/']);
       });
@@ -180,9 +180,9 @@ export class AgoraService {
     return this.globalAgoraClient;
   }
 
-  getParticipants(channelId: string): Observable<User[]> {
+  getParticipants(eventId: string): Observable<User[]> {
     return this.db
-      .collection<User>(`channels/${channelId}/participants`)
+      .collection<User>(`channels/${eventId}/participants`)
       .valueChanges();
   }
 }

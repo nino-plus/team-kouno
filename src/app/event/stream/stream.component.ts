@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map, switchMap, take, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { User } from 'src/app/interfaces/user';
 import { AgoraService } from 'src/app/services/agora.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -13,14 +13,12 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./stream.component.scss'],
 })
 export class StreamComponent implements OnInit {
-  @Input() userid: string;
+  @Input() uid: string;
   @Input() eventId: string;
-  uid: string;
   user$: Observable<User> = this.authService.user$;
   channelId$: Observable<string> = this.route.paramMap.pipe(
     map((params) => params.get('channelId'))
   );
-  channelId: string;
   players: any;
 
   isProcessing: boolean;
@@ -43,9 +41,7 @@ export class StreamComponent implements OnInit {
   }
 
   streamInit() {
-    this.channelId = this.route.snapshot.params.channelId;
-    this.uid = this.route.snapshot.params.uid;
-    this.agoraService.joinAgoraChannel(this.userid, this.eventId);
+    this.agoraService.joinAgoraChannel(this.uid, this.eventId);
     this.participants$ = this.agoraService.getParticipants(this.eventId);
     this.players = true;
   }
