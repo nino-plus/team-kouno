@@ -1,0 +1,36 @@
+@import 'custom-style';
+
+.event {
+  &__header {
+    position: relative;
+  }
+  &__category {
+    padding: 8px 16px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: $color-bg-gray;
+    color: #fff;
+  }
+  &__date-wrap {
+    display: flex;
+    align-items: center;
+  }
+  &__date {
+    margin-right: 8px;
+  }
+  &__name {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  &__info {
+    font-size: 14px;
+  }
+}
+
+.actions {
+  &__submit {
+    background: $color-accent;
+  }
+}

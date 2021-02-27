@@ -14,7 +14,7 @@
       <app-event-card
         *ngFor="let event of event$ | async"
         [event]="event"
-        (click)="joinChannel(event.eventId, user.uid)"
+        [uid]="user.uid"
       ></app-event-card
     ></mat-tab>
     <mat-tab label="Second">Content 2</mat-tab>
