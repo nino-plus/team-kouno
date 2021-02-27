@@ -42,6 +42,7 @@ import {
     MatSelectModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
+    MatDividerModule,
   ],
 })
 export class EventModule {}
