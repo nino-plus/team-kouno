@@ -13,6 +13,9 @@ export const environment = {
     appId: '1:667562475069:web:51bc3ca415cdd3ac29f454',
     measurementId: 'G-BCSGM94VWM',
   },
+  agora: {
+    appId: '60c972e80bee423ea01a8ca67121691d',
+  },
 };
 
 /*
