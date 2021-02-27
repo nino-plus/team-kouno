@@ -4,6 +4,8 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { Event } from '../interfaces/event';
 import * as firebase from 'firebase';
 import { Observable } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +13,9 @@ import { Observable } from 'rxjs';
 export class EventService {
   constructor(
     private db: AngularFirestore,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {}
 
   async createEvent(
@@ -20,12 +24,18 @@ export class EventService {
   ): Promise<void> {
     const id = this.db.createId();
     const image = await this.setThumbnailToStorage(id, thumbnailURL);
-    await this.db.doc<Event>(`events/${id}`).set({
-      ...event,
-      eventId: id,
-      updatedAt: firebase.default.firestore.Timestamp.now(),
-      thumbnailURL: image,
-    });
+    await this.db
+      .doc<Event>(`events/${id}`)
+      .set({
+        ...event,
+        eventId: id,
+        updatedAt: firebase.default.firestore.Timestamp.now(),
+        thumbnailURL: image,
+      })
+      .then(() => {
+        this.snackBar.open('イベントを作成しました！');
+        this.router.navigateByUrl('/');
+      });
   }
 
   async setThumbnailToStorage(eventId: string, file: string): Promise<string> {
@@ -41,5 +51,24 @@ export class EventService {
 
   getEvent(eventId: string): Observable<Event> {
     return this.db.doc<Event>(`events/${eventId}`).valueChanges();
+  }
+
+  async updateEvent(
+    eventId: string,
+    event: Omit<Event, 'eventId' | 'thumbnailURL' | 'updatedAt'>,
+    thumbnailURL: string
+  ): Promise<void> {
+    const image = await this.setThumbnailToStorage(eventId, thumbnailURL);
+    await this.db.doc<Event>(`events/${eventId}`).set(
+      {
+        ...event,
+        eventId,
+        updatedAt: firebase.default.firestore.Timestamp.now(),
+        thumbnailURL: image,
+      },
+      {
+        merge: true,
+      }
+    );
   }
 }

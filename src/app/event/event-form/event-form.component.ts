@@ -1,12 +1,13 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { take } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
+import * as firebase from 'firebase';
+import { Observable } from 'rxjs';
+import { switchMap, take } from 'rxjs/operators';
+import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { EventService } from 'src/app/services/event.service';
-import * as firebase from 'firebase';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-event-form',
@@ -21,6 +22,14 @@ export class EventFormComponent implements OnInit {
   imageFile: string;
   isProcessing: boolean;
   uid: string;
+  eventId: string;
+  event: Event;
+  event$: Observable<Event> = this.route.paramMap.pipe(
+    switchMap((params) => {
+      this.eventId = params.get('eventId');
+      return this.eventService.getEvent(this.eventId);
+    })
+  );
 
   form = this.fb.group({
     name: [
@@ -53,13 +62,23 @@ export class EventFormComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private eventService: EventService,
-    private snackBar: MatSnackBar,
-    private router: Router
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.authService.user$.pipe(take(1)).subscribe((user: User) => {
       this.uid = user.uid;
+    });
+    this.event$.subscribe((event) => {
+      this.event = event;
+      this.oldImageUrl = event.thumbnailURL;
+      this.form.patchValue({
+        title: event.name || '',
+        description: event.description || '',
+        startAt: event.startAt,
+        exitAt: event.exitAt,
+        category: event.category,
+      });
     });
   }
 
@@ -82,23 +101,28 @@ export class EventFormComponent implements OnInit {
       createdAt: firebase.default.firestore.Timestamp.now(),
     };
 
-    if (this.imageFile !== undefined) {
-      await this.eventService
-        .createEvent(eventData, this.imageFile)
-        .then(() => {
-          this.snackBar.open('イベントを作成しました！');
-          this.router.navigateByUrl('/');
-        })
-        .finally(() => (this.isProcessing = false));
+    if (!this.event) {
+      if (this.imageFile !== undefined) {
+        await this.eventService
+          .createEvent(eventData, this.imageFile)
+          .finally(() => (this.isProcessing = false));
+      } else {
+        const defaultImage = 'assets/images/default-image.jpg';
+        await this.eventService
+          .createEvent(eventData, defaultImage)
+          .finally(() => (this.isProcessing = false));
+      }
     } else {
-      const defaultImage = 'assets/images/default-image.jpg';
-      await this.eventService
-        .createEvent(eventData, defaultImage)
-        .then(() => {
-          this.snackBar.open('イベントを作成しました！');
-          this.router.navigateByUrl('/');
-        })
-        .finally(() => (this.isProcessing = false));
+      if (this.imageFile !== undefined) {
+        await this.eventService
+          .updateEvent(this.eventId, eventData, this.imageFile)
+          .finally(() => (this.isProcessing = false));
+      } else {
+        const defaultImage = 'assets/images/default-image.jpg';
+        await this.eventService
+          .updateEvent(this.eventId, eventData, defaultImage)
+          .finally(() => (this.isProcessing = false));
+      }
     }
   }
 
