@@ -15,6 +15,10 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { CropperModule } from '@deer-inc/ngx-croppie';
 import { MatSelectModule } from '@angular/material/select';
+import {
+  OwlDateTimeModule,
+  OwlNativeDateTimeModule,
+} from '@danielmoncada/angular-datetime-picker';
 
 @NgModule({
   declarations: [
@@ -36,6 +40,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatIconModule,
     CropperModule,
     MatSelectModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
   ],
 })
 export class EventModule {}

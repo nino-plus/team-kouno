@@ -77,7 +77,10 @@
           formControlName="startTime"
           autocomplete="off"
           required
+          [owlDateTimeTrigger]="dt1"
+          [owlDateTime]="dt1"
         />
+        <owl-date-time [pickerType]="'both'" #dt1></owl-date-time>
         <mat-error *ngIf="form.get('startTime').hasError('required')"
           >必須入力です</mat-error
         >
@@ -92,7 +95,10 @@
           placeholder="イベントの終了時間を選択してください"
           formControlName="exitTime"
           autocomplete="off"
+          [owlDateTimeTrigger]="dt2"
+          [owlDateTime]="dt2"
         />
+        <owl-date-time [pickerType]="'both'" #dt2></owl-date-time>
       </mat-form-field>
     </div>
 
