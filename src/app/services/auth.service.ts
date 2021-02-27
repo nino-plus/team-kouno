@@ -47,4 +47,15 @@ export class AuthService {
         this.snackBar.open('ログイン中にエラーが発生しました。');
       });
   }
+
+  async logout(): Promise<void> {
+    this.afAuth
+      .signOut()
+      .finally(() => {
+        this.router.navigateByUrl('/');
+      })
+      .then(() => {
+        this.snackBar.open('ログアウトしました');
+      });
+  }
 }
