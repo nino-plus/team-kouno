@@ -1,10 +1,16 @@
 <header class="header">
   <h1 class="header__logo">
-    <a href="" class="header__logo-link"><img src="./assets/images/favicon.svg" alt="" >Eventstand</a>
+    <a href="" class="header__logo-link"
+      ><img src="./assets/images/favicon.svg" alt="" />Eventstand</a
+    >
   </h1>
   <ng-container *ngIf="authService.user$ | async as user; else default">
     <div>
-      <button mat-flat-button class="header__event-button" routerLink="/">
+      <button
+        mat-flat-button
+        class="header__event-button"
+        routerLink="/event/event-form"
+      >
         イベントをつくる
       </button>
       <button
