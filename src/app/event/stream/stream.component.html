@@ -1,15 +1,24 @@
 <div class="channel">
   <ng-container *ngIf="event$ | async as event">
-    <p class="channel__title">{{ event.name }}</p>
+    <ng-container *ngIf="!isPublishScreen; else shareScreen">
+      <p class="channel__title">{{ event.name }}</p>
+      <div
+        *ngIf="!event.isShareScreen"
+        id="local-player"
+        class="player player--more-player"
+      ></div>
+      <div *ngIf="event.isShareScreen" id="share-screen" class="screen"></div>
+    </ng-container>
+
+    <ng-template #shareScreen>
+      <p class="channel__title">画面共有中です</p>
+    </ng-template>
+
     <!-- <div class="channel__camera">
         <ng-template #nobady>
           <p class="channel__title">まだだれもいません</p>
         </ng-template>
       </div> -->
-
-    <ng-container *ngIf="players">
-      <div id="local-player" class="player player--more-player"></div>
-    </ng-container>
 
     <!-- <div class="channel__default">
       <div>

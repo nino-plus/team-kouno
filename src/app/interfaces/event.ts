@@ -14,4 +14,6 @@ export interface Event {
   participantCount?: number;
   participants?: User[];
   reserveUserCount?: number;
+  isShareScreen?: boolean;
+  screenOwnerUid?: string;
 }

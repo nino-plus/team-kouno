@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ReserveUid } from '../interfaces/reserve-uid';
+import { map, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -71,6 +72,29 @@ export class EventService {
         merge: true,
       }
     );
+  }
+
+  async updateScreenFlag(eventId: string, boolean: boolean, uid: string) {
+    if (boolean) {
+      await this.db
+        .doc<Event>(`events/${eventId}`)
+        .update({ isShareScreen: boolean, screenOwnerUid: uid });
+    } else {
+      await this.db
+        .doc<Event>(`events/${eventId}`)
+        .update({ isShareScreen: boolean, screenOwnerUid: null });
+    }
+  }
+
+  getScreenOwnerId(eventId: string): Promise<string> {
+    return this.db
+      .doc<Event>(`events/${eventId}`)
+      .valueChanges()
+      .pipe(
+        take(1),
+        map((event) => event.screenOwnerUid)
+      )
+      .toPromise();
   }
 
   async reserveEvent(event: Event, uid: string): Promise<void> {

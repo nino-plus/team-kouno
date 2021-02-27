@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from '../interfaces/user';
 import AgoraRTC, { IAgoraRTCClient } from 'agora-rtc-sdk-ng';
+import { EventService } from './event.service';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +29,8 @@ export class AgoraService {
     private fnc: AngularFireFunctions,
     private router: Router,
     private snackBar: MatSnackBar,
-    private db: AngularFirestore
+    private db: AngularFirestore,
+    private eventService: EventService
   ) {}
 
   async joinAgoraChannel(uid: string, eventId: string) {
@@ -47,7 +49,11 @@ export class AgoraService {
 
     client.on('user-published', async (user, mediaType) => {
       await client.subscribe(user, mediaType);
+      console.log('remote', user.uid);
+      const screenOwnerUid = await this.eventService.getScreenOwnerId(eventId);
       const remoteUserId = user.uid;
+      console.log('screen', screenOwnerUid);
+
       if (mediaType === 'video') {
         // const playerElement = document.createElement('div');
 
@@ -58,12 +64,28 @@ export class AgoraService {
         //     <div id="player-${remoteUserId}" class="player"></div>
         //   </div>
         // `;
-
-        const remoteTrack = user.videoTrack;
-        remoteTrack.play('local-player', { fit: 'contain' });
+        if (screenOwnerUid === remoteUserId) {
+          user.videoTrack.play('share-screen', { fit: 'contain' });
+        } else {
+          user.videoTrack.play('local-player', { fit: 'contain' });
+        }
       }
       if (mediaType === 'audio') {
         user.audioTrack.play();
+      }
+    });
+
+    client.on('user-unpublished', async (user, mediaType) => {
+      await client.unsubscribe(user, mediaType);
+      const screenOwnerUid = await this.eventService.getScreenOwnerId(eventId);
+      const remoteUserId = user.uid;
+      if (mediaType === 'video') {
+        if (screenOwnerUid === remoteUserId) {
+          const element = document.getElementById('share-screen');
+          if (element) {
+            element.remove();
+          }
+        }
       }
     });
 
@@ -111,24 +133,25 @@ export class AgoraService {
     }
   }
 
-  async publishScreen(): Promise<void> {
+  async publishScreen(eventId: string, uid: string): Promise<void> {
     const client = this.getClient();
 
     AgoraRTC.createScreenVideoTrack({
       encoderConfig: '1080p_1',
     }).then(async (screenTrack) => {
       this.localTracks.screenTrack = screenTrack;
-      this.localTracks.screenTrack.play('local-player');
       await client.publish([this.localTracks.screenTrack]);
+      await this.eventService.updateScreenFlag(eventId, true, uid);
     });
   }
 
-  async unpublishScreen(): Promise<void> {
+  async unpublishScreen(eventId: string, uid: string): Promise<void> {
     const client = this.getClient();
 
     if (this.localTracks.screenTrack) {
       this.localTracks.screenTrack.close();
-      client.unpublish([this.localTracks.screenTrack]);
+      await client.unpublish([this.localTracks.screenTrack]);
+      await this.eventService.updateScreenFlag(eventId, false, uid);
     }
   }
 
