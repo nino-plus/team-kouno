@@ -1,5 +1,6 @@
 @import "~@angular/material/theming";
-@import '/styles/_custom-style.scss';
+@import "custom-style";
+@import "~@danielmoncada/angular-datetime-picker/assets/style/picker.min.css";
 
 @include mat-core();
 
@@ -19,6 +20,10 @@ $eventstand-theme: mat-light-theme(
 
 @include angular-material-theme($eventstand-theme);
 
+* {
+  box-sizing: border-box;
+}
+
 html,
 body {
   height: 100%;
@@ -27,7 +32,9 @@ body {
 body {
   margin: 0;
   padding-top: 56px;
-  font-family: 'Avenir','Helvetica Neue','Helvetica','Arial','Hiragino Sans','ヒラギノ角ゴシック',YuGothic,'Yu Gothic','メイリオ', Meiryo,'ＭＳ Ｐゴシック','MS PGothic',sans-serif;
+  font-family: "Avenir", "Helvetica Neue", "Helvetica", "Arial", "Hiragino Sans",
+    "ヒラギノ角ゴシック", YuGothic, "Yu Gothic", "メイリオ", Meiryo,
+    "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
 }
 a {
   color: inherit;
@@ -56,4 +63,13 @@ button {
 }
 input {
   outline: none;
+}
+
+.container {
+  max-width: 1200px;
+  padding: 0 48px;
+  margin: 0 auto;
+  &--event-form {
+    max-width: 960px;
+  }
 }
