@@ -1,39 +1,59 @@
+@import "~@angular/material/theming";
+@import '/styles/_custom-style.scss';
 
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
-@import '~@angular/material/theming';
-// Plus imports for other components in your app.
-
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
 @include mat-core();
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$eventstand-primary: mat-palette($mat-indigo);
-$eventstand-accent: mat-palette($mat-pink, A200, A100, A400);
-
-// The warn palette is optional (defaults to red).
+$eventstand-primary: mat-palette($mat-lime, A700);
+$eventstand-accent: mat-palette($mat-grey, A200, A100, A400);
 $eventstand-warn: mat-palette($mat-red);
 
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-$eventstand-theme: mat-light-theme((
-  color: (
-    primary: $eventstand-primary,
-    accent: $eventstand-accent,
-    warn: $eventstand-warn,
+$eventstand-theme: mat-light-theme(
+  (
+    color: (
+      primary: $eventstand-primary,
+      accent: $eventstand-accent,
+      warn: $eventstand-warn,
+    ),
   )
-));
+);
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
 @include angular-material-theme($eventstand-theme);
 
-/* You can add global styles to this file, and also import other style files */
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding-top: 56px;
+  font-family: 'Avenir','Helvetica Neue','Helvetica','Arial','Hiragino Sans','ヒラギノ角ゴシック',YuGothic,'Yu Gothic','メイリオ', Meiryo,'ＭＳ Ｐゴシック','MS PGothic',sans-serif;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+li {
+  list-style: none;
+}
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+li,
+ol,
+figure {
+  padding: 0;
+  margin: 0;
+  outline: none;
+}
+button {
+  border: none;
+  outline: none;
+  appearance: none;
+}
+input {
+  outline: none;
+}

@@ -1,0 +1,38 @@
+<header class="header">
+  <h1 class="header__logo">
+    <a href="" class="header__logo-link"><img src="./assets/images/favicon.svg" alt="" >Eventstand</a>
+  </h1>
+  <ng-container *ngIf="authService.user$ | async as user; else default">
+    <div>
+      <button mat-flat-button class="header__event-button" routerLink="/">
+        イベントをつくる
+      </button>
+      <button
+        mat-mini-fab
+        [matMenuTriggerFor]="userMenu"
+        [style.background-image]="'url(' + user?.avatarURL + ')'"
+        class="header__icon"
+      ></button>
+    </div>
+    <mat-menu #userMenu="matMenu" class="header__menu">
+      <a mat-menu-item routerLink="/settings">
+        <mat-icon>settings</mat-icon>
+        <span>設定</span>
+      </a>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>ログアウト</span>
+      </button>
+    </mat-menu>
+  </ng-container>
+  <ng-template #default>
+    <button
+      mat-flat-button
+      class="header__login-button"
+      (click)="authService.login()"
+      matTooltip="Googleアカウントでサインイン"
+    >
+      ログイン
+    </button>
+  </ng-template>
+</header>

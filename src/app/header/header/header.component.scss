@@ -1,0 +1,44 @@
+@import '/styles/_custom-style.scss';
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  align-items: center;
+  min-height: 56px;
+  box-sizing: border-box;
+  &__logo {
+    font-family: $font-logo;
+  }
+  &__logo-link {
+    display: flex;
+    color: #606060;
+    align-items: center;
+  }
+  &__event-button {
+    font-size: 20px;
+    font-weight: bold;
+    color: $color-sub;
+    margin: auto 16px auto 0;
+    transform: translateY(3px);
+  }
+  &__icon {
+    transform: translateY(-1px);
+  }
+  &__login-button {
+    font-weight: bold;
+    color: $color-font;
+    border: solid 2px $color-font;
+    &:hover {
+      color: white;
+      border: none;
+      background-color: $color-main;
+    }
+  }
+}
