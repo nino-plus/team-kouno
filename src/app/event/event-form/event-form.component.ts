@@ -32,8 +32,8 @@ export class EventFormComponent implements OnInit {
       [Validators.required, Validators.maxLength(this.DESCRIPTION_MAX_LENGTH)],
     ],
     category: ['', [Validators.required]],
-    startTime: ['', [Validators.required]],
-    exitTime: [''],
+    startAt: ['', [Validators.required]],
+    exitAt: [''],
   });
 
   categoryGroup = [
