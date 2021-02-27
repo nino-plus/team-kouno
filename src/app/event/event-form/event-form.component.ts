@@ -96,6 +96,7 @@ export class EventFormComponent implements OnInit {
       category: formData.category,
       ownerId: this.uid,
       participantCount: 0,
+      reserveUserCount: 0,
       startAt: formData.startAt,
       exitAt: formData.exitAt,
       createdAt: firebase.default.firestore.Timestamp.now(),
