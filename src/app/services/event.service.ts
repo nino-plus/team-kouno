@@ -47,7 +47,9 @@ export class EventService {
   }
 
   getEvents(): Observable<Event[]> {
-    return this.db.collection<Event>(`events`).valueChanges();
+    return this.db
+      .collection<Event>(`events`, (ref) => ref.orderBy('startAt', 'asc'))
+      .valueChanges();
   }
 
   getEvent(eventId: string): Observable<Event> {
