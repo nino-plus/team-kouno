@@ -71,4 +71,14 @@ export class EventService {
       }
     );
   }
+
+  async deleteEvent(eventId: string): Promise<void> {
+    await this.db
+      .doc<Event>(`events/${eventId}`)
+      .delete()
+      .then(() => {
+        this.snackBar.open('イベントを削除しました');
+        this.router.navigateByUrl('/');
+      });
+  }
 }
