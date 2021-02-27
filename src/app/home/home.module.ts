@@ -8,6 +8,7 @@ import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home/home.component';
 import { EventDetailDialogComponent } from './event-detail-dialog/event-detail-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [HomeComponent, EventCardComponent, EventDetailDialogComponent],
@@ -18,6 +19,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatButtonModule,
     MatTabsModule,
     MatDialogModule,
+    MatDividerModule,
   ],
 })
 export class HomeModule {}
