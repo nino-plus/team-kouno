@@ -30,13 +30,18 @@
 
     <div class="actions">
       <ng-template #video>
-        <button class="actions__btn" (click)="publishVideo()">
+        <button
+          matTooltip="カメラをオン"
+          class="actions__btn"
+          (click)="publishVideo()"
+        >
           <mat-icon class="actions__icon">videocam</mat-icon>
         </button>
       </ng-template>
 
       <button
         *ngIf="isPublishVideo; else video"
+        matTooltip="カメラをオフ"
         class="actions__btn actions__btn--active"
         (click)="unPublishVideo()"
       >
@@ -44,34 +49,48 @@
       </button>
 
       <ng-template #microphone>
-        <button class="actions__btn" (click)="publishAudio()">
+        <button
+          matTooltip="ミュートを解除"
+          class="actions__btn actions__btn--active"
+          (click)="publishAudio()"
+        >
           <mat-icon class="actions__icon">volume_off</mat-icon>
         </button>
       </ng-template>
 
       <button
         *ngIf="isPublishMicrophone; else microphone"
-        class="actions__btn actions__btn--active"
+        matTooltip="ミュート"
+        class="actions__btn"
         (click)="unPublishAudio()"
       >
         <mat-icon class="actions__icon">volume_up</mat-icon>
       </button>
 
       <ng-template #screen>
-        <button class="actions__btn" (click)="publishScreen()">
+        <button
+          matTooltip="画面共有"
+          class="actions__btn"
+          (click)="publishScreen()"
+        >
           <mat-icon class="actions__icon">desktop_windows</mat-icon>
         </button>
       </ng-template>
 
       <button
         *ngIf="isPublishScreen; else screen"
+        matTooltip="画面共有を停止"
         class="actions__btn actions__btn--active"
         (click)="unPublishScreen()"
       >
         <mat-icon class="actions__icon">desktop_access_disabled</mat-icon>
       </button>
 
-      <button class="actions__btn actions__btn--exit" (click)="leaveChannel()">
+      <button
+        matTooltip="退室"
+        class="actions__btn actions__btn--exit"
+        (click)="leaveChannel()"
+      >
         <mat-icon class="actions__icon">exit_to_app</mat-icon>
       </button>
     </div>

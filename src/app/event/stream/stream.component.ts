@@ -57,6 +57,7 @@ export class StreamComponent implements OnInit, OnDestroy {
   streamInit() {
     this.agoraService.joinAgoraChannel(this.uid, this.eventId).then(() => {
       this.isJoin = true;
+      this.isPublishMicrophone = true;
     });
     this.participants$ = this.agoraService.getParticipants(this.eventId);
     this.players = true;
@@ -77,7 +78,6 @@ export class StreamComponent implements OnInit, OnDestroy {
 
   async publishAudio(): Promise<void> {
     this.agoraService.publishMicrophone().then(() => {
-      this.snackBar.open('音声をオンにしました');
       this.isPublishMicrophone = true;
     });
     this.players = true;
@@ -85,7 +85,6 @@ export class StreamComponent implements OnInit, OnDestroy {
 
   async unPublishAudio(): Promise<void> {
     this.agoraService.unpublishMicrophone().then(() => {
-      this.snackBar.open('音声をミュートしました');
       this.isPublishMicrophone = false;
     });
   }
@@ -99,7 +98,6 @@ export class StreamComponent implements OnInit, OnDestroy {
         });
     }
     this.agoraService.publishVideo().then(() => {
-      this.snackBar.open('カメラをオンにしました');
       this.isPublishVideo = true;
     });
     this.players = true;
@@ -107,7 +105,6 @@ export class StreamComponent implements OnInit, OnDestroy {
 
   async unPublishVideo(): Promise<void> {
     this.agoraService.unpublishVideo().then(() => {
-      this.snackBar.open('カメラをオフにしました');
       this.isPublishVideo = false;
     });
   }
@@ -119,14 +116,12 @@ export class StreamComponent implements OnInit, OnDestroy {
       });
     }
     this.agoraService.publishScreen(this.eventId, this.uid).then(() => {
-      this.snackBar.open('画面共有をオンにしました');
       this.isPublishScreen = true;
     });
   }
 
   async unPublishScreen(): Promise<void> {
     this.agoraService.unpublishScreen(this.eventId, this.uid).then(() => {
-      this.snackBar.open('画面共有をオフにしました');
       this.isPublishScreen = false;
     });
   }

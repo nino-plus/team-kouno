@@ -19,6 +19,7 @@ import {
   OwlDateTimeModule,
   OwlNativeDateTimeModule,
 } from '@danielmoncada/angular-datetime-picker';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import {
     MatSelectModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
+    MatTooltipModule,
   ],
 })
 export class EventModule {}
