@@ -1,0 +1,46 @@
+@import 'custom-style';
+
+mat-form-field {
+  width: 100%;
+  background-color: white;
+}
+
+.chat {
+  height: calc(100vh - 81px);
+  padding: 8px 8px 81px;
+  overflow-y: scroll;
+  color: $color-font;
+  position: relative;
+  width: 100%;
+  &__heading {
+    color: $color-font;
+    text-align: center;
+  }
+  &__item {
+    padding: 8px 0;
+    display: grid;
+    gap: 8px;
+    grid-template-columns: 40px 1fr 40px;
+  }
+  &__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: center/cover rgba(0, 0, 0, 0.5);
+  }
+  &__date {
+    font-size: 13px;
+  }
+  &__name {
+    font-size: 13px;
+    line-height: 1;
+    margin-right: 8px;
+  }
+  &__form {
+    position: absolute;
+    bottom: 0;
+    width: 300px;
+    right: 0;
+    z-index: 10;
+  }
+}
