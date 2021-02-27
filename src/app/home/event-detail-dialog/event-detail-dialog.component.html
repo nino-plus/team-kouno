@@ -14,9 +14,11 @@
         <p class="event__date">
           {{ data.event.startAt.toDate() | date: 'M/dd E HH:mm 〜' }}
         </p>
-        <p class="event__exitAt">
-          {{ data.event.exitAt.toDate() | date: 'M/dd E HH:mm' }}
-        </p>
+        <ng-container *ngIf="data.event.exitAt">
+          <p class="event__exitAt">
+            {{ data.event.exitAt.toDate() | date: 'M/dd E HH:mm':'' }}
+          </p>
+        </ng-container>
       </div>
 
       <div class="event__detail">
