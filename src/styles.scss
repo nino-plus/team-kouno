@@ -1,6 +1,6 @@
-@import "~@angular/material/theming";
-@import "custom-style";
-@import "~@danielmoncada/angular-datetime-picker/assets/style/picker.min.css";
+@import '~@angular/material/theming';
+@import 'custom-style';
+@import '~@danielmoncada/angular-datetime-picker/assets/style/picker.min.css';
 
 @include mat-core();
 
@@ -32,9 +32,9 @@ body {
 body {
   margin: 0;
   padding-top: 56px;
-  font-family: "Avenir", "Helvetica Neue", "Helvetica", "Arial", "Hiragino Sans",
-    "ヒラギノ角ゴシック", YuGothic, "Yu Gothic", "メイリオ", Meiryo,
-    "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+  font-family: 'Avenir', 'Helvetica Neue', 'Helvetica', 'Arial', 'Hiragino Sans',
+    'ヒラギノ角ゴシック', YuGothic, 'Yu Gothic', 'メイリオ', Meiryo,
+    'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
 }
 a {
   color: inherit;
@@ -64,7 +64,9 @@ button {
 input {
   outline: none;
 }
-
+.agora_video_player {
+  min-height: 300px !important;
+}
 .container {
   max-width: 1200px;
   padding: 0 48px;
