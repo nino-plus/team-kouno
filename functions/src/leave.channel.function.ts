@@ -14,15 +14,16 @@ export const leaveFromSession = functions
       );
     }
 
-    const channelId = data.channelName;
-    if (!channelId || typeof channelId !== 'string') {
+    const eventId = data.eventId;
+    if (!eventId || typeof eventId !== 'string') {
       throw new functions.https.HttpsError(
         'invalid-argument',
         '`roomId` is required'
       );
     }
 
-    await db
-      .doc(`channels/${channelId}/participants/${currentUserId}`)
-      .delete();
+    await db.doc(`events/${eventId}/participants/${currentUserId}`).delete();
+    await db.doc(`events/${eventId}`).update({
+      participantCount: admin.firestore.FieldValue.increment(-1),
+    });
   });
