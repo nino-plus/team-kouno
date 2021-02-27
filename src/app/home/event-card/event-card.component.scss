@@ -1,14 +1,17 @@
 @import 'custom-style';
 .card {
-  cursor: pointer;
   &__content {
     border-radius: 10px;
     height: 300px;
     overflow: hidden;
-    background-color: rgb(235, 235, 235);
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 8px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: ease 0.3s;
     &:hover {
       transition-duration: 0.3s;
-      box-shadow: 0 5px 20px gray;
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
+        rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
     }
   }
   &__img {
@@ -42,6 +45,7 @@
     color: #fff;
     padding: 2px 4px;
     font-size: 14px;
+    margin-bottom: 8px;
   }
   &__name {
     color: #505050;

@@ -15,10 +15,9 @@
         <app-event-card
           *ngFor="let event of event$ | async"
           [event]="event"
-          (click)="joinChannel(event.eventId, user.uid)"
-        ></app-event-card>
-      </div>
-    </mat-tab>
+          [uid]="user.uid"
+        ></app-event-card></div
+    ></mat-tab>
     <mat-tab label="Second">Content 2</mat-tab>
   </mat-tab-group>
 </ng-container>

@@ -1,0 +1,55 @@
+<div class="event">
+  <div class="event__header">
+    <img [src]="data.event.thumbnailURL" alt="" class="event__img" />
+    <p class="event__reserve">
+      現在
+      {{
+        data.event.reserveUserCount ? data.event.reserveUserCount : 0
+      }}
+      人が参加予定❤️
+    </p>
+  </div>
+
+  <mat-dialog-content>
+    <div class="event__body">
+      <div class="event__date-wrap">
+        <p class="event__date">
+          {{ data.event.startAt.toDate() | date: 'M/dd E HH:mm 〜' }}
+        </p>
+        <p class="event__exitAt">
+          {{ data.event.exitAt.toDate() | date: 'M/dd E HH:mm' }}
+        </p>
+      </div>
+
+      <div class="event__detail">
+        <p class="event__category">{{ data.event.category }}</p>
+        <p class="event__name">{{ data.event.name }}</p>
+
+        <mat-divider></mat-divider>
+
+        <p class="event__info-heading">イベント詳細</p>
+        <p class="event__info">{{ data.event.description }}</p>
+      </div>
+    </div>
+  </mat-dialog-content>
+</div>
+
+<mat-dialog-actions class="actions" align="end">
+  <button class="actions__back" mat-button matDialogClose type="button">
+    キャンセル
+  </button>
+  <button
+    mat-raised-button
+    class="actions__submit"
+    (click)="reserveEvent(data.event)"
+  >
+    イベントを予約
+  </button>
+  <button
+    mat-raised-button
+    class="actions__submit"
+    (click)="joinChannel(data.event.eventId, data.uid)"
+  >
+    イベントに参加
+  </button>
+</mat-dialog-actions>
