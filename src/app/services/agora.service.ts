@@ -123,8 +123,12 @@ export class AgoraService {
           this.router.navigate(['/']);
         });
     }
+    if (this.localTracks.screenTrack) {
+      await this.eventService.updateScreenFlag(eventId, false);
+    }
     await this.unpublishAgora();
     await client.leave();
+
     await this.db.doc(`events/${eventId}`).update({
       participantCount: firestore.firestore.FieldValue.increment(-1),
     });

@@ -79,7 +79,7 @@ export class EventService {
     );
   }
 
-  async updateScreenFlag(eventId: string, boolean: boolean, uid: string) {
+  async updateScreenFlag(eventId: string, boolean: boolean, uid?: string) {
     if (boolean) {
       await this.db
         .doc<Event>(`events/${eventId}`)
