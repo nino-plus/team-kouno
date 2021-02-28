@@ -1,8 +1,11 @@
 @import 'custom-style';
+
 .header {
   display: flex;
   align-items: center;
   margin-left: 24px;
+  margin-top: 16px;
+  position: relative;
   &__avatar {
     width: 40px;
     height: 40px;
@@ -15,15 +18,15 @@
     color: $color-font;
   }
 }
-.app-grid {
-  padding: 0 24px;
-  display: grid;
-  gap: 24px;
-  grid-template-columns: 1fr 300px;
+.drawer-container {
+  width: 100%;
+  height: calc(100vh - 56px - 81px - 40px);
+  padding: 8px 16px;
 }
 app-stream {
-  padding: 8px 0;
+  width: 100%;
 }
+
 .room-title {
   display: flex;
   margin-left: 24px;
@@ -41,4 +44,16 @@ app-stream {
   &__name {
     font-size: 18px;
   }
+  &__chat-button {
+    position: absolute;
+    color: white;
+    right: 100px;
+    font-size: 12px;
+    border-radius: 14px;
+    padding: 6px 12px 6px;
+    background-color: $color-main;
+  }
+}
+.mat-drawer-side.mat-drawer-end {
+  border-left: none;
 }

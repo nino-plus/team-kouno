@@ -8,12 +8,20 @@
       {{ event.user?.name }}
     </span>
   </div>
-  <div class="app-grid">
+  <mat-drawer-container class="drawer-container" autosize>
     <app-stream [eventId]="eventId" [uid]="uid"></app-stream>
-    <app-chat [eventId]="eventId"></app-chat>
-  </div>
+    <mat-drawer class="drawer" #drawer position="end" mode="side">
+      <app-chat [eventId]="eventId"></app-chat>
+    </mat-drawer>
+  </mat-drawer-container>
   <div class="room-title">
     <p class="room-title__label">LIVE</p>
     <p class="room-title__name">{{ event.name }}</p>
+    <button
+      class="room-title__chat-button"
+      (click)="drawer.toggle(); hide = !hide"
+    >
+      {{ hide ? 'コメント非表示' : 'コメント表示' }}
+    </button>
   </div>
 </ng-container>
