@@ -9,6 +9,8 @@ import { User } from '../interfaces/user';
 import AgoraRTC, { ConnectionState, IAgoraRTCClient } from 'agora-rtc-sdk-ng';
 import { EventService } from './event.service';
 import { UserService } from './user.service';
+import firestore from 'firebase/app';
+import { map, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -39,6 +41,7 @@ export class AgoraService {
 
   async joinAgoraChannel(uid: string, eventId: string) {
     const client = this.getClient();
+
     const callable = this.fnc.httpsCallable('participateChannel');
     await callable({ eventId })
       .toPromise()
@@ -49,6 +52,21 @@ export class AgoraService {
     if (!uid) {
       throw new Error('channel name is required.');
     }
+
+    this.getParticipants(eventId)
+      .pipe(
+        map((users: User[]) => users.map((user) => user.uid)),
+        take(1)
+      )
+      .toPromise()
+      .then(async (ids: string[]) => {
+        if (!ids.includes(uid)) {
+          await this.db.doc(`events/${eventId}`).update({
+            participantCount: firestore.firestore.FieldValue.increment(1),
+          });
+        }
+      });
+
     const token: any = await this.getToken(eventId);
 
     client.on('user-published', async (user, mediaType) => {
@@ -107,6 +125,9 @@ export class AgoraService {
     }
     await this.unpublishAgora();
     await client.leave();
+    await this.db.doc(`events/${eventId}`).update({
+      participantCount: firestore.firestore.FieldValue.increment(-1),
+    });
     await this.leaveFromSession(eventId);
   }
 
@@ -234,12 +255,12 @@ export class AgoraService {
       .valueChanges();
   }
 
-  getAgoraConnectioneState(): Observable<ConnectionState> {
+  getAgoraConnectioneState(): ConnectionState {
     const client = this.getClient();
     let state: ConnectionState;
     client.on('connection-state-change', (newState: ConnectionState) => {
       state = newState;
     });
-    return of(state);
+    return state;
   }
 }

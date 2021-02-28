@@ -23,7 +23,4 @@ export const leaveFromSession = functions
     }
 
     await db.doc(`events/${eventId}/participants/${currentUserId}`).delete();
-    await db.doc(`events/${eventId}`).update({
-      participantCount: admin.firestore.FieldValue.increment(-1),
-    });
   });
