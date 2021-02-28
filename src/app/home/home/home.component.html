@@ -30,7 +30,7 @@
 <ng-template #view>
   <div class="event-grid">
     <app-event-card
-      *ngFor="let event of event$ | async"
+      *ngFor="let event of events$ | async"
       [event]="event"
     ></app-event-card>
   </div>

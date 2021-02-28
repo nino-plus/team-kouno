@@ -6,6 +6,7 @@
   // background: #1a1f23;
   position: relative;
   padding: 32px;
+  z-index: 1;
   &__title {
     position: absolute;
     top: 50%;
@@ -31,24 +32,25 @@
 }
 
 .actions {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 50%;
-  transform: translateY(0%) translateX(-50%);
-  -webkit-transform: translateY(0%) translateX(-50%);
-  width: 100%;
+  transform: translateY(17%) translateX(-50%);
+  -webkit-transform: translateY(17%) translateX(-50%);
+  /* width: 100%; */
   padding: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 16px;
+  border-radius: 30px;
   &__btn {
-    width: 64px;
-    height: 64px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     background: linear-gradient(to right, rgba(#fff, 0.038), rgba(#eee, 0.038));
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 16px;
-    color: #fff;
+    box-shadow: rgba(0, 0, 0, 0.28) 0px 4px 16px;
+    color: #333;
     transition: all 0.5s 0.1s ease;
     display: grid;
     place-items: center;
@@ -91,10 +93,10 @@
     &--active {
       &:after {
         opacity: 1;
-        background-color: #fafafa;
+        background-color: #333;
       }
       mat-icon {
-        color: #333;
+        color: #fafafa;
       }
       &:hover:after {
         opacity: 0.8;
