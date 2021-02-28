@@ -29,4 +29,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  &__day {
+    transform: translateY(-2px);
+  }
 }
