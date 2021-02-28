@@ -8,7 +8,7 @@
     <h1 class="top__heading">イベントを始めよう</h1>
   </div>
 </section>
-<ng-container *ngIf="user$ | async as user">
+<ng-container *ngIf="user$ | async as user; else view">
   <mat-tab-group mat-align-tabs="center">
     <mat-tab label="イベント一覧">
       <div class="event-grid">
@@ -21,4 +21,12 @@
     <mat-tab label="Second">Content 2</mat-tab>
   </mat-tab-group>
 </ng-container>
+<ng-template #view>
+  <div class="event-grid">
+    <app-event-card
+      *ngFor="let event of event$ | async"
+      [event]="event"
+    ></app-event-card>
+  </div>
+</ng-template>
 <footer class="footer">&copy; Eventstand.</footer>
