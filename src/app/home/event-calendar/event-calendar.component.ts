@@ -1,40 +1,37 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  Input,
   OnInit,
   TemplateRef,
   ViewChild,
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import {
   CalendarEvent,
   CalendarEventAction,
   CalendarEventTimesChangedEvent,
   CalendarView,
 } from 'angular-calendar';
-import {
-  addDays,
-  addHours,
-  endOfDay,
-  endOfMonth,
-  isSameDay,
-  isSameMonth,
-  startOfDay,
-  subDays,
-} from 'date-fns';
-import { Subject } from 'rxjs';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { isSameDay, isSameMonth } from 'date-fns';
+import { Observable, Subject } from 'rxjs';
+import { switchMap, take } from 'rxjs/operators';
+import { Event } from 'src/app/interfaces/event';
+import { AuthService } from 'src/app/services/auth.service';
+import { EventService } from 'src/app/services/event.service';
+import { EventDetailDialogComponent } from '../event-detail-dialog/event-detail-dialog.component';
 
 const colors: any = {
-  red: {
-    primary: '#ad2121',
+  main: {
+    primary: '#1bcbe0',
     secondary: '#FAE3E3',
   },
-  blue: {
-    primary: '#1e90ff',
+  pink: {
+    primary: '#F891A8',
     secondary: '#D1E8FF',
   },
-  yellow: {
-    primary: '#e3bc08',
+  orange: {
+    primary: '#ed9309',
     secondary: '#FDF1BA',
   },
 };
@@ -47,15 +44,28 @@ const colors: any = {
 })
 export class EventCalendarComponent implements OnInit {
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
+  @Input() eventLists: Event[];
+  @Input() uid: string;
+
+  reserveEvents$: Observable<Event[]> = this.authService.user$.pipe(
+    switchMap((user) => {
+      return this.eventService.getReservedEvent(user.uid);
+    })
+  );
+
+  calendarEventLists = [];
+
+  private readonly weekList = ['日', '月', '火', '水', '木', '金', '土'];
   view: CalendarView = CalendarView.Month;
   viewDate: Date = new Date();
   CalendarView = CalendarView;
+
+  activeDayIsOpen: boolean;
+
   modalData: {
     action: string;
     event: CalendarEvent;
   };
-
-  activeDayIsOpen = true;
 
   actions: CalendarEventAction[] = [
     {
@@ -77,50 +87,36 @@ export class EventCalendarComponent implements OnInit {
 
   refresh: Subject<any> = new Subject();
 
-  events: CalendarEvent[] = [
-    {
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'A 3 day event',
-      color: colors.red,
-      actions: this.actions,
-      allDay: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-    {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
-      color: colors.yellow,
-      actions: this.actions,
-    },
-    {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
-      color: colors.blue,
-      allDay: true,
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: addHours(new Date(), 2),
-      title: 'A draggable and resizable event',
-      color: colors.yellow,
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-  ];
+  events: CalendarEvent[] = this.calendarEventLists;
 
-  constructor(private modal: NgbModal) {}
+  constructor(
+    private eventService: EventService,
+    private authService: AuthService,
+    private dialog: MatDialog
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.view);
+    console.log(this.viewDate);
+
+    this.reserveEvents$.pipe(take(1)).subscribe((events) => {
+      events.forEach((event) => {
+        this.calendarEventLists.push({
+          id: event.eventId,
+          start: event.startAt.toDate(),
+          end: event.exitAt ? event.exitAt.toDate() : '',
+          title: event.name,
+          color: colors.main,
+          actions: this.actions,
+          resizable: {
+            beforeStart: true,
+            afterEnd: true,
+          },
+          draggable: true,
+        });
+      });
+    });
+  }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
@@ -134,23 +130,6 @@ export class EventCalendarComponent implements OnInit {
       }
       this.viewDate = date;
     }
-  }
-
-  addEvent(): void {
-    this.events = [
-      ...this.events,
-      {
-        title: 'New event',
-        start: startOfDay(new Date()),
-        end: endOfDay(new Date()),
-        color: colors.red,
-        draggable: true,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true,
-        },
-      },
-    ];
   }
 
   eventTimesChanged({
@@ -173,14 +152,29 @@ export class EventCalendarComponent implements OnInit {
 
   handleEvent(action: string, event: CalendarEvent): void {
     this.modalData = { event, action };
-    this.modal.open(this.modalContent, { size: 'lg' });
+    this.openDetailDialog(event.id);
+    console.log(event);
   }
 
   setView(view: CalendarView): void {
     this.view = view;
+    console.log(view);
   }
 
   closeOpenMonthViewDay(): void {
     this.activeDayIsOpen = false;
+  }
+
+  openDetailDialog(eventId: any): void {
+    const eventData$ = this.eventService.getEvent(eventId);
+    eventData$.subscribe((data) => {
+      const eventData = data;
+      this.dialog.open(EventDetailDialogComponent, {
+        data: {
+          event: eventData,
+          uid: this.uid,
+        },
+      });
+    });
   }
 }

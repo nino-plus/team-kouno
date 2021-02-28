@@ -79,3 +79,15 @@ input {
     padding: 48px;
   }
 }
+
+.cal-month-view .cal-day-badge {
+  background: #f891a8;
+}
+
+.cal-month-view .cal-day-cell.cal-today {
+  background: $color-sub;
+}
+
+.mat-tab-group.mat-primary .mat-ink-bar {
+  background: $color-main;
+}

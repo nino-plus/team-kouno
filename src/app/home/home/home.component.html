@@ -9,17 +9,20 @@
   </div>
 </section>
 <ng-container *ngIf="user$ | async as user">
-  <mat-tab-group mat-align-tabs="center">
+  <mat-tab-group mat-align-tabs="center" *ngIf="events$ | async as eventLists">
     <mat-tab label="イベント一覧">
       <div class="event-grid">
         <app-event-card
-          *ngFor="let event of event$ | async"
+          *ngFor="let event of eventLists"
           [event]="event"
           [uid]="user.uid"
         ></app-event-card></div
     ></mat-tab>
     <mat-tab label="カレンダー">
-      <app-event-calendar></app-event-calendar>
+      <app-event-calendar
+        [eventLists]="eventLists"
+        [uid]="user.uid"
+      ></app-event-calendar>
     </mat-tab>
   </mat-tab-group>
 </ng-container>
