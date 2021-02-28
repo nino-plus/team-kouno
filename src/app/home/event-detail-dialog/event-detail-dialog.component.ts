@@ -16,11 +16,13 @@ export class EventDetailDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     public data: {
       event: Event;
-      uid: string;
+      uid?: string;
     }
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.data.uid);
+  }
 
   reserveEvent(event: Event): void {
     this.eventService.reserveEvent(event, this.data.uid);
