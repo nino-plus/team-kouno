@@ -1,4 +1,19 @@
-<div class="app-grid">
-  <app-stream [eventId]="eventId" [uid]="uid"></app-stream>
-  <app-chat [eventId]="eventId"></app-chat>
-</div>
+<ng-container *ngIf="eventWithOwner$ | async as event">
+  <div class="header">
+    <figure
+      class="header__avatar"
+      [style.background-image]="'url(' + event.user?.avatarURL + ')'"
+    ></figure>
+    <span class="header__name">
+      {{ event.user?.name }}
+    </span>
+  </div>
+  <div class="app-grid">
+    <app-stream [eventId]="eventId" [uid]="uid"></app-stream>
+    <app-chat [eventId]="eventId"></app-chat>
+  </div>
+  <div class="room-title">
+    <p class="room-title__label">LIVE</p>
+    <p class="room-title__name">{{ event.name }}</p>
+  </div>
+</ng-container>

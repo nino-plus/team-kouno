@@ -15,3 +15,7 @@ export interface Event {
   participants?: User[];
   reserveUserCount?: number;
 }
+
+export interface EventWithOwner extends Event {
+  user: User;
+}

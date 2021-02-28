@@ -1,6 +1,6 @@
 <p class="chat__heading">コメント</p>
+<mat-divider></mat-divider>
 <div class="chat">
-  <mat-divider></mat-divider>
   <div class="chat__content" *ngFor="let chat of chats$ | async">
     <div class="chat__item">
       <figure
@@ -36,7 +36,7 @@
     </div>
   </div>
 </div>
-<div class="chat__form">
+<div class="chat-form">
   <mat-form-field appearance="fill">
     <textarea
       placeholder="コメントを追加"

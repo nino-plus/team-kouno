@@ -1,5 +1,44 @@
+@import 'custom-style';
+.header {
+  display: flex;
+  align-items: center;
+  margin-left: 24px;
+  &__avatar {
+    width: 40px;
+    height: 40px;
+    margin-right: 8px;
+    border-radius: 50%;
+    background: center/cover rgba(0, 0, 0, 0.5);
+  }
+  &__name {
+    font-size: 20px;
+    color: $color-font;
+  }
+}
 .app-grid {
+  padding: 0 24px;
   display: grid;
+  gap: 24px;
   grid-template-columns: 1fr 300px;
-  height: 100%;
+}
+app-stream {
+  padding: 8px 0;
+}
+.room-title {
+  display: flex;
+  margin-left: 24px;
+  color: $color-font;
+  &__label {
+    align-items: center;
+    margin-right: 8px;
+    color: white;
+    font-size: 12px;
+    border-radius: 14px;
+    padding: 6px 12px 4px;
+    background-color: $color-sub;
+    letter-spacing: 1.2px;
+  }
+  &__name {
+    font-size: 18px;
+  }
 }
