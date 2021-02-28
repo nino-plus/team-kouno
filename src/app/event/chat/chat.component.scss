@@ -6,7 +6,7 @@ mat-form-field {
 }
 
 .chat {
-  height: calc(100vh - 81px);
+  height: calc(100vh - 56px - 81px - 40px);
   padding: 8px 8px 81px;
   overflow-y: scroll;
   color: $color-font;
@@ -36,11 +36,14 @@ mat-form-field {
     line-height: 1;
     margin-right: 8px;
   }
-  &__form {
-    position: absolute;
-    bottom: 0;
-    width: 300px;
-    right: 0;
-    z-index: 10;
-  }
+}
+.chat-form {
+  position: absolute;
+  bottom: 56px;
+  width: 300px;
+  right: 24px;
+  z-index: 10;
+}
+mat-divider {
+  margin-right: 8px;
 }
