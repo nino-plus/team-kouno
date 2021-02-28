@@ -1,7 +1,23 @@
-$color-main: #37AB9D;
-$color-sub: #4DC0B2;
-$color-accent: #FFC042;
-$color-base: #f2f4f8;
+$color-main: linear-gradient(
+  to right bottom,
+  rgba(#1ac4da, 1),
+  rgba(#1bcbe0, 1)
+);
+$color-sub: linear-gradient(
+  to right bottom,
+  rgba(#1ac4da, 0.8),
+  rgba(#1bcbe0, 0.8)
+);
+$color-accent: linear-gradient(
+  to right bottom,
+  rgba(#feb71f, 1),
+  rgba(#ed9309, 1)
+);
+$color-base: linear-gradient(
+  to right bottom,
+  rgba(#fff, 0.038),
+  rgba(#eee, 0.038)
+);
 $color-font: #707070;
 $color-bg-gray: #586365;
 
