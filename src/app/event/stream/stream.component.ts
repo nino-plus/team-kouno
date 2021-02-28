@@ -8,7 +8,7 @@ import {
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { AgoraService } from 'src/app/services/agora.service';
@@ -32,8 +32,11 @@ export class StreamComponent implements OnInit, OnDestroy {
   isPublishMicrophone: boolean;
   isPublishScreen: boolean;
 
+  isShareScreen$: Observable<boolean>;
   participants$: Observable<User[]>;
   event$: Observable<Event>;
+  videoPublishUserIds: string[];
+  videoPublishUserIds$: Observable<string[]>;
 
   constructor(
     private authService: AuthService,
@@ -62,6 +65,9 @@ export class StreamComponent implements OnInit, OnDestroy {
     this.participants$ = this.agoraService.getParticipants(this.eventId);
     this.players = true;
     this.event$ = this.eventService.getEvent(this.eventId);
+    this.videoPublishUserIds$ = this.eventService.getVideoPublishUserIds(
+      this.eventId
+    );
   }
 
   async leaveChannel(): Promise<void> {
@@ -97,21 +103,21 @@ export class StreamComponent implements OnInit, OnDestroy {
           this.isPublishScreen = false;
         });
     }
-    this.agoraService.publishVideo().then(() => {
+    this.agoraService.publishVideo(this.eventId).then(() => {
       this.isPublishVideo = true;
     });
     this.players = true;
   }
 
   async unPublishVideo(): Promise<void> {
-    this.agoraService.unpublishVideo().then(() => {
+    this.agoraService.unpublishVideo(this.eventId).then(() => {
       this.isPublishVideo = false;
     });
   }
 
   async publishScreen(): Promise<void> {
     if (this.isPublishVideo) {
-      await this.agoraService.unpublishVideo().then(() => {
+      await this.agoraService.unpublishVideo(this.eventId).then(() => {
         this.isPublishVideo = false;
       });
     }

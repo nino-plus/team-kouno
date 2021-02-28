@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ReserveUid } from '../interfaces/reserve-uid';
 import { map, take } from 'rxjs/operators';
+import { User } from '../interfaces/user';
 
 @Injectable({
   providedIn: 'root',
@@ -116,5 +117,12 @@ export class EventService {
         this.snackBar.open('イベントを削除しました');
         this.router.navigateByUrl('/');
       });
+  }
+
+  getVideoPublishUserIds(eventId: string): Observable<string[]> {
+    return this.db
+      .collection<User>(`events/${eventId}/videoPublishUsers`)
+      .valueChanges()
+      .pipe(map((users: User[]) => users.map((user) => user.uid)));
   }
 }

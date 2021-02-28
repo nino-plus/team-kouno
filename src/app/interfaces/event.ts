@@ -16,4 +16,5 @@ export interface Event {
   reserveUserCount?: number;
   isShareScreen?: boolean;
   screenOwnerUid?: string;
+  videoPublishUsers?: User[];
 }
