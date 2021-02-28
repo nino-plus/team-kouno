@@ -28,9 +28,13 @@
   &__event-button {
     font-size: 16px;
     font-weight: 500;
-    color: $color-sub;
+    color: $font-logo;
     margin: auto 16px auto 0;
     transform: translateY(3px);
+    transition: ease-in-out 0.16s;
+    &:hover {
+      color: #1bcbe0;
+    }
   }
   &__icon {
     transform: translateY(-1px);
@@ -41,7 +45,7 @@
     font-weight: 500;
     color: $color-font;
     border: solid 2px $color-font;
-    transition: ease-in-out 0.3s;
+    transition: ease-in-out 0.16s;
     &:hover {
       color: #fff;
       border: solid 2px #1bcbe0;
