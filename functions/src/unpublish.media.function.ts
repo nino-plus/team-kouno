@@ -3,7 +3,7 @@ import * as admin from 'firebase-admin';
 
 const db = admin.firestore();
 
-export const leaveFromSession = functions
+export const unpublishVideo = functions
   .region('asia-northeast1')
   .https.onCall(async (data, context) => {
     const currentUserId = context.auth?.uid;
@@ -22,5 +22,7 @@ export const leaveFromSession = functions
       );
     }
 
-    await db.doc(`events/${eventId}/participants/${currentUserId}`).delete();
+    await db
+      .doc(`events/${eventId}/videoPublishUsers/${currentUserId}`)
+      .delete();
   });

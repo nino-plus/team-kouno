@@ -19,6 +19,7 @@ import {
   OwlDateTimeModule,
   OwlNativeDateTimeModule,
 } from '@danielmoncada/angular-datetime-picker';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
@@ -44,6 +45,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     MatSelectModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
+    MatTooltipModule,
     MatDividerModule,
     MatMenuModule,
     MatSidenavModule,

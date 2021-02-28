@@ -62,9 +62,6 @@ async function addUserToParticipantList(
   }
 
   await db.doc(`events/${eventId}/participants/${currentUserId}`).set(userData);
-  await db.doc(`events/${eventId}`).update({
-    participantCount: admin.firestore.FieldValue.increment(1),
-  });
 }
 
 export const getChannelToken = functions
