@@ -89,6 +89,28 @@ export class EventService {
       .finally(() => this.router.navigateByUrl('/'));
   }
 
+  getReservedEvent(uid: string): Observable<Event[]> {
+    if (!uid) {
+      return of(null);
+    }
+    return this.db
+      .collectionGroup<ReserveUid>('reserveUids', (ref) =>
+        ref.where('uid', '==', uid)
+      )
+      .valueChanges()
+      .pipe(
+        switchMap((reserveDatas) => {
+          if (reserveDatas.length) {
+            return combineLatest(
+              reserveDatas.map((data) => this.getEvent(data.eventId))
+            );
+          } else {
+            return of(null);
+          }
+        })
+      );
+  }
+
   async deleteEvent(eventId: string): Promise<void> {
     await this.db
       .doc<Event>(`events/${eventId}`)
