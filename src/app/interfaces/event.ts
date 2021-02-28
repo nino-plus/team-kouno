@@ -18,3 +18,7 @@ export interface Event {
   screenOwnerUid?: string;
   videoPublishUsers?: User[];
 }
+
+export interface EventWithOwner extends Event {
+  user: User;
+}

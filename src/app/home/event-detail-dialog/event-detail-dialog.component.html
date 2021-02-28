@@ -3,9 +3,7 @@
     <img [src]="data.event.thumbnailURL" alt="" class="event__img" />
     <p class="event__reserve">
       現在
-      {{
-        data.event.reserveUserCount ? data.event.reserveUserCount : 0
-      }}
+      {{ data.event.reserveUserCount ? data.event.reserveUserCount : 0 }}
       人が参加予定❤️
     </p>
   </div>
@@ -42,6 +40,7 @@
     mat-raised-button
     class="actions__submit"
     (click)="reserveEvent(data.event)"
+    mat-dialog-close
   >
     イベントを予約
   </button>
@@ -49,6 +48,7 @@
     mat-raised-button
     class="actions__submit"
     (click)="joinChannel(data.event.eventId, data.uid)"
+    mat-dialog-close
   >
     イベントに参加
   </button>

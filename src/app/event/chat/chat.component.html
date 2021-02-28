@@ -1,1 +1,49 @@
-<p>chat works!</p>
+<p class="chat__heading">コメント</p>
+<mat-divider></mat-divider>
+<div class="chat">
+  <div class="chat__content" *ngFor="let chat of chats$ | async">
+    <div class="chat__item">
+      <figure
+        class="chat__avatar"
+        [style.background-image]="'url(' + chat.user?.avatarURL + ')'"
+      ></figure>
+      <div class="chat__body">
+        <p class="chat__body">
+          <span class="chat__name">
+            {{ chat.user?.name }}
+          </span>
+          {{ chat.chatBody }}
+        </p>
+        <p class="chat__date">
+          {{ chat.createdAt.toDate() | date: 'M/d HH:mm' }}
+        </p>
+      </div>
+      <div>
+        <button
+          mat-icon-button
+          [mat-menu-trigger-for]="chatEditor"
+          type="button"
+        >
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #chatEditor="matMenu">
+          <button mat-menu-item type="button" (click)="deleteChat(chat.chatId)">
+            <mat-icon>delete</mat-icon>
+            削除
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="chat-form">
+  <mat-form-field appearance="fill">
+    <textarea
+      placeholder="コメントを追加"
+      [formControl]="form"
+      matTextareaAutosize
+      matInput
+    ></textarea>
+    <mat-icon (click)="createChat()" matSuffix>send</mat-icon>
+  </mat-form-field>
+</div>

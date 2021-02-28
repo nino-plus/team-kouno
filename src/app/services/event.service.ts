@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { Event } from '../interfaces/event';
+import { Event, EventWithOwner } from '../interfaces/event';
 import * as firebase from 'firebase';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable, of } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ReserveUid } from '../interfaces/reserve-uid';
-import { map, take } from 'rxjs/operators';
+import { switchMap, map, take } from 'rxjs/operators';
 import { User } from '../interfaces/user';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,8 @@ export class EventService {
     private db: AngularFirestore,
     private storage: AngularFireStorage,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private userService: UserService
   ) {}
 
   async createEvent(
@@ -124,5 +126,20 @@ export class EventService {
       .collection<User>(`events/${eventId}/videoPublishUsers`)
       .valueChanges()
       .pipe(map((users: User[]) => users.map((user) => user.uid)));
+  }
+
+  getEventWithOwner(eventId: string): Observable<EventWithOwner> {
+    return this.db
+      .doc<Event>(`events/${eventId}`)
+      .valueChanges()
+      .pipe(
+        switchMap((event) => {
+          const user$ = this.userService.getUserData(event.ownerId);
+          return combineLatest([of(event), user$]);
+        }),
+        map(([event, user]) => {
+          return { ...event, user };
+        })
+      );
   }
 }
