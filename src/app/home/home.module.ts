@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -33,8 +33,8 @@ import { MatIconModule } from '@angular/material/icon';
     FormsModule,
     CalendarCommonModule,
     CalendarMonthModule,
-    CalendarModule,
     MatIconModule,
+    CalendarModule,
   ],
 })
 export class HomeModule {}

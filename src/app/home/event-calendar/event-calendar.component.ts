@@ -1,7 +1,14 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import {
   CalendarEvent,
   CalendarEventAction,
+  CalendarEventTimesChangedEvent,
   CalendarView,
 } from 'angular-calendar';
 import {
@@ -9,6 +16,8 @@ import {
   addHours,
   endOfDay,
   endOfMonth,
+  isSameDay,
+  isSameMonth,
   startOfDay,
   subDays,
 } from 'date-fns';
@@ -32,6 +41,7 @@ const colors: any = {
 
 @Component({
   selector: 'app-event-calendar',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './event-calendar.component.html',
   styleUrls: ['./event-calendar.component.scss'],
 })
@@ -112,6 +122,20 @@ export class EventCalendarComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    if (isSameMonth(date, this.viewDate)) {
+      if (
+        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+        events.length === 0
+      ) {
+        this.activeDayIsOpen = false;
+      } else {
+        this.activeDayIsOpen = true;
+      }
+      this.viewDate = date;
+    }
+  }
+
   addEvent(): void {
     this.events = [
       ...this.events,
@@ -127,6 +151,24 @@ export class EventCalendarComponent implements OnInit {
         },
       },
     ];
+  }
+
+  eventTimesChanged({
+    event,
+    newStart,
+    newEnd,
+  }: CalendarEventTimesChangedEvent): void {
+    this.events = this.events.map((iEvent) => {
+      if (iEvent === event) {
+        return {
+          ...event,
+          start: newStart,
+          end: newEnd,
+        };
+      }
+      return iEvent;
+    });
+    this.handleEvent('Dropped or resized', event);
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
