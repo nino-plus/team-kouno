@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { CalendarCommonModule, CalendarMonthModule } from 'angular-calendar';
 import { CalendarModule } from 'angular-calendar';
 import { MatIconModule } from '@angular/material/icon';
+import { InfoDialogComponent } from './info-dialog/info-dialog.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { MatIconModule } from '@angular/material/icon';
     EventCardComponent,
     EventDetailDialogComponent,
     EventCalendarComponent,
+    InfoDialogComponent,
   ],
   imports: [
     CommonModule,
