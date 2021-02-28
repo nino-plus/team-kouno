@@ -20,6 +20,7 @@ import {
   OwlNativeDateTimeModule,
 } from '@danielmoncada/angular-datetime-picker';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { MatMenuModule } from '@angular/material/menu';
     OwlNativeDateTimeModule,
     MatDividerModule,
     MatMenuModule,
+    MatSidenavModule,
   ],
 })
 export class EventModule {}
