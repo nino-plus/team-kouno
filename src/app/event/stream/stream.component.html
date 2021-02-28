@@ -1,70 +1,119 @@
 <div class="channel">
-  <p class="channel__title">meeting room</p>
-  <ng-container *ngIf="user$ | async as user">
-    <!-- <div class="channel__camera">
-        <ng-template #nobady>
-          <p class="channel__title">まだだれもいません</p>
-        </ng-template>
-      </div> -->
-
-    <ng-container *ngIf="players">
-      <div id="local-player" class="player player--more-player"></div>
+  <ng-container *ngIf="event$ | async as event">
+    <ng-container *ngIf="!isPublishScreen; else shareScreen">
+      <div
+        *ngIf="!event.isShareScreen"
+        id="local-player"
+        class="player player--more-player"
+        [class.player--1-player]="event.participantCount === 1"
+        [class.player--2-player]="
+          event.participantCount > 1 && event.participantCount < 3
+        "
+        [class.player--more-player]="event.participantCount > 2"
+        [class.invisible]="isProcessing"
+      >
+        <ng-container *ngFor="let user of participants$ | async">
+          <ng-container *ngIf="videoPublishUserIds$ | async as ids">
+            <div
+              *ngIf="!ids.includes(user.uid)"
+              class="participants"
+              [class.invisible]="isProcessing"
+            >
+              <img
+                class="participants__photo"
+                [class.invisible]="isProcessing"
+                [src]="user.avatarURL"
+                alt=""
+              />
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+      <div
+        *ngIf="event.isShareScreen"
+        id="share-screen"
+        class="screen"
+        [class.invisible]="isProcessing"
+      ></div>
     </ng-container>
 
-    <!-- <div class="channel__default">
-      <div>
-        <p id="local-player-name" class="player-name"></p>
-        <div id="local-player" class="player"></div>
-      </div>
-      <div id="remote-player-list"></div>
-    </div> -->
+    <ng-template #shareScreen>
+      <p class="channel__title" [class.invisible]="isProcessing">
+        画面共有中です
+      </p>
+    </ng-template>
+  </ng-container>
 
-    <div class="actions">
-      <ng-template #video>
-        <button class="actions__btn" (click)="publishVideo()">
-          <mat-icon class="actions__icon">videocam</mat-icon>
-        </button>
-      </ng-template>
-
+  <div class="actions">
+    <ng-template #video>
       <button
-        *ngIf="isPublishVideo; else video"
+        matTooltip="カメラをオン"
         class="actions__btn"
-        (click)="unPublishVideo()"
+        (click)="publishVideo()"
       >
-        <mat-icon class="actions__icon">videocam_off</mat-icon>
+        <mat-icon class="actions__icon">videocam</mat-icon>
       </button>
+    </ng-template>
 
-      <ng-template #microphone>
-        <button class="actions__btn" (click)="publishAudio()">
-          <mat-icon class="actions__icon">volume_up</mat-icon>
-        </button>
-      </ng-template>
+    <button
+      *ngIf="isPublishVideo; else video"
+      matTooltip="カメラをオフ"
+      class="actions__btn actions__btn--active"
+      (click)="unPublishVideo()"
+    >
+      <mat-icon class="actions__icon">videocam_off</mat-icon>
+    </button>
 
+    <ng-template #microphone>
       <button
-        *ngIf="isPublishMicrophone; else microphone"
-        class="actions__btn"
-        (click)="unPublishAudio()"
+        matTooltip="ミュートを解除"
+        class="actions__btn actions__btn--active"
+        (click)="publishAudio()"
       >
         <mat-icon class="actions__icon">volume_off</mat-icon>
       </button>
+    </ng-template>
 
-      <ng-template #screen>
-        <button class="actions__btn" (click)="publishScreen()">
-          <mat-icon class="actions__icon">desktop_windows</mat-icon>
-        </button>
-      </ng-template>
+    <button
+      *ngIf="isPublishMicrophone; else microphone"
+      matTooltip="ミュート"
+      class="actions__btn"
+      (click)="unPublishAudio()"
+    >
+      <mat-icon class="actions__icon">volume_up</mat-icon>
+    </button>
 
+    <ng-template #screen>
       <button
-        *ngIf="isPublishScreen; else screen"
+        matTooltip="画面共有"
         class="actions__btn"
-        (click)="unPublishScreen()"
+        (click)="publishScreen()"
       >
-        <mat-icon class="actions__icon">desktop_access_disabled</mat-icon>
+        <mat-icon class="actions__icon">desktop_windows</mat-icon>
       </button>
+    </ng-template>
 
-      <button class="actions__btn" (click)="leaveChannel()">
-        <mat-icon class="actions__icon">exit_to_app</mat-icon>
-      </button>
+    <button
+      *ngIf="isPublishScreen; else screen"
+      matTooltip="画面共有を停止"
+      class="actions__btn actions__btn--active"
+      (click)="unPublishScreen()"
+    >
+      <mat-icon class="actions__icon">desktop_access_disabled</mat-icon>
+    </button>
+
+    <button
+      matTooltip="退室"
+      class="actions__btn actions__btn--exit"
+      (click)="leaveChannel()"
+    >
+      <mat-icon class="actions__icon">exit_to_app</mat-icon>
+    </button>
+  </div>
+
+  <ng-container *ngIf="isProcessing">
+    <div class="lodading-wrap">
+      <img class="loading" src="assets/images/grid.svg" alt="" />
     </div>
   </ng-container>
 </div>

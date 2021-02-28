@@ -14,6 +14,9 @@ export interface Event {
   participantCount?: number;
   participants?: User[];
   reserveUserCount?: number;
+  isShareScreen?: boolean;
+  screenOwnerUid?: string;
+  videoPublishUsers?: User[];
 }
 
 export interface EventWithOwner extends Event {
