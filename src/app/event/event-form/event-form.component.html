@@ -18,7 +18,7 @@
           placeholder="イベント名を入力してください"
         />
         <mat-hint align="end">
-          {{ form.get("name").value.length }} /
+          {{ form.get('name').value.length }} /
           {{ NAME_MAX_LENGTH }}
         </mat-hint>
         <mat-error *ngIf="form.get('name').hasError('maxlength')"
@@ -56,7 +56,7 @@
           placeholder="イベントの説明文を入力してください"
         />
         <mat-hint align="end"
-          >{{ form.get("description").value.length }} /
+          >{{ form.get('description').value.length }} /
           {{ DESCRIPTION_MAX_LENGTH }}</mat-hint
         >
         <mat-error *ngIf="form.get('description').hasError('maxlength')"
@@ -125,7 +125,14 @@
     </div>
 
     <div class="actions">
-      <button type="button" mat-flat-button class="actions__back">戻る</button>
+      <button
+        type="button"
+        mat-flat-button
+        class="actions__back"
+        routerLink="/"
+      >
+        戻る
+      </button>
       <button
         [disabled]="form.invalid || form.pristine || isProcessing"
         mat-raised-button

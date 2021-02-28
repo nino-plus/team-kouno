@@ -51,7 +51,9 @@ export class EventService {
   }
 
   getEvents(): Observable<Event[]> {
-    return this.db.collection<Event>(`events`).valueChanges();
+    return this.db
+      .collection<Event>(`events`, (ref) => ref.orderBy('startAt', 'asc'))
+      .valueChanges();
   }
 
   getEvent(eventId: string): Observable<Event> {
@@ -109,6 +111,28 @@ export class EventService {
       })
       .then(() => this.snackBar.open('イベントを予約しました'))
       .finally(() => this.router.navigateByUrl('/'));
+  }
+
+  getReservedEvent(uid: string): Observable<Event[]> {
+    if (!uid) {
+      return of(null);
+    }
+    return this.db
+      .collectionGroup<ReserveUid>('reserveUids', (ref) =>
+        ref.where('uid', '==', uid)
+      )
+      .valueChanges()
+      .pipe(
+        switchMap((reserveDatas) => {
+          if (reserveDatas.length) {
+            return combineLatest(
+              reserveDatas.map((data) => this.getEvent(data.eventId))
+            );
+          } else {
+            return of(null);
+          }
+        })
+      );
   }
 
   async deleteEvent(eventId: string): Promise<void> {

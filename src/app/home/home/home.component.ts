@@ -13,7 +13,7 @@ import { EventService } from 'src/app/services/event.service';
 })
 export class HomeComponent implements OnInit {
   user$: Observable<User> = this.authService.user$;
-  event$: Observable<Event[]> = this.eventService.getEvents();
+  events$: Observable<Event[]> = this.eventService.getEvents();
 
   constructor(
     private authService: AuthService,

@@ -8,17 +8,23 @@
     <h1 class="top__heading">イベントを始めよう</h1>
   </div>
 </section>
+
 <ng-container *ngIf="user$ | async as user; else view">
-  <mat-tab-group mat-align-tabs="center">
+  <mat-tab-group mat-align-tabs="center" *ngIf="events$ | async as eventLists">
     <mat-tab label="イベント一覧">
       <div class="event-grid">
         <app-event-card
-          *ngFor="let event of event$ | async"
+          *ngFor="let event of eventLists"
           [event]="event"
           [uid]="user.uid"
         ></app-event-card></div
     ></mat-tab>
-    <mat-tab label="Second">Content 2</mat-tab>
+    <mat-tab label="カレンダー">
+      <app-event-calendar
+        [eventLists]="eventLists"
+        [uid]="user.uid"
+      ></app-event-calendar>
+    </mat-tab>
   </mat-tab-group>
 </ng-container>
 <ng-template #view>

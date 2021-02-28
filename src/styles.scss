@@ -1,6 +1,7 @@
 @import '~@angular/material/theming';
 @import 'custom-style';
 @import '~@danielmoncada/angular-datetime-picker/assets/style/picker.min.css';
+@import '../node_modules/angular-calendar/css/angular-calendar.css';
 
 @include mat-core();
 
@@ -80,4 +81,19 @@ input {
   &--event-form {
     max-width: 960px;
   }
+  &--calendar {
+    padding: 48px;
+  }
+}
+
+.cal-month-view .cal-day-badge {
+  background: #f891a8;
+}
+
+.cal-month-view .cal-day-cell.cal-today {
+  background: $color-sub;
+}
+
+.mat-tab-group.mat-primary .mat-ink-bar {
+  background: $color-main;
 }
