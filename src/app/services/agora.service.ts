@@ -3,10 +3,12 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from '../interfaces/user';
-import AgoraRTC, { IAgoraRTCClient } from 'agora-rtc-sdk-ng';
+import AgoraRTC, { ConnectionState, IAgoraRTCClient } from 'agora-rtc-sdk-ng';
+import { EventService } from './event.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,14 +23,18 @@ export class AgoraService {
     screenTrack: null,
     screenAudioTrack: null,
   };
-  remoteUsers = {};
+  remoteUserIds: (number | string)[] = [];
+  remoteUserIds$: Observable<(number | string)[]>;
+
   globalAgoraClient: IAgoraRTCClient | null = null;
   isProcessing: boolean;
   constructor(
     private fnc: AngularFireFunctions,
     private router: Router,
     private snackBar: MatSnackBar,
-    private db: AngularFirestore
+    private db: AngularFirestore,
+    private eventService: EventService,
+    private userService: UserService
   ) {}
 
   async joinAgoraChannel(uid: string, eventId: string) {
@@ -47,31 +53,58 @@ export class AgoraService {
 
     client.on('user-published', async (user, mediaType) => {
       await client.subscribe(user, mediaType);
+      console.log('remote', user.uid);
+      if (!this.remoteUserIds.includes(user.uid)) {
+        this.remoteUserIds.push(user.uid);
+        this.remoteUserIds$ = of(this.remoteUserIds);
+      }
+      console.log(this.remoteUserIds);
+      const screenOwnerUid = await this.eventService.getScreenOwnerId(eventId);
       const remoteUserId = user.uid;
+
       if (mediaType === 'video') {
-        // const playerElement = document.createElement('div');
-
-        // document.getElementById('remote-player-list').append(playerElement);
-        // playerElement.outerHTML = `
-        //   <div id="player-wrapper-${remoteUserId}">
-        //     <p class="player-name">remoteUser(${remoteUserId})</p>
-        //     <div id="player-${remoteUserId}" class="player"></div>
-        //   </div>
-        // `;
-
-        const remoteTrack = user.videoTrack;
-        remoteTrack.play('local-player', { fit: 'contain' });
+        if (screenOwnerUid === remoteUserId) {
+          user.videoTrack.play('share-screen', { fit: 'contain' });
+        } else {
+          user.videoTrack.play('local-player', { fit: 'contain' });
+        }
       }
       if (mediaType === 'audio') {
         user.audioTrack.play();
       }
     });
 
+    client.on('user-unpublished', async (user, mediaType) => {
+      await client.unsubscribe(user, mediaType);
+      const screenOwnerUid = await this.eventService.getScreenOwnerId(eventId);
+      const remoteUserId = user.uid;
+
+      console.log(this.remoteUserIds);
+      if (mediaType === 'video') {
+        if (screenOwnerUid === remoteUserId) {
+          const element = document.getElementById('share-screen');
+          if (element) {
+            element.remove();
+          }
+        }
+      }
+    });
+
     await client.join(this.agoraAppId, eventId, token.token, uid);
+    await this.publishMicrophone();
   }
 
   async leaveAgoraChannel(eventId: string): Promise<void> {
     const client = this.getClient();
+    if (this.localTracks.videoTrack) {
+      const callable = this.fnc.httpsCallable('unPublishVideo');
+      await callable({ eventId })
+        .toPromise()
+        .catch((error) => {
+          console.log(error);
+          this.router.navigate(['/']);
+        });
+    }
     await this.unpublishAgora();
     await client.leave();
     await this.leaveFromSession(eventId);
@@ -93,42 +126,57 @@ export class AgoraService {
     }
   }
 
-  async publishVideo(): Promise<void> {
+  async publishVideo(eventId: string): Promise<void> {
     const client = this.getClient();
 
     this.localTracks.videoTrack = await AgoraRTC.createCameraVideoTrack();
     await this.localTracks.videoTrack.play('local-player', { fit: 'contain' });
 
     await client.publish([this.localTracks.videoTrack]);
+    const callable = this.fnc.httpsCallable('publishVideo');
+    await callable({ eventId })
+      .toPromise()
+      .catch((error) => {
+        console.log(error);
+        this.router.navigate(['/']);
+      });
   }
 
-  async unpublishVideo(): Promise<void> {
+  async unpublishVideo(eventId: string): Promise<void> {
     const client = this.getClient();
 
     if (this.localTracks.videoTrack) {
       this.localTracks.videoTrack.close();
       client.unpublish([this.localTracks.videoTrack]);
+      const callable = this.fnc.httpsCallable('unpublishVideo');
+      await callable({ eventId })
+        .toPromise()
+        .catch((error) => {
+          console.log(error);
+          this.router.navigate(['/']);
+        });
     }
   }
 
-  async publishScreen(): Promise<void> {
+  async publishScreen(eventId: string, uid: string): Promise<void> {
     const client = this.getClient();
 
     AgoraRTC.createScreenVideoTrack({
       encoderConfig: '1080p_1',
     }).then(async (screenTrack) => {
       this.localTracks.screenTrack = screenTrack;
-      this.localTracks.screenTrack.play('local-player');
       await client.publish([this.localTracks.screenTrack]);
+      await this.eventService.updateScreenFlag(eventId, true, uid);
     });
   }
 
-  async unpublishScreen(): Promise<void> {
+  async unpublishScreen(eventId: string, uid: string): Promise<void> {
     const client = this.getClient();
 
     if (this.localTracks.screenTrack) {
       this.localTracks.screenTrack.close();
-      client.unpublish([this.localTracks.screenTrack]);
+      await client.unpublish([this.localTracks.screenTrack]);
+      await this.eventService.updateScreenFlag(eventId, false, uid);
     }
   }
 
@@ -146,7 +194,7 @@ export class AgoraService {
 
   handleUserUnpublished(user): void {
     const id = user.uid;
-    delete this.remoteUsers[id];
+    delete this.remoteUserIds[id];
     const element = document.getElementById(`player-wrapper-${id}`);
     if (element) {
       element.remove();
@@ -182,7 +230,16 @@ export class AgoraService {
 
   getParticipants(eventId: string): Observable<User[]> {
     return this.db
-      .collection<User>(`channels/${eventId}/participants`)
+      .collection<User>(`events/${eventId}/participants`)
       .valueChanges();
+  }
+
+  getAgoraConnectioneState(): Observable<ConnectionState> {
+    const client = this.getClient();
+    let state: ConnectionState;
+    client.on('connection-state-change', (newState: ConnectionState) => {
+      state = newState;
+    });
+    return of(state);
   }
 }

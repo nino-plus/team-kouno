@@ -4,6 +4,7 @@ import { EventComponent } from './event/event.component';
 import { StreamComponent } from './stream/stream.component';
 import { EventFormComponent } from './event-form/event-form.component';
 import { EventRoomComponent } from './event-room/event-room.component';
+import { RoomGuard } from '../guards/room.guard';
 
 const routes: Routes = [
   {
@@ -13,6 +14,7 @@ const routes: Routes = [
   {
     path: ':channelId/:uid',
     component: EventRoomComponent,
+    canDeactivate: [RoomGuard],
   },
   {
     path: '',

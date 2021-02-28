@@ -9,3 +9,5 @@ export {
   countUpReservedUsers,
   countDownReservedUsers,
 } from './reserve.event.function';
+export * from './publish.media.function';
+export * from './unpublish.media.function';

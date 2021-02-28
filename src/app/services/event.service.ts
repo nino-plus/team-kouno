@@ -7,7 +7,8 @@ import { combineLatest, Observable, of } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ReserveUid } from '../interfaces/reserve-uid';
-import { switchMap, map } from 'rxjs/operators';
+import { switchMap, map, take } from 'rxjs/operators';
+import { User } from '../interfaces/user';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -76,6 +77,29 @@ export class EventService {
     );
   }
 
+  async updateScreenFlag(eventId: string, boolean: boolean, uid: string) {
+    if (boolean) {
+      await this.db
+        .doc<Event>(`events/${eventId}`)
+        .update({ isShareScreen: boolean, screenOwnerUid: uid });
+    } else {
+      await this.db
+        .doc<Event>(`events/${eventId}`)
+        .update({ isShareScreen: boolean, screenOwnerUid: null });
+    }
+  }
+
+  getScreenOwnerId(eventId: string): Promise<string> {
+    return this.db
+      .doc<Event>(`events/${eventId}`)
+      .valueChanges()
+      .pipe(
+        take(1),
+        map((event) => event.screenOwnerUid)
+      )
+      .toPromise();
+  }
+
   async reserveEvent(event: Event, uid: string): Promise<void> {
     this.db
       .doc<ReserveUid>(`events/${event.eventId}/reserveUids/${uid}`)
@@ -95,6 +119,13 @@ export class EventService {
         this.snackBar.open('イベントを削除しました');
         this.router.navigateByUrl('/');
       });
+  }
+
+  getVideoPublishUserIds(eventId: string): Observable<string[]> {
+    return this.db
+      .collection<User>(`events/${eventId}/videoPublishUsers`)
+      .valueChanges()
+      .pipe(map((users: User[]) => users.map((user) => user.uid)));
   }
 
   getEventWithOwner(eventId: string): Observable<EventWithOwner> {
