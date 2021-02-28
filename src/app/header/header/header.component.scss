@@ -1,4 +1,4 @@
-@import 'custom-style.scss';
+@import 'custom-style';
 
 .header {
   position: fixed;
@@ -16,6 +16,9 @@
   background-color: white;
   &__logo {
     font-family: $font-logo;
+    img {
+      margin-right: 4px;
+    }
   }
   &__logo-link {
     display: flex;
@@ -23,8 +26,8 @@
     align-items: center;
   }
   &__event-button {
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 16px;
+    font-weight: 500;
     color: $color-sub;
     margin: auto 16px auto 0;
     transform: translateY(3px);
@@ -35,13 +38,14 @@
     background: center / cover no-repeat;
   }
   &__login-button {
-    font-weight: bold;
+    font-weight: 500;
     color: $color-font;
     border: solid 2px $color-font;
+    transition: ease-in-out 0.3s;
     &:hover {
-      color: white;
-      border: none;
-      background-color: $color-main;
+      color: #fff;
+      border: solid 2px #1bcbe0;
+      background: $color-main;
     }
   }
 }
