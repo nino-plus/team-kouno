@@ -8,7 +8,6 @@ import {
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { AgoraService } from 'src/app/services/agora.service';
@@ -58,9 +57,11 @@ export class StreamComponent implements OnInit, OnDestroy {
   }
 
   streamInit() {
+    this.isProcessing = true;
     this.agoraService.joinAgoraChannel(this.uid, this.eventId).then(() => {
       this.isJoin = true;
       this.isPublishMicrophone = true;
+      this.isProcessing = false;
     });
     this.participants$ = this.agoraService.getParticipants(this.eventId);
     this.players = true;
@@ -71,10 +72,12 @@ export class StreamComponent implements OnInit, OnDestroy {
   }
 
   async leaveChannel(): Promise<void> {
+    this.isProcessing = true;
+    this.isJoin = false;
     this.agoraService
       .leaveAgoraChannel(this.eventId)
       .then(() => {
-        this.isJoin = false;
+        this.isProcessing = false;
         this.snackBar.open('退室しました');
       })
       .finally(() => {
@@ -83,19 +86,24 @@ export class StreamComponent implements OnInit, OnDestroy {
   }
 
   async publishAudio(): Promise<void> {
+    this.isProcessing = true;
     this.agoraService.publishMicrophone().then(() => {
       this.isPublishMicrophone = true;
+      this.isProcessing = false;
     });
     this.players = true;
   }
 
   async unPublishAudio(): Promise<void> {
+    this.isProcessing = true;
     this.agoraService.unpublishMicrophone().then(() => {
       this.isPublishMicrophone = false;
+      this.isProcessing = false;
     });
   }
 
   async publishVideo(): Promise<void> {
+    this.isProcessing = true;
     if (this.isPublishScreen) {
       await this.agoraService
         .unpublishScreen(this.eventId, this.uid)
@@ -105,17 +113,21 @@ export class StreamComponent implements OnInit, OnDestroy {
     }
     this.agoraService.publishVideo(this.eventId).then(() => {
       this.isPublishVideo = true;
+      this.isProcessing = false;
     });
     this.players = true;
   }
 
   async unPublishVideo(): Promise<void> {
+    this.isProcessing = true;
     this.agoraService.unpublishVideo(this.eventId).then(() => {
       this.isPublishVideo = false;
+      this.isProcessing = false;
     });
   }
 
   async publishScreen(): Promise<void> {
+    this.isProcessing = true;
     if (this.isPublishVideo) {
       await this.agoraService.unpublishVideo(this.eventId).then(() => {
         this.isPublishVideo = false;
@@ -123,12 +135,15 @@ export class StreamComponent implements OnInit, OnDestroy {
     }
     this.agoraService.publishScreen(this.eventId, this.uid).then(() => {
       this.isPublishScreen = true;
+      this.isProcessing = false;
     });
   }
 
   async unPublishScreen(): Promise<void> {
+    this.isProcessing = true;
     this.agoraService.unpublishScreen(this.eventId, this.uid).then(() => {
       this.isPublishScreen = false;
+      this.isProcessing = false;
     });
   }
 
