@@ -38,22 +38,42 @@
   <button class="actions__back" mat-button matDialogClose type="button">
     キャンセル
   </button>
-  <button
-    mat-raised-button
-    class="actions__submit"
-    (click)="reserveEvent(data.event)"
-    mat-dialog-close
-    [disabled]="!data.uid"
-  >
-    イベントを予約
-  </button>
-  <button
-    mat-raised-button
-    class="actions__submit"
-    (click)="joinChannel(data.event.eventId, data.uid)"
-    mat-dialog-close
-    [disabled]="!data.uid"
-  >
-    イベントに参加
-  </button>
+  <ng-container *ngIf="data.uid; else default">
+    <button
+      mat-raised-button
+      class="actions__submit"
+      (click)="reserveEvent(data.event)"
+      mat-dialog-close
+    >
+      イベントを予約
+    </button>
+    <button
+      mat-raised-button
+      class="actions__submit"
+      (click)="joinChannel(data.event.eventId, data.uid)"
+      mat-dialog-close
+    >
+      イベントに参加
+    </button>
+  </ng-container>
+  <ng-template #default>
+    <button
+      mat-raised-button
+      class="actions__submit"
+      (click)="openInfoDialog()"
+      mat-dialog-close
+      [class.disable]="!data.uid"
+    >
+      イベントを予約
+    </button>
+    <button
+      mat-raised-button
+      class="actions__submit"
+      (click)="openInfoDialog()"
+      mat-dialog-close
+      [class.disable]="!data.uid"
+    >
+      イベントに参加
+    </button>
+  </ng-template>
 </mat-dialog-actions>
