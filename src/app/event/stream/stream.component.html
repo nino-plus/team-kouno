@@ -44,76 +44,76 @@
     </ng-template>
   </ng-container>
 
-  <div class="actions">
-    <ng-template #video>
-      <button
-        matTooltip="カメラをオン"
-        class="actions__btn"
-        (click)="publishVideo()"
-      >
-        <mat-icon class="actions__icon">videocam</mat-icon>
-      </button>
-    </ng-template>
-
-    <button
-      *ngIf="isPublishVideo; else video"
-      matTooltip="カメラをオフ"
-      class="actions__btn actions__btn--active"
-      (click)="unPublishVideo()"
-    >
-      <mat-icon class="actions__icon">videocam_off</mat-icon>
-    </button>
-
-    <ng-template #microphone>
-      <button
-        matTooltip="ミュートを解除"
-        class="actions__btn actions__btn--active"
-        (click)="publishAudio()"
-      >
-        <mat-icon class="actions__icon">volume_off</mat-icon>
-      </button>
-    </ng-template>
-
-    <button
-      *ngIf="isPublishMicrophone; else microphone"
-      matTooltip="ミュート"
-      class="actions__btn"
-      (click)="unPublishAudio()"
-    >
-      <mat-icon class="actions__icon">volume_up</mat-icon>
-    </button>
-
-    <ng-template #screen>
-      <button
-        matTooltip="画面共有"
-        class="actions__btn"
-        (click)="publishScreen()"
-      >
-        <mat-icon class="actions__icon">desktop_windows</mat-icon>
-      </button>
-    </ng-template>
-
-    <button
-      *ngIf="isPublishScreen; else screen"
-      matTooltip="画面共有を停止"
-      class="actions__btn actions__btn--active"
-      (click)="unPublishScreen()"
-    >
-      <mat-icon class="actions__icon">desktop_access_disabled</mat-icon>
-    </button>
-
-    <button
-      matTooltip="退室"
-      class="actions__btn actions__btn--exit"
-      (click)="leaveChannel()"
-    >
-      <mat-icon class="actions__icon">exit_to_app</mat-icon>
-    </button>
-  </div>
-
   <ng-container *ngIf="isProcessing">
     <div class="lodading-wrap">
       <img class="loading" src="assets/images/grid.svg" alt="" />
     </div>
   </ng-container>
+</div>
+
+<div class="actions">
+  <ng-template #video>
+    <button
+      matTooltip="カメラをオン"
+      class="actions__btn"
+      (click)="publishVideo()"
+    >
+      <mat-icon class="actions__icon">videocam</mat-icon>
+    </button>
+  </ng-template>
+
+  <button
+    *ngIf="isPublishVideo; else video"
+    matTooltip="カメラをオフ"
+    class="actions__btn actions__btn--active"
+    (click)="unPublishVideo()"
+  >
+    <mat-icon class="actions__icon">videocam_off</mat-icon>
+  </button>
+
+  <ng-template #microphone>
+    <button
+      matTooltip="ミュートを解除"
+      class="actions__btn actions__btn--active"
+      (click)="publishAudio()"
+    >
+      <mat-icon class="actions__icon">volume_off</mat-icon>
+    </button>
+  </ng-template>
+
+  <button
+    *ngIf="isPublishMicrophone; else microphone"
+    matTooltip="ミュート"
+    class="actions__btn"
+    (click)="unPublishAudio()"
+  >
+    <mat-icon class="actions__icon">volume_up</mat-icon>
+  </button>
+
+  <ng-template #screen>
+    <button
+      matTooltip="画面共有"
+      class="actions__btn"
+      (click)="publishScreen()"
+    >
+      <mat-icon class="actions__icon">desktop_windows</mat-icon>
+    </button>
+  </ng-template>
+
+  <button
+    *ngIf="isPublishScreen; else screen"
+    matTooltip="画面共有を停止"
+    class="actions__btn actions__btn--active"
+    (click)="unPublishScreen()"
+  >
+    <mat-icon class="actions__icon">desktop_access_disabled</mat-icon>
+  </button>
+
+  <button
+    matTooltip="退室"
+    class="actions__btn actions__btn--exit"
+    (click)="leaveChannel()"
+  >
+    <mat-icon class="actions__icon">exit_to_app</mat-icon>
+  </button>
 </div>
