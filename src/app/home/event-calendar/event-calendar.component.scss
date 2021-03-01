@@ -23,6 +23,15 @@
       background: $color-accent;
     }
   }
+  &__warning-section {
+    display: flex;
+    align-items: center;
+    margin: 16px 0;
+  }
+  &__warning-icon {
+    margin-right: 8px;
+    color: red;
+  }
 }
 
 .btn-group {
