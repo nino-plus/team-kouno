@@ -55,7 +55,6 @@ export class EventCalendarComponent implements OnInit {
 
   calendarEventLists = [];
 
-  private readonly weekList = ['日', '月', '火', '水', '木', '金', '土'];
   view: CalendarView = CalendarView.Month;
   viewDate: Date = new Date();
   CalendarView = CalendarView;
@@ -96,9 +95,6 @@ export class EventCalendarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.view);
-    console.log(this.viewDate);
-
     this.reserveEvents$.pipe(take(1)).subscribe((events) => {
       events.forEach((event) => {
         this.calendarEventLists.push({
@@ -106,7 +102,7 @@ export class EventCalendarComponent implements OnInit {
           start: event.startAt.toDate(),
           end: event.exitAt ? event.exitAt.toDate() : '',
           title: event.name,
-          color: colors.main,
+          color: colors.orange,
           actions: this.actions,
           resizable: {
             beforeStart: true,

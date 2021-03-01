@@ -79,15 +79,19 @@ export class EventService {
     );
   }
 
-  async updateScreenFlag(eventId: string, boolean: boolean, uid?: string) {
-    if (boolean) {
+  async updateScreenFlag(
+    eventId: string,
+    state: boolean,
+    uid?: string
+  ): Promise<void> {
+    if (state) {
       await this.db
         .doc<Event>(`events/${eventId}`)
-        .update({ isShareScreen: boolean, screenOwnerUid: uid });
+        .update({ isShareScreen: state, screenOwnerUid: uid });
     } else {
       await this.db
         .doc<Event>(`events/${eventId}`)
-        .update({ isShareScreen: boolean, screenOwnerUid: null });
+        .update({ isShareScreen: state, screenOwnerUid: null });
     }
   }
 

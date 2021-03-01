@@ -18,11 +18,13 @@
     color: $color-font;
   }
 }
+
 .drawer-container {
   width: 100%;
   height: calc(100vh - 56px - 81px - 40px);
   padding: 8px 16px;
 }
+
 app-stream {
   width: 100%;
 }
@@ -38,7 +40,7 @@ app-stream {
     font-size: 12px;
     border-radius: 14px;
     padding: 6px 12px 4px;
-    background-color: $color-sub;
+    background: $color-sub;
     letter-spacing: 1.2px;
   }
   &__name {
@@ -51,9 +53,10 @@ app-stream {
     font-size: 12px;
     border-radius: 14px;
     padding: 6px 12px 6px;
-    background-color: $color-main;
+    background: $color-main;
   }
 }
+
 .mat-drawer-side.mat-drawer-end {
   border-left: none;
 }

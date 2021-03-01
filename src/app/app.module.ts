@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -34,6 +34,10 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import localeJa from '@angular/common/locales/ja';
+import { registerLocaleData } from '@angular/common';
+
+registerLocaleData(localeJa);
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent],
@@ -69,6 +73,7 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
   ],
   providers: [
     { provide: REGION, useValue: 'asia-northeast1' },
+    { provide: LOCALE_ID, useValue: 'ja-JP' },
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } },
   ],
   bootstrap: [AppComponent],

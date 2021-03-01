@@ -47,15 +47,18 @@ export class EventFormComponent implements OnInit {
 
   categoryGroup = [
     { value: 'スポーツ' },
-    { value: '音楽' },
+    { value: 'ミュージック' },
     { value: 'フード' },
     { value: 'ビジネス' },
     { value: 'プログラミング' },
-    { value: 'アウトドア' },
-    { value: '健康' },
+    { value: 'ゲーム' },
+    { value: 'アニメ' },
+    { value: '映画' },
+    { value: '漫画' },
     { value: '政治経済' },
-    { value: 'モノづくり' },
-    { value: '総合' },
+    { value: 'ジェンダー' },
+    { value: '地域' },
+    { value: 'オールラウンド' },
   ];
 
   constructor(

@@ -12,7 +12,7 @@ export const countUpReservedUsers = functions
     return shouldEventRun(eventId).then(async (should) => {
       if (should) {
         await db
-          .doc(`events/${context.params.teamId}`)
+          .doc(`events/${context.params.eventId}`)
           .update('reserveUserCount', admin.firestore.FieldValue.increment(1));
         return markEventTried(eventId);
       } else {
@@ -23,13 +23,13 @@ export const countUpReservedUsers = functions
 
 export const countDownReservedUsers = functions
   .region('asia-northeast1')
-  .firestore.document('teams/{teamId}/joinedUids/{uid}')
+  .firestore.document('events/{eventId}/joinedUids/{uid}')
   .onDelete(async (snap, context) => {
     const eventId = context.eventId;
     return shouldEventRun(eventId).then(async (should) => {
       if (should) {
         await db
-          .doc(`events/${context.params.teamId}`)
+          .doc(`events/${context.params.eventId}`)
           .update('reserveUserCount', admin.firestore.FieldValue.increment(-1));
         return markEventTried(eventId);
       } else {
