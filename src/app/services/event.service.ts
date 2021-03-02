@@ -15,6 +15,8 @@ import { UserService } from './user.service';
   providedIn: 'root',
 })
 export class EventService {
+  dateNow: firebase.default.firestore.Timestamp = firebase.default.firestore.Timestamp.now();
+
   constructor(
     private db: AngularFirestore,
     private storage: AngularFireStorage,
@@ -50,9 +52,19 @@ export class EventService {
     return result.ref.getDownloadURL();
   }
 
-  getEvents(): Observable<Event[]> {
+  getFutureEvents(): Observable<Event[]> {
     return this.db
-      .collection<Event>(`events`, (ref) => ref.orderBy('startAt', 'asc'))
+      .collection<Event>(`events`, (ref) =>
+        ref.where('startAt', '>=', this.dateNow).orderBy('startAt', 'asc')
+      )
+      .valueChanges();
+  }
+
+  getPastEvents(): Observable<Event[]> {
+    return this.db
+      .collection<Event>(`events`, (ref) =>
+        ref.where('startAt', '<', this.dateNow).orderBy('startAt', 'asc')
+      )
       .valueChanges();
   }
 
