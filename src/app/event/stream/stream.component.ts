@@ -56,7 +56,7 @@ export class StreamComponent implements OnInit, OnDestroy {
     this.streamInit();
   }
 
-  streamInit() {
+  streamInit(): void {
     this.isProcessing = true;
     this.agoraService.joinAgoraChannel(this.uid, this.eventId).then(() => {
       this.isJoin = true;

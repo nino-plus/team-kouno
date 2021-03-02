@@ -39,7 +39,7 @@ export class AgoraService {
     private userService: UserService
   ) {}
 
-  async joinAgoraChannel(uid: string, eventId: string) {
+  async joinAgoraChannel(uid: string, eventId: string): Promise<void> {
     const client = this.getClient();
 
     const callable = this.fnc.httpsCallable('participateChannel');
