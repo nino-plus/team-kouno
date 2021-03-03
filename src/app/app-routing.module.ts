@@ -23,6 +23,10 @@ const routes: Routes = [
     loadChildren: () =>
       import('./event/event.module').then((m) => m.EventModule),
   },
+  {
+    path: 'intl',
+    loadChildren: () => import('./intl/intl.module').then((m) => m.IntlModule),
+  },
 ];
 
 @NgModule({
