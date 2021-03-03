@@ -1,0 +1,24 @@
+<ng-container *ngIf="data">
+  <h1 matDialogTitle class="dialog-header">
+    {{ data.title }}
+  </h1>
+</ng-container>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-content align="center">
+  <div class="dialog-content">
+    <p>退会すると全てのデータが削除されます。</p>
+    <p>削除されたデータは元に戻すことができませんが</p>
+    <p>それでも退会してよろしいですか？</p>
+  </div>
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button matDialogClose>キャンセル</button>
+  <button color="warn" mat-raised-button [mat-dialog-close]="true">
+    退会する
+  </button>
+</mat-dialog-actions>
