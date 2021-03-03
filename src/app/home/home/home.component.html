@@ -1,45 +1,52 @@
-<section class="top">
-  <div class="top__grid">
-    <img class="top__img" src="/assets/images/hero-1.png" alt="" />
-    <img class="top__img" src="/assets/images/hero-2.png" alt="" />
-    <img class="top__img" src="/assets/images/hero-3.png" alt="" />
-  </div>
-  <div class="top__overlay">
-    <h1 class="top__heading">さあ、Webでつながろう</h1>
-    <p class="top__sub">オンラインイベントプラットフォーム</p>
-  </div>
-</section>
-
-<ng-container *ngIf="user$ | async as user; else guest">
-  <mat-tab-group mat-align-tabs="center" *ngIf="events$ | async as eventLists">
-    <mat-tab label="イベント一覧">
-      <div class="container">
-        <div class="event-grid">
-          <app-event-card
-            *ngFor="let event of eventLists"
-            [event]="event"
-            [uid]="user.uid"
-          ></app-event-card>
-        </div></div
-    ></mat-tab>
-    <mat-tab label="カレンダー">
-      <app-event-calendar
-        [eventLists]="eventLists"
-        [uid]="user.uid"
-      ></app-event-calendar>
-    </mat-tab>
-  </mat-tab-group>
-</ng-container>
-
-<ng-template #guest>
-  <div class="container">
-    <div class="event-grid">
-      <app-event-card
-        *ngFor="let event of events$ | async"
-        [event]="event"
-      ></app-event-card>
+<main class="main-wrap">
+  <section class="top">
+    <div class="top__grid">
+      <img class="top__img" src="/assets/images/hero-1.png" alt="" />
+      <img class="top__img" src="/assets/images/hero-2.png" alt="" />
+      <img class="top__img" src="/assets/images/hero-3.png" alt="" />
     </div>
-  </div>
-</ng-template>
+    <div class="top__overlay">
+      <h1 class="top__heading">さあ、Webでつながろう</h1>
+      <p class="top__sub">オンラインイベントプラットフォーム</p>
+    </div>
+  </section>
 
-<footer class="footer">&copy; Eventstand.</footer>
+  <ng-container *ngIf="user$ | async as user; else guest">
+    <mat-tab-group
+      mat-align-tabs="center"
+      *ngIf="events$ | async as eventLists"
+    >
+      <mat-tab label="イベント一覧">
+        <div class="container">
+          <div class="event-grid">
+            <app-event-card
+              *ngFor="let event of eventLists"
+              [event]="event"
+              [uid]="user.uid"
+            ></app-event-card>
+          </div></div
+      ></mat-tab>
+      <mat-tab label="カレンダー">
+        <app-event-calendar
+          [eventLists]="eventLists"
+          [uid]="user.uid"
+        ></app-event-calendar>
+      </mat-tab>
+    </mat-tab-group>
+  </ng-container>
+
+  <ng-template #guest>
+    <div class="container">
+      <div class="event-grid">
+        <app-event-card
+          *ngFor="let event of events$ | async"
+          [event]="event"
+        ></app-event-card>
+      </div>
+    </div>
+  </ng-template>
+</main>
+
+<div class="footer">
+  <app-footer></app-footer>
+</div>

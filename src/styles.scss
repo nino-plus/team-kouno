@@ -84,6 +84,47 @@ input {
   &--calendar {
     padding: 48px;
   }
+  &--intl {
+    padding: 48px;
+  }
+}
+
+.intl {
+  &__title {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 24px;
+  }
+  &__content-box {
+    margin-bottom: 16px;
+    &--eventstand {
+      display: flex;
+      flex-flow: column;
+    }
+  }
+  &__heading {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  &__contents {
+    font-size: 14px;
+    opacity: 0.8;
+  }
+  &__flex {
+    display: flex;
+    align-items: center;
+  }
+  &__icon {
+    margin-right: 8px;
+  }
+  &__logo-link {
+    display: flex;
+    align-items: center;
+    img {
+      margin-right: 4px;
+    }
+  }
 }
 
 .cal-month-view .cal-day-badge {

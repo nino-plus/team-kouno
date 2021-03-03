@@ -1,0 +1,27 @@
+@import 'custom-style';
+
+.footer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  padding: 24px 0;
+  &__heading {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  &__menu {
+    display: block;
+    font-size: 12px;
+    opacity: 0.8;
+    margin: 0 0 8px 8px;
+    &:hover {
+      color: #1bcbe0;
+    }
+  }
+  &__bottom {
+    padding: 6px;
+    font-style: 12px;
+    text-align: center;
+  }
+}
