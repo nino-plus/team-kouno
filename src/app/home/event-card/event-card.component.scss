@@ -14,6 +14,40 @@
         rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
     }
   }
+  &__header {
+    position: relative;
+  }
+  &__participants {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: $color-accent;
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 2;
+    &--reserve {
+      background: $color-sub;
+    }
+  }
+  &__participants-count-wrap {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  &__participants-count {
+    font-size: 24px;
+    font-weight: 600;
+    color: #fff;
+    &--s {
+      font-size: 10px;
+    }
+  }
+  &__participants-text {
+    font-size: 10px;
+    color: #fff;
+  }
   &__img {
     width: 100%;
     object-fit: cover;

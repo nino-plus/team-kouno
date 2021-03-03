@@ -14,7 +14,7 @@ import {
   CalendarView,
 } from 'angular-calendar';
 import { isSameDay, isSameMonth } from 'date-fns';
-import { Observable, Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
 import { AuthService } from 'src/app/services/auth.service';
@@ -49,7 +49,11 @@ export class EventCalendarComponent implements OnInit {
 
   reserveEvents$: Observable<Event[]> = this.authService.user$.pipe(
     switchMap((user) => {
-      return this.eventService.getReservedEvent(user.uid);
+      if (user) {
+        return this.eventService.getReservedEvent(user.uid);
+      } else {
+        return of(null);
+      }
     })
   );
 
@@ -96,21 +100,23 @@ export class EventCalendarComponent implements OnInit {
 
   ngOnInit(): void {
     this.reserveEvents$.pipe(take(1)).subscribe((events) => {
-      events.forEach((event) => {
-        this.calendarEventLists.push({
-          id: event.eventId,
-          start: event.startAt.toDate(),
-          end: event.exitAt ? event.exitAt.toDate() : '',
-          title: event.name,
-          color: colors.orange,
-          actions: this.actions,
-          resizable: {
-            beforeStart: true,
-            afterEnd: true,
-          },
-          draggable: true,
+      if (events) {
+        events.forEach((event) => {
+          this.calendarEventLists.push({
+            id: event.eventId,
+            start: event.startAt.toDate(),
+            end: event.exitAt ? event.exitAt.toDate() : '',
+            title: event.name,
+            color: colors.orange,
+            actions: this.actions,
+            resizable: {
+              beforeStart: true,
+              afterEnd: true,
+            },
+            draggable: true,
+          });
         });
-      });
+      }
     });
   }
 
@@ -149,12 +155,10 @@ export class EventCalendarComponent implements OnInit {
   handleEvent(action: string, event: CalendarEvent): void {
     this.modalData = { event, action };
     this.openDetailDialog(event.id);
-    console.log(event);
   }
 
   setView(view: CalendarView): void {
     this.view = view;
-    console.log(view);
   }
 
   closeOpenMonthViewDay(): void {

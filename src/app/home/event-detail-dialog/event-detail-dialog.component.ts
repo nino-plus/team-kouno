@@ -1,8 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { Event } from 'src/app/interfaces/event';
+import { User } from 'src/app/interfaces/user';
 import { EventService } from 'src/app/services/event.service';
+import { UserService } from 'src/app/services/user.service';
 import { InfoDialogComponent } from '../info-dialog/info-dialog.component';
 
 @Component({
@@ -11,10 +14,16 @@ import { InfoDialogComponent } from '../info-dialog/info-dialog.component';
   styleUrls: ['./event-detail-dialog.component.scss'],
 })
 export class EventDetailDialogComponent implements OnInit {
+  reservedUsers$: Observable<User[]> = this.eventService.getReservedUsers(
+    this.data.event.eventId
+  );
+  owner$: Observable<User>;
+
   constructor(
     private router: Router,
     private eventService: EventService,
     private dialog: MatDialog,
+    private userService: UserService,
     @Inject(MAT_DIALOG_DATA)
     public data: {
       event: Event;
@@ -22,7 +31,9 @@ export class EventDetailDialogComponent implements OnInit {
     }
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.owner$ = this.userService.getUserData(this.data.event.ownerId);
+  }
 
   reserveEvent(event: Event): void {
     this.eventService.reserveEvent(event, this.data.uid);

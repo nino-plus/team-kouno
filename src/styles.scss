@@ -90,7 +90,8 @@ input {
   background: #f891a8;
 }
 
-.cal-month-view .cal-day-cell.cal-today {
+.cal-month-view .cal-day-cell.cal-today,
+.cal-week-view .cal-header.cal-today {
   background: $color-sub;
 }
 
@@ -98,7 +99,8 @@ input {
   background: $color-main;
 }
 
-.cal-month-view .cal-header {
+.cal-month-view *,
+.cal-week-view * {
   font-weight: normal;
   font-size: 14px;
 }

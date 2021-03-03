@@ -56,7 +56,7 @@ export class StreamComponent implements OnInit, OnDestroy {
     this.streamInit();
   }
 
-  streamInit() {
+  streamInit(): void {
     this.isProcessing = true;
     this.agoraService.joinAgoraChannel(this.uid, this.eventId).then(() => {
       this.isJoin = true;
@@ -147,16 +147,19 @@ export class StreamComponent implements OnInit, OnDestroy {
     });
   }
 
-  @HostListener('window:beforeunload')
-  beforeUnloadHandler() {
+  @HostListener('window:unload', ['$event'])
+  unloadHandler($event: any): void {
     if (this.isJoin) {
       this.agoraService.leaveAgoraChannel(this.eventId);
     }
   }
-  @HostListener('window:unload')
-  unloadHandler() {
+
+  @HostListener('window:beforeunload', ['$event'])
+  beforeUnloadHandler($event: any): void {
     if (this.isJoin) {
-      this.agoraService.leaveAgoraChannel(this.eventId);
+      $event.preventDefault();
+      $event.returnValue =
+        'ページを閉じるとライブ通話を終了しますがよろしいですか？';
     }
   }
 }
