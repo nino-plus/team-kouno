@@ -72,6 +72,23 @@ export class EventService {
     return this.db.doc<Event>(`events/${eventId}`).valueChanges();
   }
 
+  getReservedUsers(eventId: string): Observable<User[]> {
+    return this.db
+      .collection<ReserveUid>(`events/${eventId}/reserveUids`)
+      .valueChanges()
+      .pipe(
+        switchMap((datas) => {
+          if (datas.length) {
+            return combineLatest(
+              datas.map((data) => this.userService.getUserData(data.uid))
+            );
+          } else {
+            return of(null);
+          }
+        })
+      );
+  }
+
   async updateEvent(
     eventId: string,
     event: Omit<Event, 'eventId' | 'thumbnailURL' | 'updatedAt'>,
