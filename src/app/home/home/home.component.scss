@@ -6,6 +6,11 @@
   min-height: 100%;
 }
 
+.main-wrap {
+  min-height: 100vh;
+  padding-bottom: 120px;
+}
+
 .top {
   position: relative;
   width: 100%;
@@ -83,9 +88,8 @@
     }
   }
 }
+
 .footer {
-  padding: 6px;
-  color: $color-font;
-  font-style: 12px;
-  text-align: center;
+  background: #424242;
+  color: #fff;
 }

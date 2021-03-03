@@ -16,6 +16,7 @@ import { CalendarModule } from 'angular-calendar';
 import { MatIconModule } from '@angular/material/icon';
 import { InfoDialogComponent } from './info-dialog/info-dialog.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { FooterComponent } from '../footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     EventDetailDialogComponent,
     EventCalendarComponent,
     InfoDialogComponent,
+    FooterComponent,
   ],
   imports: [
     CommonModule,
