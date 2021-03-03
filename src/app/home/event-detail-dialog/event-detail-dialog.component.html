@@ -27,8 +27,33 @@
 
         <mat-divider></mat-divider>
 
+        <p class="event__info-heading">参加予定の人</p>
+        <div class="user">
+          <ng-container *ngFor="let user of reservedUsers$ | async; else: zero">
+            <img
+              class="user__avatar"
+              [src]="user.avatarURL"
+              alt=""
+              [matTooltip]="user.name"
+            />
+          </ng-container>
+          <ng-template #zero>
+            <p>まだいません...</p>
+          </ng-template>
+        </div>
+
+        <mat-divider></mat-divider>
+
         <p class="event__info-heading">イベント詳細</p>
-        <p class="event__info">{{ data.event.description }}</p>
+        <div class="info">
+          <p class="info__description">{{ data.event.description }}</p>
+
+          <p class="info__heading">主催者</p>
+          <div class="info__owner-wrap" *ngIf="owner$ | async as owner">
+            <img class="info__owner-avatar" [src]="owner.avatarURL" alt="" />
+            <p class="info__owner-name">{{ owner.name }}</p>
+          </div>
+        </div>
       </div>
     </div>
   </mat-dialog-content>

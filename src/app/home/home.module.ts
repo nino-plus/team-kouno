@@ -15,6 +15,7 @@ import { CalendarCommonModule, CalendarMonthModule } from 'angular-calendar';
 import { CalendarModule } from 'angular-calendar';
 import { MatIconModule } from '@angular/material/icon';
 import { InfoDialogComponent } from './info-dialog/info-dialog.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { InfoDialogComponent } from './info-dialog/info-dialog.component';
     CalendarMonthModule,
     MatIconModule,
     CalendarModule,
+    MatTooltipModule,
   ],
 })
 export class HomeModule {}
