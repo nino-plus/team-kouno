@@ -13,6 +13,7 @@ export const createUser = functions
         uid: user.uid,
         name: user.displayName,
         avatarURL: user.photoURL,
+        email: user.email,
         createdAt: new Date(),
       },
       { merge: true }

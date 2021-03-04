@@ -3,4 +3,6 @@ export interface User {
   name: string;
   avatarURL: string;
   email?: string;
+  createdAt: firebase.default.firestore.Timestamp;
+  description: string;
 }

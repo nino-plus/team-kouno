@@ -14,7 +14,6 @@ const routes: Routes = [
   },
   {
     path: 'settings',
-    pathMatch: 'full',
     loadChildren: () =>
       import('./settings/settings.module').then((m) => m.SettingsModule),
   },

@@ -1,49 +1,42 @@
-<div class="settings">
-  <h1 class="settings__title">プロフィール編集</h1>
-  <ng-container *ngIf="user$ | async as user">
-    <form [formGroup]="form">
-      <div class="settings__profile">
-        <div class="settings__avatar" matTooltip="画像を設定">
-          <div class="settings__cropper">
-            <deer-crop-trigger
-              [options]="{
-                aspectRatio: 1 / 1,
-                oldImageUrl: imageFile
-              }"
-              (image)="onCroppedImage($event)"
-            ></deer-crop-trigger>
-          </div>
-        </div>
+<div class="container">
+  <div class="settings">
+    <ng-container *ngIf="user$ | async as user">
+      <div class="settings__header">
+        <img [src]="user.avatarURL" alt="" class="settings__avatar" />
+        <p class="settings__name">{{ user.name }}</p>
+      </div>
 
-        <div class="settings__info">
-          <p class="settings__id">
-            <span class="settings__label">ユーザーID</span>{{ user.uid }}
-          </p>
+      <div class="settings__main">
+        <side>
+          <mat-nav-list>
+            <a
+              routerLink="profile"
+              [routerLinkActive]="['active']"
+              mat-list-item
+            >
+              <p>プロフィール</p>
+            </a>
+            <a
+              routerLink="account"
+              [routerLinkActive]="['active']"
+              mat-list-item
+            >
+              <p>アカウント</p>
+            </a>
+            <a
+              routerLink="notifications"
+              [routerLinkActive]="['active']"
+              mat-list-item
+            >
+              <p>通知</p>
+            </a>
+          </mat-nav-list>
+        </side>
 
-          <div class="settings__name">
-            <span class="settings__label">ユーザー名</span>
-            <mat-form-field appearance="outline">
-              <input
-                class="settings__input"
-                matInput
-                autocomplete="off"
-                formControlName="name"
-                required
-                #name
-              />
-            </mat-form-field>
-          </div>
-          <button
-            (click)="updateUser()"
-            class="setting__update-button"
-            [disabled]="form.invalid || form.pristine"
-            mat-raised-button
-            color="primary"
-          >
-            更新
-          </button>
+        <div class="settings__outlet">
+          <router-outlet></router-outlet>
         </div>
       </div>
-    </form>
-  </ng-container>
+    </ng-container>
+  </div>
 </div>

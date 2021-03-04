@@ -11,9 +11,19 @@ import { CropperModule } from '@deer-inc/ngx-croppie';
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatDialogModule } from '@angular/material/dialog';
+import { AccountComponent } from './account/account.component';
+import { MatListModule } from '@angular/material/list';
+import { NotificationsComponent } from './notifications/notifications.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
-  declarations: [SettingsComponent, DeleteDialogComponent],
+  declarations: [
+    SettingsComponent,
+    DeleteDialogComponent,
+    AccountComponent,
+    NotificationsComponent,
+    ProfileComponent,
+  ],
   imports: [
     CommonModule,
     SettingsRoutingModule,
@@ -25,6 +35,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatInputModule,
     MatDividerModule,
     MatDialogModule,
+    MatListModule,
   ],
 })
 export class SettingsModule {}
