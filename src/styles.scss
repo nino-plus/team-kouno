@@ -127,6 +127,16 @@ input {
   }
 }
 
+.settings {
+  &__heading {
+    font-weight: 500;
+    margin-bottom: 16px;
+    &--unsubscribe {
+      color: red;
+    }
+  }
+}
+
 .cal-month-view .cal-day-badge {
   background: #f891a8;
 }

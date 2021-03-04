@@ -15,6 +15,8 @@ import { AccountComponent } from './account/account.component';
 import { MatListModule } from '@angular/material/list';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { ProfileComponent } from './profile/profile.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,8 @@ import { ProfileComponent } from './profile/profile.component';
     MatDividerModule,
     MatDialogModule,
     MatListModule,
+    MatIconModule,
+    MatTooltipModule,
   ],
 })
 export class SettingsModule {}
