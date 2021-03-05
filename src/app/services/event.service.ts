@@ -7,7 +7,7 @@ import { combineLatest, Observable, of } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ReserveUid } from '../interfaces/reserve-uid';
-import { switchMap, map, take } from 'rxjs/operators';
+import { switchMap, map, take, filter } from 'rxjs/operators';
 import { User } from '../interfaces/user';
 import { UserService } from './user.service';
 
@@ -146,7 +146,7 @@ export class EventService {
       .finally(() => this.router.navigateByUrl('/'));
   }
 
-  getReservedEvent(uid: string): Observable<Event[]> {
+  getReservedEvents(uid: string): Observable<Event[]> {
     if (!uid) {
       return of(null);
     }
@@ -166,6 +166,22 @@ export class EventService {
           }
         })
       );
+  }
+
+  getFutureReservedEvents(uid: string): Observable<Event[]> {
+    const allEvents = this.getReservedEvents(uid);
+    return allEvents.pipe(
+      map((events) => events.filter((event) => event.startAt > this.dateNow)),
+      filter((events) => events && events.length > 0)
+    );
+  }
+
+  getPastReservedEvents(uid: string): Observable<Event[]> {
+    const allEvents = this.getReservedEvents(uid);
+    return allEvents.pipe(
+      map((events) => events.filter((event) => event.startAt < this.dateNow)),
+      filter((events) => events && events.length > 0)
+    );
   }
 
   async deleteEvent(eventId: string): Promise<void> {
