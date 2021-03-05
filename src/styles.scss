@@ -135,6 +135,14 @@ input {
       color: red;
     }
   }
+  &__contents-wrap {
+    padding: 24px 0 48px;
+  }
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 }
 
 .cal-month-view .cal-day-badge {

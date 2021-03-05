@@ -1,0 +1,17 @@
+<ng-container *ngIf="user$ | async as user">
+  <div class="container">
+    <section class="my-page">
+      <div class="my-page__header">
+        <img [src]="user.avatarURL" alt="" />
+        <p>{{ user.name }}</p>
+        <p>{{ user.description }}</p>
+      </div>
+    </section>
+
+    <mat-tab-group mat-align-tabs="center">
+      <mat-tab label="参加イベント"> </mat-tab>
+      <mat-tab label="主催イベント"> </mat-tab>
+      <mat-tab label="フォロワー"> </mat-tab>
+    </mat-tab-group>
+  </div>
+</ng-container>
