@@ -1,12 +1,25 @@
-<ng-container *ngIf="user$ | async as user">
+<section class="my-page" *ngIf="user$ | async as user">
   <div class="container">
-    <section class="my-page">
-      <div class="my-page__header">
+    <div class="my-page__header">
+      <div class="my-page__avatar">
         <img [src]="user.avatarURL" alt="" />
-        <p>{{ user.name }}</p>
-        <p>{{ user.description }}</p>
       </div>
-    </section>
+
+      <div class="my-page__body">
+        <p class="my-page__name">{{ user.name }}</p>
+        <div class="my-page__flex">
+          <mat-icon class="my-page__icon">supervised_user_circle</mat-icon>
+          <p class="my-page__flex-item">
+            フォロワー {{ user.followerCount }}人
+          </p>
+          <mat-icon class="my-page__icon">supervised_user_circle</mat-icon>
+          <p class="my-page__flex-item">
+            フォロー中 {{ user.followingCount }}人
+          </p>
+        </div>
+        <p class="my-page__description">{{ user.description }}</p>
+      </div>
+    </div>
 
     <mat-tab-group mat-align-tabs="center">
       <mat-tab label="参加イベント"> </mat-tab>
@@ -14,4 +27,4 @@
       <mat-tab label="フォロワー"> </mat-tab>
     </mat-tab-group>
   </div>
-</ng-container>
+</section>
