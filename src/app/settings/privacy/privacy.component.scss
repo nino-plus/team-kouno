@@ -1,0 +1,11 @@
+@import 'custom-style';
+
+.privacy {
+  &__check-box {
+    margin: 24px 0;
+  }
+  &__text {
+    font-size: 14px;
+    color: $color-font;
+  }
+}

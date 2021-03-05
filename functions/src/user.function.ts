@@ -15,6 +15,10 @@ export const createUser = functions
         avatarURL: user.photoURL,
         email: user.email,
         createdAt: new Date(),
+        followerCount: 0,
+        followingCount: 0,
+        myEventCount: 0,
+        isPrivate: false,
       },
       { merge: true }
     );

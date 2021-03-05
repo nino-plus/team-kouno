@@ -17,6 +17,8 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { ProfileComponent } from './profile/profile.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { PrivacyComponent } from './privacy/privacy.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     AccountComponent,
     NotificationsComponent,
     ProfileComponent,
+    PrivacyComponent,
   ],
   imports: [
     CommonModule,
@@ -40,6 +43,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatListModule,
     MatIconModule,
     MatTooltipModule,
+    MatCheckboxModule,
   ],
 })
 export class SettingsModule {}

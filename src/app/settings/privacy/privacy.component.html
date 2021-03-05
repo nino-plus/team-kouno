@@ -1,0 +1,27 @@
+<div class="privacy">
+  <h3 class="settings__heading">プライバシー設定</h3>
+
+  <mat-divider></mat-divider>
+
+  <ng-container *ngIf="user$ | async as user">
+    <form [formGroup]="form" (ngSubmit)="setPrivacy(user.uid)">
+      <div class="settings__contents-wrap">
+        <mat-checkbox
+          formControlName="isPrivate"
+          color="primary"
+          class="privacy__check-box"
+        >
+          非公開アカウント
+        </mat-checkbox>
+        <p class="privacy__text">
+          アカウントが非公開になっている場合、承認した人以外にはイベントやアカウントは表示されません。
+        </p>
+      </div>
+
+      <div class="settings__actions">
+        <button mat-stroked-button type="button">戻る</button>
+        <button mat-raised-button>保存する</button>
+      </div>
+    </form>
+  </ng-container>
+</div>
