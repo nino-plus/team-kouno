@@ -53,6 +53,10 @@ export class ProfileComponent implements OnInit {
         avatarURL: this.imageFile,
         email: this.form.value.email,
         description: this.form.value.description,
+        isPrivate: this.user.isPrivate,
+        followerCount: this.user.followerCount,
+        followingCount: this.user.followingCount,
+        myEventCount: this.user.myEventCount,
       })
       .then(() => this.snackBar.open('ユーザー情報を更新しました'));
   }

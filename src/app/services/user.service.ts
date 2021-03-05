@@ -29,6 +29,15 @@ export class UserService {
     });
   }
 
+  async updateIsPrivate(uid: string, value: boolean): Promise<void> {
+    await this.db
+      .doc<User>(`users/${uid}`)
+      .update({
+        isPrivate: value,
+      })
+      .then(() => this.snackBar.open('プライバシー設定を保存しました'));
+  }
+
   async deleteUser(user: User): Promise<void> {
     this.isProcessing = true;
     const callable = this.fnc.httpsCallable('deleteAfUser');
