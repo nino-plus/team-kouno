@@ -5,11 +5,17 @@ import { MyPageRoutingModule } from './my-page-routing.module';
 import { MyPageComponent } from './my-page/my-page.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
-import { ParticipateEventComponent } from './participate-event/participate-event.component';
 import { MyEventComponent } from './my-event/my-event.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-  declarations: [MyPageComponent, ParticipateEventComponent, MyEventComponent],
-  imports: [CommonModule, MyPageRoutingModule, MatTabsModule, MatIconModule],
+  declarations: [MyPageComponent, MyEventComponent],
+  imports: [
+    CommonModule,
+    MyPageRoutingModule,
+    MatTabsModule,
+    MatIconModule,
+    SharedModule,
+  ],
 })
 export class MyPageModule {}
