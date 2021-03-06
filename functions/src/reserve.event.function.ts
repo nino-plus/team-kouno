@@ -23,7 +23,7 @@ export const countUpReservedUsers = functions
 
 export const countDownReservedUsers = functions
   .region('asia-northeast1')
-  .firestore.document('events/{eventId}/joinedUids/{uid}')
+  .firestore.document('events/{eventId}/reserveUids/{uid}')
   .onDelete(async (snap, context) => {
     const eventId = context.eventId;
     return shouldEventRun(eventId).then(async (should) => {

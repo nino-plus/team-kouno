@@ -70,20 +70,33 @@
   </mat-dialog-content>
 </div>
 
-<mat-dialog-actions class="actions" align="end">
+<mat-dialog-actions class="actions">
   <button class="actions__back" mat-button matDialogClose type="button">
-    キャンセル
+    閉じる
   </button>
   <ng-container *ngIf="data.uid; else default">
-    <button
-      mat-raised-button
-      class="actions__submit"
-      (click)="reserveEvent(data.event)"
-      mat-dialog-close
-    >
-      イベントを予約
-    </button>
-
+    <ng-container *ngIf="reservedUids$ | async as uids">
+      <ng-container *ngIf="!uids.includes(data.uid); else cancel">
+        <button
+          mat-raised-button
+          class="actions__submit"
+          (click)="reserveEvent(data.event)"
+          mat-dialog-close
+        >
+          イベントを予約
+        </button>
+      </ng-container>
+      <ng-template #cancel>
+        <button
+          mat-raised-button
+          class="actions__submit"
+          (click)="cancelReserve(data.event)"
+          mat-dialog-close
+        >
+          予約をキャンセル
+        </button>
+      </ng-template>
+    </ng-container>
     <ng-container *ngIf="data.event.startAt < eventService.dateNow">
       <button
         mat-raised-button
