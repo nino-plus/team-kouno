@@ -43,6 +43,11 @@ export class EventDetailDialogComponent implements OnInit {
     this.router.navigateByUrl(`/event/${eventId}/${uid}`);
   }
 
+  navigateMyPage(uid: string): void {
+    this.router.navigateByUrl(`${uid}`);
+    this.dialog.closeAll();
+  }
+
   openInfoDialog(): void {
     this.dialog.open(InfoDialogComponent);
   }

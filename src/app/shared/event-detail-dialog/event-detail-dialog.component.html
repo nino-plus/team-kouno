@@ -29,16 +29,20 @@
 
         <p class="event__info-heading">参加予定の人</p>
         <div class="user">
-          <ng-container *ngIf="reservedUsers$ | async as users; else zero">
-            <ng-container *ngFor="let user of users">
+          <ul
+            *ngIf="reservedUsers$ | async as users; else zero"
+            class="user__list-wrap"
+          >
+            <li *ngFor="let user of users" class="user__list">
               <img
-                class="user__avatar"
                 [src]="user.avatarURL"
                 alt=""
                 [matTooltip]="user.name"
+                class="user__avatar"
+                (click)="navigateMyPage(user.uid)"
               />
-            </ng-container>
-          </ng-container>
+            </li>
+          </ul>
           <ng-template #zero>
             <p>まだいません...</p>
           </ng-template>
@@ -52,7 +56,12 @@
 
           <p class="info__heading">主催者</p>
           <div class="info__owner-wrap" *ngIf="owner$ | async as owner">
-            <img class="info__owner-avatar" [src]="owner.avatarURL" alt="" />
+            <img
+              class="info__owner-avatar"
+              [src]="owner.avatarURL"
+              alt=""
+              (click)="navigateMyPage(owner.uid)"
+            />
             <p class="info__owner-name">{{ owner.name }}</p>
           </div>
         </div>
