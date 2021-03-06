@@ -33,9 +33,6 @@ export class PrivacyComponent implements OnInit {
 
   setPrivacy(uid: string): void {
     const value = this.form.value;
-    console.log(value);
-    console.log(value.isPrivate);
-
     this.userService.updateIsPrivate(uid, value.isPrivate);
   }
 }
