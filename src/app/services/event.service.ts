@@ -89,6 +89,17 @@ export class EventService {
       );
   }
 
+  getReaservedUids(eventId: string): Observable<string[]> {
+    return this.db
+      .collection<ReserveUid>(`events/${eventId}/reserveUids`)
+      .valueChanges()
+      .pipe(
+        map((uids) => {
+          return uids.map((data) => data.uid);
+        })
+      );
+  }
+
   async updateEvent(
     eventId: string,
     event: Omit<Event, 'eventId' | 'thumbnailURL' | 'updatedAt'>,
@@ -143,6 +154,14 @@ export class EventService {
         eventId: event.eventId,
       })
       .then(() => this.snackBar.open('イベントを予約しました'))
+      .finally(() => this.router.navigateByUrl('/'));
+  }
+
+  async cancelReserve(event: Event, uid: string): Promise<void> {
+    this.db
+      .doc<ReserveUid>(`events/${event.eventId}/reserveUids/${uid}`)
+      .delete()
+      .then(() => this.snackBar.open('予約をキャンセルしました'))
       .finally(() => this.router.navigateByUrl('/'));
   }
 
