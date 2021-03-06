@@ -55,7 +55,7 @@ export class EventService {
   getFutureEvents(): Observable<Event[]> {
     return this.db
       .collection<Event>(`events`, (ref) =>
-        ref.where('startAt', '>=', this.dateNow).orderBy('startAt', 'asc')
+        ref.where('exitAt', '>=', this.dateNow).orderBy('exitAt', 'asc')
       )
       .valueChanges();
   }
@@ -63,7 +63,7 @@ export class EventService {
   getPastEvents(): Observable<Event[]> {
     return this.db
       .collection<Event>(`events`, (ref) =>
-        ref.where('startAt', '<', this.dateNow).orderBy('startAt', 'asc')
+        ref.where('exitAt', '<', this.dateNow).orderBy('exitAt', 'asc')
       )
       .valueChanges();
   }
