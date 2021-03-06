@@ -21,7 +21,7 @@ export class EventDetailDialogComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private eventService: EventService,
+    public eventService: EventService,
     private dialog: MatDialog,
     private userService: UserService,
     @Inject(MAT_DIALOG_DATA)
@@ -29,7 +29,10 @@ export class EventDetailDialogComponent implements OnInit {
       event: Event;
       uid?: string;
     }
-  ) {}
+  ) {
+    console.log(this.eventService.dateNow);
+    console.log(this.data.event.startAt);
+  }
 
   ngOnInit(): void {
     this.owner$ = this.userService.getUserData(this.data.event.ownerId);
@@ -40,7 +43,9 @@ export class EventDetailDialogComponent implements OnInit {
   }
 
   joinChannel(eventId: string, uid: string): void {
-    this.router.navigateByUrl(`/event/${eventId}/${uid}`);
+    if (this.data.event.startAt < this.eventService.dateNow) {
+      this.router.navigateByUrl(`/event/${eventId}/${uid}`);
+    }
   }
 
   navigateMyPage(uid: string): void {
