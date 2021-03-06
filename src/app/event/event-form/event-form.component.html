@@ -97,8 +97,12 @@
           autocomplete="off"
           [owlDateTimeTrigger]="dt2"
           [owlDateTime]="dt2"
+          required
         />
         <owl-date-time [pickerType]="'both'" #dt2></owl-date-time>
+        <mat-error *ngIf="form.get('exitAt').hasError('required')"
+          >必須入力です</mat-error
+        >
       </mat-form-field>
     </div>
 
