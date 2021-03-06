@@ -7,6 +7,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MyEventComponent } from './my-event/my-event.component';
 import { SharedModule } from '../shared/shared.module';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [MyPageComponent, MyEventComponent],
@@ -16,6 +17,7 @@ import { SharedModule } from '../shared/shared.module';
     MatTabsModule,
     MatIconModule,
     SharedModule,
+    MatButtonModule,
   ],
 })
 export class MyPageModule {}

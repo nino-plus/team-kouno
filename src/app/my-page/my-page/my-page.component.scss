@@ -3,7 +3,7 @@
 .my-page {
   &__header {
     display: grid;
-    grid-template-columns: 240px 1fr;
+    grid-template-columns: 240px 1fr 160px;
     gap: 24px;
     align-items: center;
     padding: 24px;

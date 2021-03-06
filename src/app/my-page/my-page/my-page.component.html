@@ -19,6 +19,14 @@
         </div>
         <p class="my-page__description">{{ user.description }}</p>
       </div>
+
+      <div class="my-page__edit">
+        <ng-container *ngIf="user.uid === currentUserUid">
+          <a routerLink="/settings/profile" mat-stroked-button
+            >プロフィールを編集</a
+          >
+        </ng-container>
+      </div>
     </div>
 
     <mat-tab-group mat-align-tabs="center">

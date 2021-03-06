@@ -22,6 +22,8 @@ export class MyPageComponent implements OnInit {
     })
   );
   user: User;
+  currentUser$: Observable<User> = this.authService.user$;
+  currentUserUid: string;
   reservedEvents$: Observable<Event[]> = this.user$.pipe(
     switchMap((user) => {
       return this.eventService.getFutureReservedEvents(user.uid);
@@ -44,7 +46,11 @@ export class MyPageComponent implements OnInit {
     private eventService: EventService,
     private route: ActivatedRoute,
     private userService: UserService
-  ) {}
+  ) {
+    this.currentUser$.subscribe((user) => {
+      this.currentUserUid = user.uid;
+    });
+  }
 
   ngOnInit(): void {}
 }
