@@ -26,6 +26,11 @@ export class MyPageComponent implements OnInit {
       return this.eventService.getPastReservedEvents(user.uid);
     })
   );
+  ownerEvents$: Observable<Event[]> = this.user$.pipe(
+    switchMap((user) => {
+      return this.eventService.getOwnerEvents(user.uid);
+    })
+  );
   uid: string;
 
   constructor(

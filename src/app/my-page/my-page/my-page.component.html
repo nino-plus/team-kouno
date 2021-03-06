@@ -34,7 +34,17 @@
         </div>
       </mat-tab>
 
-      <mat-tab label="主催イベント"></mat-tab>
+      <mat-tab label="主催イベント">
+        <div class="event-grid">
+          <app-event-card
+            *ngFor="let event of ownerEvents$ | async"
+            [event]="event"
+            [uid]="user.uid"
+          >
+            ></app-event-card
+          >
+        </div>
+      </mat-tab>
 
       <mat-tab label="過去のイベント">
         <div class="event-grid">

@@ -215,4 +215,12 @@ export class EventService {
         })
       );
   }
+
+  getOwnerEvents(uid: string): Observable<Event[]> {
+    return this.db
+      .collection<Event>('events', (ref) =>
+        ref.where('ownerId', '==', uid).orderBy('startAt', 'asc')
+      )
+      .valueChanges();
+  }
 }
