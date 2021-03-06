@@ -29,13 +29,15 @@
 
         <p class="event__info-heading">参加予定の人</p>
         <div class="user">
-          <ng-container *ngFor="let user of reservedUsers$ | async; else: zero">
-            <img
-              class="user__avatar"
-              [src]="user.avatarURL"
-              alt=""
-              [matTooltip]="user.name"
-            />
+          <ng-container *ngIf="reservedUsers$ | async as users; else zero">
+            <ng-container *ngFor="let user of users">
+              <img
+                class="user__avatar"
+                [src]="user.avatarURL"
+                alt=""
+                [matTooltip]="user.name"
+              />
+            </ng-container>
           </ng-container>
           <ng-template #zero>
             <p>まだいません...</p>
