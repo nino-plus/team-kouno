@@ -3,11 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'event',
-    loadChildren: () =>
-      import('./event/event.module').then((m) => m.EventModule),
-  },
-  {
     path: '',
     pathMatch: 'full',
     loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
@@ -30,6 +25,11 @@ const routes: Routes = [
     path: ':uid',
     loadChildren: () =>
       import('./my-page/my-page.module').then((m) => m.MyPageModule),
+  },
+  {
+    path: 'editor',
+    loadChildren: () =>
+      import('./editor/editor.module').then((m) => m.EditorModule),
   },
 ];
 
