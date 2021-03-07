@@ -8,12 +8,14 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ShareScreenInfoDialogComponent } from './share-screen-info-dialog/share-screen-info-dialog.component';
 
 @NgModule({
   declarations: [
     EventCardComponent,
     EventDetailDialogComponent,
     InfoDialogComponent,
+    ShareScreenInfoDialogComponent,
   ],
   imports: [
     CommonModule,
