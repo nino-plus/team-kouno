@@ -1,14 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { EventRoutingModule } from './event-routing.module';
-import { EventComponent } from './event/event.component';
-import { EventRoomComponent } from './event-room/event-room.component';
-import { ChatComponent } from './chat/chat.component';
-import { StreamComponent } from './stream/stream.component';
+import { EditorRoutingModule } from './editor-routing.module';
+import { EditorComponent } from './editor/editor.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,19 +16,12 @@ import {
   OwlNativeDateTimeModule,
 } from '@danielmoncada/angular-datetime-picker';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatSidenavModule } from '@angular/material/sidenav';
 
 @NgModule({
-  declarations: [
-    EventComponent,
-    EventRoomComponent,
-    ChatComponent,
-    StreamComponent,
-  ],
+  declarations: [EditorComponent],
   imports: [
     CommonModule,
-    EventRoutingModule,
+    EditorRoutingModule,
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
@@ -45,8 +35,6 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     OwlNativeDateTimeModule,
     MatTooltipModule,
     MatDividerModule,
-    MatMenuModule,
-    MatSidenavModule,
   ],
 })
-export class EventModule {}
+export class EditorModule {}

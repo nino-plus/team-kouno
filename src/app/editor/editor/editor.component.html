@@ -47,14 +47,17 @@
     <div class="form-grid">
       <p class="form-grid__label">イベント詳細</p>
       <mat-form-field class="form-field" appearance="outline">
-        <input
+        <textarea
           matInput
           autocomplete="off"
           formControlName="description"
           [maxlength]="DESCRIPTION_MAX_LENGTH"
           required
           placeholder="イベントの説明文を入力してください"
-        />
+          matTextareaAutosize
+          [matAutosizeMinRows]="4"
+        >
+        </textarea>
         <mat-hint align="end"
           >{{ form.get('description').value.length }} /
           {{ DESCRIPTION_MAX_LENGTH }}</mat-hint
@@ -109,13 +112,15 @@
     <div class="form-grid">
       <p class="form-grid__label">サムネイル画像</p>
       <div class="form-grid__cropper">
-        <deer-crop-trigger
-          [options]="{
-            aspectRatio: 16 / 9,
-            oldImageUrl: oldImageUrl || 'assets/images/default-image.jpg'
-          }"
-          (image)="onCroppedImage($event)"
-        ></deer-crop-trigger>
+        <ng-container *ngIf="oldImageUrl">
+          <deer-crop-trigger
+            [options]="{
+              aspectRatio: 16 / 9,
+              oldImageUrl: oldImageUrl
+            }"
+            (image)="onCroppedImage($event)"
+          ></deer-crop-trigger>
+        </ng-container>
 
         <div class="form-grid__hint">
           <mat-icon class="form-grid__icon">done</mat-icon>
