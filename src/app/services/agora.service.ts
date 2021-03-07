@@ -109,7 +109,6 @@ export class AgoraService {
     });
 
     await client.join(this.agoraAppId, eventId, token.token, uid);
-    await this.publishMicrophone();
   }
 
   async leaveAgoraChannel(eventId: string): Promise<void> {

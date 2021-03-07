@@ -60,7 +60,6 @@ export class StreamComponent implements OnInit, OnDestroy {
     this.isProcessing = true;
     this.agoraService.joinAgoraChannel(this.uid, this.eventId).then(() => {
       this.isJoin = true;
-      this.isPublishMicrophone = true;
       this.isProcessing = false;
     });
     this.participants$ = this.agoraService.getParticipants(this.eventId);

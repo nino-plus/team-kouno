@@ -74,21 +74,21 @@
 
     <ng-template #microphone>
       <button
-        matTooltip="ミュートを解除"
-        class="actions__btn actions__btn--active"
+        matTooltip="ボイスをオン"
+        class="actions__btn"
         (click)="publishAudio()"
       >
-        <mat-icon class="actions__icon">volume_off</mat-icon>
+        <mat-icon class="actions__icon">volume_up</mat-icon>
       </button>
     </ng-template>
 
     <button
       *ngIf="isPublishMicrophone; else microphone"
       matTooltip="ミュート"
-      class="actions__btn"
+      class="actions__btn actions__btn--active"
       (click)="unPublishAudio()"
     >
-      <mat-icon class="actions__icon">volume_up</mat-icon>
+      <mat-icon class="actions__icon">volume_off</mat-icon>
     </button>
 
     <ng-template #screen>
