@@ -3,7 +3,6 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Event } from 'src/app/interfaces/event';
-import { ReserveUid } from 'src/app/interfaces/reserve-uid';
 import { User } from 'src/app/interfaces/user';
 import { EventService } from 'src/app/services/event.service';
 import { UserService } from 'src/app/services/user.service';
@@ -55,6 +54,11 @@ export class EventDetailDialogComponent implements OnInit {
 
   navigateMyPage(uid: string): void {
     this.router.navigateByUrl(`${uid}`);
+    this.dialog.closeAll();
+  }
+
+  navigateEditor(event: Event): void {
+    this.router.navigateByUrl(`/editor/${event.eventId}`);
     this.dialog.closeAll();
   }
 
