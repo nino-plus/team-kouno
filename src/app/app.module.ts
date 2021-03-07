@@ -38,6 +38,7 @@ import localeJa from '@angular/common/locales/ja';
 import { registerLocaleData } from '@angular/common';
 import { SearchBoxComponent } from './search-box/search-box.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 registerLocaleData(localeJa);
 
@@ -73,6 +74,7 @@ registerLocaleData(localeJa);
     FlexLayoutModule,
     NgbModalModule,
     MatAutocompleteModule,
+    MatTooltipModule,
   ],
   providers: [
     { provide: REGION, useValue: 'asia-northeast1' },
