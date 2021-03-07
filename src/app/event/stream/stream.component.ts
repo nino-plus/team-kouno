@@ -113,6 +113,9 @@ export class StreamComponent implements OnInit, OnDestroy {
           this.isPublishScreen = false;
         });
     }
+    await this.agoraService.publishMicrophone().then(() => {
+      this.isPublishMicrophone = true;
+    });
     this.agoraService.publishVideo(this.eventId).then(() => {
       this.isPublishVideo = true;
       this.isProcessing = false;
@@ -157,8 +160,7 @@ export class StreamComponent implements OnInit, OnDestroy {
   unloadHandler($event: any): void {
     if (this.isJoin) {
       $event.preventDefault();
-      $event.returnValue =
-        false;
+      $event.returnValue = false;
       this.agoraService.leaveAgoraChannel(this.eventId);
     }
   }
@@ -167,9 +169,8 @@ export class StreamComponent implements OnInit, OnDestroy {
   beforeUnloadHandler($event: any): void {
     if (this.isJoin) {
       $event.preventDefault();
-      $event.returnValue =
-        false;
-      this.agoraService.leaveAgoraChannel(this.eventId)
+      $event.returnValue = false;
+      this.agoraService.leaveAgoraChannel(this.eventId);
     }
   }
 }
