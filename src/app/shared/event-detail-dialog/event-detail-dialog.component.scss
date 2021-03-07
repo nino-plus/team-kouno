@@ -16,9 +16,18 @@
   &__date-wrap {
     display: flex;
     align-items: center;
+    justify-content: space-between;
   }
   &__date {
+    display: flex;
+    align-items: center;
     margin-right: 8px;
+  }
+  &__startAt {
+    margin-right: 4px;
+  }
+  &__exitAt {
+    margin-left: 4px;
   }
   &__category {
     font-size: 14px;
