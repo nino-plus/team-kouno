@@ -18,6 +18,24 @@
           </p>
         </div>
         <p class="my-page__description">{{ user.description }}</p>
+        <ng-container *ngIf="user.uid !== currentUserUid">
+          <button
+            mat-button
+            *ngIf="!isFollowing"
+            class="my-page__follow-button"
+            (click)="follow()"
+          >
+            フォローする
+          </button>
+          <button
+            mat-button
+            *ngIf="isFollowing"
+            class="my-page__following-button"
+            (click)="unFollow()"
+          >
+            フォロー中
+          </button>
+        </ng-container>
       </div>
 
       <div class="my-page__edit">

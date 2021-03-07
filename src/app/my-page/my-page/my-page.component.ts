@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as firebase from 'firebase';
 import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { EventService } from 'src/app/services/event.service';
+import { UserFollowService } from 'src/app/services/user-follow.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -39,19 +40,41 @@ export class MyPageComponent implements OnInit {
       return this.eventService.getOwnerEvents(user.uid);
     })
   );
+  targetId: string;
+  isFollowing: boolean;
   uid: string;
-  type;
 
   constructor(
     private authService: AuthService,
     private eventService: EventService,
     private route: ActivatedRoute,
-    private userService: UserService
-  ) {
-    this.currentUser$.subscribe((user) => {
-      this.currentUserUid = user.uid;
-    });
+    private userService: UserService,
+    private followService: UserFollowService
+  ) {}
+
+  follow(): void {
+    this.isFollowing = true;
+    this.followService.follow(this.currentUserUid, this.targetId);
   }
 
-  ngOnInit(): void {}
+  unFollow(): void {
+    this.isFollowing = false;
+    this.followService.unFollow(this.currentUserUid, this.targetId);
+  }
+
+  ngOnInit(): void {
+    this.targetId = this.route.snapshot.params.uid;
+    this.currentUser$
+      .pipe(
+        take(1),
+        map((user) => user.uid)
+      )
+      .toPromise()
+      .then((uid) => {
+        this.currentUserUid = uid;
+        this.followService
+          .checkFollowing(this.currentUserUid, this.targetId)
+          .then((isFollowing) => (this.isFollowing = isFollowing));
+      });
+  }
 }

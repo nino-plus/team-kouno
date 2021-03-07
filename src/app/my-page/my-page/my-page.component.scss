@@ -39,6 +39,20 @@
   &__description {
     font-size: 14px;
   }
+  &__follow-button {
+    margin-top: 16px;
+    color: white;
+    background-color: #1bcbe0;
+  }
+  &__following-button {
+    margin-top: 16px;
+    height: 36px;
+    width: 102px;
+    padding: 0;
+    color: black;
+    border: solid 1px gray;
+    box-sizing: border-box;
+  }
 }
 
 .event-grid {
