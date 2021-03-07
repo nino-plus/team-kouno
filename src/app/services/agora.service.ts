@@ -39,7 +39,7 @@ export class AgoraService {
     private userService: UserService
   ) {}
 
-  async joinAgoraChannel(uid: string, eventId: string): Promise<void> {
+  async joinAgoraChannel(uid: string, eventId: string): Promise<string | number> {
     const client = this.getClient();
 
     const callable = this.fnc.httpsCallable('participateChannel');
@@ -52,20 +52,6 @@ export class AgoraService {
     if (!uid) {
       throw new Error('channel name is required.');
     }
-
-    this.getParticipants(eventId)
-      .pipe(
-        map((users: User[]) => users.map((user) => user.uid)),
-        take(1)
-      )
-      .toPromise()
-      .then(async (ids: string[]) => {
-        if (!ids.includes(uid)) {
-          await this.db.doc(`events/${eventId}`).update({
-            participantCount: firestore.firestore.FieldValue.increment(1),
-          });
-        }
-      });
 
     const token: any = await this.getToken(eventId);
 
@@ -108,7 +94,7 @@ export class AgoraService {
       }
     });
 
-    await client.join(this.agoraAppId, eventId, token.token, uid);
+    return client.join(this.agoraAppId, eventId, token.token, uid);
   }
 
   async leaveAgoraChannel(eventId: string): Promise<void> {
@@ -127,10 +113,6 @@ export class AgoraService {
     }
     await this.unpublishAgora();
     await client.leave();
-
-    await this.db.doc(`events/${eventId}`).update({
-      participantCount: firestore.firestore.FieldValue.increment(-1),
-    });
     await this.leaveFromSession(eventId);
   }
 
