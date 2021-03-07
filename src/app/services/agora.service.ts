@@ -78,18 +78,6 @@ export class AgoraService {
 
     client.on('user-unpublished', async (user, mediaType) => {
       await client.unsubscribe(user, mediaType);
-      const screenOwnerUid = await this.eventService.getScreenOwnerId(eventId);
-      const remoteUserId = user.uid;
-
-      console.log(this.remoteUserIds);
-      if (mediaType === 'video') {
-        if (screenOwnerUid === remoteUserId) {
-          const element = document.getElementById('share-screen');
-          if (element) {
-            element.remove();
-          }
-        }
-      }
     });
 
     return client.join(this.agoraAppId, eventId, token.token, uid);
