@@ -1,4 +1,5 @@
 @import 'custom-style';
+@import 'mixins';
 
 .header {
   position: fixed;
@@ -18,6 +19,9 @@
     font-family: $font-logo;
     img {
       margin-right: 4px;
+    }
+    @include sp {
+      font-size: 20px;
     }
   }
   &__logo-link {
