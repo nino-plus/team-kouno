@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { EventRoutingModule } from './event-routing.module';
 import { EventComponent } from './event/event.component';
-import { EventFormComponent } from './event-form/event-form.component';
 import { EventRoomComponent } from './event-room/event-room.component';
 import { ChatComponent } from './chat/chat.component';
 import { StreamComponent } from './stream/stream.component';
@@ -26,7 +25,6 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 @NgModule({
   declarations: [
     EventComponent,
-    EventFormComponent,
     EventRoomComponent,
     ChatComponent,
     StreamComponent,
