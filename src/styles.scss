@@ -30,6 +30,7 @@ body {
   height: 100%;
   box-sizing: border-box;
 }
+
 body {
   margin: 0;
   padding-top: 56px;
@@ -37,13 +38,16 @@ body {
     'ヒラギノ角ゴシック', YuGothic, 'Yu Gothic', 'メイリオ', Meiryo,
     'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
 }
+
 a {
   color: inherit;
   text-decoration: none;
 }
+
 li {
   list-style: none;
 }
+
 h1,
 h2,
 h3,
@@ -57,14 +61,22 @@ figure {
   margin: 0;
   outline: none;
 }
+
 button {
   border: none;
   outline: none;
   appearance: none;
 }
+
 input {
   outline: none;
 }
+
+img {
+  max-width: 100%;
+  vertical-align: bottom;
+}
+
 .agora_video_player {
   min-height: 300px !important;
   // position: unset !important;
@@ -74,6 +86,7 @@ input {
   // display: block;
   // border-radius: 300px;
 }
+
 .container {
   max-width: 1200px;
   padding: 0 48px;
@@ -86,6 +99,10 @@ input {
   }
   &--intl {
     padding: 48px;
+  }
+  &--result {
+    padding: 48px 0;
+    max-width: 1600px;
   }
 }
 

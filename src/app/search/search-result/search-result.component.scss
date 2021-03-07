@@ -1,0 +1,73 @@
+@import 'custom-style';
+
+.result {
+  &__hits {
+    font-size: 24px;
+    font-weight: 500;
+    color: $color-font;
+    margin-bottom: 24px;
+  }
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+}
+
+.event {
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 8px;
+  position: relative;
+  transition: ease 0.3s;
+  cursor: pointer;
+  &:hover {
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
+      rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+  }
+  &:hover.event__count-wrap {
+    display: block;
+  }
+  &__thumbnail {
+    padding: 0px 24px;
+    background: #303030;
+    border-radius: 12px;
+    img {
+      max-width: 100%;
+      border-radius: 2px;
+    }
+  }
+  &__category {
+    position: absolute;
+    top: 16px;
+    left: 0;
+    background: $color-sub;
+    color: #fff;
+    padding-left: 16px;
+  }
+  &__name {
+    font-size: 14px;
+  }
+  &__body {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.38);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 0 0 10px 10px;
+    font-size: 12px;
+  }
+  &__description {
+    display: flex;
+    align-items: center;
+  }
+  &__count-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .spacer {
+    flex: 1;
+  }
+}

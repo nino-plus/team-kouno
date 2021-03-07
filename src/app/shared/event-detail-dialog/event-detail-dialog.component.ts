@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { EventService } from 'src/app/services/event.service';
+import { UiService } from 'src/app/services/ui.service';
 import { UserService } from 'src/app/services/user.service';
 import { InfoDialogComponent } from '../info-dialog/info-dialog.component';
 
@@ -27,6 +28,7 @@ export class EventDetailDialogComponent implements OnInit {
     public eventService: EventService,
     private dialog: MatDialog,
     private userService: UserService,
+    public uiService: UiService,
     @Inject(MAT_DIALOG_DATA)
     public data: {
       event: Event;

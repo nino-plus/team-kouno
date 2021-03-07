@@ -32,6 +32,7 @@
     "@deer-inc/ngx-croppie": "0.0.17",
     "@ng-bootstrap/ng-bootstrap": "^9.0.2",
     "agora-rtc-sdk-ng": "^4.3.0",
+    "algoliasearch": "^4.8.5",
     "angular-calendar": "^0.28.22",
     "angularx-flatpickr": "^6.5.2",
     "croppie": "^2.6.5",
@@ -39,6 +40,7 @@
     "firebase": "^7.0.0 || ^8.0.0",
     "flatpickr": "^4.6.9",
     "moment": "^2.29.1",
+    "ngx-infinite-scroll": "^10.0.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.3"
