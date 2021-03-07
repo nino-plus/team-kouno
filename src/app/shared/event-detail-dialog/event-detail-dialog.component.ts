@@ -31,6 +31,7 @@ export class EventDetailDialogComponent implements OnInit {
     public data: {
       event: Event;
       uid?: string;
+      type?;
     }
   ) {}
 
@@ -64,5 +65,9 @@ export class EventDetailDialogComponent implements OnInit {
 
   openInfoDialog(): void {
     this.dialog.open(InfoDialogComponent);
+  }
+
+  deleteEvent(event): void {
+    this.eventService.deleteEvent(event);
   }
 }

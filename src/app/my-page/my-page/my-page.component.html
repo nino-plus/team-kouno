@@ -48,6 +48,7 @@
             *ngFor="let event of ownerEvents$ | async"
             [event]="event"
             [uid]="user.uid"
+            [type]="'owner'"
           >
             ></app-event-card
           >
@@ -60,6 +61,7 @@
             *ngFor="let event of pastEvents$ | async"
             [event]="event"
             [uid]="user.uid"
+            [type]="'past'"
           >
           </app-event-card>
         </div>

@@ -78,58 +78,75 @@
   <button class="actions__back" mat-button matDialogClose type="button">
     閉じる
   </button>
-  <ng-container *ngIf="data.uid; else default">
-    <ng-container *ngIf="reservedUids$ | async as uids">
-      <ng-container *ngIf="!uids.includes(data.uid); else cancel">
+  <ng-container [ngSwitch]="data.type">
+    <ng-container *ngSwitchDefault>
+      <ng-container *ngIf="data.uid; else default">
+        <ng-container *ngIf="reservedUids$ | async as uids">
+          <ng-container *ngIf="!uids.includes(data.uid); else cancel">
+            <button
+              mat-raised-button
+              class="actions__submit"
+              (click)="reserveEvent(data.event)"
+              mat-dialog-close
+            >
+              イベントを予約
+            </button>
+          </ng-container>
+          <ng-template #cancel>
+            <button
+              mat-raised-button
+              class="actions__submit"
+              (click)="cancelReserve(data.event)"
+              mat-dialog-close
+            >
+              予約をキャンセル
+            </button>
+          </ng-template>
+        </ng-container>
+        <ng-container *ngIf="data.event.startAt < eventService.dateNow">
+          <button
+            mat-raised-button
+            class="actions__submit"
+            (click)="joinChannel(data.event.eventId, data.uid)"
+            mat-dialog-close
+          >
+            イベントに参加
+          </button>
+        </ng-container>
+      </ng-container>
+      <ng-template #default>
         <button
           mat-raised-button
           class="actions__submit"
-          (click)="reserveEvent(data.event)"
+          (click)="openInfoDialog()"
           mat-dialog-close
+          [class.disable]="!data.uid"
         >
           イベントを予約
         </button>
-      </ng-container>
-      <ng-template #cancel>
         <button
           mat-raised-button
           class="actions__submit"
-          (click)="cancelReserve(data.event)"
+          (click)="openInfoDialog()"
           mat-dialog-close
+          [class.disable]="!data.uid"
         >
-          予約をキャンセル
+          イベントに参加
         </button>
       </ng-template>
     </ng-container>
-    <ng-container *ngIf="data.event.startAt < eventService.dateNow">
+
+    <ng-container *ngSwitchCase="'owner'">
       <button
         mat-raised-button
         class="actions__submit"
-        (click)="joinChannel(data.event.eventId, data.uid)"
+        (click)="deleteEvent(data.event.eventId)"
         mat-dialog-close
       >
-        イベントに参加
+        イベントを削除
       </button>
     </ng-container>
+
+    <ng-container *ngSwitchCase="'past'"></ng-container>
   </ng-container>
-  <ng-template #default>
-    <button
-      mat-raised-button
-      class="actions__submit"
-      (click)="openInfoDialog()"
-      mat-dialog-close
-      [class.disable]="!data.uid"
-    >
-      イベントを予約
-    </button>
-    <button
-      mat-raised-button
-      class="actions__submit"
-      (click)="openInfoDialog()"
-      mat-dialog-close
-      [class.disable]="!data.uid"
-    >
-      イベントに参加
-    </button>
-  </ng-template>
 </mat-dialog-actions>
