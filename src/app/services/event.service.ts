@@ -106,17 +106,21 @@ export class EventService {
     thumbnailURL: string
   ): Promise<void> {
     const image = await this.setThumbnailToStorage(eventId, thumbnailURL);
-    await this.db.doc<Event>(`events/${eventId}`).set(
-      {
-        ...event,
-        eventId,
-        updatedAt: firebase.default.firestore.Timestamp.now(),
-        thumbnailURL: image,
-      },
-      {
-        merge: true,
-      }
-    );
+    await this.db
+      .doc<Event>(`events/${eventId}`)
+      .set(
+        {
+          ...event,
+          eventId,
+          updatedAt: firebase.default.firestore.Timestamp.now(),
+          thumbnailURL: image,
+        },
+        {
+          merge: true,
+        }
+      )
+      .then(() => this.snackBar.open('イベントを更新しました'))
+      .finally(() => this.router.navigateByUrl('/'));
   }
 
   async updateScreenFlag(
