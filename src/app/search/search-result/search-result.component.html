@@ -1,0 +1,73 @@
+<div class="container container--result">
+  <div class="result">
+    <ng-container *ngIf="result?.hits.length || events.length">
+      <h2 class="result__hits">全部で {{ result?.nbHits }} 件見つかりました</h2>
+    </ng-container>
+    <div *ngIf="events?.length > 0; else notFound" class="result__grid">
+      <ul *ngFor="let event of events">
+        <li (click)="openDetailDialog(event)" class="event">
+          <div @fade class="event__thumbnail">
+            <img [src]="event.thumbnailURL" alt="" />
+          </div>
+
+          <button class="event__category">
+            <p class="event__category-text">{{ event.category }}</p>
+          </button>
+
+          <div class="event__body">
+            <div class="event__top">
+              <h3 class="event__name">{{ event.name }}</h3>
+            </div>
+
+            <div class="event__description">
+              <p class="event__date">
+                {{ event.startAt | date: 'yyyy/MM/dd HH:mm' }}〜
+              </p>
+
+              <span class="spacer"></span>
+
+              <div class="event__count-wrap">
+                <p class="event__count">
+                  <span
+                    >予約
+                    {{
+                      event.reserveUserCount ? event.reserveUserCount : 0
+                    }}</span
+                  >
+                </p>
+                <p class="event__count">
+                  <span
+                    >参加
+                    {{
+                      event.participateCount ? event.participateCount : 0
+                    }}</span
+                  >
+                </p>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <ng-container *ngIf="result?.hits.length || events.length">
+      <div
+        infiniteScroll
+        [infiniteScrollDistance]="1"
+        [infiniteScrollThrottle]="100"
+        (scrolled)="searchEvents()"
+      ></div>
+    </ng-container>
+
+    <ng-template #notFound>
+      <div class="not-found" *ngIf="!loading">
+        <p>一致するアイテムがありませんでした🙏</p>
+        <p>キーワードを変えて試してみましょう。</p>
+      </div>
+    </ng-template>
+
+    <ng-container *ngIf="loading">
+      <img src="assets/images/loading.svg" alt="" />
+    </ng-container>
+  </div>
+</div>

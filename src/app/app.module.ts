@@ -36,11 +36,13 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import localeJa from '@angular/common/locales/ja';
 import { registerLocaleData } from '@angular/common';
+import { SearchBoxComponent } from './search-box/search-box.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 registerLocaleData(localeJa);
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent],
+  declarations: [AppComponent, HeaderComponent, SearchBoxComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -70,6 +72,7 @@ registerLocaleData(localeJa);
     }),
     FlexLayoutModule,
     NgbModalModule,
+    MatAutocompleteModule,
   ],
   providers: [
     { provide: REGION, useValue: 'asia-northeast1' },
