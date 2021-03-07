@@ -114,7 +114,7 @@
         opacity: 0.8;
       }
     }
-    &--diabled {
+    &--disabled {
       cursor: auto;
       pointer-events: none;
       &:after {
@@ -203,4 +203,6 @@
   opacity: 0;
   position: fixed;
   transition: all 600ms;
+  z-index: -1;
+  pointer-events: none;
 }

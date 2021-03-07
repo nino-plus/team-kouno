@@ -1,9 +1,7 @@
 <ng-container *ngIf="event$ | async as event">
   <div class="channel">
-    <ng-container *ngIf="!isPublishScreen; else shareScreen">
-      <ng-container *ngIf="participants$ | async as participants">
-        <div
-        *ngIf="!event.isShareScreen"
+    <ng-container *ngIf="participants$ | async as participants">
+      <div
         id="local-player"
         class="player"
         [class.player--1-player]="participants.length === 1"
@@ -11,7 +9,7 @@
           participants.length > 1 && participants.length < 3
         "
         [class.player--more-player]="participants.length > 2"
-        [class.invisible]="isProcessing"
+        [class.invisible]="isProcessing || event.isShareScreen"
       >
         <ng-container *ngFor="let user of participants">
           <ng-container *ngIf="videoPublishUserIds$ | async as ids">
@@ -31,19 +29,11 @@
         </ng-container>
       </div>
       <div
-      *ngIf="event.isShareScreen"
-      id="share-screen"
-      class="screen"
-      [class.invisible]="isProcessing"
-    ></div>
-      </ng-container>
+        id="share-screen"
+        class="screen"
+        [class.invisible]="isProcessing || !event.isShareScreen"
+      ></div>
     </ng-container>
-
-    <ng-template #shareScreen>
-      <p class="channel__title" [class.invisible]="isProcessing">
-        画面共有中です
-      </p>
-    </ng-template>
 
     <ng-container *ngIf="isProcessing">
       <div class="lodading-wrap">
@@ -59,7 +49,7 @@
         class="actions__btn"
         (click)="publishVideo()"
         [disabled]="event.isShareScreen"
-        [class.actions__btn--diabled]="event.isShareScreen"
+        [class.actions__btn--disabled]="event.isShareScreen"
       >
         <mat-icon class="actions__icon">videocam</mat-icon>
       </button>
@@ -99,7 +89,7 @@
         class="actions__btn"
         (click)="publishScreen()"
         [disabled]="event.isShareScreen"
-        [class.actions__btn--diabled]="event.isShareScreen"
+        [class.actions__btn--disabled]="event.isShareScreen"
       >
         <mat-icon class="actions__icon">desktop_windows</mat-icon>
       </button>

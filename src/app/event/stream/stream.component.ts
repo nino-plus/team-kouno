@@ -5,6 +5,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -13,6 +14,7 @@ import { User } from 'src/app/interfaces/user';
 import { AgoraService } from 'src/app/services/agora.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { EventService } from 'src/app/services/event.service';
+import { ShareScreenInfoDialogComponent } from 'src/app/shared/share-screen-info-dialog/share-screen-info-dialog.component';
 
 @Component({
   selector: 'app-stream',
@@ -43,7 +45,8 @@ export class StreamComponent implements OnInit, OnDestroy {
     private agoraService: AgoraService,
     private router: Router,
     private snackBar: MatSnackBar,
-    private eventService: EventService
+    private eventService: EventService,
+    private dialog: MatDialog
   ) {}
 
   ngOnDestroy(): void {
@@ -110,6 +113,9 @@ export class StreamComponent implements OnInit, OnDestroy {
           this.isPublishScreen = false;
         });
     }
+    await this.agoraService.publishMicrophone().then(() => {
+      this.isPublishMicrophone = true;
+    });
     this.agoraService.publishVideo(this.eventId).then(() => {
       this.isPublishVideo = true;
       this.isProcessing = false;
@@ -132,8 +138,12 @@ export class StreamComponent implements OnInit, OnDestroy {
         this.isPublishVideo = false;
       });
     }
-    this.agoraService.publishScreen(this.eventId, this.uid).then(() => {
-      this.isPublishScreen = true;
+    this.agoraService.publishScreen(this.eventId, this.uid).then((isError) => {
+      if (isError) {
+        this.dialog.open(ShareScreenInfoDialogComponent);
+      } else {
+        this.isPublishScreen = true;
+      }
       this.isProcessing = false;
     });
   }
@@ -150,8 +160,7 @@ export class StreamComponent implements OnInit, OnDestroy {
   unloadHandler($event: any): void {
     if (this.isJoin) {
       $event.preventDefault();
-      $event.returnValue =
-        false;
+      $event.returnValue = false;
       this.agoraService.leaveAgoraChannel(this.eventId);
     }
   }
@@ -160,9 +169,8 @@ export class StreamComponent implements OnInit, OnDestroy {
   beforeUnloadHandler($event: any): void {
     if (this.isJoin) {
       $event.preventDefault();
-      $event.returnValue =
-        false;
-      this.agoraService.leaveAgoraChannel(this.eventId)
+      $event.returnValue = false;
+      this.agoraService.leaveAgoraChannel(this.eventId);
     }
   }
 }
