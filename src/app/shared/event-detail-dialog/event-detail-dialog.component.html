@@ -29,14 +29,20 @@
 
         <p class="event__info-heading">参加予定の人</p>
         <div class="user">
-          <ng-container *ngFor="let user of reservedUsers$ | async; else: zero">
-            <img
-              class="user__avatar"
-              [src]="user.avatarURL"
-              alt=""
-              [matTooltip]="user.name"
-            />
-          </ng-container>
+          <ul
+            *ngIf="reservedUsers$ | async as users; else zero"
+            class="user__list-wrap"
+          >
+            <li *ngFor="let user of users" class="user__list">
+              <img
+                [src]="user.avatarURL"
+                alt=""
+                [matTooltip]="user.name"
+                class="user__avatar"
+                (click)="navigateMyPage(user.uid)"
+              />
+            </li>
+          </ul>
           <ng-template #zero>
             <p>まだいません...</p>
           </ng-template>
@@ -50,7 +56,12 @@
 
           <p class="info__heading">主催者</p>
           <div class="info__owner-wrap" *ngIf="owner$ | async as owner">
-            <img class="info__owner-avatar" [src]="owner.avatarURL" alt="" />
+            <img
+              class="info__owner-avatar"
+              [src]="owner.avatarURL"
+              alt=""
+              (click)="navigateMyPage(owner.uid)"
+            />
             <p class="info__owner-name">{{ owner.name }}</p>
           </div>
         </div>
@@ -59,27 +70,43 @@
   </mat-dialog-content>
 </div>
 
-<mat-dialog-actions class="actions" align="end">
+<mat-dialog-actions class="actions">
   <button class="actions__back" mat-button matDialogClose type="button">
-    キャンセル
+    閉じる
   </button>
   <ng-container *ngIf="data.uid; else default">
-    <button
-      mat-raised-button
-      class="actions__submit"
-      (click)="reserveEvent(data.event)"
-      mat-dialog-close
-    >
-      イベントを予約
-    </button>
-    <button
-      mat-raised-button
-      class="actions__submit"
-      (click)="joinChannel(data.event.eventId, data.uid)"
-      mat-dialog-close
-    >
-      イベントに参加
-    </button>
+    <ng-container *ngIf="reservedUids$ | async as uids">
+      <ng-container *ngIf="!uids.includes(data.uid); else cancel">
+        <button
+          mat-raised-button
+          class="actions__submit"
+          (click)="reserveEvent(data.event)"
+          mat-dialog-close
+        >
+          イベントを予約
+        </button>
+      </ng-container>
+      <ng-template #cancel>
+        <button
+          mat-raised-button
+          class="actions__submit"
+          (click)="cancelReserve(data.event)"
+          mat-dialog-close
+        >
+          予約をキャンセル
+        </button>
+      </ng-template>
+    </ng-container>
+    <ng-container *ngIf="data.event.startAt < eventService.dateNow">
+      <button
+        mat-raised-button
+        class="actions__submit"
+        (click)="joinChannel(data.event.eventId, data.uid)"
+        mat-dialog-close
+      >
+        イベントに参加
+      </button>
+    </ng-container>
   </ng-container>
   <ng-template #default>
     <button

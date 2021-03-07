@@ -3,6 +3,7 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Event } from 'src/app/interfaces/event';
+import { ReserveUid } from 'src/app/interfaces/reserve-uid';
 import { User } from 'src/app/interfaces/user';
 import { EventService } from 'src/app/services/event.service';
 import { UserService } from 'src/app/services/user.service';
@@ -17,11 +18,14 @@ export class EventDetailDialogComponent implements OnInit {
   reservedUsers$: Observable<User[]> = this.eventService.getReservedUsers(
     this.data.event.eventId
   );
+  reservedUids$: Observable<string[]> = this.eventService.getReaservedUids(
+    this.data.event.eventId
+  );
   owner$: Observable<User>;
 
   constructor(
     private router: Router,
-    private eventService: EventService,
+    public eventService: EventService,
     private dialog: MatDialog,
     private userService: UserService,
     @Inject(MAT_DIALOG_DATA)
@@ -39,8 +43,19 @@ export class EventDetailDialogComponent implements OnInit {
     this.eventService.reserveEvent(event, this.data.uid);
   }
 
+  cancelReserve(event: Event): void {
+    this.eventService.cancelReserve(event, this.data.uid);
+  }
+
   joinChannel(eventId: string, uid: string): void {
-    this.router.navigateByUrl(`/event/${eventId}/${uid}`);
+    if (this.data.event.startAt < this.eventService.dateNow) {
+      this.router.navigateByUrl(`/event/${eventId}/${uid}`);
+    }
+  }
+
+  navigateMyPage(uid: string): void {
+    this.router.navigateByUrl(`${uid}`);
+    this.dialog.closeAll();
   }
 
   openInfoDialog(): void {

@@ -127,6 +127,24 @@ input {
   }
 }
 
+.settings {
+  &__heading {
+    font-weight: 500;
+    margin-bottom: 16px;
+    &--unsubscribe {
+      color: red;
+    }
+  }
+  &__contents-wrap {
+    padding: 24px 0 48px;
+  }
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
 .cal-month-view .cal-day-badge {
   background: #f891a8;
 }

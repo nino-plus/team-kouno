@@ -19,7 +19,7 @@ import { switchMap, take } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
 import { AuthService } from 'src/app/services/auth.service';
 import { EventService } from 'src/app/services/event.service';
-import { EventDetailDialogComponent } from '../event-detail-dialog/event-detail-dialog.component';
+import { EventDetailDialogComponent } from 'src/app/shared/event-detail-dialog/event-detail-dialog.component';
 
 const colors: any = {
   main: {
@@ -50,7 +50,7 @@ export class EventCalendarComponent implements OnInit {
   reserveEvents$: Observable<Event[]> = this.authService.user$.pipe(
     switchMap((user) => {
       if (user) {
-        return this.eventService.getReservedEvent(user.uid);
+        return this.eventService.getReservedEvents(user.uid);
       } else {
         return of(null);
       }

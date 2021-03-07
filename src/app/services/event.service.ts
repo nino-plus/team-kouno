@@ -7,7 +7,7 @@ import { combineLatest, Observable, of } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ReserveUid } from '../interfaces/reserve-uid';
-import { switchMap, map, take } from 'rxjs/operators';
+import { switchMap, map, take, filter } from 'rxjs/operators';
 import { User } from '../interfaces/user';
 import { UserService } from './user.service';
 
@@ -55,7 +55,7 @@ export class EventService {
   getFutureEvents(): Observable<Event[]> {
     return this.db
       .collection<Event>(`events`, (ref) =>
-        ref.where('startAt', '>=', this.dateNow).orderBy('startAt', 'asc')
+        ref.where('exitAt', '>=', this.dateNow).orderBy('exitAt', 'asc')
       )
       .valueChanges();
   }
@@ -63,7 +63,7 @@ export class EventService {
   getPastEvents(): Observable<Event[]> {
     return this.db
       .collection<Event>(`events`, (ref) =>
-        ref.where('startAt', '<', this.dateNow).orderBy('startAt', 'asc')
+        ref.where('exitAt', '<', this.dateNow).orderBy('exitAt', 'asc')
       )
       .valueChanges();
   }
@@ -85,6 +85,17 @@ export class EventService {
           } else {
             return of(null);
           }
+        })
+      );
+  }
+
+  getReaservedUids(eventId: string): Observable<string[]> {
+    return this.db
+      .collection<ReserveUid>(`events/${eventId}/reserveUids`)
+      .valueChanges()
+      .pipe(
+        map((uids) => {
+          return uids.map((data) => data.uid);
         })
       );
   }
@@ -146,7 +157,15 @@ export class EventService {
       .finally(() => this.router.navigateByUrl('/'));
   }
 
-  getReservedEvent(uid: string): Observable<Event[]> {
+  async cancelReserve(event: Event, uid: string): Promise<void> {
+    this.db
+      .doc<ReserveUid>(`events/${event.eventId}/reserveUids/${uid}`)
+      .delete()
+      .then(() => this.snackBar.open('予約をキャンセルしました'))
+      .finally(() => this.router.navigateByUrl('/'));
+  }
+
+  getReservedEvents(uid: string): Observable<Event[]> {
     if (!uid) {
       return of(null);
     }
@@ -166,6 +185,22 @@ export class EventService {
           }
         })
       );
+  }
+
+  getFutureReservedEvents(uid: string): Observable<Event[]> {
+    const allEvents = this.getReservedEvents(uid);
+    return allEvents.pipe(
+      map((events) => events.filter((event) => event.startAt > this.dateNow)),
+      filter((events) => events && events.length > 0)
+    );
+  }
+
+  getPastReservedEvents(uid: string): Observable<Event[]> {
+    const allEvents = this.getReservedEvents(uid);
+    return allEvents.pipe(
+      map((events) => events.filter((event) => event.startAt < this.dateNow)),
+      filter((events) => events && events.length > 0)
+    );
   }
 
   async deleteEvent(eventId: string): Promise<void> {
@@ -198,5 +233,13 @@ export class EventService {
           return { ...event, user };
         })
       );
+  }
+
+  getOwnerEvents(uid: string): Observable<Event[]> {
+    return this.db
+      .collection<Event>('events', (ref) =>
+        ref.where('ownerId', '==', uid).orderBy('startAt', 'asc')
+      )
+      .valueChanges();
   }
 }

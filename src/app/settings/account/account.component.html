@@ -1,0 +1,43 @@
+<div class="unsubscribe">
+  <h3 class="settings__heading settings__heading--unsubscribe">
+    アカウント削除
+  </h3>
+
+  <mat-divider></mat-divider>
+
+  <ng-container *ngIf="user$ | async as user">
+    <p class="unsubscribe__title" (click)="isOpen = !isOpen">
+      退会をご希望の方はこちら
+    </p>
+    <div *ngIf="isOpen" @fade>
+      <p class="unsubscribe__text">
+        退会すると全ての利用データが失われ、あとから復元できません。
+      </p>
+
+      <mat-form-field class="unsubscribe__form">
+        <input
+          class="unsubscribe__input"
+          matInput
+          placeholder="ユーザー名を入力"
+          #input
+          autocomplete="off"
+        />
+        <mat-hint align="end">{{ user.name }}</mat-hint>
+      </mat-form-field>
+
+      <button
+        class="unsubscribe__btn"
+        mat-button
+        [disabled]="user.name !== input.value"
+        (click)="openDeleteDialog()"
+      >
+        退会
+      </button>
+    </div>
+  </ng-container>
+
+  <div class="unsubscribe__message" *ngIf="userService.isProcessing">
+    <p>退会処理中です...</p>
+    <mat-spinner [diameter]="40"></mat-spinner>
+  </div>
+</div>

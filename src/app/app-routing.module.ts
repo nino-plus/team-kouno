@@ -14,7 +14,6 @@ const routes: Routes = [
   },
   {
     path: 'settings',
-    pathMatch: 'full',
     loadChildren: () =>
       import('./settings/settings.module').then((m) => m.SettingsModule),
   },
@@ -26,6 +25,11 @@ const routes: Routes = [
   {
     path: 'intl',
     loadChildren: () => import('./intl/intl.module').then((m) => m.IntlModule),
+  },
+  {
+    path: ':uid',
+    loadChildren: () =>
+      import('./my-page/my-page.module').then((m) => m.MyPageModule),
   },
 ];
 

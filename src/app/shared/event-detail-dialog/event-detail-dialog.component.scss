@@ -40,7 +40,20 @@
 
 .user {
   padding: 16px 0;
+  &__list-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  &__list {
+    cursor: pointer;
+    transition: ease 0.3s;
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
   &__avatar {
+    display: block;
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -64,6 +77,11 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
+    cursor: pointer;
+    transition: ease 0.3s;
+    &:hover {
+      transform: scale(1.05);
+    }
   }
   &__owner-name {
     margin-left: 8px;

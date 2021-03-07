@@ -1,0 +1,13 @@
+.unsubscribe {
+  &__title {
+    cursor: pointer;
+    margin-bottom: 16px;
+  }
+  &__text {
+    color: red;
+  }
+}
+
+mat-divider {
+  margin-bottom: 48px;
+}
