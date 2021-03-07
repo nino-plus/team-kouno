@@ -1,18 +1,19 @@
 <ng-container *ngIf="event$ | async as event">
   <div class="channel">
     <ng-container *ngIf="!isPublishScreen; else shareScreen">
-      <div
+      <ng-container *ngIf="participants$ | async as participants">
+        <div
         *ngIf="!event.isShareScreen"
         id="local-player"
-        class="player player--more-player"
-        [class.player--1-player]="event.participantCount === 1"
+        class="player"
+        [class.player--1-player]="participants.length === 1"
         [class.player--2-player]="
-          event.participantCount > 1 && event.participantCount < 3
+          participants.length > 1 && participants.length < 3
         "
-        [class.player--more-player]="event.participantCount > 2"
+        [class.player--more-player]="participants.length > 2"
         [class.invisible]="isProcessing"
       >
-        <ng-container *ngFor="let user of participants$ | async">
+        <ng-container *ngFor="let user of participants">
           <ng-container *ngIf="videoPublishUserIds$ | async as ids">
             <div
               *ngIf="!ids.includes(user.uid)"
@@ -30,11 +31,12 @@
         </ng-container>
       </div>
       <div
-        *ngIf="event.isShareScreen"
-        id="share-screen"
-        class="screen"
-        [class.invisible]="isProcessing"
-      ></div>
+      *ngIf="event.isShareScreen"
+      id="share-screen"
+      class="screen"
+      [class.invisible]="isProcessing"
+    ></div>
+      </ng-container>
     </ng-container>
 
     <ng-template #shareScreen>

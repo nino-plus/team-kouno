@@ -13,6 +13,7 @@ import { EventDetailDialogComponent } from '../event-detail-dialog/event-detail-
 export class EventCardComponent implements OnInit {
   @Input() event: Event;
   @Input() uid: string;
+  @Input() type: string;
 
   constructor(private dialog: MatDialog) {}
 
@@ -21,6 +22,7 @@ export class EventCardComponent implements OnInit {
       data: {
         event,
         uid: this.uid,
+        type: this.type,
       },
     });
   }

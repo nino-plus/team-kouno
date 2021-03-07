@@ -149,6 +149,9 @@ export class StreamComponent implements OnInit, OnDestroy {
   @HostListener('window:unload', ['$event'])
   unloadHandler($event: any): void {
     if (this.isJoin) {
+      $event.preventDefault();
+      $event.returnValue =
+        false;
       this.agoraService.leaveAgoraChannel(this.eventId);
     }
   }
@@ -158,7 +161,8 @@ export class StreamComponent implements OnInit, OnDestroy {
     if (this.isJoin) {
       $event.preventDefault();
       $event.returnValue =
-        'ページを閉じるとライブ通話を終了しますがよろしいですか？';
+        false;
+      this.agoraService.leaveAgoraChannel(this.eventId)
     }
   }
 }

@@ -40,6 +40,7 @@ export class MyPageComponent implements OnInit {
     })
   );
   uid: string;
+  type;
 
   constructor(
     private authService: AuthService,

@@ -1,6 +1,7 @@
 import * as functions from 'firebase-functions';
 import { RtcTokenBuilder, RtcRole } from 'agora-access-token';
 import * as admin from 'firebase-admin';
+import { shouldEventRun, markEventTried } from './utils/firebase.util';
 
 const db = admin.firestore();
 
@@ -63,6 +64,40 @@ async function addUserToParticipantList(
 
   await db.doc(`events/${eventId}/participants/${currentUserId}`).set(userData);
 }
+
+export const countUpParticipants = functions
+  .region('asia-northeast1')
+  .firestore.document('events/{eventId}/participants/{uid}')
+  .onCreate(async (snap, context) => {
+    const eventId = context.eventId;
+    return shouldEventRun(eventId).then(async (should: boolean) => {
+      if (should) {
+        await db
+          .doc(`events/${context.params.eventId}`)
+          .update('participantCount', admin.firestore.FieldValue.increment(1));
+        return markEventTried(eventId);
+      } else {
+        return;
+      }
+    });
+  });
+
+export const countDownParticipants = functions
+  .region('asia-northeast1')
+  .firestore.document('events/{eventId}/participants/{uid}')
+  .onDelete(async (snap, context) => {
+    const eventId = context.eventId;
+    return shouldEventRun(eventId).then(async (should: boolean) => {
+      if (should) {
+        await db
+          .doc(`events/${context.params.eventId}`)
+          .update('participantCount', admin.firestore.FieldValue.increment(-1));
+        return markEventTried(eventId);
+      } else {
+        return;
+      }
+    });
+  });
 
 export const getChannelToken = functions
   .region('asia-northeast1')
