@@ -68,7 +68,7 @@ export class Algolia {
   }) {
     const index = client.initIndex(param.indexName);
     const item = this.transformDate(param.data);
-    const idKey = param.idKey || 'id';
+    const idKey = param.idKey || 'eventId';
 
     if (param.isUpdate) {
       await this.removeRecord(param.indexName, item[idKey]);
@@ -98,7 +98,7 @@ export class Algolia {
    * @param id 削除対象のid
    * @param idKey idのキー名(デフォルトは'id')
    */
-  removeRecord(indexName: string, id: string, idKey: string = 'id') {
+  removeRecord(indexName: string, id: string, idKey: string = 'eventId') {
     const index = client.initIndex(indexName);
     return index.deleteBy({ filters: `${idKey}:${id}` });
   }
