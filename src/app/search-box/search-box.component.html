@@ -1,0 +1,26 @@
+<div class="search-box">
+  <form class="search-box__form" (ngSubmit)="routeSearch(searchControl.value)">
+    <label for="search"></label>
+    <input
+      #search
+      class="search-box__input"
+      type="text"
+      placeholder="キーワード [ 例：雑談、飲み会... ]"
+      autocomplete="off"
+      [matAutocomplete]="auto"
+      [formControl]="searchControl"
+    />
+  </form>
+  <button class="search-box__submit" (click)="routeSearch(searchControl.value)">
+    <span><mat-icon>search</mat-icon></span>
+  </button>
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    (optionActivated)="setSearchQuery($event.option?.value)"
+    (optionSelected)="routeSearch($event.option?.value)"
+  >
+    <mat-option *ngFor="let option of searchOptions" [value]="option.name">{{
+      option.name
+    }}</mat-option>
+  </mat-autocomplete>
+</div>
