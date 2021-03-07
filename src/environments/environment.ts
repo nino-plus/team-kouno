@@ -16,6 +16,10 @@ export const environment = {
   agora: {
     appId: '60c972e80bee423ea01a8ca67121691d',
   },
+  algolia: {
+    appId: 'JKOSWPL40A',
+    searchKey: '0615dae3a9591145ccd4460d77f874a7',
+  },
 };
 
 /*
