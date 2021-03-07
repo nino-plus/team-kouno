@@ -32,10 +32,13 @@ export class AgoraService {
     private router: Router,
     private snackBar: MatSnackBar,
     private db: AngularFirestore,
-    private eventService: EventService,
+    private eventService: EventService
   ) {}
 
-  async joinAgoraChannel(uid: string, eventId: string): Promise<string | number> {
+  async joinAgoraChannel(
+    uid: string,
+    eventId: string
+  ): Promise<string | number> {
     const client = this.getClient();
 
     const callable = this.fnc.httpsCallable('participateChannel');
@@ -164,15 +167,18 @@ export class AgoraService {
 
     return await AgoraRTC.createScreenVideoTrack({
       encoderConfig: '1080p_1',
-    }).then(async (screenTrack) => {
-      this.localTracks.screenTrack = screenTrack;
-      await client.publish([this.localTracks.screenTrack]);
-      await this.eventService.updateScreenFlag(eventId, true, uid);
-    }).catch((error) => {
-      if(error.code === 'PERMISSION_DENIED') {
-        return true
-      }
-    });
+    })
+      .then(async (screenTrack) => {
+        this.localTracks.screenTrack = screenTrack;
+        this.localTracks.screenTrack.play('share-screen', { fit: 'contain' });
+        await client.publish([this.localTracks.screenTrack]);
+        await this.eventService.updateScreenFlag(eventId, true, uid);
+      })
+      .catch((error) => {
+        if (error.code === 'PERMISSION_DENIED') {
+          return true;
+        }
+      });
   }
 
   async unpublishScreen(eventId: string, uid: string): Promise<void> {
