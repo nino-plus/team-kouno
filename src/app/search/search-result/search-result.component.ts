@@ -9,6 +9,7 @@ import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { SearchService } from 'src/app/services/search.service';
+import { UiService } from 'src/app/services/ui.service';
 import { EventDetailDialogComponent } from 'src/app/shared/event-detail-dialog/event-detail-dialog.component';
 
 @Component({
@@ -30,6 +31,7 @@ export class SearchResultComponent implements OnInit {
   searchControl: FormControl = new FormControl();
   index: SearchIndex = this.searchService.index.events;
   loading: boolean;
+  type: string;
 
   private page = 0;
   private maxPage: number;
@@ -40,7 +42,8 @@ export class SearchResultComponent implements OnInit {
     private searchService: SearchService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
-    private authService: AuthService
+    private authService: AuthService,
+    private uiService: UiService
   ) {}
 
   ngOnInit(): void {
@@ -83,10 +86,13 @@ export class SearchResultComponent implements OnInit {
   }
 
   openDetailDialog(event: Event): void {
+    this.uiService.dialogType = 'search';
+
     this.dialog.open(EventDetailDialogComponent, {
       data: {
         event,
         uid: this.uid,
+        type: this.uiService.dialogType,
       },
     });
   }
