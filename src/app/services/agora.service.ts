@@ -3,14 +3,11 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import AgoraRTC, { ConnectionState, IAgoraRTCClient } from 'agora-rtc-sdk-ng';
 import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from '../interfaces/user';
-import AgoraRTC, { ConnectionState, IAgoraRTCClient } from 'agora-rtc-sdk-ng';
 import { EventService } from './event.service';
-import { UserService } from './user.service';
-import firestore from 'firebase/app';
-import { map, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -36,7 +33,6 @@ export class AgoraService {
     private snackBar: MatSnackBar,
     private db: AngularFirestore,
     private eventService: EventService,
-    private userService: UserService
   ) {}
 
   async joinAgoraChannel(uid: string, eventId: string): Promise<string | number> {
@@ -57,7 +53,6 @@ export class AgoraService {
 
     client.on('user-published', async (user, mediaType) => {
       await client.subscribe(user, mediaType);
-      console.log('remote', user.uid);
       if (!this.remoteUserIds.includes(user.uid)) {
         this.remoteUserIds.push(user.uid);
         this.remoteUserIds$ = of(this.remoteUserIds);
@@ -164,15 +159,19 @@ export class AgoraService {
     }
   }
 
-  async publishScreen(eventId: string, uid: string): Promise<void> {
+  async publishScreen(eventId: string, uid: string): Promise<boolean | void> {
     const client = this.getClient();
 
-    AgoraRTC.createScreenVideoTrack({
+    return await AgoraRTC.createScreenVideoTrack({
       encoderConfig: '1080p_1',
     }).then(async (screenTrack) => {
       this.localTracks.screenTrack = screenTrack;
       await client.publish([this.localTracks.screenTrack]);
       await this.eventService.updateScreenFlag(eventId, true, uid);
+    }).catch((error) => {
+      if(error.code === 'PERMISSION_DENIED') {
+        return true
+      }
     });
   }
 
