@@ -33,9 +33,11 @@ export class EventDetailDialogComponent implements OnInit {
     public data: {
       event: Event;
       uid?: string;
-      type?;
+      type?: string | undefined;
     }
-  ) {}
+  ) {
+    console.log(data.type);
+  }
 
   ngOnInit(): void {
     this.owner$ = this.userService.getUserData(this.data.event.ownerId);
