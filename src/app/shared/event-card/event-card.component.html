@@ -1,8 +1,8 @@
-<div (click)="openDetailDialog(event)" class="card__content" @fade>
+<div (click)="navigateDetail(event)" class="card__content" @fade>
   <div class="card__header">
     <img [src]="event.thumbnailURL" alt="" class="card__img" />
     <ng-container *ngIf="event.participantCount > 0; else future">
-      <div class="card__participants">
+      <div class="card__participants" (click)="openDetailDialog(event)">
         <div class="card__participants-count-wrap">
           <p class="card__participants-count">
             {{ event.participantCount }}
