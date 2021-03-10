@@ -98,9 +98,7 @@
     </div>
 
     <div class="actions">
-      <button class="actions__back" mat-button matDialogClose type="button">
-        閉じる
-      </button>
+      <button routerLink="/" mat-button type="button">戻る</button>
 
       <ng-container *ngIf="user$ | async as user; else default">
         <ng-container *ngIf="reservedUids$ | async as uids">
