@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { fade } from 'src/app/animations/animations';
 import { Event } from 'src/app/interfaces/event';
+import { EventService } from 'src/app/services/event.service';
 import { EventDetailDialogComponent } from '../event-detail-dialog/event-detail-dialog.component';
 
 @Component({
@@ -16,9 +17,16 @@ export class EventCardComponent implements OnInit {
   @Input() uid: string;
   @Input() type: string;
 
-  constructor(private dialog: MatDialog, private router: Router) {}
+  constructor(
+    private dialog: MatDialog,
+    private router: Router,
+    private eventService: EventService
+  ) {}
 
-  openDetailDialog(event: Event): void {
+  ngOnInit(): void {}
+
+  openDetailDialog(event: Event, $event): void {
+    $event.stopPropagation();
     this.dialog.open(EventDetailDialogComponent, {
       data: {
         event,
@@ -32,5 +40,11 @@ export class EventCardComponent implements OnInit {
     this.router.navigateByUrl(`/event/${event.eventId}`);
   }
 
-  ngOnInit(): void {}
+  joinChannel(event: Event): void {
+    if (event.startAt < this.eventService.dateNow) {
+      this.router.navigateByUrl(`/event/${event.eventId}/${this.uid}`);
+    } else {
+      this.navigateDetail(event);
+    }
+  }
 }
