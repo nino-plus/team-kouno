@@ -112,7 +112,7 @@
     <div class="form-grid">
       <p class="form-grid__label">サムネイル画像</p>
       <div class="form-grid__cropper">
-        <ng-container *ngIf="oldImageUrl">
+        <ng-container *ngIf="oldImageUrl; else nothing">
           <deer-crop-trigger
             [options]="{
               aspectRatio: 16 / 9,
@@ -121,6 +121,16 @@
             (image)="onCroppedImage($event)"
           ></deer-crop-trigger>
         </ng-container>
+
+        <ng-template #nothing>
+          <deer-crop-trigger
+            [options]="{
+              aspectRatio: 16 / 9,
+              oldImageUrl: oldImageUrl
+            }"
+            (image)="onCroppedImage($event)"
+          ></deer-crop-trigger>
+        </ng-template>
 
         <div class="form-grid__hint">
           <mat-icon class="form-grid__icon">done</mat-icon>

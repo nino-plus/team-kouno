@@ -1,4 +1,4 @@
-<div (click)="openDetailDialog(event)" class="card__content" @fade>
+<div (click)="joinChannel(event)" class="card__content" @fade>
   <div class="card__header">
     <img [src]="event.thumbnailURL" alt="" class="card__img" />
     <ng-container *ngIf="event.participantCount > 0; else future">
@@ -37,19 +37,40 @@
       <p class="card__day">
         {{ event.startAt.toDate() | date: 'E' }}
       </p>
-    </div>
-
-    <span class="pipe"></span>
-
-    <div class="card__detail">
       <p class="card__startAt">
         {{ event.startAt.toDate() | date: 'HH:mm〜' }}
       </p>
-      <p class="card__category">
-        {{ event.category }}
-      </p>
-      <p class="card__name">{{ event.name }}</p>
-      <p class="card__info">{{ event.description }}</p>
+    </div>
+
+    <span class="card__pipe"></span>
+
+    <div class="card__body-inner">
+      <div class="card__body-flex">
+        <p class="card__category">
+          {{ event.category }}
+        </p>
+        <div class="card__actions" align="end">
+          <button
+            class="card__btn"
+            (click)="openDetailDialog(event, $event)"
+            matTooltip="予約する"
+          >
+            <mat-icon>touch_app</mat-icon>
+          </button>
+          <button
+            class="card__btn"
+            (click)="navigateDetail(event)"
+            matTooltip="詳しく見る"
+          >
+            <mat-icon>expand_more</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="card__detail">
+        <p class="card__name">{{ event.name }}</p>
+        <p class="card__info">{{ event.description }}</p>
+      </div>
     </div>
   </div>
 </div>

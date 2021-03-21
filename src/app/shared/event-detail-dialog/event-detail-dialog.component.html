@@ -46,52 +46,6 @@
           </button>
         </ng-container>
       </div>
-
-      <div class="event__detail">
-        <p class="event__category">{{ data.event.category }}</p>
-        <p class="event__name">{{ data.event.name }}</p>
-
-        <mat-divider></mat-divider>
-
-        <p class="event__info-heading">参加予定の人</p>
-        <div class="user">
-          <ul
-            *ngIf="reservedUsers$ | async as users; else zero"
-            class="user__list-wrap"
-          >
-            <li *ngFor="let user of users" class="user__list">
-              <img
-                [src]="user.avatarURL"
-                alt=""
-                [matTooltip]="user?.name"
-                class="user__avatar"
-                (click)="navigateMyPage(user.uid)"
-              />
-            </li>
-          </ul>
-          <ng-template #zero>
-            <p>まだいません...</p>
-          </ng-template>
-        </div>
-
-        <mat-divider></mat-divider>
-
-        <p class="event__info-heading">イベント詳細</p>
-        <div class="info">
-          <p class="info__description">{{ data.event.description }}</p>
-
-          <p class="info__heading">主催者</p>
-          <div class="info__owner-wrap" *ngIf="owner$ | async as owner">
-            <img
-              class="info__owner-avatar"
-              [src]="owner.avatarURL"
-              alt=""
-              (click)="navigateMyPage(owner.uid)"
-            />
-            <p class="info__owner-name">{{ owner.name }}</p>
-          </div>
-        </div>
-      </div>
     </div>
   </mat-dialog-content>
 </div>
@@ -169,6 +123,15 @@
       </button>
     </ng-container>
 
-    <ng-container *ngSwitchCase="'past'"></ng-container>
+    <ng-container *ngSwitchCase="'past'">
+      <button
+        mat-raised-button
+        class="actions__submit"
+        (click)="deleteEvent(data.event.eventId)"
+        mat-dialog-close
+      >
+        イベントを削除
+      </button>
+    </ng-container>
   </ng-container>
 </mat-dialog-actions>

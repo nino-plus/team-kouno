@@ -22,6 +22,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { EventDetailComponent } from './event-detail/event-detail.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
     EventRoomComponent,
     ChatComponent,
     StreamComponent,
+    EventDetailComponent,
   ],
   imports: [
     CommonModule,
