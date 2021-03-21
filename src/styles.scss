@@ -194,3 +194,9 @@ img {
   font-weight: normal;
   font-size: 14px;
 }
+
+.event-detail-dialog {
+  .mat-dialog-container {
+    padding: 0;
+  }
+}
