@@ -1,3 +1,4 @@
+import { MatDialog } from '@angular/material/dialog';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as firebase from 'firebase';
@@ -9,6 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { EventService } from 'src/app/services/event.service';
 import { UserFollowService } from 'src/app/services/user-follow.service';
 import { UserService } from 'src/app/services/user.service';
+import { UnfollowDialogComponent } from 'src/app/shared/unfollow-dialog/unfollow-dialog.component';
 
 @Component({
   selector: 'app-my-page',
@@ -51,6 +53,7 @@ export class MyPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private userService: UserService,
     private followService: UserFollowService,
+    private dialog: MatDialog,
     private router: Router
   ) {}
 
@@ -59,9 +62,18 @@ export class MyPageComponent implements OnInit, OnDestroy {
     this.followService.follow(this.currentUserUid, this.targetId);
   }
 
-  unFollow(): void {
-    this.isFollowing = false;
-    this.followService.unFollow(this.currentUserUid, this.targetId);
+  openUnFollowDialog(): void {
+    this.dialog
+      .open(UnfollowDialogComponent, {
+        width: '250px',
+      })
+      .afterClosed()
+      .subscribe((status) => {
+        if (status) {
+          this.isFollowing = false;
+          this.followService.unFollow(this.currentUserUid, this.targetId);
+        }
+      });
   }
 
   ngOnInit(): void {
