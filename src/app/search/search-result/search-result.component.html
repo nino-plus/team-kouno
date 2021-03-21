@@ -4,8 +4,8 @@
       <h2 class="result__hits">全部で {{ result?.nbHits }} 件見つかりました</h2>
     </ng-container>
     <div *ngIf="events?.length > 0; else notFound" class="result__grid">
-      <ul *ngFor="let event of events">
-        <li (click)="openDetailDialog(event)" class="event">
+      <ul *ngFor="let event of events" class="event-parent">
+        <li class="event">
           <div @fade class="event__thumbnail">
             <img [src]="event.thumbnailURL" alt="" />
           </div>
@@ -17,6 +17,22 @@
           <div class="event__body">
             <div class="event__top">
               <h3 class="event__name">{{ event.name }}</h3>
+              <div class="event__actions" align="end">
+                <button
+                  class="event__btn"
+                  (click)="openDetailDialog(event, $event)"
+                  matTooltip="予約する"
+                >
+                  <mat-icon>touch_app</mat-icon>
+                </button>
+                <button
+                  class="event__btn"
+                  (click)="navigateDetail(event)"
+                  matTooltip="詳しく見る"
+                >
+                  <mat-icon>expand_more</mat-icon>
+                </button>
+              </div>
             </div>
 
             <div class="event__description">
@@ -61,8 +77,9 @@
 
     <ng-template #notFound>
       <div class="not-found" *ngIf="!loading">
-        <p>一致するアイテムがありませんでした🙏</p>
-        <p>キーワードを変えて試してみましょう。</p>
+        <p class="not-found__text">一致するアイテムがありませんでした🙏</p>
+        <p class="not-found__text">キーワードを変えて試してみましょう。</p>
+        <button routerLink="/" mat-stroked-button type="button">戻る</button>
       </div>
     </ng-template>
 

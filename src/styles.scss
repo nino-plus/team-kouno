@@ -101,8 +101,11 @@ img {
     padding: 48px;
   }
   &--result {
-    padding: 48px 0;
+    padding: 48px 4%;
     max-width: 1600px;
+  }
+  &--event-detail {
+    padding: 24px 0 120px;
   }
 }
 
