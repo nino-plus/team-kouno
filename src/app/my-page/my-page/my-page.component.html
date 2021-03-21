@@ -10,11 +10,11 @@
         <div class="my-page__flex">
           <mat-icon class="my-page__icon">supervised_user_circle</mat-icon>
           <p class="my-page__flex-item">
-            フォロワー {{ user.followerCount }}人
+            フォロワー <span>{{ user.followerCount }}人</span>
           </p>
           <mat-icon class="my-page__icon">supervised_user_circle</mat-icon>
           <p class="my-page__flex-item">
-            フォロー中 {{ user.followingCount }}人
+            フォロー中 <span>{{ user.followingCount }}人</span>
           </p>
         </div>
         <p class="my-page__description">{{ user.description }}</p>
@@ -46,6 +46,7 @@
         </ng-container>
       </div>
     </div>
+    <p class="my-page__sp-description">{{ user.description }}</p>
 
     <mat-tab-group mat-align-tabs="center">
       <mat-tab label="参加イベント">
