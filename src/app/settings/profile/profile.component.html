@@ -1,5 +1,5 @@
 <ng-container *ngIf="user$ | async as user">
-  <form [formGroup]="form">
+  <form [formGroup]="form" (ngSubmit)="updateUser()">
     <div class="settings__profile">
       <div class="settings__info">
         <h3 class="settings__heading">プロフィール編集</h3>
@@ -102,11 +102,10 @@
         </div>
 
         <button
-          (click)="updateUser()"
-          class="setting__update-button"
+          class="settings__update-btn"
           [disabled]="form.invalid || form.pristine"
+          [class.disabled]="form.invalid || form.pristine"
           mat-raised-button
-          color="primary"
         >
           更新
         </button>
@@ -125,6 +124,15 @@
           </div>
         </div>
       </div>
+
+      <button
+        class="settings__update-btn settings__update-btn--sp"
+        [disabled]="form.invalid || form.pristine"
+        [class.disabled]="form.invalid || form.pristine"
+        mat-raised-botton
+      >
+        更新
+      </button>
     </div>
   </form>
 </ng-container>
