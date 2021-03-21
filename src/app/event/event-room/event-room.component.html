@@ -9,7 +9,122 @@
     </span>
   </div>
   <mat-drawer-container class="drawer-container" autosize>
-    <app-stream [eventId]="eventId" [uid]="uid"></app-stream>
+    <ng-container *ngIf="event$ | async as event">
+      <div class="channel">
+        <ng-container *ngIf="participants$ | async as participants">
+          <div
+            id="local-player"
+            class="player"
+            [class.player--1-player]="participants.length === 1"
+            [class.player--2-player]="
+              participants.length > 1 && participants.length < 3
+            "
+            [class.player--more-player]="participants.length > 2"
+            [class.invisible]="isProcessing || event.isShareScreen"
+          >
+            <ng-container *ngFor="let user of participants">
+              <ng-container *ngIf="videoPublishUserIds$ | async as ids">
+                <div
+                  *ngIf="!ids.includes(user.uid)"
+                  class="participants"
+                  [class.invisible]="isProcessing"
+                >
+                  <img
+                    class="participants__photo"
+                    [class.invisible]="isProcessing"
+                    [src]="user.avatarURL"
+                    alt=""
+                  />
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
+          <div
+            id="share-screen"
+            class="screen"
+            [class.invisible]="isProcessing || !event.isShareScreen"
+          ></div>
+        </ng-container>
+
+        <ng-container *ngIf="isProcessing">
+          <div class="lodading-wrap">
+            <img class="loading" src="assets/images/grid.svg" alt="" />
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="actions">
+        <ng-template #video>
+          <button
+            matTooltip="カメラをオン"
+            class="actions__btn"
+            (click)="publishVideo()"
+            [disabled]="event.isShareScreen"
+            [class.actions__btn--disabled]="event.isShareScreen"
+          >
+            <mat-icon class="actions__icon">videocam</mat-icon>
+          </button>
+        </ng-template>
+
+        <button
+          *ngIf="isPublishVideo; else video"
+          matTooltip="カメラをオフ"
+          class="actions__btn actions__btn--active"
+          (click)="unPublishVideo()"
+        >
+          <mat-icon class="actions__icon">videocam_off</mat-icon>
+        </button>
+
+        <ng-template #microphone>
+          <button
+            matTooltip="ボイスをオン"
+            class="actions__btn"
+            (click)="publishAudio()"
+          >
+            <mat-icon class="actions__icon">volume_up</mat-icon>
+          </button>
+        </ng-template>
+
+        <button
+          *ngIf="isPublishMicrophone; else microphone"
+          matTooltip="ミュート"
+          class="actions__btn actions__btn--active"
+          (click)="unPublishAudio()"
+        >
+          <mat-icon class="actions__icon">volume_off</mat-icon>
+        </button>
+
+        <ng-template #screen>
+          <button
+            matTooltip="画面共有"
+            class="actions__btn"
+            (click)="publishScreen()"
+            [disabled]="event.isShareScreen"
+            [class.actions__btn--disabled]="event.isShareScreen"
+          >
+            <mat-icon class="actions__icon">desktop_windows</mat-icon>
+          </button>
+        </ng-template>
+
+        <button
+          *ngIf="isPublishScreen; else screen"
+          matTooltip="画面共有を停止"
+          class="actions__btn actions__btn--active"
+          (click)="unPublishScreen()"
+        >
+          <mat-icon class="actions__icon">desktop_access_disabled</mat-icon>
+        </button>
+
+        <button
+          matTooltip="退室"
+          class="actions__btn actions__btn--exit"
+          (click)="leaveChannel()"
+        >
+          <mat-icon class="actions__icon">exit_to_app</mat-icon>
+        </button>
+      </div>
+    </ng-container>
+
     <mat-drawer class="drawer" #drawer position="end" mode="side">
       <app-chat [eventId]="eventId"></app-chat>
     </mat-drawer>
