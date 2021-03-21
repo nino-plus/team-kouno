@@ -1,13 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SearchIndex } from 'functions/node_modules/algoliasearch';
 import { Observable } from 'rxjs';
 import { fade } from 'src/app/animations/animations';
 import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
+import { EventService } from 'src/app/services/event.service';
 import { SearchService } from 'src/app/services/search.service';
 import { UiService } from 'src/app/services/ui.service';
 import { EventDetailDialogComponent } from 'src/app/shared/event-detail-dialog/event-detail-dialog.component';
@@ -43,7 +44,9 @@ export class SearchResultComponent implements OnInit {
     private route: ActivatedRoute,
     private dialog: MatDialog,
     private authService: AuthService,
-    private uiService: UiService
+    private uiService: UiService,
+    private router: Router,
+    private eventService: EventService
   ) {}
 
   ngOnInit(): void {
@@ -95,5 +98,17 @@ export class SearchResultComponent implements OnInit {
         type: this.uiService.dialogType,
       },
     });
+  }
+
+  navigateDetail(event: Event) {
+    this.router.navigateByUrl(`/event/${event.eventId}`);
+  }
+
+  joinChannel(event: Event): void {
+    if (event.startAt < this.eventService.dateNow) {
+      this.router.navigateByUrl(`/event/${event.eventId}/${this.uid}`);
+    } else {
+      this.navigateDetail(event);
+    }
   }
 }

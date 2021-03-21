@@ -55,11 +55,45 @@
   &__body {
     color: $color-font;
     padding: 8px;
+    height: 100%;
     display: grid;
     grid-template-columns: 80px 4px 1fr;
   }
+  &__actions {
+    margin-left: auto;
+  }
+  &__btn {
+    width: 40px;
+    height: 40px;
+    margin-left: 8px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+    transition: ease 0.3s;
+    mat-icon {
+      display: grid;
+      place-items: center;
+    }
+    &:hover {
+      border: 1px solid #424242;
+    }
+  }
   &__date-wrap {
-    margin-top: 8px;
+    margin: 8px 0;
+  }
+  &__pipe {
+    width: 2px;
+    height: 120px;
+    background: rgba(#000, 0.16);
+  }
+  &__body-inner {
+    padding: 0 8px;
+    overflow: hidden;
+  }
+  &__body-flex {
+    display: flex;
+    align-items: center;
   }
   &__date {
     font-size: 24px;
@@ -73,17 +107,22 @@
     display: grid;
     place-items: center;
   }
+  &__startAt {
+    align-items: center;
+    display: grid;
+    place-items: center;
+  }
   &__detail {
-    margin-left: 16px;
+    margin-left: 8px;
   }
   &__category {
-    min-width: 80%;
     display: inline-block;
     background: $color-sub;
     color: #fff;
-    padding: 2px 4px;
+    padding: 4px 8px;
     font-size: 14px;
-    margin-bottom: 8px;
+    margin-left: 8px;
+    border-radius: 14px;
   }
   &__name {
     color: #505050;
@@ -101,10 +140,4 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
   }
-}
-
-.pipe {
-  width: 2px;
-  height: 100px;
-  background: rgba(#000, 0.16);
 }

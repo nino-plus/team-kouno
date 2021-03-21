@@ -33,7 +33,7 @@ export class EventDetailDialogComponent implements OnInit {
     public data: {
       event: Event;
       uid?: string;
-      type?;
+      type?: string | undefined;
     }
   ) {}
 

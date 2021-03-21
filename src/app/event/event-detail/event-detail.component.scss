@@ -1,0 +1,127 @@
+@import 'custom-style';
+
+.event {
+  &__header {
+    width: 100%;
+    position: relative;
+    img {
+      width: 100%;
+    }
+  }
+  &__body {
+    padding: 8px 0;
+  }
+  &__reserve {
+    padding: 8px 16px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: $color-sub;
+    color: #fff;
+    font-size: 14px;
+  }
+  &__date-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  &__date {
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
+  }
+  &__startAt {
+    margin-right: 4px;
+  }
+  &__exitAt {
+    margin-left: 4px;
+  }
+  &__category {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  &__name {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  &__info-heading {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  mat-divider {
+    margin-bottom: 16px;
+  }
+}
+
+.user {
+  padding: 16px 0;
+  &__list-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  &__list {
+    cursor: pointer;
+    transition: ease 0.3s;
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+  &__avatar {
+    display: block;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+}
+
+.info {
+  font-size: 14px;
+  padding: 16px 0;
+  &__description {
+    opacity: 0.8;
+    padding-bottom: 16px;
+  }
+  &__owner-wrap {
+    display: flex;
+    align-items: center;
+    padding: 16px 0;
+  }
+  &__owner-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: ease 0.3s;
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+  &__owner-name {
+    margin-left: 8px;
+  }
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  padding-bottom: 24px;
+  &__submit {
+    background: $color-main;
+    color: #fff;
+    &:hover {
+      background: $color-accent;
+    }
+    &.disable {
+      background: #eee;
+      color: $color-font;
+    }
+  }
+}
+
+.mat-dialog-actions .mat-button-base + .mat-button-base {
+  margin-left: 0;
+}
