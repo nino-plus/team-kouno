@@ -1,4 +1,5 @@
 @import 'custom-style';
+@import 'mixins';
 
 :host {
   min-height: 100%;
@@ -6,15 +7,25 @@
 
 .settings {
   padding: 24px 0;
+  @include sp {
+    padding: 0 16px;
+  }
   &__header {
     display: flex;
     align-items: center;
     margin: 24px 0;
+    @include sp {
+      margin: 0;
+    }
   }
   &__avatar {
     width: 80px;
     height: 80px;
     border-radius: 50%;
+    @include sp {
+      width: 40px;
+      height: 40px;
+    }
   }
   &__name {
     margin-left: 8px;
@@ -23,10 +34,20 @@
     display: grid;
     grid-template-columns: 160px 1fr;
     gap: 24px;
+    @include sp {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+  &__item {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
   &__outlet {
     box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 8px;
     border-radius: 8px;
     padding: 48px;
+    @include sp {
+      padding: 8px;
+    }
   }
 }
