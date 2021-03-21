@@ -35,16 +35,6 @@
             </p>
           </div>
         </ng-template>
-
-        <ng-container *ngIf="data.event.ownerId === data.uid">
-          <button
-            mat-stroked-button
-            type="button"
-            (click)="navigateEditor(data.event)"
-          >
-            イベントを編集
-          </button>
-        </ng-container>
       </div>
     </div>
   </mat-dialog-content>
@@ -123,7 +113,6 @@
       </button>
     </ng-container>
 
-    <ng-container *ngSwitchCase="'past'">
-    </ng-container>
+    <ng-container *ngSwitchCase="'past'"> </ng-container>
   </ng-container>
 </mat-dialog-actions>

@@ -12,36 +12,22 @@
 
       <div class="event__body">
         <div class="event__date-wrap">
-          <div
-            class="event__date"
-            *ngIf="uiService.dialogType === 'search'; else default"
-          >
+          <div class="event__date">
             <p class="event__startAt">
-              {{ event.startAt | date: 'M/d(E) HH:mm' }}
+              {{ event.startAt.toDate() | date: 'M/d(E) HH:mm' }}
             </p>
             <p>〜</p>
             <p class="event__exitAt">
-              {{ event.exitAt | date: 'M/d(E) HH:mm' || '' }}
+              {{ event.exitAt.toDate() | date: 'M/d(E) HH:mm' || '' }}
             </p>
           </div>
-
-          <ng-template #default>
-            <div class="event__date">
-              <p class="event__startAt">
-                {{ event.startAt.toDate() | date: 'M/d(E) HH:mm' }}
-              </p>
-              <p>〜</p>
-              <p class="event__exitAt">
-                {{ event.exitAt.toDate() | date: 'M/d(E) HH:mm' || '' }}
-              </p>
-            </div>
-          </ng-template>
           <ng-container *ngIf="user$ | async as user">
             <ng-container *ngIf="event.ownerId === user.uid">
               <button
                 mat-stroked-button
                 type="button"
                 (click)="navigateEditor(event)"
+                class="event__edit"
               >
                 イベントを編集
               </button>

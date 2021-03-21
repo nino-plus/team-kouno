@@ -1,4 +1,5 @@
 @import 'custom-style';
+@import 'mixins';
 
 .result {
   &__hits {
@@ -6,24 +7,80 @@
     font-weight: 500;
     color: $color-font;
     margin-bottom: 24px;
+    @include sp {
+      font-size: 16px;
+    }
   }
   &__grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     column-gap: 24px;
     row-gap: 48px;
+    @include sp {
+      grid-template-columns: 1fr;
+      row-gap: 8px;
+    }
   }
 }
 
-.event-parent {
-  transition: 0.5s ease-in-out 0.5s;
-  &:nth-of-type(4n + 1):hover {
-    transform: translate(8%, -4%);
-    z-index: 100;
+@include pc {
+  .event-parent {
+    transition: 0.5s ease-in-out 0.5s;
+    &:nth-of-type(4n + 1):hover {
+      transform: translate(8%, -4%);
+      z-index: 100;
+    }
+    &:nth-of-type(4n):hover {
+      transform: translate(-8%, -4%);
+      z-index: 100;
+    }
   }
-  &:nth-of-type(4n):hover {
-    transform: translate(-8%, -4%);
-    z-index: 100;
+
+  .event {
+    &:hover {
+      box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+        rgba(0, 0, 0, 0.22) 0px 15px 12px;
+      transform: scale(1.3);
+      z-index: 100;
+      transition: 0.5s ease-in-out 0.5s;
+    }
+    &:hover .event__thumbnail {
+      padding: 0;
+      img {
+        border-radius: 12px;
+      }
+    }
+    &:hover .event__actions {
+      visibility: visible;
+      transition: 0.5s ease-in-out 0.5s;
+    }
+    &:hover .event__body {
+      bottom: 0;
+    }
+    &:hover .event__top {
+      margin-bottom: 8px;
+    }
+    &:hover .event__btn {
+      visibility: visible;
+      transition: 0.5s ease-in-out 0.5s;
+      mat-icon {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        font-size: 20px;
+        transform: translateY(2px);
+      }
+      &:hover {
+        border: 1px solid #fff;
+        color: #fff;
+      }
+    }
+    &:hover .event__description {
+      visibility: visible;
+    }
   }
 }
 
@@ -34,50 +91,6 @@
   transition: 0.3s ease-in-out;
   overflow: hidden;
   cursor: pointer;
-  &:hover {
-    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
-      rgba(0, 0, 0, 0.22) 0px 15px 12px;
-    transform: scale(1.3);
-    z-index: 100;
-    transition: 0.5s ease-in-out 0.5s;
-  }
-  &:hover .event__thumbnail {
-    padding: 0;
-    img {
-      border-radius: 12px;
-    }
-  }
-  &:hover .event__actions {
-    visibility: visible;
-    transition: 0.5s ease-in-out 0.5s;
-  }
-  &:hover .event__body {
-    bottom: 0;
-  }
-  &:hover .event__top {
-    margin-bottom: 8px;
-  }
-  &:hover .event__btn {
-    visibility: visible;
-    transition: 0.5s ease-in-out 0.5s;
-    mat-icon {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      margin: auto;
-      font-size: 20px;
-      transform: translateY(2px);
-    }
-    &:hover {
-      border: 1px solid #fff;
-      color: #fff;
-    }
-  }
-  &:hover .event__description {
-    visibility: visible;
-  }
   &__thumbnail {
     padding: 0px 24px;
     background: #303030;
@@ -115,6 +128,9 @@
     border-radius: 0 0 10px 10px;
     font-size: 12px;
     transition: 0.5s ease-in-out 0.5s;
+    @include sp {
+      padding: 16px;
+    }
   }
   &__actions {
     display: flex;
@@ -122,6 +138,9 @@
     margin-left: auto;
     visibility: hidden;
     transition: 0.5s ease-in-out 0.5s;
+    @include sp {
+      visibility: visible;
+    }
   }
   &__btn {
     width: 32px;
@@ -134,6 +153,21 @@
     position: relative;
     cursor: pointer;
     visibility: hidden;
+    @include sp {
+      visibility: visible;
+      width: 24px;
+      height: 24px;
+      mat-icon {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        font-size: 16px;
+        transform: translateY(4px);
+      }
+    }
   }
   &__description {
     display: flex;
@@ -159,6 +193,8 @@
   display: grid;
   place-items: center;
   place-content: center;
+  font-size: 14px;
+  opacity: 0.6;
   &__text:last-of-type {
     margin-bottom: 24px;
   }

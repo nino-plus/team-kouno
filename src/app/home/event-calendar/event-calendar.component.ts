@@ -103,10 +103,10 @@ export class EventCalendarComponent implements OnInit {
       if (events) {
         events.forEach((event) => {
           this.calendarEventLists.push({
-            id: event.eventId,
-            start: event.startAt.toDate(),
-            end: event.exitAt ? event.exitAt.toDate() : '',
-            title: event.name,
+            id: event?.eventId,
+            start: event?.startAt.toDate(),
+            end: event?.exitAt ? event.exitAt.toDate() : '',
+            title: event?.name,
             color: colors.orange,
             actions: this.actions,
             resizable: {

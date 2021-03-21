@@ -30,6 +30,7 @@ export class EventCardComponent implements OnInit {
   openDetailDialog(event: Event, $event): void {
     $event.stopPropagation();
     this.dialog.open(EventDetailDialogComponent, {
+      panelClass: 'event-detail-dialog',
       data: {
         event,
         uid: this.uid,
@@ -49,7 +50,10 @@ export class EventCardComponent implements OnInit {
   }
 
   joinChannel(event: Event): void {
-    if (event.startAt < this.eventService.dateNow) {
+    if (
+      event.startAt < this.eventService.dateNow &&
+      event.exitAt >= this.eventService.dateNow
+    ) {
       this.router.navigateByUrl(`/event/${event.eventId}/${this.uid}`);
     } else {
       this.navigateDetail(event);

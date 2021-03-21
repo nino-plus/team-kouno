@@ -1,10 +1,23 @@
+@import 'mixins';
+@import 'custom-style';
+
 .settings {
   &__profile {
     display: grid;
     grid-template-columns: 0.7fr 0.3fr;
+    margin-bottom: 24px;
+    @include sp {
+      grid-template-columns: 1fr;
+    }
+  }
+  &__heading {
+    font-size: 18px;
   }
   &__info {
     padding-right: 48px;
+    @include sp {
+      padding: 0;
+    }
   }
   &__photo {
     margin: 0 auto 16px;
@@ -22,6 +35,11 @@
     grid-template-columns: 120px 1fr;
     gap: 16px;
     margin-bottom: 24px;
+    @include sp {
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
   }
   &__label {
     display: flex;
@@ -44,9 +62,37 @@
     border-radius: 50%;
     max-width: 240px;
     overflow: hidden;
+    @include sp {
+      margin-bottom: 24px;
+    }
+  }
+  &__update-btn {
+    background: $color-main;
+    color: #fff;
+    cursor: pointer;
+    &:hover {
+      background: $color-accent;
+    }
+    &.disabled {
+      opacity: 0.38;
+      cursor: not-allowed;
+    }
+    @include sp {
+      display: none;
+    }
+    &--sp {
+      display: block;
+      width: 100%;
+      @include pc {
+        display: none;
+      }
+    }
   }
 }
 
 mat-divider {
   margin-bottom: 48px;
+  @include sp {
+    margin-bottom: 16px;
+  }
 }

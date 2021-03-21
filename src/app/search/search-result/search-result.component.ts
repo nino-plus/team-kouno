@@ -92,6 +92,7 @@ export class SearchResultComponent implements OnInit {
     this.uiService.dialogType = 'search';
 
     this.dialog.open(EventDetailDialogComponent, {
+      panelClass: 'event-detail-dialog',
       data: {
         event,
         uid: this.uid,

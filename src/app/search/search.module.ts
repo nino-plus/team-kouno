@@ -8,6 +8,8 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { SharedModule } from '../shared/shared.module';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [SearchResultComponent, SearchComponent],
@@ -18,6 +20,9 @@ import { MatButtonModule } from '@angular/material/button';
     SharedModule,
     MatIconModule,
     MatButtonModule,
+    MatAutocompleteModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
 })
 export class SearchModule {}

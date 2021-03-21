@@ -1,0 +1,33 @@
+@import 'custom-style';
+@import 'mixins';
+
+.search-box {
+  width: 320px;
+  background: #eee;
+  height: 40px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  border-radius: 24px;
+  z-index: 10000;
+  margin: 16px auto;
+  &__form {
+    height: 40px;
+    color: $color-font;
+  }
+  &__input {
+    width: 260px;
+    height: 40px;
+    border: none;
+    outline: none;
+    background: #eee;
+  }
+  &__submit {
+    color: $color-font;
+    text-align: center;
+    cursor: pointer;
+    span {
+      display: inline-block;
+    }
+  }
+}

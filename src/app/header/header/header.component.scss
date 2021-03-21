@@ -17,14 +17,16 @@
   background-color: white;
   @include sp {
     height: 56px;
+    padding: 8px;
   }
   &__logo {
     font-family: $font-logo;
     img {
       margin-right: 4px;
+      width: 16px;
     }
     @include sp {
-      font-size: 20px;
+      font-size: 12px;
     }
   }
   &__logo-link {
@@ -32,15 +34,33 @@
     color: #606060;
     align-items: center;
   }
+  &__btns {
+    display: flex;
+    align-items: center;
+  }
+  &__search {
+    display: none;
+    @include sp {
+      display: block;
+    }
+  }
   &__event-button {
     font-size: 16px;
     font-weight: 500;
     color: $font-logo;
     margin: auto 16px auto 0;
-    transform: translateY(3px);
     transition: ease-in-out 0.16s;
+    @include sp {
+      margin: auto 0;
+    }
     &:hover {
       color: #1bcbe0;
+    }
+    span {
+      line-height: 19px;
+      @include sp {
+        display: none;
+      }
     }
   }
   &__icon {

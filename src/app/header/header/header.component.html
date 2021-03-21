@@ -8,13 +8,17 @@
   <app-search-box></app-search-box>
 
   <ng-container *ngIf="authService.user$ | async as user; else default">
-    <div>
+    <div class="header__btns">
+      <button mat-icon-button class="header__search" routerLink="/search">
+        <mat-icon>search</mat-icon>
+      </button>
       <button
         mat-flat-button
         class="header__event-button"
         routerLink="/editor/create"
       >
-        イベントをつくる
+        <mat-icon class="header__create">add</mat-icon>
+        <span>イベントをつくる</span>
       </button>
       <button
         mat-mini-fab

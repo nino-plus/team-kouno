@@ -2,6 +2,7 @@
 @import 'custom-style';
 @import '~@danielmoncada/angular-datetime-picker/assets/style/picker.min.css';
 @import '../node_modules/angular-calendar/css/angular-calendar.css';
+@import 'mixins';
 
 @include mat-core();
 
@@ -91,6 +92,9 @@ img {
   max-width: 1200px;
   padding: 0 48px;
   margin: 0 auto;
+  @include sp {
+    padding: 0;
+  }
   &--event-form {
     max-width: 960px;
   }
@@ -103,9 +107,16 @@ img {
   &--result {
     padding: 48px 4%;
     max-width: 1600px;
+    @include sp {
+      max-width: 100%;
+      padding: 16px 4%;
+    }
   }
   &--event-detail {
     padding: 24px 0 120px;
+    @include sp {
+      padding: 0 0 48px;
+    }
   }
 }
 
@@ -182,4 +193,10 @@ img {
 .cal-week-view * {
   font-weight: normal;
   font-size: 14px;
+}
+
+.event-detail-dialog {
+  .mat-dialog-container {
+    padding: 0;
+  }
 }
