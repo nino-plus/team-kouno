@@ -7,4 +7,14 @@ export class UiService {
   dialogType: string;
 
   constructor() {}
+
+  isLargeScreen(container?: HTMLElement): boolean {
+    const screenWidth = window.innerWidth || container.clientWidth;
+    const mobileScreen = 700;
+    if (screenWidth >= mobileScreen) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

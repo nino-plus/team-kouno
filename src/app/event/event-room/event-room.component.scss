@@ -1,21 +1,19 @@
 @import 'custom-style';
+@import 'mixins';
 
 .header {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   margin-left: 24px;
   margin-top: 16px;
   position: relative;
-  &__avatar {
-    width: 40px;
-    height: 40px;
-    margin-right: 8px;
-    border-radius: 50%;
-    background: center/cover rgba(0, 0, 0, 0.5);
+  color: $color-font;
+  &__title {
+    font-size: 24px;
   }
-  &__name {
-    font-size: 20px;
-    color: $color-font;
+  &__count {
+    font-size: 12px;
+    margin-left: 8px;
   }
 }
 
@@ -33,6 +31,7 @@ app-stream {
   display: flex;
   margin-left: 24px;
   color: $color-font;
+  align-items: center;
   &__label {
     align-items: center;
     margin-right: 8px;
@@ -70,6 +69,9 @@ app-stream {
   position: relative;
   padding: 32px;
   z-index: 1;
+  @include sp {
+    padding: 0;
+  }
   &__title {
     position: absolute;
     top: 50%;
@@ -95,13 +97,13 @@ app-stream {
 }
 
 .actions {
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateY(17%) translateX(-50%);
-  -webkit-transform: translateY(17%) translateX(-50%);
+  // position: fixed;
+  // bottom: 0;
+  // left: 50%;
+  // transform: translateY(17%) translateX(-50%);
+  // -webkit-transform: translateY(17%) translateX(-50%);
   /* width: 100%; */
-  padding: 24px;
+  padding: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -193,13 +195,13 @@ app-stream {
 }
 
 .player {
-  /* height: 320px; */
   min-height: 100%;
   display: grid;
   gap: 32px;
-  /* grid-template-rows: auto; */
+  @include sp {
+    gap: 0px;
+  }
   &--1-player {
-    margin: auto 0;
     grid-template-columns: 1fr;
     height: 80vh;
   }
@@ -232,9 +234,11 @@ app-stream {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 16px;
   background-color: rgba(183, 183, 183, 0.2);
   border-radius: 8px;
+  @include sp {
+    border-radius: 0;
+  }
   &__photo {
     width: 160px;
     height: 160px;

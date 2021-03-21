@@ -15,6 +15,9 @@
   min-height: 56px;
   box-sizing: border-box;
   background-color: white;
+  @include sp {
+    height: 56px;
+  }
   &__logo {
     font-family: $font-logo;
     img {

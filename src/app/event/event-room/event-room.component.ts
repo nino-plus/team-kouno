@@ -1,4 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,6 +9,7 @@ import { User } from 'src/app/interfaces/user';
 import { AgoraService } from 'src/app/services/agora.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { EventService } from 'src/app/services/event.service';
+import { UiService } from 'src/app/services/ui.service';
 import { ShareScreenInfoDialogComponent } from 'src/app/shared/share-screen-info-dialog/share-screen-info-dialog.component';
 
 @Component({
@@ -29,6 +31,7 @@ export class EventRoomComponent implements OnInit, OnDestroy {
   isPublishVideo: boolean;
   isPublishMicrophone: boolean;
   isPublishScreen: boolean;
+  isPcScreen = this.uiService.isLargeScreen();
 
   isShareScreen$: Observable<boolean>;
   participants$: Observable<User[]>;
@@ -43,7 +46,9 @@ export class EventRoomComponent implements OnInit, OnDestroy {
     private agoraService: AgoraService,
     private router: Router,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private bottomSheet: MatBottomSheet,
+    private uiService: UiService
   ) {}
 
   ngOnInit(): void {
