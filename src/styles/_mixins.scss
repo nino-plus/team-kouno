@@ -1,0 +1,35 @@
+@mixin pc {
+  @media screen and (min-width: 1025px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media screen and (max-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin sp {
+  @media screen and (max-width: 700px) {
+    @content;
+  }
+}
+
+@mixin sp-small {
+  @media screen and (max-width: 350px) {
+    @content;
+  }
+}
+
+@mixin iPadPro {
+  @media screen and (max-width: 1024px) and (min-height: 1366px) {
+    @content;
+  }
+}
+
+@mixin iPad {
+  @media screen and (max-width: 768px) and (min-height: 1024px) {
+    @content;
+  }
+}

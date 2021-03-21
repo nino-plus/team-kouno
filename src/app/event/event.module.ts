@@ -21,6 +21,7 @@ import {
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { EventDetailComponent } from './event-detail/event-detail.component';
 
 @NgModule({
@@ -49,6 +50,7 @@ import { EventDetailComponent } from './event-detail/event-detail.component';
     MatDividerModule,
     MatMenuModule,
     MatSidenavModule,
+    MatBottomSheetModule,
   ],
 })
 export class EventModule {}

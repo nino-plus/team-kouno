@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as firebase from 'firebase';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
@@ -17,7 +17,8 @@ import { UnfollowDialogComponent } from 'src/app/shared/unfollow-dialog/unfollow
   templateUrl: './my-page.component.html',
   styleUrls: ['./my-page.component.scss'],
 })
-export class MyPageComponent implements OnInit {
+export class MyPageComponent implements OnInit, OnDestroy {
+  readonly subscription = new Subscription();
   dateNow: firebase.default.firestore.Timestamp = firebase.default.firestore.Timestamp.now();
   user$: Observable<User> = this.route.paramMap.pipe(
     switchMap((params) => {
@@ -53,6 +54,7 @@ export class MyPageComponent implements OnInit {
     private userService: UserService,
     private followService: UserFollowService,
     private dialog: MatDialog,
+    private router: Router
   ) {}
 
   follow(): void {
@@ -69,8 +71,7 @@ export class MyPageComponent implements OnInit {
       .subscribe((status) => {
         if (status) {
           this.isFollowing = false;
-          this.followService
-          .unFollow(this.currentUserUid, this.targetId);
+          this.followService.unFollow(this.currentUserUid, this.targetId);
         }
       });
   }
@@ -89,5 +90,16 @@ export class MyPageComponent implements OnInit {
           .checkFollowing(this.currentUserUid, this.targetId)
           .then((isFollowing) => (this.isFollowing = isFollowing));
       });
+    this.subscription.add(
+      this.userService.getUserData(this.targetId).subscribe((user) => {
+        if (!user) {
+          this.router.navigate(['/404']);
+        }
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

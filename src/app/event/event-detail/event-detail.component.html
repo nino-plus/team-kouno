@@ -134,15 +134,6 @@
                 イベントに参加
               </button>
             </ng-container>
-            <ng-container *ngIf="event.ownerId === user.uid">
-              <button
-                mat-raised-button
-                class="actions__submit"
-                (click)="deleteEvent(event.eventId)"
-              >
-                イベントを削除
-              </button>
-            </ng-container>
           </ng-container>
         </ng-container>
 
