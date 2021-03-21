@@ -1,14 +1,13 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import * as firebase from 'firebase';
 import { Observable } from 'rxjs';
 import { switchMap, take, tap } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { EventService } from 'src/app/services/event.service';
-import * as firebase from 'firebase';
-import { CropperOptions } from '@deer-inc/ngx-croppie';
 
 @Component({
   selector: 'app-editor',

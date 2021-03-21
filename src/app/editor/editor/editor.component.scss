@@ -1,7 +1,16 @@
+@import 'mixins';
+@import 'custom-style';
+
 .heading {
   margin: 24px 0;
+  @include sp {
+    margin: 8px 0;
+  }
   &__text {
-    font-weight: 600;
+    font-weight: 500;
+    @include sp {
+      font-size: 20px;
+    }
   }
 }
 
@@ -15,13 +24,23 @@
   display: grid;
   grid-template-columns: 120px 1fr;
   gap: 24px;
+  @include sp {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
   &__label {
     line-height: 64px;
+    @include sp {
+      line-height: 16px;
+    }
   }
   &__cropper {
     max-width: 320px;
     margin-bottom: 16px;
     margin-top: 24px;
+    @include sp {
+      margin-top: 0;
+    }
   }
   &__hint {
     display: flex;
@@ -33,7 +52,16 @@
     }
   }
   &__icon {
-    color: #00c300;
+    color: #1bcbe0;
+  }
+}
+
+.form-field {
+  input {
+    font-size: 14px;
+  }
+  textarea {
+    font-size: 14px;
   }
 }
 
