@@ -1,0 +1,39 @@
+@import 'mixins';
+@import 'custom-style';
+
+.wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  -webkit-transform: translateY(-50%) translateX(-50%);
+  text-align: center;
+}
+
+.text {
+  display: block;
+  margin: 16px auto 64px;
+  font-family: $font-logo;
+  @include sp {
+    font-size: 20px;
+  }
+}
+
+.outline-button {
+  padding: 10px 32px;
+  border: 2px solid black;
+  border-radius: 50px;
+  cursor: pointer;
+  background-color: transparent;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+  text-align: center;
+  transition: all 280ms;
+  &:hover {
+    background-color: rgba(black, 0.04);
+  }
+  &:active {
+    outline: none;
+  }
+}

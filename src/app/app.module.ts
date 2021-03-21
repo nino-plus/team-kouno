@@ -39,11 +39,12 @@ import { registerLocaleData } from '@angular/common';
 import { SearchBoxComponent } from './search-box/search-box.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 registerLocaleData(localeJa);
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, SearchBoxComponent],
+  declarations: [AppComponent, HeaderComponent, SearchBoxComponent, NotFoundComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

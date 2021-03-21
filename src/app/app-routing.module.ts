@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [
   {
@@ -27,14 +28,22 @@ const routes: Routes = [
     loadChildren: () => import('./intl/intl.module').then((m) => m.IntlModule),
   },
   {
+    path: 'editor',
+    loadChildren: () =>
+      import('./editor/editor.module').then((m) => m.EditorModule),
+  },
+  {
+    path: '404',
+    component: NotFoundComponent,
+  },
+  {
     path: ':uid',
     loadChildren: () =>
       import('./my-page/my-page.module').then((m) => m.MyPageModule),
   },
   {
-    path: 'editor',
-    loadChildren: () =>
-      import('./editor/editor.module').then((m) => m.EditorModule),
+    path: '**',
+    component: NotFoundComponent,
   },
 ];
 

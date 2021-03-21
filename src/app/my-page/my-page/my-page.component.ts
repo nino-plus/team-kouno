@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as firebase from 'firebase';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
@@ -15,7 +15,8 @@ import { UserService } from 'src/app/services/user.service';
   templateUrl: './my-page.component.html',
   styleUrls: ['./my-page.component.scss'],
 })
-export class MyPageComponent implements OnInit {
+export class MyPageComponent implements OnInit, OnDestroy {
+  readonly subscription = new Subscription();
   dateNow: firebase.default.firestore.Timestamp = firebase.default.firestore.Timestamp.now();
   user$: Observable<User> = this.route.paramMap.pipe(
     switchMap((params) => {
@@ -49,7 +50,8 @@ export class MyPageComponent implements OnInit {
     private eventService: EventService,
     private route: ActivatedRoute,
     private userService: UserService,
-    private followService: UserFollowService
+    private followService: UserFollowService,
+    private router: Router
   ) {}
 
   follow(): void {
@@ -76,5 +78,16 @@ export class MyPageComponent implements OnInit {
           .checkFollowing(this.currentUserUid, this.targetId)
           .then((isFollowing) => (this.isFollowing = isFollowing));
       });
+    this.subscription.add(
+      this.userService.getUserData(this.targetId).subscribe((user) => {
+        if (!user) {
+          this.router.navigate(['/404']);
+        }
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }
