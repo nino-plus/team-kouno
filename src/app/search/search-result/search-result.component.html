@@ -21,10 +21,15 @@
                 <button
                   class="event__btn"
                   (click)="openDetailDialog(event, $event)"
+                  matTooltip="予約する"
                 >
                   <mat-icon>touch_app</mat-icon>
                 </button>
-                <button class="event__btn" (click)="navigateDetail(event)">
+                <button
+                  class="event__btn"
+                  (click)="navigateDetail(event)"
+                  matTooltip="詳しく見る"
+                >
                   <mat-icon>expand_more</mat-icon>
                 </button>
               </div>
@@ -56,7 +61,6 @@
                 </p>
               </div>
             </div>
-            <p class="event__info">{{ event.description }}</p>
           </div>
         </li>
       </ul>

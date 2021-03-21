@@ -50,10 +50,18 @@
           {{ event.category }}
         </p>
         <div class="card__actions" align="end">
-          <button class="card__btn" (click)="openDetailDialog(event, $event)">
+          <button
+            class="card__btn"
+            (click)="openDetailDialog(event, $event)"
+            matTooltip="予約する"
+          >
             <mat-icon>touch_app</mat-icon>
           </button>
-          <button class="card__btn" (click)="navigateDetail(event)">
+          <button
+            class="card__btn"
+            (click)="navigateDetail(event)"
+            matTooltip="詳しく見る"
+          >
             <mat-icon>expand_more</mat-icon>
           </button>
         </div>
