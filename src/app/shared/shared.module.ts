@@ -9,6 +9,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ShareScreenInfoDialogComponent } from './share-screen-info-dialog/share-screen-info-dialog.component';
+import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
+import { UnfollowDialogComponent } from './unfollow-dialog/unfollow-dialog.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +18,8 @@ import { ShareScreenInfoDialogComponent } from './share-screen-info-dialog/share
     EventDetailDialogComponent,
     InfoDialogComponent,
     ShareScreenInfoDialogComponent,
+    DeleteDialogComponent,
+    UnfollowDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -29,6 +33,8 @@ import { ShareScreenInfoDialogComponent } from './share-screen-info-dialog/share
     EventCardComponent,
     EventDetailDialogComponent,
     InfoDialogComponent,
+    DeleteDialogComponent,
+    UnfollowDialogComponent,
   ],
 })
 export class SharedModule {}

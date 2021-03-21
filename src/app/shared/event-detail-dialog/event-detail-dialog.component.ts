@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Event } from 'src/app/interfaces/event';
@@ -7,6 +8,7 @@ import { User } from 'src/app/interfaces/user';
 import { EventService } from 'src/app/services/event.service';
 import { UiService } from 'src/app/services/ui.service';
 import { UserService } from 'src/app/services/user.service';
+import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { InfoDialogComponent } from '../info-dialog/info-dialog.component';
 
 @Component({
@@ -29,6 +31,7 @@ export class EventDetailDialogComponent implements OnInit {
     private dialog: MatDialog,
     private userService: UserService,
     public uiService: UiService,
+    private snackBer: MatSnackBar,
     @Inject(MAT_DIALOG_DATA)
     public data: {
       event: Event;
@@ -60,6 +63,20 @@ export class EventDetailDialogComponent implements OnInit {
     this.dialog.closeAll();
   }
 
+  openDeleteDialog(eventId): void {
+    this.dialog
+      .open(DeleteDialogComponent, {
+        width: '250px',
+      })
+      .afterClosed()
+      .subscribe((status) => {
+        if (status) {
+          this.eventService
+            .deleteEvent(eventId);
+        }
+      });
+  }
+
   navigateEditor(event: Event): void {
     this.router.navigateByUrl(`/editor/${event.eventId}`);
     this.dialog.closeAll();
@@ -69,7 +86,4 @@ export class EventDetailDialogComponent implements OnInit {
     this.dialog.open(InfoDialogComponent);
   }
 
-  deleteEvent(event): void {
-    this.eventService.deleteEvent(event);
-  }
 }

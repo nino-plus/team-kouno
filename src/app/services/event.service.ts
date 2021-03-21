@@ -10,6 +10,7 @@ import { ReserveUid } from '../interfaces/reserve-uid';
 import { switchMap, map, take, filter } from 'rxjs/operators';
 import { User } from '../interfaces/user';
 import { UserService } from './user.service';
+import { AngularFireFunctions } from '@angular/fire/functions';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +23,8 @@ export class EventService {
     private storage: AngularFireStorage,
     private snackBar: MatSnackBar,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private fns: AngularFireFunctions,
   ) {}
 
   async createEvent(
@@ -208,9 +210,10 @@ export class EventService {
   }
 
   async deleteEvent(eventId: string): Promise<void> {
-    await this.db
-      .doc<Event>(`events/${eventId}`)
-      .delete()
+    const callable = this.fns.httpsCallable('deleteEvent');
+
+    return callable(eventId)
+      .toPromise()
       .then(() => {
         this.snackBar.open('イベントを削除しました');
         this.router.navigateByUrl('/');

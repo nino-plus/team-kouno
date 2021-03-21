@@ -1,72 +1,34 @@
-import { Algolia } from './utils/algolia.util';
+import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import {
+  deleteCollectionByReference,
+} from './utils/firebase.util';
 
-const algolia = new Algolia();
-
-export const createEvent = functions
-  .region('asia-northeast1')
-  .firestore.document('events/{eventId}')
-  .onCreate((snap) => {
-    const data = snap.data();
-    functions.logger.info(data);
-    return algolia.saveRecord({
-      indexName: 'events',
-      largeConcentKey: 'description',
-      data: {
-        eventId: data.eventId,
-        name: data.name,
-        category: data.category,
-        createdAt: data.createdAt,
-        updatedAt: data.updatedAt,
-        thumbnailURL: data.thumbnailURL,
-        description: data.description,
-        startAt: data.startAt,
-        exitAt: data.exitAt,
-        ownerId: data.ownerId,
-        participantCount: data.participantCount,
-        reserveUserCount: data.reserveUserCount,
-      },
-    });
-  });
+const db = admin.firestore();
+const storage = admin.storage().bucket();
 
 export const deleteEvent = functions
   .region('asia-northeast1')
-  .firestore.document('events/{eventId}')
-  .onDelete((snap) => {
-    const data = snap.data();
-    functions.logger.info(data);
+  .https.onCall(async (eventId: any) => {
+    const reserveUidsRef = db
+      .collectionGroup(`reserveUids`)
+      .where('eventId', '==', eventId);
+    const videoPublishUsersRef = db
+      .collectionGroup(`videoPublishUsers`)
+      .where('eventId', '==', eventId);
+    const eventsRef = db
+      .collection(`events`)
+      .where('eventId', '==', eventId);
 
-    if (data) {
-      return algolia.removeRecord('events', data.eventId);
-    } else {
-      return;
-    }
-  });
+    const deleteEventImage = storage.deleteFiles({
+        directory: `events/${eventId}`,
+        prefix: 'image',
+      });
 
-export const updateEvent = functions
-  .region('asia-northeast1')
-  .firestore.document('events/{eventId}')
-  .onUpdate((change) => {
-    const data = change.after.data();
-    functions.logger.info(data);
-
-    return algolia.saveRecord({
-      indexName: 'events',
-      largeConcentKey: 'description',
-      isUpdate: true,
-      data: {
-        eventId: data.eventId,
-        name: data.name,
-        category: data.category,
-        createdAt: data.createdAt,
-        updatedAt: data.updatedAt,
-        thumbnailURL: data.thumbnailURL,
-        description: data.description,
-        startAt: data.startAt,
-        exitAt: data.exitAt,
-        ownerId: data.ownerId,
-        participantCount: data.participantCount,
-        reserveUserCount: data.reserveUserCount,
-      },
-    });
+    return Promise.all([
+      deleteCollectionByReference(reserveUidsRef),
+      deleteCollectionByReference(videoPublishUsersRef),
+      deleteCollectionByReference(eventsRef),
+      deleteEventImage,
+    ]);
   });
