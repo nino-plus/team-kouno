@@ -1,4 +1,6 @@
 @import 'custom-style';
+@import 'mixins';
+
 .card {
   &__content {
     border-radius: 10px;
@@ -12,6 +14,9 @@
       transition-duration: 0.3s;
       box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
         rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+    }
+    @include sp-s {
+      height: 300px;
     }
   }
   &__header {
@@ -29,6 +34,10 @@
     &--reserve {
       background: $color-sub;
     }
+    @include sp-s {
+      width: 64px;
+      height: 64px;
+    }
   }
   &__participants-count-wrap {
     position: absolute;
@@ -42,6 +51,9 @@
     color: #fff;
     &--s {
       font-size: 10px;
+    }
+    @include sp-s {
+      font-size: 16px;
     }
   }
   &__participants-text {
@@ -101,6 +113,9 @@
     padding: 16px 16px 8px 16px;
     display: grid;
     place-items: center;
+    @include sp-s {
+      font-size: 18px;
+    }
   }
   &__day {
     align-items: center;
@@ -123,6 +138,9 @@
     font-size: 14px;
     margin-left: 8px;
     border-radius: 14px;
+    @include sp-s {
+      font-size: 12px;
+    }
   }
   &__name {
     color: #505050;
@@ -132,6 +150,9 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     margin-bottom: 2px;
+    @include sp-s {
+      font-size: 14px;
+    }
   }
   &__info {
     font-size: 14px;
