@@ -51,6 +51,7 @@
         </p>
         <div class="card__actions" align="end">
           <button
+            *ngIf="event.ownerId !== uid"
             class="card__btn"
             (click)="openDetailDialog(event, $event)"
             matTooltip="予約する"

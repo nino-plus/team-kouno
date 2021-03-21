@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { take } from 'rxjs/operators';
 import { fade } from 'src/app/animations/animations';
 import { Event } from 'src/app/interfaces/event';
 import { EventService } from 'src/app/services/event.service';
@@ -16,6 +17,7 @@ export class EventCardComponent implements OnInit {
   @Input() event: Event;
   @Input() uid: string;
   @Input() type: string;
+  ownerEvents: string[];
 
   constructor(
     private dialog: MatDialog,
@@ -37,7 +39,13 @@ export class EventCardComponent implements OnInit {
   }
 
   navigateDetail(event: Event) {
-    this.router.navigateByUrl(`/event/${event.eventId}`);
+    let userType;
+    if (event.ownerId === this.uid) {
+      userType = 'owner';
+    }
+    this.router.navigate([`/event/${event.eventId}`], {
+      queryParams: { type: userType },
+    });
   }
 
   joinChannel(event: Event): void {

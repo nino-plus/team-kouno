@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { EventService } from 'src/app/services/event.service';
 import { UiService } from 'src/app/services/ui.service';
 import { UserService } from 'src/app/services/user.service';
+import { DeleteDialogComponent } from 'src/app/shared/delete-dialog/delete-dialog.component';
 import { InfoDialogComponent } from 'src/app/shared/info-dialog/info-dialog.component';
 
 @Component({
@@ -43,6 +44,8 @@ export class EventDetailComponent implements OnInit {
   );
 
   user$: Observable<User> = this.authService.user$;
+
+  type: string = this.route.snapshot.queryParamMap.get('type');
 
   constructor(
     private router: Router,
@@ -84,7 +87,16 @@ export class EventDetailComponent implements OnInit {
     this.dialog.open(InfoDialogComponent);
   }
 
-  deleteEvent(event): void {
-    this.eventService.deleteEvent(event);
+  openDeleteDialog(eventId): void {
+    this.dialog
+      .open(DeleteDialogComponent, {
+        width: '250px',
+      })
+      .afterClosed()
+      .subscribe((status) => {
+        if (status) {
+          this.eventService.deleteEvent(eventId);
+        }
+      });
   }
 }
