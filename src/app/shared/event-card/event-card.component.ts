@@ -30,6 +30,7 @@ export class EventCardComponent implements OnInit {
   openDetailDialog(event: Event, $event): void {
     $event.stopPropagation();
     this.dialog.open(EventDetailDialogComponent, {
+      panelClass: 'event-detail-dialog',
       data: {
         event,
         uid: this.uid,
