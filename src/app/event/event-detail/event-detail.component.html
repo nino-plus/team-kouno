@@ -99,69 +99,82 @@
 
     <div class="actions">
       <button routerLink="/" mat-button type="button">戻る</button>
-
-      <ng-container *ngIf="user$ | async as user; else default">
-        <ng-container *ngIf="reservedUids$ | async as uids">
-          <ng-container *ngIf="!uids.includes(user.uid); else cancel">
-            <button
-              mat-raised-button
-              class="actions__submit"
-              (click)="reserveEvent(event, user.uid)"
-              mat-dialog-close
-            >
-              イベントを予約
-            </button>
+      <ng-container [ngSwitch]="type">
+        <ng-container *ngSwitchDefault>
+          <ng-container *ngIf="user$ | async as user; else default">
+            <ng-container *ngIf="reservedUids$ | async as uids">
+              <ng-container *ngIf="!uids.includes(user.uid); else cancel">
+                <button
+                  mat-raised-button
+                  class="actions__submit"
+                  (click)="reserveEvent(event, user.uid)"
+                  mat-dialog-close
+                >
+                  イベントを予約
+                </button>
+              </ng-container>
+              <ng-template #cancel>
+                <button
+                  mat-raised-button
+                  class="actions__submit"
+                  (click)="cancelReserve(event, user.uid)"
+                  mat-dialog-close
+                >
+                  予約をキャンセル
+                </button>
+              </ng-template>
+            </ng-container>
+            <ng-container *ngIf="event.startAt < eventService.dateNow">
+              <button
+                mat-raised-button
+                class="actions__submit"
+                (click)="joinChannel(event, user.uid)"
+                mat-dialog-close
+              >
+                イベントに参加
+              </button>
+            </ng-container>
+            <ng-container *ngIf="event.ownerId === user.uid">
+              <button
+                mat-raised-button
+                class="actions__submit"
+                (click)="deleteEvent(event.eventId)"
+              >
+                イベントを削除
+              </button>
+            </ng-container>
           </ng-container>
-          <ng-template #cancel>
-            <button
-              mat-raised-button
-              class="actions__submit"
-              (click)="cancelReserve(event, user.uid)"
-              mat-dialog-close
-            >
-              予約をキャンセル
-            </button>
-          </ng-template>
         </ng-container>
-        <ng-container *ngIf="event.startAt < eventService.dateNow">
+
+        <ng-template #default>
           <button
             mat-raised-button
             class="actions__submit"
-            (click)="joinChannel(event, user.uid)"
-            mat-dialog-close
+            (click)="openInfoDialog()"
+            [class.disable]
+          >
+            イベントを予約
+          </button>
+          <button
+            mat-raised-button
+            class="actions__submit"
+            (click)="openInfoDialog()"
+            [class.disable]
           >
             イベントに参加
           </button>
-        </ng-container>
-        <ng-container *ngIf="event.ownerId === user.uid">
+        </ng-template>
+        <ng-container *ngSwitchCase="'owner'">
           <button
             mat-raised-button
             class="actions__submit"
-            (click)="deleteEvent(event.eventId)"
+            (click)="openDeleteDialog(event.eventId)"
+            mat-dialog-close
           >
             イベントを削除
           </button>
         </ng-container>
       </ng-container>
-
-      <ng-template #default>
-        <button
-          mat-raised-button
-          class="actions__submit"
-          (click)="openInfoDialog()"
-          [class.disable]
-        >
-          イベントを予約
-        </button>
-        <button
-          mat-raised-button
-          class="actions__submit"
-          (click)="openInfoDialog()"
-          [class.disable]
-        >
-          イベントに参加
-        </button>
-      </ng-template>
     </div>
   </div>
 </ng-container>

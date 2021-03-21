@@ -11,6 +11,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ShareScreenInfoDialogComponent } from './share-screen-info-dialog/share-screen-info-dialog.component';
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { UnfollowDialogComponent } from './unfollow-dialog/unfollow-dialog.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { UnfollowDialogComponent } from './unfollow-dialog/unfollow-dialog.compo
     MatDividerModule,
     MatIconModule,
     MatButtonModule,
-    MatTooltipModule
+    MatTooltipModule,
+    RouterModule,
   ],
   exports: [
     EventCardComponent,
