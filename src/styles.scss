@@ -100,6 +100,9 @@ img {
   }
   &--calendar {
     padding: 48px;
+    @include sp {
+      padding: 16px;
+    }
   }
   &--intl {
     padding: 48px;
