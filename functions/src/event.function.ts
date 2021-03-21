@@ -21,8 +21,7 @@ export const deleteEvent = functions
       .where('eventId', '==', eventId);
 
     const deleteEventImage = storage.deleteFiles({
-        directory: `events/${eventId}`,
-        prefix: 'image',
+      prefix: `events/${eventId}`,
       });
 
     return Promise.all([
