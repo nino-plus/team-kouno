@@ -11,4 +11,6 @@ export {
 } from './reserve.event.function';
 export * from './publish.media.function';
 export * from './unpublish.media.function';
+export * from './follow.function';
 export * from './event.function';
+

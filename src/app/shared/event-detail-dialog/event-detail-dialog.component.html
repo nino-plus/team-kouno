@@ -13,7 +13,7 @@
       <div class="event__date-wrap">
         <div
           class="event__date"
-          *ngIf="uiService.dialogType == 'search'; else default"
+          *ngIf="uiService.dialogType === 'search'; else default"
         >
           <p class="event__startAt">
             {{ data.event.startAt | date: 'M/d(E) HH:mm' }}
@@ -36,9 +36,15 @@
           </div>
         </ng-template>
 
-        <button mat-stroked-button (click)="navigateEditor(data.event)">
-          イベントを編集
-        </button>
+        <ng-container *ngIf="data.event.ownerId === data.uid">
+          <button
+            mat-stroked-button
+            type="button"
+            (click)="navigateEditor(data.event)"
+          >
+            イベントを編集
+          </button>
+        </ng-container>
       </div>
 
       <div class="event__detail">
@@ -57,7 +63,7 @@
               <img
                 [src]="user.avatarURL"
                 alt=""
-                [matTooltip]="user.name"
+                [matTooltip]="user?.name"
                 class="user__avatar"
                 (click)="navigateMyPage(user.uid)"
               />
