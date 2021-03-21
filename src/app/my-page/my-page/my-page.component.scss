@@ -12,6 +12,9 @@
       grid-template-columns: 144px 1fr;
       padding: 16px;
     }
+    @include sp-s {
+      grid-template-columns: 120px 1fr;
+    }
   }
   &__avatar {
     img {
@@ -22,6 +25,10 @@
         width: 144px;
         height: 144px;
       }
+      @include sp-s {
+        width: 120px;
+        height: 120px;
+      }
     }
   }
   &__name {
@@ -31,6 +38,9 @@
     @include sp {
       font-size: 24px;
     }
+    @include sp-s {
+      font-size: 20px;
+    }
   }
   &__flex {
     display: flex;
@@ -38,6 +48,9 @@
     margin-bottom: 16px;
     @include sp {
       font-size: 14px;
+    }
+    @include sp-s {
+      font-size: 12px;
     }
   }
   &__flex-item {
@@ -96,4 +109,7 @@
   margin-top: 16px;
   padding: 24px 16px 32px;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  @include sp {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
 }
