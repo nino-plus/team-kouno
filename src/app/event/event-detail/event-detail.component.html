@@ -21,22 +21,25 @@
               {{ event.exitAt.toDate() | date: 'M/d(E) HH:mm' || '' }}
             </p>
           </div>
-          <ng-container *ngIf="user$ | async as user">
-            <ng-container *ngIf="event.ownerId === user.uid">
-              <button
-                mat-stroked-button
-                type="button"
-                (click)="navigateEditor(event)"
-                class="event__edit"
-              >
-                イベントを編集
-              </button>
-            </ng-container>
-          </ng-container>
         </div>
 
         <div class="event__detail">
-          <p class="event__category">{{ event.category }}</p>
+          <div class="event__flex">
+            <p class="event__category">{{ event.category }}</p>
+            <span class="event__spacer"></span>
+            <ng-container *ngIf="user$ | async as user">
+              <ng-container *ngIf="event.ownerId === user.uid">
+                <button
+                  mat-stroked-button
+                  type="button"
+                  (click)="navigateEditor(event)"
+                  class="event__edit"
+                >
+                  イベントを編集
+                </button>
+              </ng-container>
+            </ng-container>
+          </div>
           <p class="event__name">{{ event.name }}</p>
 
           <mat-divider></mat-divider>

@@ -33,12 +33,22 @@
     display: flex;
     align-items: center;
     margin-right: 8px;
+    @include sp-s {
+      font-size: 14px;
+    }
   }
   &__startAt {
     margin-right: 4px;
   }
   &__exitAt {
     margin-left: 4px;
+  }
+  &__flex {
+    display: flex;
+    align-items: center;
+  }
+  &__spacer {
+    flex: 1;
   }
   &__edit {
     font-size: 12px;
