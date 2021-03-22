@@ -1,0 +1,31 @@
+<h1 matDialogTitle class="dialog-header">フォロー中</h1>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-content>
+  <div class="following" *ngFor="let following of data.followings">
+    <a class="following__avatar" routerLink="/{{ following.uid }}">
+      <img src="{{ following.avatarURL }}" alt="" />
+    </a>
+    <a class="following__name" routerLink="/{{ following.uid }}">
+      {{ following.name }}
+    </a>
+    <ng-container *ngIf="myFollowingUids$ | async as myFollowingUids">
+      <button mat-stroked-button class="following__btn">
+        {{
+          myFollowingUids.includes(following.uid)
+            ? 'フォロー中'
+            : 'フォローする'
+        }}
+      </button>
+    </ng-container>
+  </div>
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-actions>
+  <button mat-flat-button matDialogClose class="close">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-dialog-actions>
