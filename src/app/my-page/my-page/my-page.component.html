@@ -15,10 +15,22 @@
           >
             フォロワー <span>{{ user.followerCount }}人</span>
           </p>
+          <a
+            class="my-page__flex-item my-page__flex-item--sp"
+            routerLink="followers"
+          >
+            フォロワー <span>{{ user.followerCount }}人</span>
+          </a>
           <mat-icon class="my-page__icon">supervised_user_circle</mat-icon>
           <p
             class="my-page__flex-item"
             (click)="openFollowingsDialog(currentUser)"
+          >
+            フォロー中 <span>{{ user.followingCount }}人</span>
+          </p>
+          <p
+            class="my-page__flex-item my-page__flex-item--sp"
+            routerLink="followings"
           >
             フォロー中 <span>{{ user.followingCount }}人</span>
           </p>

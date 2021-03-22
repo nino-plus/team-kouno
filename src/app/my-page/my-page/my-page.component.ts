@@ -63,6 +63,8 @@ export class MyPageComponent implements OnInit, OnDestroy {
     })
   );
 
+  screenWidth = window.innerWidth;
+
   constructor(
     private authService: AuthService,
     private eventService: EventService,

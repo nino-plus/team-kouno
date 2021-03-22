@@ -60,10 +60,20 @@
       color: #1bcbe0;
     }
     @include sp {
-      margin-right: 8px;
-      font-size: 14px;
-      span {
+      display: none;
+    }
+    &--sp {
+      display: none;
+      @include sp {
         display: block;
+        margin-right: 8px;
+        font-size: 14px;
+        span {
+          display: block;
+        }
+      }
+      @include sp-s {
+        font-size: 12px;
       }
     }
   }
