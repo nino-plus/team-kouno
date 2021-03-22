@@ -127,6 +127,9 @@ img {
       padding: 0 0 48px;
     }
   }
+  &--followers {
+    padding: 0 16px 24px;
+  }
 }
 
 .intl {
@@ -165,6 +168,10 @@ img {
       margin-right: 4px;
     }
   }
+}
+
+.spacer {
+  flex: 1;
 }
 
 .settings {

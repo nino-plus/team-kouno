@@ -12,9 +12,11 @@ import { FollowersDialogComponent } from './followers-dialog/followers-dialog.co
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { FollowingsDialogComponent } from './followings-dialog/followings-dialog.component';
+import { FollowersComponent } from './followers/followers.component';
+import { FollowingsComponent } from './followings/followings.component';
 
 @NgModule({
-  declarations: [MyPageComponent, MyEventComponent, FollowersDialogComponent, FollowingsDialogComponent],
+  declarations: [MyPageComponent, MyEventComponent, FollowersDialogComponent, FollowingsDialogComponent, FollowersComponent, FollowingsComponent],
   imports: [
     CommonModule,
     MyPageRoutingModule,
