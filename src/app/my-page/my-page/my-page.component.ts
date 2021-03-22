@@ -11,6 +11,8 @@ import { EventService } from 'src/app/services/event.service';
 import { UserFollowService } from 'src/app/services/user-follow.service';
 import { UserService } from 'src/app/services/user.service';
 import { UnfollowDialogComponent } from 'src/app/shared/unfollow-dialog/unfollow-dialog.component';
+import { FollowersDialogComponent } from '../followers-dialog/followers-dialog.component';
+import { FollowingsDialogComponent } from '../followings-dialog/followings-dialog.component';
 
 @Component({
   selector: 'app-my-page',
@@ -46,6 +48,20 @@ export class MyPageComponent implements OnInit, OnDestroy {
   targetId: string;
   isFollowing: boolean;
   uid: string;
+  followings: User[];
+  followers: User[];
+
+  followings$: Observable<User[]> = this.user$.pipe(
+    switchMap((user) => {
+      return this.userService.getFollowings(user.uid);
+    })
+  );
+
+  followers$: Observable<User[]> = this.user$.pipe(
+    switchMap((user) => {
+      return this.userService.getFollowers(user.uid);
+    })
+  );
 
   constructor(
     private authService: AuthService,
@@ -55,7 +71,14 @@ export class MyPageComponent implements OnInit, OnDestroy {
     private followService: UserFollowService,
     private dialog: MatDialog,
     private router: Router
-  ) {}
+  ) {
+    this.followers$.subscribe((users) => {
+      this.followers = users;
+    });
+    this.followings$.subscribe((users) => {
+      this.followings = users;
+    });
+  }
 
   follow(): void {
     this.isFollowing = true;
@@ -74,6 +97,26 @@ export class MyPageComponent implements OnInit, OnDestroy {
           this.followService.unFollow(this.currentUserUid, this.targetId);
         }
       });
+  }
+
+  openFollowersDialog(currentUser: User): void {
+    this.dialog.open(FollowersDialogComponent, {
+      autoFocus: false,
+      data: {
+        currentUser,
+        followers: this.followers,
+      },
+    });
+  }
+
+  openFollowingsDialog(currentUser: User): void {
+    this.dialog.open(FollowingsDialogComponent, {
+      autoFocus: false,
+      data: {
+        currentUser,
+        followings: this.followings,
+      },
+    });
   }
 
   ngOnInit(): void {
