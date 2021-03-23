@@ -1,0 +1,36 @@
+.dialog-header {
+  text-align: center;
+}
+
+.following {
+  display: grid;
+  grid-template-columns: 48px 1fr 80px;
+  gap: 16px;
+  place-items: center;
+  margin: 16px 0;
+  &__avatar {
+    overflow: hidden;
+    img {
+      text-align: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+    }
+  }
+  &__name {
+    text-align: center;
+    &:hover {
+      opacity: 0.6;
+    }
+  }
+  &__btn {
+    font-size: 12px;
+  }
+}
+
+.close {
+  margin-left: auto;
+  &__icon {
+    color: white;
+  }
+}

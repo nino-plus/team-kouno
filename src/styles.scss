@@ -97,12 +97,21 @@ img {
   }
   &--event-form {
     max-width: 960px;
+    @include sp {
+      padding: 0 16px;
+    }
   }
   &--calendar {
     padding: 48px;
+    @include sp {
+      padding: 16px;
+    }
   }
   &--intl {
     padding: 48px;
+    @include sp {
+      padding: 16px;
+    }
   }
   &--result {
     padding: 48px 4%;
@@ -117,6 +126,9 @@ img {
     @include sp {
       padding: 0 0 48px;
     }
+  }
+  &--followers {
+    padding: 0 16px 24px;
   }
 }
 
@@ -156,6 +168,10 @@ img {
       margin-right: 4px;
     }
   }
+}
+
+.spacer {
+  flex: 1;
 }
 
 .settings {
@@ -199,4 +215,8 @@ img {
   .mat-dialog-container {
     padding: 0;
   }
+}
+
+.mat-tab-header-pagination-disabled .mat-tab-header-pagination-chevron {
+  display: none;
 }

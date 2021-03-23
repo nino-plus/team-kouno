@@ -1,0 +1,49 @@
+.heading {
+  display: flex;
+  align-items: center;
+  &__icon {
+    margin-bottom: 8px;
+    opacity: 0.6;
+  }
+  &__text {
+    width: 62%;
+    font-size: 16px;
+    font-weight: 500;
+    place-items: center;
+    place-content: center;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+}
+
+.follower {
+  display: flex;
+  align-items: center;
+  margin: 16px 0;
+  font-size: 14px;
+  &__avatar {
+    overflow: hidden;
+    margin-right: 16px;
+    img {
+      text-align: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+  }
+  &__name {
+    text-align: center;
+    &:hover {
+      opacity: 0.6;
+    }
+  }
+  &__btn {
+    font-size: 12px;
+  }
+}
+
+.back {
+  display: flex;
+  flex-direction: end;
+  margin: 16px 0 16px auto;
+}

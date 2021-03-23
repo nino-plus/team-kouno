@@ -3,7 +3,11 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { regExpEscape } from '@ng-bootstrap/ng-bootstrap/util/util';
+import { combineLatest, Observable, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+import { Follower } from '../interfaces/follower';
+import { Following } from '../interfaces/following';
 import { User } from '../interfaces/user';
 
 @Injectable({
@@ -50,5 +54,42 @@ export class UserService {
       .finally(() => {
         this.isProcessing = false;
       });
+  }
+  getFollowers(uid: string) {
+    return this.db
+      .collection<Follower>(`users/${uid}/followers`, (ref) =>
+        ref.orderBy('createdAt', 'desc')
+      )
+      .valueChanges()
+      .pipe(
+        switchMap((users) => {
+          if (users.length) {
+            return combineLatest(
+              users.map((user) => this.getUserData(user.followerId))
+            );
+          } else {
+            return of(null);
+          }
+        })
+      );
+  }
+
+  getFollowings(uid: string): Observable<User[]> {
+    return this.db
+      .collection<Following>(`users/${uid}/follows`, (ref) =>
+        ref.orderBy('createdAt', 'desc')
+      )
+      .valueChanges()
+      .pipe(
+        switchMap((users) => {
+          if (users.length) {
+            return combineLatest(
+              users.map((user) => this.getUserData(user.followingId))
+            );
+          } else {
+            return of(null);
+          }
+        })
+      );
   }
 }

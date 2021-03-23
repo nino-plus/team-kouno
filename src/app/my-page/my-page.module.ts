@@ -8,9 +8,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MyEventComponent } from './my-event/my-event.component';
 import { SharedModule } from '../shared/shared.module';
 import { MatButtonModule } from '@angular/material/button';
+import { FollowersDialogComponent } from './followers-dialog/followers-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
+import { FollowingsDialogComponent } from './followings-dialog/followings-dialog.component';
+import { FollowersComponent } from './followers/followers.component';
+import { FollowingsComponent } from './followings/followings.component';
 
 @NgModule({
-  declarations: [MyPageComponent, MyEventComponent],
+  declarations: [MyPageComponent, MyEventComponent, FollowersDialogComponent, FollowingsDialogComponent, FollowersComponent, FollowingsComponent],
   imports: [
     CommonModule,
     MyPageRoutingModule,
@@ -18,6 +24,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatIconModule,
     SharedModule,
     MatButtonModule,
+    MatDialogModule,
+    MatDividerModule,
   ],
 })
 export class MyPageModule {}

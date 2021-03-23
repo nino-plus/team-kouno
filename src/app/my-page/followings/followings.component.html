@@ -1,0 +1,32 @@
+<div class="container container--followers">
+  <div class="heading">
+    <button mat-flat-button (click)="backLocation()">
+      <mat-icon class="heading__icon">arrow_back_ios</mat-icon>
+    </button>
+    <span class="spacer"></span>
+    <h1 class="heading__text">フォロー中</h1>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="follower" *ngFor="let following of followings$ | async">
+    <a class="follower__avatar" routerLink="/{{ following.uid }}">
+      <img src="{{ following.avatarURL }}" alt="" />
+    </a>
+    <a class="follower__name" routerLink="/{{ following.uid }}">
+      {{ following.name }}
+    </a>
+    <span class="spacer"></span>
+    <ng-container *ngIf="myFollowingUids$ | async as myFollowerUids">
+      <button mat-stroked-button class="follower__btn">
+        {{
+          myFollowerUids.includes(following.uid) ? 'フォロー中' : 'フォローする'
+        }}
+      </button>
+    </ng-container>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <button mat-stroked-button (click)="backLocation()" class="back">戻る</button>
+</div>
