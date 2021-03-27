@@ -12,6 +12,7 @@ import { ShareScreenInfoDialogComponent } from './share-screen-info-dialog/share
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { UnfollowDialogComponent } from './unfollow-dialog/unfollow-dialog.component';
 import { RouterModule } from '@angular/router';
+import { UserListComponent } from './user-list/user-list.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { RouterModule } from '@angular/router';
     ShareScreenInfoDialogComponent,
     DeleteDialogComponent,
     UnfollowDialogComponent,
+    UserListComponent,
   ],
   imports: [
     CommonModule,
@@ -37,6 +39,7 @@ import { RouterModule } from '@angular/router';
     InfoDialogComponent,
     DeleteDialogComponent,
     UnfollowDialogComponent,
+    UserListComponent,
   ],
 })
 export class SharedModule {}
