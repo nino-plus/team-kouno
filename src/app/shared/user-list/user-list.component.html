@@ -1,0 +1,6 @@
+<div *ngIf="users$ | async as users">
+  <div *ngFor="let user of users">
+    <p>{{ user.name }}</p>
+    <button (click)="call(user.uid)">話しかける</button>
+  </div>
+</div>

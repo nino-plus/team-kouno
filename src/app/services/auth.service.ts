@@ -7,19 +7,16 @@ import { switchMap, shareReplay } from 'rxjs/operators';
 import { UserService } from './user.service';
 import firebase from 'firebase/app';
 
-
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-
   afUser$: Observable<any> = this.afAuth.user;
   uid: string;
   user$ = this.afAuth.authState.pipe(
     switchMap((afUser) => {
       if (afUser) {
-        this.uid = afUser && afUser.uid;
+        this.uid = afUser.uid;
         return this.userService.getUserData(afUser.uid);
       } else {
         return of(null);

@@ -1,0 +1,70 @@
+<div class="container">
+  <h2>1. Start your Webcam</h2>
+  <div class="videos">
+    <span>
+      <h3>Local Stream</h3>
+      <video
+        *ngIf="localStream; else sublocal"
+        autoplay
+        playsinline
+        [muted]="isLocalMute"
+        #webcamVideo
+        [srcObject]="localStream"
+      ></video>
+      <ng-template #sublocal>
+        <video src=""></video>
+      </ng-template>
+      <button (click)="isLocalMute = !isLocalMute">ミュート</button>
+    </span>
+    <span>
+      <h3>Remote Stream</h3>
+      <video
+        *ngIf="remoteStream; else subremote"
+        autoplay
+        playsinline
+        [muted]="isRemoteMute"
+        #remoteVideo
+        [srcObject]="remoteStream"
+      ></video>
+      <ng-template #subremote>
+        <video src=""></video>
+      </ng-template>
+      <button (click)="isRemoteMute = !isRemoteMute">ミュート</button>
+    </span>
+  </div>
+
+  <!-- <button
+    id="webcamButton"
+    mat-button
+    (click)="publishWebcam()"
+    [disabled]="isPublishWebcam"
+  >
+    カメラをオン
+  </button>
+  <h2>2. Create a new Call</h2>
+  <button
+    mat-button
+    id="callButton"
+    [disabled]="!isPublishWebcam"
+    (click)="createRoom()"
+  >
+    Create Call (offer)
+  </button> -->
+
+  <h2>3. Join a Call</h2>
+  <p>Answer the call from a different browser window or device</p>
+  <button
+    mat-button
+    id="answerButton"
+    [disabled]="!isPublishWebcam"
+    (click)="answer()"
+  >
+    通信開始(招待した人が押してください)
+  </button>
+
+  <!-- <h2>4. Hangup</h2>
+
+  <button id="hangupButton" [disabled]="!isCreateRoom" (click)="Hangup()">
+    Hangup
+  </button> -->
+</div>

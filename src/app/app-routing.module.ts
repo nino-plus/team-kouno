@@ -33,6 +33,11 @@ const routes: Routes = [
       import('./editor/editor.module').then((m) => m.EditorModule),
   },
   {
+    path: 'meeting/:roomId',
+    loadChildren: () =>
+      import('./meeting/meeting.module').then((m) => m.MeetingModule),
+  },
+  {
     path: '404',
     component: NotFoundComponent,
   },

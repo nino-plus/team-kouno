@@ -27,6 +27,10 @@ export class UserService {
     return this.db.doc<User>(`users/${uid}`).valueChanges();
   }
 
+  getUsers(): Observable<User[]> {
+    return this.db.collection<User>(`users`).valueChanges();
+  }
+
   async updateUser(user: Omit<User, 'createdAt'>): Promise<void> {
     await this.db.doc<User>(`users/${user.uid}`).update({
       ...user,
@@ -55,6 +59,7 @@ export class UserService {
         this.isProcessing = false;
       });
   }
+
   getFollowers(uid: string) {
     return this.db
       .collection<Follower>(`users/${uid}/followers`, (ref) =>
