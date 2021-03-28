@@ -33,29 +33,38 @@
     </span>
   </div>
 
-  <button
+  <!-- <button
     id="webcamButton"
+    mat-button
     (click)="publishWebcam()"
     [disabled]="isPublishWebcam"
   >
-    Start webcam
+    カメラをオン
   </button>
   <h2>2. Create a new Call</h2>
-  <button id="callButton" [disabled]="!isPublishWebcam" (click)="createRoom()">
+  <button
+    mat-button
+    id="callButton"
+    [disabled]="!isPublishWebcam"
+    (click)="createRoom()"
+  >
     Create Call (offer)
-  </button>
+  </button> -->
 
   <h2>3. Join a Call</h2>
   <p>Answer the call from a different browser window or device</p>
-
-  <input id="callInput" [formControl]="form" />
-  <button id="answerButton" [disabled]="!isPublishWebcam" (click)="answer()">
-    Answer
+  <button
+    mat-button
+    id="answerButton"
+    [disabled]="!isPublishWebcam"
+    (click)="answer()"
+  >
+    通信開始(招待した人が押してください)
   </button>
 
-  <h2>4. Hangup</h2>
+  <!-- <h2>4. Hangup</h2>
 
   <button id="hangupButton" [disabled]="!isCreateRoom" (click)="Hangup()">
     Hangup
-  </button>
+  </button> -->
 </div>

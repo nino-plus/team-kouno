@@ -109,7 +109,11 @@
           <ul>
             <li *ngFor="let invite of invites">
               <p>
-                {{ invite.sender.name }}さんからミーティングの招待が届いています
+                {{
+                  invite.sender.name
+                }}さんからミーティングの招待が届いています({{
+                  invite.createdAt.toMillis() | date: 'yyyy/MM/dd HH:mm'
+                }})
               </p>
               <a mat-button [routerLink]="'/meeting/' + invite.roomId"
                 >参加する</a

@@ -1,20 +1,21 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import {
   AngularFirestore,
-  AngularFirestoreDocument,
   DocumentReference,
   DocumentSnapshot,
 } from '@angular/fire/firestore';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { take, tap } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
+import { promise } from 'selenium-webdriver';
 import { Room } from 'src/app/interfaces/room';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-meeting-room',
   templateUrl: './meeting-room.component.html',
   styleUrls: ['./meeting-room.component.scss'],
 })
-export class MeetingRoomComponent implements OnInit {
+export class MeetingRoomComponent implements OnInit, AfterViewInit {
   @ViewChild('webcamVideo') webcamVideo: HTMLVideoElement;
   @ViewChild('remoteVideo') remoteVideo: HTMLVideoElement;
 
@@ -42,14 +43,29 @@ export class MeetingRoomComponent implements OnInit {
   isLocalMute: boolean = true;
   isRemoteMute: boolean;
 
+  readonly roomId = this.route.snapshot.paramMap.get('roomId');
+
   get formValue() {
     return this.form.value as FormControl;
   }
 
-  constructor(private db: AngularFirestore, private fb: FormBuilder) {}
+  constructor(
+    private db: AngularFirestore,
+    private route: ActivatedRoute,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.registerPeerConnectionListeners();
+  }
+
+  ngAfterViewInit(): void {
+    this.authService.uid;
+    this.publishWebcam().then(() => {
+      setTimeout(() => {
+        this.createRoom();
+      }, 500);
+    });
   }
 
   async publishWebcam() {
@@ -60,7 +76,7 @@ export class MeetingRoomComponent implements OnInit {
     this.remoteStream = new MediaStream();
 
     // Push tracks from local stream to peer connection
-    this.localStream.getTracks().forEach((track) => {
+    await this.localStream.getTracks().forEach((track) => {
       this.peerConnection.addTrack(track, this.localStream);
     });
 
@@ -68,7 +84,6 @@ export class MeetingRoomComponent implements OnInit {
     this.peerConnection.ontrack = (event) => {
       event.streams[0].getTracks().forEach((track) => {
         this.remoteStream.addTrack(track);
-        console.log(this.remoteStream);
       });
     };
 
@@ -79,10 +94,7 @@ export class MeetingRoomComponent implements OnInit {
   }
 
   async createRoom() {
-    const roomId = this.db.createId();
-    this.form.patchValue(roomId);
-
-    const roomRef = this.db.doc(`rooms/${roomId}`)
+    const roomRef = this.db.doc(`rooms/${this.roomId}`)
       .ref as DocumentReference<Room>;
     const answerCandidates = roomRef.collection('answerCandidates');
     const offerCandidates = roomRef.collection('offerCandidates');
@@ -102,8 +114,8 @@ export class MeetingRoomComponent implements OnInit {
       type: offerDescription.type,
     };
 
-    await this.db.doc(`rooms/${roomId}`).set({
-      roomId,
+    await this.db.doc(`rooms/${this.roomId}`).set({
+      roomId: this.roomId,
       offer,
     });
 
@@ -127,7 +139,7 @@ export class MeetingRoomComponent implements OnInit {
     });
 
     // this.db
-    //   .collection(`rooms/${roomId}/answerCandidates`)
+    //   .collection(`rooms/${this.roomId}/answerCandidates`)
     //   .snapshotChanges()
     //   .pipe(
     //     tap((changes) => {
@@ -144,7 +156,7 @@ export class MeetingRoomComponent implements OnInit {
   }
 
   async answer() {
-    const roomId = this.formValue;
+    const roomId = this.roomId;
     const roomRef = this.db.doc(`rooms/${roomId}`).ref;
     const roomSnapshot = (await roomRef.get()) as DocumentSnapshot<Room>;
     const answerCandidates = roomRef.collection('answerCandidates');
