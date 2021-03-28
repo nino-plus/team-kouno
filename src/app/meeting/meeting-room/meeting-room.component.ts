@@ -39,6 +39,9 @@ export class MeetingRoomComponent implements OnInit {
 
   form = new FormControl('');
 
+  isLocalMute: boolean = true;
+  isRemoteMute: boolean;
+
   get formValue() {
     return this.form.value as FormControl;
   }
@@ -52,7 +55,7 @@ export class MeetingRoomComponent implements OnInit {
   async publishWebcam() {
     this.localStream = await navigator.mediaDevices.getUserMedia({
       video: true,
-      audio: false,
+      audio: true,
     });
     this.remoteStream = new MediaStream();
 
@@ -60,8 +63,6 @@ export class MeetingRoomComponent implements OnInit {
     this.localStream.getTracks().forEach((track) => {
       this.peerConnection.addTrack(track, this.localStream);
     });
-
-    console.log(this.localStream);
 
     // Pull tracks from remote stream, add to video stream
     this.peerConnection.ontrack = (event) => {
@@ -81,13 +82,14 @@ export class MeetingRoomComponent implements OnInit {
     const roomId = this.db.createId();
     this.form.patchValue(roomId);
 
+    const roomRef = this.db.doc(`rooms/${roomId}`)
+      .ref as DocumentReference<Room>;
+    const answerCandidates = roomRef.collection('answerCandidates');
+    const offerCandidates = roomRef.collection('offerCandidates');
+
     this.peerConnection.onicecandidate = (event) => {
-      console.log('icecandidate' + event);
-      const candidateId = this.db.createId();
       if (event.candidate) {
-        this.db
-          .doc(`rooms/${roomId}/offerCandidates/${candidateId}`)
-          .set(event.candidate.toJSON());
+        offerCandidates.add(event.candidate.toJSON());
       }
     };
 
@@ -105,9 +107,6 @@ export class MeetingRoomComponent implements OnInit {
       offer,
     });
 
-    const roomRef = this.db.doc(`rooms/${roomId}`)
-      .ref as DocumentReference<Room>;
-
     roomRef.onSnapshot((snapshot) => {
       console.log('Got updated room:', snapshot.data());
       const data = snapshot.data();
@@ -118,19 +117,28 @@ export class MeetingRoomComponent implements OnInit {
       }
     });
 
-    this.db
-      .collection(`rooms/${roomId}/answerCandidates`)
-      .snapshotChanges()
-      .pipe(
-        tap((changes) => {
-          changes.forEach((change) => {
-            if (change.payload.type === 'added') {
-              const candidate = new RTCIceCandidate(change.payload.doc.data());
-              this.peerConnection.addIceCandidate(candidate);
-            }
-          });
-        })
-      );
+    answerCandidates.onSnapshot((snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === 'added') {
+          let data = change.doc.data();
+          this.peerConnection.addIceCandidate(new RTCIceCandidate(data));
+        }
+      });
+    });
+
+    // this.db
+    //   .collection(`rooms/${roomId}/answerCandidates`)
+    //   .snapshotChanges()
+    //   .pipe(
+    //     tap((changes) => {
+    //       changes.forEach((change) => {
+    //         if (change.payload.type === 'added') {
+    //           const candidate = new RTCIceCandidate(change.payload.doc.data());
+    //           this.peerConnection.addIceCandidate(candidate);
+    //         }
+    //       });
+    //     })
+    //   );
 
     this.isCreateRoom = true;
   }
@@ -141,10 +149,6 @@ export class MeetingRoomComponent implements OnInit {
     const roomSnapshot = (await roomRef.get()) as DocumentSnapshot<Room>;
     const answerCandidates = roomRef.collection('answerCandidates');
     const offerCandidates = roomRef.collection('offerCandidates');
-
-    this.peerConnection.onicecandidate = (event) => {
-      event.candidate && answerCandidates.add(event.candidate.toJSON());
-    };
 
     this.peerConnection.onicecandidate = (event) => {
       if (event.candidate) {

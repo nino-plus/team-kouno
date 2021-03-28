@@ -7,25 +7,29 @@
         *ngIf="localStream; else sublocal"
         autoplay
         playsinline
+        [muted]="isLocalMute"
         #webcamVideo
         [srcObject]="localStream"
       ></video>
       <ng-template #sublocal>
         <video src=""></video>
       </ng-template>
+      <button (click)="isLocalMute = !isLocalMute">ミュート</button>
     </span>
     <span>
       <h3>Remote Stream</h3>
       <video
-        *ngIf="remoteStream"
+        *ngIf="remoteStream; else subremote"
         autoplay
         playsinline
+        [muted]="isRemoteMute"
         #remoteVideo
         [srcObject]="remoteStream"
       ></video>
       <ng-template #subremote>
         <video src=""></video>
       </ng-template>
+      <button (click)="isRemoteMute = !isRemoteMute">ミュート</button>
     </span>
   </div>
 
