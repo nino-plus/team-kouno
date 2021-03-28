@@ -13,6 +13,8 @@ import { UserService } from 'src/app/services/user.service';
 import { UnfollowDialogComponent } from 'src/app/shared/unfollow-dialog/unfollow-dialog.component';
 import { FollowersDialogComponent } from '../followers-dialog/followers-dialog.component';
 import { FollowingsDialogComponent } from '../followings-dialog/followings-dialog.component';
+import { MeetingService } from 'src/app/services/meeting.service';
+import { InviteWithSender } from 'src/app/intefaces/invite';
 
 @Component({
   selector: 'app-my-page',
@@ -63,6 +65,8 @@ export class MyPageComponent implements OnInit, OnDestroy {
     })
   );
 
+  invites$: Observable<InviteWithSender[]>;
+
   screenWidth = window.innerWidth;
 
   constructor(
@@ -72,7 +76,8 @@ export class MyPageComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private followService: UserFollowService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private meetingService: MeetingService
   ) {
     this.followers$.subscribe((users) => {
       this.followers = users;
@@ -134,6 +139,7 @@ export class MyPageComponent implements OnInit, OnDestroy {
         this.followService
           .checkFollowing(this.currentUserUid, this.targetId)
           .then((isFollowing) => (this.isFollowing = isFollowing));
+        this.invites$ = this.meetingService.getInvites(uid);
       });
     this.subscription.add(
       this.userService.getUserData(this.targetId).subscribe((user) => {

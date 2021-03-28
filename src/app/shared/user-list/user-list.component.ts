@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
+import { MeetingService } from 'src/app/services/meeting.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -10,11 +12,19 @@ import { UserService } from 'src/app/services/user.service';
 export class UserListComponent implements OnInit {
   users$ = this.userService.getUsers();
 
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private userService: UserService,
+    private router: Router,
+    private meetingService: MeetingService
+  ) {}
 
   ngOnInit(): void {}
 
-  call(uid: string) {
-    this.router.navigate(['meeting']);
+  async call(uid: string) {
+    const roomId = this.meetingService.createRoomId();
+    this.meetingService.createInvite(uid, roomId, this.authService.uid);
+
+    this.router.navigate(['meeting', roomId]);
   }
 }
