@@ -46,8 +46,32 @@
     <button
       mat-flat-button
       class="header__login-button"
-      (click)="authService.login()"
+      (click)="authService.login('google')"
       matTooltip="Googleアカウントでサインイン"
+    >
+      登録 ／ ログイン
+    </button>
+    <button
+      mat-flat-button
+      class="header__login-button"
+      (click)="authService.login('twitter')"
+      matTooltip="Twitterアカウントでサインイン"
+    >
+      登録 ／ ログイン
+    </button>
+    <button
+      mat-flat-button
+      class="header__login-button"
+      (click)="authService.login('facebook')"
+      matTooltip="Facebookアカウントでサインイン"
+    >
+      登録 ／ ログイン
+    </button>
+    <button
+      mat-flat-button
+      class="header__login-button"
+      (click)="authService.login('github')"
+      matTooltip="Githubアカウントでサインイン"
     >
       登録 ／ ログイン
     </button>
