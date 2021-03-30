@@ -43,37 +43,39 @@
     </mat-menu>
   </ng-container>
   <ng-template #default>
-    <button
-      mat-flat-button
-      class="header__login-button"
-      (click)="authService.login('google')"
-      matTooltip="Googleアカウントでサインイン"
+    <app-auto-open-login-menu class="tablet-none"
+      ><div trigger>登録 ／ ログイン</div>
+      <div content class="header__login-contents">
+        <ng-container *ngFor="let item of snsList">
+          <button
+            class="header__login-item"
+            [ngClass]="item"
+            (click)="authService.login(item)"
+          >
+            {{ item }}でログイン
+          </button>
+        </ng-container>
+      </div></app-auto-open-login-menu
     >
-      登録 ／ ログイン
-    </button>
-    <button
-      mat-flat-button
-      class="header__login-button"
-      (click)="authService.login('twitter')"
-      matTooltip="Twitterアカウントでサインイン"
-    >
-      登録 ／ ログイン
-    </button>
-    <button
-      mat-flat-button
-      class="header__login-button"
-      (click)="authService.login('facebook')"
-      matTooltip="Facebookアカウントでサインイン"
-    >
-      登録 ／ ログイン
-    </button>
-    <button
-      mat-flat-button
-      class="header__login-button"
-      (click)="authService.login('github')"
-      matTooltip="Githubアカウントでサインイン"
-    >
-      登録 ／ ログイン
-    </button>
+    <div class="pc-none">
+      <button
+        mat-flat-button
+        class="header__login-button"
+        [matMenuTriggerFor]="loginMenu"
+      >
+        登録 ／ ログイン
+      </button>
+      <mat-menu #loginMenu class="login-menu">
+        <ng-container *ngFor="let item of snsList">
+          <button
+            class="header__login-item"
+            [ngClass]="item"
+            (click)="authService.login(item)"
+          >
+            {{ item }}でログイン
+          </button>
+        </ng-container>
+      </mat-menu>
+    </div>
   </ng-template>
 </header>
