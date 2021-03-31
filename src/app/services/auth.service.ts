@@ -49,7 +49,7 @@ export class AuthService {
         provider = new firebase.auth.FacebookAuthProvider();
         break;
       case 'github':
-        provider = new firebase.auth.FacebookAuthProvider();
+        provider = new firebase.auth.GithubAuthProvider();
         break;
       default:
         break;
