@@ -23,7 +23,12 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
-            "assets": ["src/favicon.svg", "src/assets"],
+            "assets": [
+              "src/favicon.svg",
+              "src/assets",
+              "src/manifest.json",
+              "src/firebase-messaging-sw.js"
+            ],
             "styles": ["src/styles.scss", "node_modules/croppie/croppie.css"],
             "scripts": [],
             "stylePreprocessorOptions": {
