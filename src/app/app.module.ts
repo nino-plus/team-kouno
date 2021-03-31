@@ -40,11 +40,12 @@ import { SearchBoxComponent } from './search-box/search-box.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { AutoOpenLoginMenuComponent } from './auto-open-login-menu/auto-open-login-menu.component';
 
 registerLocaleData(localeJa);
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, SearchBoxComponent, NotFoundComponent],
+  declarations: [AppComponent, HeaderComponent, SearchBoxComponent, NotFoundComponent, AutoOpenLoginMenuComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

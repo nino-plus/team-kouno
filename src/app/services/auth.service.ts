@@ -32,8 +32,28 @@ export class AuthService {
     private userService: UserService
   ) {}
 
-  async login(): Promise<void> {
-    const provider = new firebase.auth.GoogleAuthProvider();
+  async login(snsLoginType?: string): Promise<void> {
+    let provider:
+      | firebase.auth.GoogleAuthProvider
+      | firebase.auth.TwitterAuthProvider
+      | firebase.auth.FacebookAuthProvider
+      | firebase.auth.GithubAuthProvider = new firebase.auth.GoogleAuthProvider();
+    switch (snsLoginType) {
+      case 'google':
+        provider = new firebase.auth.GoogleAuthProvider();
+        break;
+      case 'twitter':
+        provider = new firebase.auth.TwitterAuthProvider();
+        break;
+      case 'facebook':
+        provider = new firebase.auth.FacebookAuthProvider();
+        break;
+      case 'github':
+        provider = new firebase.auth.GithubAuthProvider();
+        break;
+      default:
+        break;
+    }
     provider.setCustomParameters({ prompt: 'select_account' });
     this.afAuth
       .signInWithPopup(provider)
