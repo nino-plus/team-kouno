@@ -14,4 +14,4 @@ export * from './unpublish.media.function';
 export * from './follow.function';
 export * from './algolia.function';
 export * from './event.function';
-
+export * from './user.status.function';
