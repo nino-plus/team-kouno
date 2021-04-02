@@ -3,16 +3,11 @@ import * as admin from 'firebase-admin';
 import { deleteCollectionByReference } from './utils/firebase.util';
 
 const db = admin.firestore();
-const rdb = admin.database();
 
 export const createUser = functions
   .region('asia-northeast1')
   .auth.user()
   .onCreate(async (user: any) => {
-    await rdb.ref(`/status/`).set({
-      uid: user.uid,
-      timestamp: Date.now(),
-    });
     return db.doc(`users/${user.uid}`).set(
       {
         uid: user.uid,
