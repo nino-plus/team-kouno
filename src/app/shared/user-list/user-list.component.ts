@@ -30,7 +30,7 @@ export class UserListComponent implements OnInit {
 
   ngOnInit(): void {
     this.user$.subscribe((user) => {
-      this.uid = user.uid;
+      this.uid = user?.uid;
     });
     this.MessagingService.requestPermission(this.uid);
     this.MessagingService.receiveMessage();
