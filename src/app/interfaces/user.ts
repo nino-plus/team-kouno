@@ -9,4 +9,5 @@ export interface User {
   followerCount?: number;
   followingCount?: number;
   myEventCount?: number;
+  online?: boolean;
 }

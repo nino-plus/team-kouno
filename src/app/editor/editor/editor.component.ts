@@ -25,7 +25,6 @@ export class EditorComponent implements OnInit {
   eventId: string;
   event: Event;
   event$: Observable<Event> = this.route.paramMap.pipe(
-    tap((params) => console.log(params.get('eventId'))),
     switchMap((params) => {
       this.eventId = params.get('eventId');
       return this.eventService.getEvent(this.eventId);
@@ -78,7 +77,6 @@ export class EditorComponent implements OnInit {
 
       if (this.event) {
         this.oldImageUrl = event.thumbnailURL;
-        console.log(event.thumbnailURL);
 
         this.form.patchValue({
           name: event.name,
