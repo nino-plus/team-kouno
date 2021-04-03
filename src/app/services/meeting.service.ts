@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { combineLatest, Observable, of } from 'rxjs';
-import { combineAll, map, switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { Invite, InviteWithSender } from '../intefaces/invite';
 import { Room } from '../interfaces/room';
 import { User } from '../interfaces/user';
@@ -14,8 +14,13 @@ import { UserService } from './user.service';
 export class MeetingService {
   constructor(private db: AngularFirestore, private userService: UserService) {}
 
-  createRoomId() {
-    return this.db.createId();
+  async createEmptyRoom(uid: string) {
+    const id = this.db.createId();
+    await this.db.doc(`rooms/${id}`).set({
+      roomId: id,
+      ownerId: uid,
+    });
+    return id;
   }
 
   createInvite(uid: string, roomId: string, senderUid: string) {
@@ -54,7 +59,9 @@ export class MeetingService {
           return invites.map((invite) => {
             return {
               ...invite,
-              sender: senders.find((sender) => invite.senderUid === sender.uid),
+              sender: senders.find(
+                (sender) => invite.senderUid === sender?.uid
+              ),
             };
           });
         })
