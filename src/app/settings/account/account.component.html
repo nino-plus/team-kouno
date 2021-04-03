@@ -1,10 +1,33 @@
 <div class="unsubscribe">
-  <h3 class="settings__heading settings__heading--unsubscribe">
-    アカウント削除
-  </h3>
+  <h3 class="settings__heading">他アカウントとの連携</h3>
+  <div class="snsLink">
+    <ng-container *ngFor="let item of snsList">
+      <ng-container *ngIf="linkedProviders | async as provider">
+        <ng-container *ngIf="provider.includes(item + '.com'); else linked">
+          <button
+            class="snsLink__link-button"
+            (click)="authService.unlinkAccount(item)"
+          >
+            {{ item }}連携を解除
+          </button>
+        </ng-container>
+        <ng-template #linked>
+          <button
+            class="snsLink__link-button"
+            (click)="authService.snsLink(item)"
+          >
+            {{ item }}連携
+          </button>
+        </ng-template>
+      </ng-container>
+    </ng-container>
+  </div>
 
   <mat-divider></mat-divider>
 
+  <h3 class="settings__heading settings__heading--unsubscribe">
+    アカウント削除
+  </h3>
   <ng-container *ngIf="user$ | async as user">
     <p class="unsubscribe__title" (click)="isOpen = !isOpen">
       退会をご希望の方はこちら
@@ -38,6 +61,5 @@
 
   <div class="unsubscribe__message" *ngIf="userService.isProcessing">
     <p>退会処理中です...</p>
-    <mat-spinner [diameter]="40"></mat-spinner>
   </div>
 </div>

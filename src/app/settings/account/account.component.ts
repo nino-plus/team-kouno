@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { fade } from 'src/app/animations/animations';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
@@ -17,14 +19,19 @@ export class AccountComponent implements OnInit {
   isOpen = false;
   user: User;
   user$: Observable<User> = this.authService.user$;
+  snsList = ['google', 'twitter', 'facebook', 'github'];
+  linkedProviders: Observable<string[]>;
 
   constructor(
     public userService: UserService,
-    private authService: AuthService,
-    private dialog: MatDialog
+    public authService: AuthService,
+    private dialog: MatDialog,
+    public afAuth: AngularFireAuth
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.linkedProviders = this.getLinkedProviders();
+  }
 
   openDeleteDialog(): void {
     this.dialog
@@ -39,5 +46,15 @@ export class AccountComponent implements OnInit {
           return;
         }
       });
+  }
+
+  getLinkedProviders(): Observable<string[]> {
+    return this.afAuth.user.pipe(
+      map((user) => {
+        return user.providerData.map((uid) => {
+          return uid.providerId;
+        });
+      })
+    );
   }
 }

@@ -75,4 +75,37 @@ export class AuthService {
         this.snackBar.open('ログアウトしました');
       });
   }
+
+  async snsLink(snsLinkType): Promise<void> {
+    let provider:
+      | firebase.auth.GoogleAuthProvider
+      | firebase.auth.TwitterAuthProvider
+      | firebase.auth.FacebookAuthProvider
+      | firebase.auth.GithubAuthProvider = new firebase.auth.GoogleAuthProvider();
+    switch (snsLinkType) {
+      case 'google':
+        provider = new firebase.auth.GoogleAuthProvider();
+        break;
+      case 'twitter':
+        provider = new firebase.auth.TwitterAuthProvider();
+        break;
+      case 'facebook':
+        provider = new firebase.auth.FacebookAuthProvider();
+        break;
+      case 'github':
+        provider = new firebase.auth.GithubAuthProvider();
+        break;
+      default:
+        break;
+    }
+    (await this.afAuth.currentUser)
+      .linkWithPopup(provider)
+      .catch((err) => console.log(err));
+  }
+
+  async unlinkAccount(item): Promise<void> {
+    (await this.afAuth.currentUser)
+      .unlink(item + '.com')
+      .catch((err) => console.log(err));
+  }
 }
