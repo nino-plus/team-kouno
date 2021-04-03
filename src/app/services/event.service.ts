@@ -24,7 +24,7 @@ export class EventService {
     private snackBar: MatSnackBar,
     private router: Router,
     private userService: UserService,
-    private fns: AngularFireFunctions,
+    private fns: AngularFireFunctions
   ) {}
 
   async createEvent(
@@ -196,7 +196,7 @@ export class EventService {
   getFutureReservedEvents(uid: string): Observable<Event[]> {
     const allEvents = this.getReservedEvents(uid);
     return allEvents.pipe(
-      map((events) => events.filter((event) => event?.exitAt > this.dateNow)),
+      map((events) => events?.filter((event) => event?.exitAt > this.dateNow)),
       filter((events) => events && events.length > 0)
     );
   }
@@ -204,7 +204,7 @@ export class EventService {
   getPastReservedEvents(uid: string): Observable<Event[]> {
     const allEvents = this.getReservedEvents(uid);
     return allEvents.pipe(
-      map((events) => events.filter((event) => event?.exitAt < this.dateNow)),
+      map((events) => events?.filter((event) => event?.exitAt < this.dateNow)),
       filter((events) => events && events.length > 0)
     );
   }
