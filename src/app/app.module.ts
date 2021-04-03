@@ -42,6 +42,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AutoOpenLoginMenuComponent } from './auto-open-login-menu/auto-open-login-menu.component';
 
 registerLocaleData(localeJa);
 
@@ -51,6 +52,7 @@ registerLocaleData(localeJa);
     HeaderComponent,
     SearchBoxComponent,
     NotFoundComponent,
+    AutoOpenLoginMenuComponent,
   ],
   imports: [
     BrowserModule,

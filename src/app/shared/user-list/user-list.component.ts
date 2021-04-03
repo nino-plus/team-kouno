@@ -59,7 +59,9 @@ export class UserListComponent implements OnInit {
   }
 
   async call(uid: string) {
-    const roomId = this.meetingService.createRoomId();
+    const roomId = await this.meetingService.createEmptyRoom(
+      this.authService.uid
+    );
     this.meetingService.createInvite(uid, roomId, this.authService.uid);
 
     this.router.navigate(['meeting', roomId]);

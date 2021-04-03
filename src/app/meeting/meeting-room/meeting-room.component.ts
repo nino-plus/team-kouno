@@ -6,9 +6,11 @@ import {
 } from '@angular/fire/firestore';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { promise } from 'selenium-webdriver';
+import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { Room } from 'src/app/interfaces/room';
 import { AuthService } from 'src/app/services/auth.service';
+import { MeetingService } from 'src/app/services/meeting.service';
 
 @Component({
   selector: 'app-meeting-room',
@@ -38,21 +40,19 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
   isPublishWebcam: boolean;
   isCreateRoom: boolean;
 
-  form = new FormControl('');
-
   isLocalMute: boolean = true;
   isRemoteMute: boolean;
+  isOwner: boolean;
 
   readonly roomId = this.route.snapshot.paramMap.get('roomId');
-
-  get formValue() {
-    return this.form.value as FormControl;
-  }
+  room$: Observable<Room> = this.meetingService.getRoom(this.roomId);
+  room: Room;
 
   constructor(
     private db: AngularFirestore,
     private route: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private meetingService: MeetingService
   ) {}
 
   ngOnInit(): void {
@@ -60,12 +60,22 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.authService.uid;
-    this.publishWebcam().then(() => {
-      setTimeout(() => {
-        this.createRoom();
-      }, 500);
+    this.snapshotRoom().then((room) => {
+      this.isOwner = this.authService.uid === room.ownerId;
+      this.publishWebcam().then(() => {
+        console.log(this.isOwner);
+        if (this.isOwner) {
+          setTimeout(() => {
+            this.createRoom();
+          }, 500);
+        }
+      });
     });
+  }
+
+  async snapshotRoom(): Promise<Room> {
+    const room = await this.room$.pipe(take(1)).toPromise();
+    return room;
   }
 
   async publishWebcam() {
@@ -116,6 +126,7 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
 
     await this.db.doc(`rooms/${this.roomId}`).set({
       roomId: this.roomId,
+      owenerId: this.authService.uid,
       offer,
     });
 
@@ -137,20 +148,6 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
         }
       });
     });
-
-    // this.db
-    //   .collection(`rooms/${this.roomId}/answerCandidates`)
-    //   .snapshotChanges()
-    //   .pipe(
-    //     tap((changes) => {
-    //       changes.forEach((change) => {
-    //         if (change.payload.type === 'added') {
-    //           const candidate = new RTCIceCandidate(change.payload.doc.data());
-    //           this.peerConnection.addIceCandidate(candidate);
-    //         }
-    //       });
-    //     })
-    //   );
 
     this.isCreateRoom = true;
   }
@@ -183,20 +180,6 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
     };
 
     await roomRef.update({ answer });
-
-    // this.db
-    //   .collection(`rooms/${roomId}/offerCandidates`)
-    //   .snapshotChanges()
-    //   .pipe(
-    //     tap((changes) => {
-    //       changes.forEach((change) => {
-    //         if (change.payload.type === 'added') {
-    //           let data = change.payload.doc.data();
-    //           this.peerConnection.addIceCandidate(new RTCIceCandidate(data));
-    //         }
-    //       });
-    //     })
-    //   );
 
     offerCandidates.onSnapshot((snapshot) => {
       snapshot.docChanges().forEach((change) => {
