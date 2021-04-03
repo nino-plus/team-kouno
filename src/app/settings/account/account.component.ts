@@ -20,7 +20,13 @@ export class AccountComponent implements OnInit {
   user: User;
   user$: Observable<User> = this.authService.user$;
   snsList = ['google', 'twitter', 'facebook', 'github'];
-  linkedProviders: Observable<string[]>;
+  linkedProviders: Observable<string[]> = this.afAuth.user.pipe(
+    map((user) => {
+      return user.providerData.map((uid) => {
+        return uid.providerId;
+      });
+    })
+  );
 
   constructor(
     public userService: UserService,
@@ -29,9 +35,7 @@ export class AccountComponent implements OnInit {
     public afAuth: AngularFireAuth
   ) {}
 
-  ngOnInit(): void {
-    this.linkedProviders = this.getLinkedProviders();
-  }
+  ngOnInit(): void {}
 
   openDeleteDialog(): void {
     this.dialog
@@ -46,15 +50,5 @@ export class AccountComponent implements OnInit {
           return;
         }
       });
-  }
-
-  getLinkedProviders(): Observable<string[]> {
-    return this.afAuth.user.pipe(
-      map((user) => {
-        return user.providerData.map((uid) => {
-          return uid.providerId;
-        });
-      })
-    );
   }
 }
