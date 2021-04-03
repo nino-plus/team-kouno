@@ -7,6 +7,10 @@ import * as firebase from 'firebase';
 import { MessagingService } from 'src/app/services/messaging.service';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/interfaces/user';
+import { AngularFireFunctions } from '@angular/fire/functions';
+import { switchMap, take } from 'rxjs/operators';
+import { Token } from 'src/app/interfaces/token';
+import { AngularFireMessaging } from '@angular/fire/messaging';
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
@@ -19,22 +23,39 @@ export class UserListComponent implements OnInit {
   message: any;
   user$: Observable<User> = this.authService.user$;
   uid: string;
+  tokens$: Observable<Token[]> = this.user$.pipe(
+    switchMap((user) => {
+      return this.messagingService.getTokens(user.uid);
+    })
+  );
+  tokens: string[] = [];
 
   constructor(
     private authService: AuthService,
     private userService: UserService,
     private router: Router,
     private meetingService: MeetingService,
-    private MessagingService: MessagingService
+    private messagingService: MessagingService,
+    private fns: AngularFireFunctions,
+    private msg: AngularFireMessaging
   ) {}
 
   ngOnInit(): void {
     this.user$.subscribe((user) => {
       this.uid = user?.uid;
     });
-    this.MessagingService.requestPermission(this.uid);
-    this.MessagingService.receiveMessage();
-    this.message = this.MessagingService.currentMessage;
+  }
+
+  send() {
+    this.tokens$.pipe(take(1)).subscribe((tokens) => {
+      tokens.map((token) => this.tokens.push(token.token));
+      const callable = this.fns.httpsCallable('sendPushMessage');
+      return callable(this.tokens)
+        .toPromise()
+        .then(() => {
+          this.messagingService.receiveMessage();
+        });
+    });
   }
 
   async call(uid: string) {
