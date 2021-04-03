@@ -1,2 +1,10 @@
 <app-header></app-header>
+
+<div
+  *ngIf="messagingService.currentMessage | async as message"
+  class="notification"
+>
+  <p>{{ message | json }}</p>
+</div>
+
 <router-outlet></router-outlet>

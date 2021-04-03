@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase';
 import { Observable } from 'rxjs';
 import { AuthService } from './services/auth.service';
+import { MessagingService } from './services/messaging.service';
 
 @Component({
   selector: 'app-root',
@@ -39,7 +40,8 @@ export class AppComponent {
   constructor(
     private db: AngularFirestore,
     private authService: AuthService,
-    private rdb: AngularFireDatabase
+    private rdb: AngularFireDatabase,
+    public messagingService: MessagingService
   ) {
     this.user$.subscribe((user) => {
       if (!user) {
