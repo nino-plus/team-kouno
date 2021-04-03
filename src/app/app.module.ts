@@ -40,12 +40,20 @@ import { SearchBoxComponent } from './search-box/search-box.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AutoOpenLoginMenuComponent } from './auto-open-login-menu/auto-open-login-menu.component';
 
 registerLocaleData(localeJa);
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, SearchBoxComponent, NotFoundComponent, AutoOpenLoginMenuComponent],
+  declarations: [
+    AppComponent,
+    HeaderComponent,
+    SearchBoxComponent,
+    NotFoundComponent,
+    AutoOpenLoginMenuComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -77,6 +85,8 @@ registerLocaleData(localeJa);
     NgbModalModule,
     MatAutocompleteModule,
     MatTooltipModule,
+    AngularFireMessagingModule,
+    AngularFireDatabaseModule,
   ],
   providers: [
     { provide: REGION, useValue: 'asia-northeast1' },

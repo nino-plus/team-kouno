@@ -2,4 +2,12 @@
   <h3 class="settings__heading">通知設定</h3>
 
   <mat-divider></mat-divider>
+
+  <p>1on1</p>
+  <p>リクエストがあった時にお知らせするようにできます。</p>
+  <ng-container *ngIf="user$ | async as user">
+    <button mat-stroked-button (click)="requestPermission(user.uid)">
+      通知を許可する
+    </button>
+  </ng-container>
 </div>

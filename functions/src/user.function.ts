@@ -7,7 +7,7 @@ const db = admin.firestore();
 export const createUser = functions
   .region('asia-northeast1')
   .auth.user()
-  .onCreate((user: any) => {
+  .onCreate(async (user: any) => {
     return db.doc(`users/${user.uid}`).set(
       {
         uid: user.uid,
@@ -19,6 +19,7 @@ export const createUser = functions
         followingCount: 0,
         myEventCount: 0,
         isPrivate: false,
+        online: true,
       },
       { merge: true }
     );
