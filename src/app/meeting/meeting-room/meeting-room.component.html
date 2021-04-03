@@ -51,15 +51,14 @@
     Create Call (offer)
   </button> -->
 
-  <h2>3. Join a Call</h2>
-  <p>Answer the call from a different browser window or device</p>
   <button
+    *ngIf="!isOwner"
     mat-button
     id="answerButton"
     [disabled]="!isPublishWebcam"
     (click)="answer()"
   >
-    通信開始(招待した人が押してください)
+    通信開始
   </button>
 
   <!-- <h2>4. Hangup</h2>
