@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { fade } from 'src/app/animations/animations';
@@ -17,11 +18,14 @@ export class AccountComponent implements OnInit {
   isOpen = false;
   user: User;
   user$: Observable<User> = this.authService.user$;
+  snsList = ['google', 'twitter', 'facebook', 'github'];
+  linkedProviders$: Observable<string[]> = this.authService.linkedProviders$;
 
   constructor(
     public userService: UserService,
-    private authService: AuthService,
-    private dialog: MatDialog
+    public authService: AuthService,
+    private dialog: MatDialog,
+    public afAuth: AngularFireAuth
   ) {}
 
   ngOnInit(): void {}
