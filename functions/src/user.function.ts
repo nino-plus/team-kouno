@@ -19,7 +19,6 @@ export const createUser = functions
         followingCount: 0,
         myEventCount: 0,
         isPrivate: false,
-        online: true,
       },
       { merge: true }
     );
