@@ -110,7 +110,18 @@ export class AuthService {
           map((user) => user.providerData.map((uid) => uid.providerId))
         );
       })
-      .catch((err) => console.log(err));
+      .catch((error) => {
+        switch (error.code) {
+          case 'auth/internal-error':
+            alert('アカウント連携に失敗しました。');
+            break;
+          case 'auth/provider-already-linked':
+            alert(
+              '既に連携されています。解除する場合はページを更新してもう一度やり直してください。'
+            );
+            break;
+        }
+      });
   }
 
   async unlinkAccount(snsLinkType: string): Promise<void> {
@@ -122,7 +133,17 @@ export class AuthService {
           map((user) => user.providerData.map((uid) => uid.providerId))
         );
       })
-
-      .catch((err) => console.log(err));
+      .catch((error) => {
+        switch (error.code) {
+          case 'auth/internal-error':
+            alert('アカウント連携に失敗しました。');
+            break;
+          case 'auth/no-such-provider':
+            alert(
+              'プロバイダーがみつかりませんでした。連携する場合はページを更新してもう一度やり直してください。'
+            );
+            break;
+        }
+      });
   }
 }
