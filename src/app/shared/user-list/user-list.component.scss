@@ -1,10 +1,15 @@
 @import 'custom-style';
+@import 'mixins';
 
 .card-wrap {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   margin: 40px 0;
+  @include sp {
+    grid-template-columns: 1fr;
+    margin: 16px;
+  }
 }
 
 .card {
