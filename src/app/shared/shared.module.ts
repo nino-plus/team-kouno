@@ -13,6 +13,7 @@ import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { UnfollowDialogComponent } from './unfollow-dialog/unfollow-dialog.component';
 import { RouterModule } from '@angular/router';
 import { UserListComponent } from './user-list/user-list.component';
+import { UserCardComponent } from './user-card/user-card.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { UserListComponent } from './user-list/user-list.component';
     DeleteDialogComponent,
     UnfollowDialogComponent,
     UserListComponent,
+    UserCardComponent,
   ],
   imports: [
     CommonModule,

@@ -103,8 +103,8 @@
 
         <button
           class="settings__update-btn"
-          [disabled]="form.invalid || form.pristine"
-          [class.disabled]="form.invalid || form.pristine"
+          [disabled]="(form.invalid || form.pristine) && !newImageFile"
+          [class.disabled]="(form.invalid || form.pristine) && !newImageFile"
           mat-raised-button
         >
           更新
@@ -113,11 +113,11 @@
 
       <div class="settings__avatar-wrap">
         <div class="settings__avatar" matTooltip="画像を設定">
-          <div class="settings__cropper">
+          <div class="settings__cropper" *ngIf="oldImageFile">
             <deer-crop-trigger
               [options]="{
                 aspectRatio: 1 / 1,
-                oldImageUrl: imageFile
+                oldImageUrl: oldImageFile
               }"
               (image)="onCroppedImage($event)"
             ></deer-crop-trigger>
@@ -127,8 +127,8 @@
 
       <button
         class="settings__update-btn settings__update-btn--sp"
-        [disabled]="form.invalid || form.pristine"
-        [class.disabled]="form.invalid || form.pristine"
+        [disabled]="(form.invalid || form.pristine) && !newImageFile"
+        [class.disabled]="(form.invalid || form.pristine) && !newImageFile"
         mat-raised-botton
       >
         更新

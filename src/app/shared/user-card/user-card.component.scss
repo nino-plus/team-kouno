@@ -1,0 +1,86 @@
+@import 'custom-style';
+
+.card {
+  &__head {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 16px;
+    margin-bottom: 8px;
+    position: relative;
+  }
+  &__active-ring {
+    background: $color-main;
+    height: 102px;
+    width: 102px;
+    border-radius: 8px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 1;
+    animation: rotation 3s infinite linear;
+  }
+  &__avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+    z-index: 2;
+  }
+  &__name {
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  &__info {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  &__description {
+    font-size: 14px;
+    opacity: 0.8;
+    margin-bottom: 8px;
+    line-height: 1.7;
+    min-height: 46px;
+  }
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+  &__btn {
+    background: $color-sub;
+    color: #fff;
+    &--submit {
+      background: $color-main;
+      color: #fff;
+      &:hover {
+        background: $color-accent;
+      }
+    }
+  }
+}
+
+@keyframes rotation {
+  0% {
+    box-shadow: 0 0 10px #1bcbe0, 0 0 10px #1bcbe0 inset;
+  }
+
+  20% {
+    box-shadow: 0 0 15px #1bcbe0, 0 0 15px #1bcbe0 inset;
+  }
+
+  40% {
+    box-shadow: 0 0 12px #1bcbe0, 0 0 12px #1bcbe0 inset;
+  }
+
+  60% {
+    box-shadow: 0 0 16px #1bcbe0, 0 0 16px #1bcbe0 inset;
+  }
+
+  80% {
+    box-shadow: 0 0 20px #1bcbe0, 0 0 20px #1bcbe0 inset;
+  }
+
+  100% {
+    box-shadow: 0 0 10px #1bcbe0, 0 0 10px #1bcbe0 inset;
+  }
+}

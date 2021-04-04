@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireMessaging } from '@angular/fire/messaging';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { mergeMap, mergeMapTo } from 'rxjs/operators';
-import { Token } from '../interfaces/token';
 import * as firebase from 'firebase';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
+import { Token } from '../interfaces/token';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +14,7 @@ export class MessagingService {
   private messaging = firebase.default.messaging();
 
   currentMessage = new BehaviorSubject(null);
+  isShow = true;
 
   constructor(
     private msg: AngularFireMessaging,
@@ -45,7 +46,10 @@ export class MessagingService {
     this.msg.getToken
       .pipe(mergeMap((token) => this.msg.deleteToken(token)))
       .subscribe((token) => {
-        this.db.doc(`users/${uid}/tokens/${token}`);
+        this.db
+          .doc(`users/${uid}/tokens/${token}`)
+          .delete()
+          .finally(() => this.snackBar.open('通知を拒否に設定しました'));
       });
   }
 
@@ -59,6 +63,7 @@ export class MessagingService {
     this.messaging.onMessage((payload) => {
       console.log(payload);
       this.currentMessage.next(payload);
+      this.isShow = true;
     });
   }
 }

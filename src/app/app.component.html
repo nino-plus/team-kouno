@@ -1,10 +1,29 @@
 <app-header></app-header>
 
-<div
-  *ngIf="messagingService.currentMessage | async as message"
-  class="notification"
->
-  <p>{{ message | json }}</p>
+<div class="notify-wrap">
+  <a
+    *ngIf="messagingService.currentMessage | async as message"
+    class="notification slideInRight"
+    [class.close]="!messagingService.isShow"
+    (click)="navigateMeeting(message.data.roomId)"
+  >
+    <img
+      [src]="message.data.icon"
+      alt=""
+      width="48px"
+      class="notification__image"
+    />
+
+    <div class="notification__body">
+      <p class="notification__title">{{ message.data.title }}</p>
+      <p class="notification__body">{{ message.data.body }}</p>
+    </div>
+    <div class="notification__btns">
+      <button mat-icon-button (click)="close(); $event.stopPropagation()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </a>
 </div>
 
 <router-outlet></router-outlet>

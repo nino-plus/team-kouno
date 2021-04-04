@@ -3,8 +3,16 @@
     font-weight: 500;
     margin-bottom: 16px;
   }
+  &__btn-wrap {
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+  &__btn {
+    justify-content: flex-end;
+  }
 }
 
 mat-divider {
-  margin-bottom: 48px;
+  margin-bottom: 24px;
 }

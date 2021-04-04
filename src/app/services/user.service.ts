@@ -30,6 +30,20 @@ export class UserService {
     return this.db.collection<User>(`users`).valueChanges();
   }
 
+  getPublicUsers(): Observable<User[]> {
+    return this.db
+      .collection<User>(`users`, (ref) => ref.where('isPrivate', '==', false))
+      .valueChanges();
+  }
+
+  getOnlinePublicUsers(): Observable<User[]> {
+    return this.db
+      .collection<User>(`users`, (ref) =>
+        ref.where('isPrivate', '==', false).where('state', '==', 'online')
+      )
+      .valueChanges();
+  }
+
   async updateUser(user: Omit<User, 'createdAt'>): Promise<void> {
     await this.db.doc<User>(`users/${user.uid}`).update({
       ...user,

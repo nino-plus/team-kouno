@@ -9,5 +9,6 @@ export interface User {
   followerCount?: number;
   followingCount?: number;
   myEventCount?: number;
-  online?: boolean;
+  lastChangedAt?: firebase.default.firestore.Timestamp;
+  state?: 'online' | 'offline' | 'away';
 }
