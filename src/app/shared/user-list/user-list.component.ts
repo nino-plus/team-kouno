@@ -11,33 +11,24 @@ import { AngularFireFunctions } from '@angular/fire/functions';
 import { switchMap, take } from 'rxjs/operators';
 import { Token } from 'src/app/interfaces/token';
 import { AngularFireMessaging } from '@angular/fire/messaging';
+import { fade } from 'src/app/animations/animations';
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss'],
+  animations: [fade],
 })
 export class UserListComponent implements OnInit {
-  users$ = this.userService.getUsers();
-  messaging = firebase.default.messaging();
-  title = 'push-notification';
-  message: any;
+  allUsers$: Observable<User[]> = this.userService.getPublicUsers();
+  onlineUsers$: Observable<User[]> = this.userService.getOnlinePublicUsers();
+  followings$: Observable<User[]>;
   user$: Observable<User> = this.authService.user$;
   uid: string;
-  tokens$: Observable<Token[]> = this.user$.pipe(
-    switchMap((user) => {
-      return this.messagingService.getTokens(user.uid);
-    })
-  );
-  tokens: string[] = [];
+  listSource: string = 'all';
 
   constructor(
     private authService: AuthService,
-    private userService: UserService,
-    private router: Router,
-    private meetingService: MeetingService,
-    private messagingService: MessagingService,
-    private fns: AngularFireFunctions,
-    private msg: AngularFireMessaging
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -46,24 +37,11 @@ export class UserListComponent implements OnInit {
     });
   }
 
-  send() {
-    this.tokens$.pipe(take(1)).subscribe((tokens) => {
-      tokens.map((token) => this.tokens.push(token.token));
-      const callable = this.fns.httpsCallable('sendPushMessage');
-      return callable(this.tokens)
-        .toPromise()
-        .then(() => {
-          this.messagingService.receiveMessage();
-        });
-    });
-  }
+  changeListSource(type: string): void {
+    this.listSource = type;
 
-  async call(uid: string) {
-    const roomId = await this.meetingService.createEmptyRoom(
-      this.authService.uid
-    );
-    this.meetingService.createInvite(uid, roomId, this.authService.uid);
-
-    this.router.navigate(['meeting', roomId]);
+    if (type == 'follow') {
+      this.followings$ = this.userService.getFollowings(this.uid);
+    }
   }
 }
