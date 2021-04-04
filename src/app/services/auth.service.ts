@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import firebase from 'firebase/app';
 import { Observable, of } from 'rxjs';
-import { shareReplay, switchMap } from 'rxjs/operators';
+import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -24,13 +24,18 @@ export class AuthService {
     }),
     shareReplay(1)
   );
+  linkedProviders$: Observable<string[]>;
 
   constructor(
     private afAuth: AngularFireAuth,
     private router: Router,
     private snackBar: MatSnackBar,
     private userService: UserService
-  ) {}
+  ) {
+    this.linkedProviders$ = this.afAuth.user.pipe(
+      map((user) => user.providerData.map((uid) => uid.providerId))
+    );
+  }
 
   async login(snsLoginType?: string): Promise<void> {
     let provider:
@@ -76,7 +81,7 @@ export class AuthService {
       });
   }
 
-  async snsLink(snsLinkType): Promise<void> {
+  async linkSns(snsLinkType: string): Promise<void> {
     let provider:
       | firebase.auth.GoogleAuthProvider
       | firebase.auth.TwitterAuthProvider
@@ -100,12 +105,24 @@ export class AuthService {
     }
     (await this.afAuth.currentUser)
       .linkWithPopup(provider)
+      .finally(() => {
+        this.linkedProviders$ = this.afAuth.user.pipe(
+          map((user) => user.providerData.map((uid) => uid.providerId))
+        );
+      })
       .catch((err) => console.log(err));
   }
 
-  async unlinkAccount(item): Promise<void> {
+  async unlinkAccount(snsLinkType: string): Promise<void> {
+    console.log('unlinkSns');
     (await this.afAuth.currentUser)
-      .unlink(item + '.com')
+      .unlink(snsLinkType + '.com')
+      .finally(() => {
+        this.linkedProviders$ = this.afAuth.user.pipe(
+          map((user) => user.providerData.map((uid) => uid.providerId))
+        );
+      })
+
       .catch((err) => console.log(err));
   }
 }
