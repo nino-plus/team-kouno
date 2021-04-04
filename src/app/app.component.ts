@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
 import * as firebase from 'firebase';
 import { Observable } from 'rxjs';
 import { AuthService } from './services/auth.service';
@@ -41,7 +42,8 @@ export class AppComponent {
     private db: AngularFirestore,
     private authService: AuthService,
     private rdb: AngularFireDatabase,
-    public messagingService: MessagingService
+    public messagingService: MessagingService,
+    private router: Router
   ) {
     this.user$.subscribe((user) => {
       if (!user) {
@@ -70,5 +72,14 @@ export class AppComponent {
             .set(this.isOnlineForFirestore, { merge: true });
         });
     });
+  }
+
+  close(): void {
+    this.messagingService.isShow = false;
+  }
+
+  navigateMeeting(roomId: string): void {
+    this.router.navigateByUrl('meeting/' + roomId);
+    this.close();
   }
 }
