@@ -21,7 +21,7 @@ export class NotificationsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.user$.pipe(take(1)).subscribe((user) => {
+    this.user$.subscribe((user) => {
       this.tokens$ = this.messagingService.getTokens(user.uid);
     });
   }

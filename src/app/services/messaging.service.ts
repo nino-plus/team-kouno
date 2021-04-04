@@ -34,7 +34,11 @@ export class MessagingService {
       );
     }
     this.msg.requestToken.subscribe(
-      (token) => this.db.doc(`users/${uid}/tokens/${token}`).set({ token }),
+      (token) =>
+        this.db
+          .doc(`users/${uid}/tokens/${token}`)
+          .set({ token })
+          .then(() => this.snackBar.open('通知を許可に設定しました')),
       (error) =>
         this.snackBar.open(
           'トークンの取得に失敗しました' + ' ' + 'エラー:' + error
