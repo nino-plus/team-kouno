@@ -3,11 +3,28 @@
 
   <mat-divider></mat-divider>
 
-  <p>1on1</p>
-  <p>リクエストがあった時にお知らせするようにできます。</p>
-  <ng-container *ngIf="user$ | async as user">
-    <button mat-stroked-button (click)="requestPermission(user.uid)">
-      通知を許可する
-    </button>
-  </ng-container>
+  <h4 class="settings__heading">プッシュ通知設定</h4>
+  <div *ngIf="user$ | async as user" class="settings__btn-wrap">
+    <p class="settings__sub">■ 1on1のリクエストされた時</p>
+
+    <span class="spacer"></span>
+    <ng-container *ngIf="tokens$ | async; else allow">
+      <button
+        mat-stroked-button
+        class="settings__btn"
+        (click)="rejectPermission(user.uid)"
+      >
+        通知を拒否する
+      </button>
+    </ng-container>
+    <ng-template #allow>
+      <button
+        mat-stroked-button
+        class="settings__btn"
+        (click)="requestPermission(user.uid)"
+      >
+        通知を許可する
+      </button>
+    </ng-template>
+  </div>
 </div>
