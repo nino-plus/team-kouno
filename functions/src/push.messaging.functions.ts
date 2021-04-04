@@ -4,11 +4,13 @@ import * as functions from 'firebase-functions';
 export const sendPushMessage = functions
   .region('asia-northeast1')
   .https.onCall(async (data, context) => {
-    const tokens: string[] = data;
+    const tokens: string[] = data.tokens;
     const message = {
       data: {
-        score: '1on1リクエストが届いています',
-        time: admin.firestore.Timestamp.now().toDate().toString(),
+        title: '1on1リクエスト',
+        body: `${data.name}からリクエストが届いています`,
+        icon: data.icon,
+        roomId: data.roomId,
       },
       tokens: tokens,
     };
