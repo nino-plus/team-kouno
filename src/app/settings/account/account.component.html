@@ -11,11 +11,12 @@
             [checked]="provider.includes(brandName + '.com')"
             (change)="
               provider.includes(brandName + '.com')
-                ? authService.unlinkAccount(brandName)
+                ? unlinkAccount(brandName)
                 : authService.linkSns(brandName)
             "
             [disabled]="
-              provider.includes(brandName + '.com') && provider.length === 1
+              provider.includes(brandName + '.com') &&
+              linkedProvidersCount === 1
             "
           >
           </mat-slide-toggle>

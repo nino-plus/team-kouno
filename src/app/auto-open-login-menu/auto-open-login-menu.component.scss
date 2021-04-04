@@ -2,6 +2,7 @@
 @import 'mixins';
 
 .app-nav-item {
+  cursor: pointer;
   font-weight: 500;
   color: $color-font;
   line-height: 36px;

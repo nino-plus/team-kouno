@@ -104,7 +104,7 @@ export class AuthService {
         break;
     }
     (await this.afAuth.currentUser)
-      .linkWithPopup(provider)
+      .linkWithRedirect(provider)
       .finally(() => {
         this.linkedProviders$ = this.afAuth.user.pipe(
           map((user) => user.providerData.map((uid) => uid.providerId))
@@ -125,7 +125,6 @@ export class AuthService {
   }
 
   async unlinkAccount(snsLinkType: string): Promise<void> {
-    console.log('unlinkSns');
     (await this.afAuth.currentUser)
       .unlink(snsLinkType + '.com')
       .finally(() => {
