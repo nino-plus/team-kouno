@@ -15,7 +15,8 @@ export class ProfileComponent implements OnInit {
   readonly nameMaxLength = 20;
   readonly descriptionMaxLength = 200;
   user: User;
-  imageFile: string;
+  oldImageFile: string;
+  newImageFile: string;
   form = this.fb.group({
     name: ['', [Validators.required, Validators.maxLength(this.nameMaxLength)]],
     email: ['', [Validators.email]],
@@ -34,15 +35,17 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.user$.subscribe((user) => {
       this.user = user;
-      this.imageFile = user?.avatarURL;
+      this.oldImageFile = user?.avatarURL;
       this.form.patchValue({
         ...user,
       });
     });
+    console.log(this.newImageFile);
   }
 
   onCroppedImage(image: string): void {
-    this.imageFile = image;
+    this.newImageFile = image;
+    console.log(this.newImageFile);
   }
 
   updateUser(): void {
@@ -50,7 +53,7 @@ export class ProfileComponent implements OnInit {
       .updateUser({
         uid: this.user.uid,
         name: this.form.value.name,
-        avatarURL: this.imageFile,
+        avatarURL: this.newImageFile ? this.newImageFile : this.oldImageFile,
         email: this.form.value.email,
         description: this.form.value.description,
         isPrivate: this.user.isPrivate || false,
