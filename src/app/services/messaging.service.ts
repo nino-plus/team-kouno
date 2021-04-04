@@ -45,7 +45,10 @@ export class MessagingService {
     this.msg.getToken
       .pipe(mergeMap((token) => this.msg.deleteToken(token)))
       .subscribe((token) => {
-        this.db.doc(`users/${uid}/tokens/${token}`);
+        this.db
+          .doc(`users/${uid}/tokens/${token}`)
+          .delete()
+          .finally(() => this.snackBar.open('通知を拒否に設定しました'));
       });
   }
 
