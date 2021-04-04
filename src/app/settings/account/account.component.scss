@@ -1,3 +1,23 @@
+@import 'mixins';
+
+mat-divider {
+  margin: 24px 0;
+}
+
+.snslink {
+  &__content {
+    max-width: 280px;
+  }
+  &__inner {
+    margin: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+  &__name {
+    text-transform: capitalize;
+  }
+}
+
 .unsubscribe {
   &__title {
     cursor: pointer;
@@ -6,8 +26,4 @@
   &__text {
     color: red;
   }
-}
-
-mat-divider {
-  margin-bottom: 48px;
 }

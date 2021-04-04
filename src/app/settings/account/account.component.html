@@ -1,10 +1,36 @@
-<div class="unsubscribe">
+<section class="snslink">
+  <h3 class="settings__heading">アカウント連携</h3>
+  <div class="snslink__content">
+    <ng-container *ngFor="let brandName of snsList">
+      <ng-container *ngIf="linkedProviders$ | async as provider">
+        <div class="snslink__inner">
+          <p class="snslink__name">{{ brandName + 'アカウント連携' }}</p>
+          <mat-slide-toggle
+            class="example-margin"
+            color="primary"
+            [checked]="provider.includes(brandName + '.com')"
+            (change)="
+              provider.includes(brandName + '.com')
+                ? unlinkAccount(brandName)
+                : authService.linkSns(brandName)
+            "
+            [disabled]="
+              provider.includes(brandName + '.com') &&
+              linkedProvidersCount === 1
+            "
+          >
+          </mat-slide-toggle>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+</section>
+
+<mat-divider></mat-divider>
+<section class="unsubscribe">
   <h3 class="settings__heading settings__heading--unsubscribe">
     アカウント削除
   </h3>
-
-  <mat-divider></mat-divider>
-
   <ng-container *ngIf="user$ | async as user">
     <p class="unsubscribe__title" (click)="isOpen = !isOpen">
       退会をご希望の方はこちら
@@ -42,4 +68,4 @@
       <img class="loading" src="assets/images/grid.svg" alt="" />
     </div>
   </div>
-</div>
+</section>

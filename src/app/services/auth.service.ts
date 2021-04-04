@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import firebase from 'firebase/app';
 import { Observable, of } from 'rxjs';
-import { shareReplay, switchMap } from 'rxjs/operators';
+import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -24,13 +24,18 @@ export class AuthService {
     }),
     shareReplay(1)
   );
+  linkedProviders$: Observable<string[]>;
 
   constructor(
     private afAuth: AngularFireAuth,
     private router: Router,
     private snackBar: MatSnackBar,
     private userService: UserService
-  ) {}
+  ) {
+    this.linkedProviders$ = this.afAuth.user.pipe(
+      map((user) => user.providerData.map((uid) => uid.providerId))
+    );
+  }
 
   async login(snsLoginType?: string): Promise<void> {
     let provider:
@@ -73,6 +78,71 @@ export class AuthService {
       })
       .then(() => {
         this.snackBar.open('ログアウトしました');
+      });
+  }
+
+  async linkSns(snsLinkType: string): Promise<void> {
+    let provider:
+      | firebase.auth.GoogleAuthProvider
+      | firebase.auth.TwitterAuthProvider
+      | firebase.auth.FacebookAuthProvider
+      | firebase.auth.GithubAuthProvider = new firebase.auth.GoogleAuthProvider();
+    switch (snsLinkType) {
+      case 'google':
+        provider = new firebase.auth.GoogleAuthProvider();
+        break;
+      case 'twitter':
+        provider = new firebase.auth.TwitterAuthProvider();
+        break;
+      case 'facebook':
+        provider = new firebase.auth.FacebookAuthProvider();
+        break;
+      case 'github':
+        provider = new firebase.auth.GithubAuthProvider();
+        break;
+      default:
+        break;
+    }
+    (await this.afAuth.currentUser)
+      .linkWithRedirect(provider)
+      .finally(() => {
+        this.linkedProviders$ = this.afAuth.user.pipe(
+          map((user) => user.providerData.map((uid) => uid.providerId))
+        );
+      })
+      .catch((error) => {
+        switch (error.code) {
+          case 'auth/internal-error':
+            alert('アカウント連携に失敗しました。');
+            break;
+          case 'auth/provider-already-linked':
+            alert(
+              '既に連携されています。解除する場合はページを更新してもう一度やり直してください。'
+            );
+            break;
+        }
+      });
+  }
+
+  async unlinkAccount(snsLinkType: string): Promise<void> {
+    (await this.afAuth.currentUser)
+      .unlink(snsLinkType + '.com')
+      .finally(() => {
+        this.linkedProviders$ = this.afAuth.user.pipe(
+          map((user) => user.providerData.map((uid) => uid.providerId))
+        );
+      })
+      .catch((error) => {
+        switch (error.code) {
+          case 'auth/internal-error':
+            alert('アカウント連携に失敗しました。');
+            break;
+          case 'auth/no-such-provider':
+            alert(
+              'プロバイダーがみつかりませんでした。連携する場合はページを更新してもう一度やり直してください。'
+            );
+            break;
+        }
       });
   }
 }

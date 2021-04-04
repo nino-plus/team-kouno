@@ -19,6 +19,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatIconModule,
     MatTooltipModule,
     MatCheckboxModule,
+    MatSlideToggleModule,
   ],
 })
 export class SettingsModule {}

@@ -81,6 +81,7 @@
     background: center / cover no-repeat;
   }
   &__login-button {
+    cursor: pointer;
     font-weight: 500;
     color: $color-font;
     border: solid 2px $color-font;
@@ -93,6 +94,7 @@
     gap: 12px;
   }
   &__login-item {
+    cursor: pointer;
     width: 100%;
     color: #fff;
     font-weight: 500;

@@ -11,6 +11,7 @@ import { HelpComponent } from './help/help.component';
 import { EventstandComponent } from './eventstand/eventstand.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { MatIconModule } from '@angular/material/icon';
     PressComponent,
     HelpComponent,
     EventstandComponent,
+    AboutComponent,
   ],
   imports: [CommonModule, IntlRoutingModule, MatButtonModule, MatIconModule],
 })
