@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
+import { AngularFireStorage } from '@angular/fire/storage';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { combineLatest, Observable, of } from 'rxjs';
@@ -19,7 +20,8 @@ export class UserService {
     private db: AngularFirestore,
     private fnc: AngularFireFunctions,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private storage: AngularFireStorage
   ) {}
 
   getUserData(uid: string): Observable<User> {
@@ -44,7 +46,34 @@ export class UserService {
       .valueChanges();
   }
 
-  async updateUser(user: Omit<User, 'createdAt'>): Promise<void> {
+  async setImageToStorage(uid: string, file: string): Promise<string> {
+    const result = await this.storage
+      .ref(`users/${uid}`)
+      .putString(file, 'data_url');
+    return result.ref.getDownloadURL();
+  }
+
+  async updateAvatar(uid: string, image: string): Promise<void> {
+    const result = await this.storage
+      .ref(`users/${uid}`)
+      .putString(image, 'data_url');
+    const avatarURL: string = await result.ref.getDownloadURL();
+    return this.db.doc<User>(`users/${uid}`).update({ avatarURL });
+  }
+
+  async updateUser(
+    user: Omit<
+      User,
+      | 'createdAt'
+      | 'lastChangedAt'
+      | 'state'
+      | 'followingCount'
+      | 'followerCount'
+      | 'myEventCount'
+      | 'isPrivate'
+      | 'avatarURL'
+    >
+  ): Promise<void> {
     await this.db.doc<User>(`users/${user.uid}`).update({
       ...user,
     });
