@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import * as firebase from 'firebase';
+import firebase from 'firebase/app';
 import { combineLatest, Observable, of } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 import { Chat, ChatWithUser } from '../interfaces/chat';
@@ -25,7 +25,7 @@ export class ChatService {
       uid,
       chatId,
       eventId,
-      createdAt: firebase.default.firestore.Timestamp.now(),
+      createdAt: firebase.firestore.Timestamp.now(),
     });
   }
 

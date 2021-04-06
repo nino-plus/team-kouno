@@ -13,15 +13,20 @@ firebase.initializeApp({
 });
 
 const messaging = firebase.messaging();
+messaging.getToken({vapidKey: "BC3WiS6p2C8B303gUBsDGwouELI-juo03jFagpLlYbFzaYKoPhYeJfLZipRIRFHYaQwi8edRHNKrQ3bqVQzUBsY"});
 
 messaging.onBackgroundMessage(function(payload) {
   console.log('[firebase-messaging-sw.js] Received background message ', payload);
   // Customize notification here
-  const notificationTitle = 'Background Message Title';
+  const notificationTitle = '1on1のリクエストが届いています';
   const notificationOptions = {
-    body: 'Background Message body.',
-    icon: '/firebase-logo.png'
+    body: payload.data.body,
+    icon: payload.data.icon,
   };
+
+  console.log(payload);
+  console.log(payload.icon);
+  console.log(payload.body);
 
   self.registration.showNotification(notificationTitle,
     notificationOptions);

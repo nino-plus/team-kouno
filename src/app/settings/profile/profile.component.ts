@@ -24,6 +24,7 @@ export class ProfileComponent implements OnInit {
   });
 
   user$: Observable<User> = this.authService.user$;
+  isProcessing: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -48,16 +49,29 @@ export class ProfileComponent implements OnInit {
     console.log(this.newImageFile);
   }
 
-  updateUser(): void {
-    this.userService
-      .updateUser({
+  async updateUser(): Promise<void> {
+    this.isProcessing = true;
+    const formData = {
+      ...this.form.value,
+    };
+    if (this.newImageFile !== undefined) {
+      const value: User = {
+        ...formData,
         uid: this.user.uid,
-        name: this.form.value.name,
-        avatarURL: this.newImageFile ? this.newImageFile : this.oldImageFile,
-        email: this.form.value.email,
-        description: this.form.value.description,
-        isPrivate: this.user.isPrivate || false,
-      })
-      .then(() => this.snackBar.open('ユーザー情報を更新しました'));
+      };
+      await this.userService
+        .updateAvatar(this.user.uid, this.newImageFile)
+        .then(() => {
+          this.userService
+            .updateUser(value)
+            .then(() => (this.isProcessing = false))
+            .then(() => this.snackBar.open('ユーザー情報を更新しました'));
+        });
+    } else {
+      await this.userService
+        .updateUser(formData)
+        .then(() => (this.isProcessing = false))
+        .then(() => this.snackBar.open('ユーザー情報を更新しました'));
+    }
   }
 }

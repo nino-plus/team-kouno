@@ -15,6 +15,9 @@ export const sendPushMessage = functions
       tokens: tokens,
     };
 
+    functions.logger.info(message);
+    functions.logger.info(data, '18');
+    functions.logger.info(tokens, '19');
     await admin
       .messaging()
       .sendMulticast(message)
