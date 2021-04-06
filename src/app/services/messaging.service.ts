@@ -11,8 +11,7 @@ import { Token } from '../interfaces/token';
   providedIn: 'root',
 })
 export class MessagingService {
-  private messaging = admin.messaging();
-
+  private messaging;
   currentMessage = new BehaviorSubject(null);
   isShow = true;
 
@@ -20,7 +19,13 @@ export class MessagingService {
     private msg: AngularFireMessaging,
     private db: AngularFirestore,
     private snackBar: MatSnackBar
-  ) {}
+  ) {
+    try {
+      this.messaging = admin.messaging();
+    } catch (e) {
+      console.log('Unable to Instantiate Firebase Messaing', e);
+    }
+  }
 
   requestPermission(uid: string) {
     if (!uid) {
