@@ -1,7 +1,7 @@
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as firebase from 'firebase';
+import firebase from 'firebase/app';
 import { Observable, Subscription } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
@@ -23,7 +23,7 @@ import { InviteWithSender } from 'src/app/intefaces/invite';
 })
 export class MyPageComponent implements OnInit, OnDestroy {
   readonly subscription = new Subscription();
-  dateNow: firebase.default.firestore.Timestamp = firebase.default.firestore.Timestamp.now();
+  dateNow: firebase.firestore.Timestamp = firebase.firestore.Timestamp.now();
   user$: Observable<User> = this.route.paramMap.pipe(
     switchMap((params) => {
       return this.userService.getUserData(params.get('uid'));

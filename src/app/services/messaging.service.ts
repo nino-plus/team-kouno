@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireMessaging } from '@angular/fire/messaging';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import * as firebase from 'firebase';
+import admin from 'firebase';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { Token } from '../interfaces/token';
@@ -11,7 +11,7 @@ import { Token } from '../interfaces/token';
   providedIn: 'root',
 })
 export class MessagingService {
-  private messaging = firebase.default.messaging();
+  private messaging = admin.messaging();
 
   currentMessage = new BehaviorSubject(null);
   isShow = true;
@@ -20,12 +20,7 @@ export class MessagingService {
     private msg: AngularFireMessaging,
     private db: AngularFirestore,
     private snackBar: MatSnackBar
-  ) {
-    // this.messaging.getToken({
-    //   vapidKey:
-    //     'BC3WiS6p2C8B303gUBsDGwouELI-juo03jFagpLlYbFzaYKoPhYeJfLZipRIRFHYaQwi8edRHNKrQ3bqVQzUBsY',
-    // });
-  }
+  ) {}
 
   requestPermission(uid: string) {
     if (!uid) {
