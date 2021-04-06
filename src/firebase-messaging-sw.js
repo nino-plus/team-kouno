@@ -1,5 +1,5 @@
-importScripts('https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/8.3.1/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/8.0.0/firebase-messaging.js');
 
 firebase.initializeApp({
   apiKey: 'AIzaSyC8cnvkGPJbFZr7Ru6x1JxGLWmN_EaZTk4',
@@ -12,7 +12,7 @@ firebase.initializeApp({
   databaseURL: 'https://eventstand-3c145-default-rtdb.firebaseio.com',
 });
 
-const messaging = firebase.messaging();
+const messaging = firebase.messaging.isSupported() ? firebase.messaging() : null
 messaging.getToken({vapidKey: "BC3WiS6p2C8B303gUBsDGwouELI-juo03jFagpLlYbFzaYKoPhYeJfLZipRIRFHYaQwi8edRHNKrQ3bqVQzUBsY"});
 
 messaging.onBackgroundMessage(function(payload) {
