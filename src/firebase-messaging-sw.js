@@ -13,29 +13,33 @@ firebase.initializeApp({
 });
 
 const messaging = firebase.messaging.isSupported() ? firebase.messaging() : null
-messaging.getToken({vapidKey: "BC3WiS6p2C8B303gUBsDGwouELI-juo03jFagpLlYbFzaYKoPhYeJfLZipRIRFHYaQwi8edRHNKrQ3bqVQzUBsY"});
 
-messaging.onBackgroundMessage(function(payload) {
-  console.log('[firebase-messaging-sw.js] Received background message ', payload);
-  // Customize notification here
-  const notificationTitle = '1on1のリクエストが届いています';
-  const notificationOptions = {
-    body: payload.data.body,
-    icon: payload.data.icon,
-  };
+if (messaging != null) {
+  messaging.getToken({vapidKey: "BC3WiS6p2C8B303gUBsDGwouELI-juo03jFagpLlYbFzaYKoPhYeJfLZipRIRFHYaQwi8edRHNKrQ3bqVQzUBsY"});
 
-  console.log(payload);
-  console.log(payload.icon);
-  console.log(payload.body);
+  messaging.onBackgroundMessage(function(payload) {
+    console.log('[firebase-messaging-sw.js] Received background message ', payload);
+    // Customize notification here
+    const notificationTitle = '1on1のリクエストが届いています';
+    const notificationOptions = {
+      body: payload.data.body,
+      icon: payload.data.icon,
+    };
 
-  self.registration.showNotification(notificationTitle,
-    notificationOptions);
-});
+    console.log(payload);
+    console.log(payload.icon);
+    console.log(payload.body);
 
-self.addEventListener('install', function(event) {
-  console.log('Service Worker installing.');
-});
+    self.registration.showNotification(notificationTitle,
+      notificationOptions);
+  });
 
-self.addEventListener('activate', function(event) {
-  console.log('Service Worker activating.');
-});
+  self.addEventListener('install', function(event) {
+    console.log('Service Worker installing.');
+  });
+
+  self.addEventListener('activate', function(event) {
+    console.log('Service Worker activating.');
+  });
+
+}
