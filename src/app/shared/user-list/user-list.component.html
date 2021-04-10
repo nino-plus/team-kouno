@@ -56,19 +56,21 @@
     </div>
   </ng-container>
   <ng-container *ngSwitchCase="'invite'">
-    <ng-container *ngIf="invites$ | async as invites; else empty">
-      <ul>
-        <li *ngFor="let invite of invites">
-          <p>
+    <div class="card-wrap">
+      <ng-container *ngIf="invites$ | async as invites; else empty">
+        <!-- <p>
             {{ invite.sender.name }}さんからミーティングの招待が届いています({{
               invite.createdAt.toMillis() | date: 'yyyy/MM/dd HH:mm'
             }})
           </p>
-          <a mat-button [routerLink]="'/meeting/' + invite.roomId">参加する</a>
-        </li>
-      </ul>
-    </ng-container>
-
-    <ng-template #empty>招待はありません</ng-template>
+          <a mat-button [routerLink]="'/meeting/' + invite.roomId">参加する</a> -->
+        <app-invite-card
+          *ngFor="let invite of invites"
+          class="card"
+          [invite]="invite"
+        ></app-invite-card>
+      </ng-container>
+      <ng-template #empty>招待はありません</ng-template>
+    </div>
   </ng-container>
 </ng-container>
