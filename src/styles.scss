@@ -3,6 +3,7 @@
 @import '~@danielmoncada/angular-datetime-picker/assets/style/picker.min.css';
 @import '../node_modules/angular-calendar/css/angular-calendar.css';
 @import 'mixins';
+@import '~swiper/swiper-bundle';
 
 @include mat-core();
 
@@ -224,4 +225,116 @@ img {
 .login-menu {
   width: 280px;
   padding: 16px 20px;
+}
+
+// swiper config
+.swiper-container {
+  overflow: visible;
+}
+.gallery-top {
+  position: relative;
+  @include sp {
+    margin-bottom: 16px;
+  }
+}
+
+.gallery-thumbs {
+  position: relative;
+  @include sp {
+    display: none;
+  }
+}
+
+.gallery-thumbs .swiper-slide {
+  opacity: 0.4;
+  padding: 4px;
+}
+
+.gallery-thumbs .swiper-slide-active {
+  opacity: 1;
+  border: 3px solid #1bcbe0;
+  position: relative;
+  &::before {
+    content: '';
+    width: 0;
+    height: 0;
+    display: block;
+    border: 20px solid transparent;
+    border-left: 20px solid #1bcbe0;
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: rotate(-90deg) translateY(-50%);
+    z-index: 100;
+    overflow: visible !important;
+  }
+}
+
+.pagination {
+  display: none;
+  position: absolute;
+  bottom: -8px;
+  z-index: 200;
+  left: 50%;
+  transform: translateX(-50%);
+  @include sp {
+    display: flex;
+  }
+  .swiper-pagination-bullet,
+  .swiper-pagination-bullet-active {
+    width: 16px;
+    height: 8px;
+    display: inline-block;
+    border-radius: initial;
+    background: rgba(#000, 0.38);
+    margin-left: 8px;
+  }
+  .swiper-pagination-bullet-active {
+    background: $color-main;
+  }
+}
+
+.navigation {
+  width: 32px;
+  position: absolute;
+  top: 4px;
+  z-index: 100;
+  background: linear-gradient(
+    to right bottom,
+    rgba(#000, 0.16),
+    rgba(#000, 0.38)
+  );
+  height: calc(100% - 10px);
+  &__icon {
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    border: solid #fff;
+    border-width: 3px 0 0 3px;
+    transform: rotate(135deg) translateY(50%);
+    position: absolute;
+    top: 50%;
+    right: 0px;
+    cursor: pointer;
+    @include sp {
+      display: none;
+    }
+    &:hover {
+      opacity: 0.7;
+    }
+    &:focus {
+      outline: 0;
+      border: 1px solid #fff;
+    }
+    &--prev {
+      right: -10px;
+      transform: rotate(-45deg) translateY(-50%);
+    }
+  }
+  &--next {
+    right: 0;
+  }
+  &--prev {
+    left: 0;
+  }
 }

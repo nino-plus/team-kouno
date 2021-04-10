@@ -5,6 +5,16 @@ import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { Event } from 'src/app/interfaces/event';
 import { EventService } from 'src/app/services/event.service';
+import SwiperCore, {
+  Autoplay,
+  Thumbs,
+  Swiper,
+  EffectFade,
+  Navigation,
+  Pagination,
+} from 'swiper/core';
+
+SwiperCore.use([Autoplay, Thumbs, EffectFade, Navigation, Pagination]);
 
 @Component({
   selector: 'app-home',
@@ -14,6 +24,10 @@ import { EventService } from 'src/app/services/event.service';
 export class HomeComponent implements OnInit {
   user$: Observable<User> = this.authService.user$;
   events$: Observable<Event[]> = this.eventService.getFutureEvents();
+  spEvents$: Observable<Event[]> = this.eventService.getSpecialEvents();
+
+  galleryThumbs = new Swiper('.gallery-thumbs');
+  galleryTops = new Swiper('.gallery-top');
 
   constructor(
     private authService: AuthService,
