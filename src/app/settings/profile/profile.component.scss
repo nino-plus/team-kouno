@@ -6,7 +6,7 @@
     display: grid;
     grid-template-columns: 0.7fr 0.3fr;
     margin-bottom: 24px;
-    @include sp {
+    @include tablet {
       grid-template-columns: 1fr;
     }
   }
@@ -15,7 +15,7 @@
   }
   &__info {
     padding-right: 48px;
-    @include sp {
+    @include tablet {
       padding: 0;
     }
   }
@@ -62,7 +62,7 @@
     border-radius: 50%;
     max-width: 240px;
     overflow: hidden;
-    @include sp {
+    @include tablet {
       margin-bottom: 24px;
     }
   }
@@ -77,7 +77,7 @@
       opacity: 0.38;
       cursor: not-allowed;
     }
-    @include sp {
+    @include tablet {
       display: none;
     }
     &--sp {
