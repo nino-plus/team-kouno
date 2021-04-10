@@ -1,16 +1,14 @@
 import * as functions from 'firebase-functions';
-import { auth } from 'firebase-admin';
 import Stripe from 'stripe';
 import * as admin from 'firebase-admin';
 import { stripe } from '../stripe/client';
 import { Customer } from '../interfaces/customer';
-
 const db = admin.firestore();
 
 export const createStripeCustomer = functions
   .region('asia-northeast1')
   .auth.user()
-  .onCreate(async (user: auth.UserRecord) => {
+  .onCreate(async (user: admin.auth.UserRecord) => {
     const customer: Stripe.Customer = await stripe.customers.create({
       name: user.displayName,
       email: user.email,
@@ -43,7 +41,7 @@ export const getStripeCustomer = functions
 export const deleteStripeCustomer = functions
   .region('asia-northeast1')
   .auth.user()
-  .onDelete(async (user: auth.UserRecord) => {
+  .onDelete(async (user: admin.auth.UserRecord) => {
     const customer: Customer = (
       await db.doc(`customers/${user.uid}`).get()
     ).data() as Customer;

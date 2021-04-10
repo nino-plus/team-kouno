@@ -16,3 +16,6 @@ export * from './algolia.function';
 export * from './event.function';
 export * from './user.status.function';
 export * from './push.messaging.functions';
+// export * from './stripe/client';
+export * from './stripe/customer.function';
+export * from './stripe/payment-method.function';
