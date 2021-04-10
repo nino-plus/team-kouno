@@ -225,3 +225,11 @@ img {
   width: 280px;
   padding: 16px 20px;
 }
+
+.submit-button {
+  background: $color-main;
+  color: #fff;
+  &:hover {
+    background: $color-accent;
+  }
+}
