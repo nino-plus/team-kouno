@@ -54,4 +54,14 @@ export class PaymentService {
       }
     }
   }
+
+  async createStripeConnectedAccount(): Promise<void> {
+    // ステートを作成&取得
+    const callable = this.fns.httpsCallable('getStripeConnectedAccountState');
+    const state = await callable({}).toPromise();
+
+    const URL = 'https://connect.stripe.com/express/oauth/authorize';
+    // 販売アカウント作成画面へリダイレクト
+    location.href = `${URL}?client_id=${environment.stripe.clientId}&state=${state}&suggested_capabilities[]=transfers`;
+  }
 }
