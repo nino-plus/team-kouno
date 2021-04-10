@@ -8,23 +8,24 @@
     <p class="settings__sub">■ 1on1のリクエストされた時</p>
 
     <span class="spacer"></span>
-    <ng-container *ngIf="tokens$ | async; else allow">
+    <ng-container *ngIf="tokens$ | async as tokens">
       <button
+        *ngIf="tokens.length; else allow"
         mat-stroked-button
         class="settings__btn"
         (click)="rejectPermission(user.uid)"
       >
         通知を拒否する
       </button>
+      <ng-template #allow>
+        <button
+          mat-stroked-button
+          class="settings__btn"
+          (click)="requestPermission(user.uid)"
+        >
+          通知を許可する
+        </button>
+      </ng-template>
     </ng-container>
-    <ng-template #allow>
-      <button
-        mat-stroked-button
-        class="settings__btn"
-        (click)="requestPermission(user.uid)"
-      >
-        通知を許可する
-      </button>
-    </ng-template>
   </div>
 </div>

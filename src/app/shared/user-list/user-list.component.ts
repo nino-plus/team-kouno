@@ -1,17 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service';
-import { MeetingService } from 'src/app/services/meeting.service';
-import { UserService } from 'src/app/services/user.service';
-import * as firebase from 'firebase';
-import { MessagingService } from 'src/app/services/messaging.service';
 import { Observable } from 'rxjs';
-import { User } from 'src/app/interfaces/user';
-import { AngularFireFunctions } from '@angular/fire/functions';
-import { switchMap, take } from 'rxjs/operators';
-import { Token } from 'src/app/interfaces/token';
-import { AngularFireMessaging } from '@angular/fire/messaging';
 import { fade } from 'src/app/animations/animations';
+import { User } from 'src/app/interfaces/user';
+import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',

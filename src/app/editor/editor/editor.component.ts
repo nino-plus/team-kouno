@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import * as firebase from 'firebase';
+import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { switchMap, take, tap } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
@@ -107,7 +107,7 @@ export class EditorComponent implements OnInit {
       reserveUserCount: this.event ? this.event.reserveUserCount : 0,
       startAt: formData.startAt,
       exitAt: formData.exitAt,
-      createdAt: firebase.default.firestore.Timestamp.now(),
+      createdAt: firebase.firestore.Timestamp.now(),
     };
 
     if (!this.event) {

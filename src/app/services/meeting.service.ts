@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Invite, InviteWithSender } from '../intefaces/invite';
@@ -27,7 +27,7 @@ export class MeetingService {
     this.db.doc(`users/${uid}/invite/${roomId}`).set({
       roomId,
       senderUid,
-      createdAt: firebase.default.firestore.Timestamp.now(),
+      createdAt: firebase.firestore.Timestamp.now(),
     });
   }
 

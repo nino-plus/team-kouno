@@ -8,6 +8,7 @@ export const environment = {
     messagingSenderId: '667562475069',
     appId: '1:667562475069:web:51bc3ca415cdd3ac29f454',
     measurementId: 'G-BCSGM94VWM',
+    databaseURL: 'https://eventstand-3c145-default-rtdb.firebaseio.com',
   },
   agora: {
     appId: '60c972e80bee423ea01a8ca67121691d',

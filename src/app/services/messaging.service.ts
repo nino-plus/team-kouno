@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireMessaging } from '@angular/fire/messaging';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import * as firebase from 'firebase';
+import admin from 'firebase';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { Token } from '../interfaces/token';
@@ -11,8 +11,7 @@ import { Token } from '../interfaces/token';
   providedIn: 'root',
 })
 export class MessagingService {
-  private messaging = firebase.default.messaging();
-
+  private messaging;
   currentMessage = new BehaviorSubject(null);
   isShow = true;
 
@@ -21,10 +20,11 @@ export class MessagingService {
     private db: AngularFirestore,
     private snackBar: MatSnackBar
   ) {
-    // this.messaging.getToken({
-    //   vapidKey:
-    //     'BC3WiS6p2C8B303gUBsDGwouELI-juo03jFagpLlYbFzaYKoPhYeJfLZipRIRFHYaQwi8edRHNKrQ3bqVQzUBsY',
-    // });
+    try {
+      this.messaging = admin.messaging();
+    } catch (e) {
+      console.log('Unable to Instantiate Firebase Messaing', e);
+    }
   }
 
   requestPermission(uid: string) {
@@ -34,7 +34,11 @@ export class MessagingService {
       );
     }
     this.msg.requestToken.subscribe(
-      (token) => this.db.doc(`users/${uid}/tokens/${token}`).set({ token }),
+      (token) =>
+        this.db
+          .doc(`users/${uid}/tokens/${token}`)
+          .set({ token })
+          .then(() => this.snackBar.open('通知を許可に設定しました')),
       (error) =>
         this.snackBar.open(
           'トークンの取得に失敗しました' + ' ' + 'エラー:' + error

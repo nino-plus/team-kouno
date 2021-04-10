@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import * as firebase from 'firebase';
+import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { Follower } from '../interfaces/follower';
@@ -19,12 +19,12 @@ export class UserFollowService {
     this.db.doc<Following>(`users/${uid}/follows/${targetId}`).set({
       uid,
       followingId: targetId,
-      createdAt: firebase.default.firestore.Timestamp.now(),
+      createdAt: firebase.firestore.Timestamp.now(),
     });
     this.db.doc<Follower>(`users/${targetId}/followers/${uid}`).set({
       uid: targetId,
       followerId: uid,
-      createdAt: firebase.default.firestore.Timestamp.now(),
+      createdAt: firebase.firestore.Timestamp.now(),
     });
   }
 

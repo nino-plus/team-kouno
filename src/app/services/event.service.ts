@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Event, EventWithOwner } from '../interfaces/event';
-import * as firebase from 'firebase';
+import firebase from 'firebase/app';
 import { combineLatest, Observable, of } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -16,7 +16,7 @@ import { AngularFireFunctions } from '@angular/fire/functions';
   providedIn: 'root',
 })
 export class EventService {
-  dateNow: firebase.default.firestore.Timestamp = firebase.default.firestore.Timestamp.now();
+  dateNow: firebase.firestore.Timestamp = firebase.firestore.Timestamp.now();
 
   constructor(
     private db: AngularFirestore,
@@ -38,7 +38,7 @@ export class EventService {
       .set({
         ...event,
         eventId: id,
-        updatedAt: firebase.default.firestore.Timestamp.now(),
+        updatedAt: firebase.firestore.Timestamp.now(),
         thumbnailURL: image,
       })
       .then(() => {
@@ -50,7 +50,7 @@ export class EventService {
   async setThumbnailToStorage(eventId: string, file: string): Promise<string> {
     const result = await this.storage
       .ref(`events/${eventId}`)
-      .putString(file, firebase.default.storage.StringFormat.DATA_URL);
+      .putString(file, firebase.storage.StringFormat.DATA_URL);
     return result.ref.getDownloadURL();
   }
 
@@ -114,7 +114,7 @@ export class EventService {
         {
           ...event,
           eventId,
-          updatedAt: firebase.default.firestore.Timestamp.now(),
+          updatedAt: firebase.firestore.Timestamp.now(),
           thumbnailURL: image,
         },
         {

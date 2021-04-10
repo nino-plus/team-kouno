@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import * as firebase from 'firebase';
+import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { MessagingService } from './services/messaging.service';
@@ -20,22 +20,22 @@ export class AppComponent {
 
   isOfflineForFirestore = {
     state: 'offline',
-    lastChangedAt: firebase.default.firestore.FieldValue.serverTimestamp(),
+    lastChangedAt: firebase.firestore.FieldValue.serverTimestamp(),
   };
 
   isOnlineForFirestore = {
     state: 'online',
-    lastChangedAt: firebase.default.firestore.FieldValue.serverTimestamp(),
+    lastChangedAt: firebase.firestore.FieldValue.serverTimestamp(),
   };
 
   isOfflineForDatabase = {
     state: 'offline',
-    lastChangedAt: firebase.default.database.ServerValue.TIMESTAMP,
+    lastChangedAt: firebase.database.ServerValue.TIMESTAMP,
   };
 
   isOnlineForDatabase = {
     state: 'online',
-    lastChangedAt: firebase.default.database.ServerValue.TIMESTAMP,
+    lastChangedAt: firebase.database.ServerValue.TIMESTAMP,
   };
 
   constructor(
