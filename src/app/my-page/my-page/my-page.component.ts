@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import firebase from 'firebase/app';
 import { Observable, Subscription } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { map, switchMap, take, tap } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
@@ -15,6 +15,7 @@ import { FollowersDialogComponent } from '../followers-dialog/followers-dialog.c
 import { FollowingsDialogComponent } from '../followings-dialog/followings-dialog.component';
 import { MeetingService } from 'src/app/services/meeting.service';
 import { InviteWithSender } from 'src/app/intefaces/invite';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-my-page',
@@ -77,7 +78,8 @@ export class MyPageComponent implements OnInit, OnDestroy {
     private followService: UserFollowService,
     private dialog: MatDialog,
     private router: Router,
-    private meetingService: MeetingService
+    private meetingService: MeetingService,
+    private afAuth: AngularFireAuth
   ) {
     this.followers$.subscribe((users) => {
       this.followers = users;
@@ -128,7 +130,7 @@ export class MyPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.targetId = this.route.snapshot.params.uid;
-    this.currentUser$
+    this.afAuth.user
       .pipe(
         take(1),
         map((user) => user.uid)
