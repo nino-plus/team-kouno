@@ -228,9 +228,7 @@ img {
 }
 
 // swiper config
-.swiper-container {
-  overflow: visible;
-}
+
 .gallery-top {
   position: relative;
   @include sp {
@@ -243,17 +241,6 @@ img {
   @include sp {
     display: none;
   }
-}
-
-.gallery-thumbs .swiper-slide {
-  opacity: 0.4;
-  padding: 4px;
-}
-
-.gallery-thumbs .swiper-slide-active {
-  opacity: 1;
-  border: 3px solid #1bcbe0;
-  position: relative;
   &::before {
     content: '';
     width: 0;
@@ -268,6 +255,17 @@ img {
     z-index: 100;
     overflow: visible !important;
   }
+}
+
+.gallery-thumbs .swiper-slide {
+  opacity: 0.4;
+  padding: 4px;
+}
+
+.gallery-thumbs .swiper-slide-active {
+  opacity: 1;
+  border: 3px solid #1bcbe0;
+  position: relative;
 }
 
 .pagination {
