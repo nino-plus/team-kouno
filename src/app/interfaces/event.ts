@@ -17,6 +17,7 @@ export interface Event {
   isShareScreen?: boolean;
   screenOwnerUid?: string;
   videoPublishUsers?: User[];
+  isSpecial?: boolean;
 }
 
 export interface EventWithOwner extends Event {

@@ -1,0 +1,21 @@
+<div class="hero" [style.background-image]="'url(' + event.thumbnailURL + ')'">
+  <div class="container">
+    <a class="hero__inner" [routerLink]="'event/' + event.eventId">
+      <h1 class="hero__name">
+        <a [routerLink]="'event/' + event.eventId" target="_blank">{{
+          event.name
+        }}</a>
+      </h1>
+
+      <h2 class="hero__title">
+        {{ event.description }}
+      </h2>
+
+      <div class="hero__data">
+        <p class="hero__count">
+          予約済{{ event.reserveUserCount ? event.reserveUserCount : 0 }}名
+        </p>
+      </div>
+    </a>
+  </div>
+</div>

@@ -18,9 +18,16 @@ import { SharedModule } from '../shared/shared.module';
 import { EventCalendarComponent } from './event-calendar/event-calendar.component';
 import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home/home.component';
+import { SpecialComponent } from './special/special.component';
+import { SwiperModule } from 'swiper/angular';
 
 @NgModule({
-  declarations: [HomeComponent, EventCalendarComponent, FooterComponent],
+  declarations: [
+    HomeComponent,
+    EventCalendarComponent,
+    FooterComponent,
+    SpecialComponent,
+  ],
   imports: [
     CommonModule,
     HomeRoutingModule,
@@ -36,6 +43,7 @@ import { HomeComponent } from './home/home.component';
     CalendarModule,
     MatTooltipModule,
     SharedModule,
+    SwiperModule,
   ],
 })
 export class HomeModule {}

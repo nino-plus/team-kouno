@@ -1,0 +1,79 @@
+@import 'mixins';
+@import 'custom-style';
+
+.hero {
+  margin-bottom: 8px;
+  padding: 7vw 0;
+  position: relative;
+  background: no-repeat center/cover;
+  color: #fff;
+  height: 473px;
+  @include sp {
+    padding: 14vw 4%;
+    height: 256px;
+  }
+  &__name {
+    color: #fff;
+    font-size: 72px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-shadow: 0px 0px 8px rgba(#212121, 0.6);
+    :hover {
+      color: #1bcbe0;
+    }
+    @include sp {
+      font-size: 24px;
+    }
+  }
+  &__title {
+    font-size: 27px;
+    text-shadow: 0px 0px 8px rgba(#212121, 0.6);
+    margin-bottom: 16px;
+    @include sp {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+  }
+  &__category {
+    display: inline;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
+    padding: 8px 16px;
+    background: $color-sub;
+    border-radius: 24px;
+    @include sp {
+      font-size: 16px;
+    }
+  }
+  &__data {
+    height: 24px;
+    @include sp {
+      height: 24px;
+    }
+  }
+  &__count {
+    font-size: 16px;
+    font-weight: 600;
+    transition: ease-out 0.2s;
+    display: inline;
+    width: 100%;
+    padding: 8px 16px;
+    background: $color-sub;
+    border-radius: 24px;
+    @include sp {
+      height: 16px;
+      padding: 4px 12px;
+    }
+    @include sp {
+      font-size: 12px;
+    }
+  }
+  &__tag {
+    max-width: 50%;
+    @include sp {
+      max-width: 100%;
+    }
+  }
+}

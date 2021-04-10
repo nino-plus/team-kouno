@@ -1,4 +1,4 @@
-<div (click)="joinChannel(event)" class="card__content" @fade>
+<div (click)="joinChannel(event, $event)" class="card__content" @fade>
   <div class="card__header">
     <img [src]="event.thumbnailURL" alt="" class="card__img" />
     <ng-container *ngIf="event.participantCount > 0; else future">
@@ -60,7 +60,7 @@
           </button>
           <button
             class="card__btn"
-            (click)="navigateDetail(event)"
+            (click)="navigateDetail(event, $event)"
             matTooltip="詳しく見る"
           >
             <mat-icon>expand_more</mat-icon>

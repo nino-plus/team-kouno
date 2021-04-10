@@ -74,6 +74,14 @@ export class EventService {
     return this.db.doc<Event>(`events/${eventId}`).valueChanges();
   }
 
+  getSpecialEvents(): Observable<Event[]> {
+    return this.db
+      .collection<Event>(`events`, (ref) =>
+        ref.where('isSpecial', '==', true).orderBy('createdAt', 'desc')
+      )
+      .valueChanges();
+  }
+
   getReservedUsers(eventId: string): Observable<User[]> {
     return this.db
       .collection<ReserveUid>(`events/${eventId}/reserveUids`)
