@@ -39,7 +39,8 @@ export class EventCardComponent implements OnInit {
     });
   }
 
-  navigateDetail(event: Event) {
+  navigateDetail(event: Event, $event): void {
+    $event.stopPropagation();
     let userType;
     if (event.ownerId === this.uid) {
       userType = 'owner';
@@ -49,14 +50,14 @@ export class EventCardComponent implements OnInit {
     });
   }
 
-  joinChannel(event: Event): void {
+  joinChannel(event: Event, $event): void {
     if (
       event.startAt < this.eventService.dateNow &&
       event.exitAt >= this.eventService.dateNow
     ) {
       this.router.navigateByUrl(`/event/${event.eventId}/${this.uid}`);
     } else {
-      this.navigateDetail(event);
+      this.navigateDetail(event, $event);
     }
   }
 }
