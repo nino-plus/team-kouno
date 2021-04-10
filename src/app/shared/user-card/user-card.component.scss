@@ -43,12 +43,12 @@
   &__actions {
     display: flex;
     align-items: center;
-    gap: 8px;
     justify-content: flex-end;
   }
   &__btn {
     background: $color-sub;
     color: #fff;
+    margin-left: 8px;
     &--submit {
       background: $color-main;
       color: #fff;
