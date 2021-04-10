@@ -1,15 +1,63 @@
 <main class="main-wrap">
-  <section class="top">
-    <div class="top__grid">
-      <img class="top__img" src="/assets/images/hero-1.png" alt="" />
-      <img class="top__img" src="/assets/images/hero-2.png" alt="" />
-      <img class="top__img" src="/assets/images/hero-3.png" alt="" />
+  <div class="gallery-top">
+    <swiper
+      [initialSlide]="3"
+      effect="fade"
+      [loop]="true"
+      [loopAdditionalSlides]="1"
+      [autoplay]="{
+        delay: 6000
+      }"
+      [thumbs]="{
+        Swiper: galleryThumbs
+      }"
+      [watchSlidesVisibility]="true"
+      [watchSlidesProgress]="true"
+      [slideToClickedSlide]="true"
+      [navigation]="true"
+      [pagination]="{
+        clickable: true,
+        el: '.pagination',
+        bulletElement: 'span'
+      }"
+    >
+      <ng-template swiperSlide let-data *ngFor="let event of spEvents$ | async">
+        <app-special [event]="event"></app-special>
+      </ng-template>
+    </swiper>
+    <div class="pagination"></div>
+  </div>
+
+  <div class="gallery-thumbs">
+    <swiper
+      [initialSlide]="3"
+      [slidesPerView]="6"
+      [loop]="true"
+      [loopAdditionalSlides]="1"
+      [autoplay]="{
+        delay: 6000
+      }"
+      [watchSlidesVisibility]="true"
+      [watchSlidesProgress]="true"
+      [centeredSlides]="true"
+      [slideToClickedSlide]="true"
+      [navigation]="{
+        nextEl: '.navigation__icon--next',
+        prevEl: '.navigation__icon--prev'
+      }"
+    >
+      <ng-template swiperSlide let-data *ngFor="let event of spEvents$ | async">
+        <img [src]="event.thumbnailURL" alt="" />
+      </ng-template>
+    </swiper>
+
+    <div class="navigation navigation--prev">
+      <div class="navigation__icon navigation__icon--prev"></div>
     </div>
-    <div class="top__overlay">
-      <h1 class="top__heading">さあ、Webでつながろう</h1>
-      <p class="top__sub">オンラインイベントプラットフォーム</p>
+    <div class="navigation navigation--next">
+      <div class="navigation__icon navigation__icon--next"></div>
     </div>
-  </section>
+  </div>
 
   <ng-container *ngIf="user$ | async as user; else guest">
     <mat-tab-group
