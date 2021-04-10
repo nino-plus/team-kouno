@@ -134,7 +134,6 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
     );
 
     roomRef.onSnapshot((snapshot) => {
-      console.log('Got updated room:', snapshot.data());
       const data = snapshot.data();
       if (!this.peerConnection.currentRemoteDescription && data?.answer) {
         const answer = new RTCSessionDescription(data.answer);
