@@ -127,7 +127,6 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
 
     await this.db.doc(`rooms/${this.roomId}`).set(
       {
-        owenerId: this.authService.uid,
         offer,
       },
       { merge: true }
