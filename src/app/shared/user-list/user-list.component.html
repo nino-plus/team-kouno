@@ -19,6 +19,13 @@
 >
   フォロー
 </button>
+<button
+  mat-button
+  (click)="changeListSource('invite')"
+  [class.active]="listSource === 'invite'"
+>
+  招待
+</button>
 
 <ng-container [ngSwitch]="listSource">
   <ng-container *ngSwitchCase="'all'">
@@ -47,5 +54,21 @@
         [user]="user"
       ></app-user-card>
     </div>
+  </ng-container>
+  <ng-container *ngSwitchCase="'invite'">
+    <ng-container *ngIf="invites$ | async as invites; else empty">
+      <ul>
+        <li *ngFor="let invite of invites">
+          <p>
+            {{ invite.sender.name }}さんからミーティングの招待が届いています({{
+              invite.createdAt.toMillis() | date: 'yyyy/MM/dd HH:mm'
+            }})
+          </p>
+          <a mat-button [routerLink]="'/meeting/' + invite.roomId">参加する</a>
+        </li>
+      </ul>
+    </ng-container>
+
+    <ng-template #empty>招待はありません</ng-template>
   </ng-container>
 </ng-container>
