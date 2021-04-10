@@ -4,10 +4,10 @@ import {
   DocumentReference,
   DocumentSnapshot,
 } from '@angular/fire/firestore';
-import { FormBuilder, FormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { shareReplay, take, tap } from 'rxjs/operators';
 import { Room } from 'src/app/interfaces/room';
 import { AuthService } from 'src/app/services/auth.service';
 import { MeetingService } from 'src/app/services/meeting.service';
@@ -33,9 +33,9 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
     iceCandidatePoolSize: 10,
   };
 
-  readonly peerConnection = new RTCPeerConnection(this.servers);
-  localStream = null;
-  remoteStream = null;
+  peerConnection = new RTCPeerConnection(this.servers);
+  localStream: MediaStream = null;
+  remoteStream: MediaStream = null;
 
   isPublishWebcam: boolean;
   isCreateRoom: boolean;
@@ -52,7 +52,9 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
     private db: AngularFirestore,
     private route: ActivatedRoute,
     private authService: AuthService,
-    private meetingService: MeetingService
+    private meetingService: MeetingService,
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -61,9 +63,8 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.snapshotRoom().then((room) => {
-      this.isOwner = this.authService.uid === room.ownerId;
+      this.isOwner = this.authService.uid === room?.ownerId;
       this.publishWebcam().then(() => {
-        console.log(this.isOwner);
         if (this.isOwner) {
           setTimeout(() => {
             this.createRoom();
@@ -124,17 +125,18 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
       type: offerDescription.type,
     };
 
-    await this.db.doc(`rooms/${this.roomId}`).set({
-      roomId: this.roomId,
-      owenerId: this.authService.uid,
-      offer,
-    });
+    await this.db.doc(`rooms/${this.roomId}`).set(
+      {
+        owenerId: this.authService.uid,
+        offer,
+      },
+      { merge: true }
+    );
 
     roomRef.onSnapshot((snapshot) => {
       console.log('Got updated room:', snapshot.data());
       const data = snapshot.data();
       if (!this.peerConnection.currentRemoteDescription && data?.answer) {
-        console.log('Set remote description: ', data.answer);
         const answer = new RTCSessionDescription(data.answer);
         this.peerConnection.setRemoteDescription(answer);
       }
@@ -149,6 +151,7 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
       });
     });
 
+    this.detectClosed();
     this.isCreateRoom = true;
   }
 
@@ -183,40 +186,109 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
 
     offerCandidates.onSnapshot((snapshot) => {
       snapshot.docChanges().forEach((change) => {
-        console.log(change);
         if (change.type === 'added') {
           let data = change.doc.data();
           this.peerConnection.addIceCandidate(new RTCIceCandidate(data));
         }
       });
     });
+
+    this.detectClosed();
   }
 
-  Hangup() {}
+  detectClosed() {
+    this.db
+      .doc<Room>(`rooms/${this.roomId}`)
+      .valueChanges()
+      .pipe(shareReplay(1))
+      .subscribe((room) => {
+        if (!room) {
+          this.closeVideoCall();
+          this.snackBar.open('通話が終了されました');
+        }
+      });
+  }
+
+  async Hangup() {
+    const roomId = this.roomId;
+    const roomRef = this.db.doc(`rooms/${roomId}`).ref;
+
+    const offerCandidates = await roomRef.collection('offerCandidates').get();
+    offerCandidates.forEach(async (candidate) => {
+      await candidate.ref.delete();
+    });
+    const answerCandidates = await roomRef.collection('answerCandidates').get();
+    answerCandidates.forEach(async (candidate) => {
+      await candidate.ref.delete();
+    });
+    await roomRef.delete();
+
+    this.closeVideoCall();
+    this.snackBar.open('通話を終了しました');
+  }
+
+  closeVideoCall() {
+    if (this.localStream) {
+      this.localStream.getTracks().forEach((track) => track.stop());
+    }
+
+    if (this.remoteStream) {
+      this.remoteStream.getTracks().forEach((track) => track.stop());
+    }
+    if (this.peerConnection) {
+      if (this.peerConnection.iceConnectionState !== 'closed') {
+        this.peerConnection.close();
+        this.peerConnection = null;
+      }
+    }
+
+    this.localStream = null;
+    this.remoteStream = null;
+
+    this.router.navigate(['/']);
+  }
+
+  handleICEConnectionStateChangeEvent(event) {
+    switch (this.peerConnection.iceConnectionState) {
+      case 'disconnected':
+      case 'failed':
+        this.closeVideoCall();
+        break;
+    }
+  }
 
   registerPeerConnectionListeners() {
     this.peerConnection.onicegatheringstatechange = (event) => {
-      console.log(
-        `ICE gathering state changed: ${this.peerConnection.iceGatheringState}`
-      );
+      if (this.peerConnection?.iceGatheringState) {
+        console.log(
+          `ICE gathering state changed: ${this.peerConnection.iceGatheringState}`
+        );
+      }
     };
 
     this.peerConnection.onconnectionstatechange = (event) => {
-      console.log(
-        `Connection state change: ${this.peerConnection.connectionState}`
-      );
+      if (this.peerConnection?.connectionState) {
+        console.log(
+          `Connection state change: ${this.peerConnection.connectionState}`
+        );
+      }
     };
 
     this.peerConnection.onsignalingstatechange = (event) => {
-      console.log(
-        `Signaling state change: ${this.peerConnection.signalingState}`
-      );
+      if (this.peerConnection?.signalingState) {
+        console.log(
+          `Signaling state change: ${this.peerConnection.signalingState}`
+        );
+      }
     };
 
     this.peerConnection.oniceconnectionstatechange = (event) => {
-      console.log(
-        `ICE connection state changed: ${this.peerConnection.iceConnectionState}`
-      );
+      this.handleICEConnectionStateChangeEvent(event);
+      if (this.peerConnection?.iceConnectionState) {
+        console.log(
+          `ICE connection state changed: ${this.peerConnection.iceConnectionState}`
+        );
+      }
     };
   }
 }
