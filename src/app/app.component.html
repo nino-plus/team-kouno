@@ -5,13 +5,13 @@
     *ngIf="messagingService.currentMessage | async as message"
     class="notification slideInRight"
     [class.close]="!messagingService.isShow"
-    (click)="navigateMeeting(message.roomId)"
+    (click)="navigateMeeting(message.data.roomId)"
   >
     <img [src]="message.icon" alt="" width="48px" class="notification__image" />
 
     <div class="notification__body">
-      <p class="notification__title">{{ message.title }}</p>
-      <p class="notification__body">{{ message.body }}</p>
+      <p class="notification__title">{{ message.data.title }}</p>
+      <p class="notification__body">{{ message.data.body }}</p>
     </div>
     <div class="notification__btns">
       <button mat-icon-button (click)="close(); $event.stopPropagation()">
