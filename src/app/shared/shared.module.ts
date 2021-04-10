@@ -14,6 +14,10 @@ import { UnfollowDialogComponent } from './unfollow-dialog/unfollow-dialog.compo
 import { RouterModule } from '@angular/router';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserCardComponent } from './user-card/user-card.component';
+import { RegisterCardDialogComponent } from './register-card-dialog/register-card-dialog.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -25,9 +29,14 @@ import { UserCardComponent } from './user-card/user-card.component';
     UnfollowDialogComponent,
     UserListComponent,
     UserCardComponent,
+    RegisterCardDialogComponent,
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
     MatDialogModule,
     MatDividerModule,
     MatIconModule,
