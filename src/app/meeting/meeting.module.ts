@@ -6,6 +6,8 @@ import { MeetingRoomComponent } from './meeting-room/meeting-room.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [MeetingRoomComponent],
@@ -16,6 +18,8 @@ import { MatInputModule } from '@angular/material/input';
     ReactiveFormsModule,
     MatInputModule,
     FormsModule,
+    MatIconModule,
+    MatButtonModule,
   ],
 })
 export class MeetingModule {}
