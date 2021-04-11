@@ -17,4 +17,8 @@ export const environment = {
     appId: 'JKOSWPL40A',
     searchKey: '0615dae3a9591145ccd4460d77f874a7',
   },
+  stripe: {
+    publicKey:
+      'pk_live_51IcXWzJ6xR3ewndOcuohfs5saq3taLYY4KsOMFHfT8QFW2HWvumbrI4UCvuBwwOokbAqXwFPPsQ2pFNeHWjNjmHz00gGOpLeqT',
+  },
 };
