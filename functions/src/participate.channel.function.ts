@@ -65,7 +65,7 @@ async function addUserToParticipantList(
   await db.doc(`events/${eventId}/participants/${currentUserId}`).set(userData);
   await db.doc(`events/${eventId}`).set(
     {
-      onlive: true,
+      islive: true,
     },
     {
       merge: true,
@@ -77,12 +77,30 @@ export const countUpParticipants = functions
   .region('asia-northeast1')
   .firestore.document('events/{eventId}/participants/{uid}')
   .onCreate(async (snap, context) => {
-    const eventId = context.eventId;
+    const eventId: string = context.eventId;
+    const participantCount: number = await db
+      .doc(`events/${eventId}`)
+      .get()
+      .then((event) => {
+        return event.data()?.participantCount;
+      });
     return shouldEventRun(eventId).then(async (should: boolean) => {
       if (should) {
         await db
           .doc(`events/${context.params.eventId}`)
-          .update('participantCount', admin.firestore.FieldValue.increment(1));
+          .update('participantCount', admin.firestore.FieldValue.increment(1))
+          .then(async () => {
+            if (participantCount >= 0) {
+              await db.doc(`events/${eventId}`).set(
+                {
+                  islive: true,
+                },
+                {
+                  merge: true,
+                }
+              );
+            }
+          });
         return markEventTried(eventId);
       } else {
         return;
@@ -94,7 +112,19 @@ export const countDownParticipants = functions
   .region('asia-northeast1')
   .firestore.document('events/{eventId}/participants/{uid}')
   .onDelete(async (snap, context) => {
-    const eventId = context.eventId;
+    const eventId = context.params.eventId;
+    const participantCount: number = await db
+      .doc(`events/${eventId}`)
+      .get()
+      .then((event) => {
+        return event.data()?.participantCount;
+      });
+
+    if (participantCount <= 1) {
+      await db.doc(`events/${eventId}`).update({
+        islive: false,
+      });
+    }
     return shouldEventRun(eventId).then(async (should: boolean) => {
       if (should) {
         await db
