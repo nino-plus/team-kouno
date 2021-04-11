@@ -77,6 +77,7 @@ export const countUpParticipants = functions
   .region('asia-northeast1')
   .firestore.document('events/{eventId}/participants/{uid}')
   .onCreate(async (snap, context) => {
+    const functionEventId: string = context.eventId;
     const eventId: string = context.params.eventId;
     const participantCount: number = await db
       .doc(`events/${eventId}`)
@@ -84,10 +85,15 @@ export const countUpParticipants = functions
       .then((event) => {
         return event.data()?.participantCount;
       });
-    return shouldEventRun(eventId).then(async (should: boolean) => {
+    functions.logger.info(eventId, 'eventId');
+    functions.logger.info(context, 'event');
+    functions.logger.info(functionEventId, 'functionEventId');
+
+    return shouldEventRun(functionEventId).then(async (should: boolean) => {
       if (should) {
+        functions.logger.info(should, 'should');
         await db
-          .doc(`events/${context.params.eventId}`)
+          .doc(`events/${eventId}`)
           .update('participantCount', admin.firestore.FieldValue.increment(1))
           .then(async () => {
             if (participantCount >= 0) {
@@ -101,7 +107,7 @@ export const countUpParticipants = functions
               );
             }
           });
-        return markEventTried(eventId);
+        return markEventTried(functionEventId);
       } else {
         return;
       }
@@ -112,6 +118,7 @@ export const countDownParticipants = functions
   .region('asia-northeast1')
   .firestore.document('events/{eventId}/participants/{uid}')
   .onDelete(async (snap, context) => {
+    const functionEventId = context.eventId;
     const eventId = context.params.eventId;
     const participantCount: number = await db
       .doc(`events/${eventId}`)
@@ -120,17 +127,25 @@ export const countDownParticipants = functions
         return event.data()?.participantCount;
       });
 
-    if (participantCount <= 1) {
-      await db.doc(`events/${eventId}`).update({
-        islive: false,
-      });
-    }
-    return shouldEventRun(eventId).then(async (should: boolean) => {
+    functions.logger.info(eventId, 'eventId');
+    functions.logger.info(context, 'event');
+    functions.logger.info(functionEventId, 'functionEventId');
+
+    return shouldEventRun(functionEventId).then(async (should: boolean) => {
+      functions.logger.info(should, 'should');
+
       if (should) {
         await db
-          .doc(`events/${context.params.eventId}`)
-          .update('participantCount', admin.firestore.FieldValue.increment(-1));
-        return markEventTried(eventId);
+          .doc(`events/${eventId}`)
+          .update('participantCount', admin.firestore.FieldValue.increment(-1))
+          .then(async () => {
+            if (participantCount <= 1) {
+              await db.doc(`events/${eventId}`).update({
+                islive: false,
+              });
+            }
+          });
+        return markEventTried(functionEventId);
       } else {
         return;
       }
