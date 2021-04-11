@@ -6,6 +6,9 @@ import { Customer } from '../interfaces/customer';
 
 const db = admin.firestore();
 
+/**
+ * 設定フローを作成
+ */
 export const createStripeSetupIntent = functions
   .region('asia-northeast1')
   .https.onCall(
@@ -32,6 +35,9 @@ export const createStripeSetupIntent = functions
     }
   );
 
+/**
+ * 顧客に支払方法を追加
+ */
 export const setStripePaymentMethod = functions
   .region('asia-northeast1')
   .https.onCall(
@@ -129,15 +135,16 @@ export const deleteStripePaymentMethod = functions
           'プラットフォームにカスタマーが存在しません。'
         );
       }
-
+      // Firestoreの顧客情報を更新
       await customerDoc.update({
         paymentMethods: admin.firestore.FieldValue.arrayRemove(data.id),
+        // 支払方法がすべて削除された場合、デフォルトカードの支払方法を空にする
         defaultPaymentMethod:
           customer.paymentMethods?.length > 1
             ? customer.defaultPaymentMethod
             : null,
       });
-
+      // 顧客から支払方法を取り外す
       return stripe.paymentMethods.detach(data.id);
     }
   );

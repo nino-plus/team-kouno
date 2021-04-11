@@ -9,11 +9,12 @@ export const createStripeCustomer = functions
   .region('asia-northeast1')
   .auth.user()
   .onCreate(async (user: admin.auth.UserRecord) => {
+    // Stripe上に顧客を作成
     const customer: Stripe.Customer = await stripe.customers.create({
       name: user.displayName,
       email: user.email,
     });
-
+    // DBに顧客情報を保存
     return db.doc(`customers/${user.uid}`).set({
       userId: user.uid,
       customerId: customer.id,
