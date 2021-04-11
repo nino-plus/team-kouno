@@ -1,7 +1,7 @@
 import * as cryptoRandomString from 'crypto-random-string';
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-import { stripe } from '../stripe/client';
+import { stripe } from './client';
 
 const db = admin.firestore();
 
@@ -89,4 +89,22 @@ export const createStripeConnectedAccount = functions
         return resp.status(500).json({ error: 'An unknown error occurred.' });
       }
     }
+  });
+
+export const getStripeAccountLoginLink = functions
+  .region('asia-northeast1')
+  .https.onCall(async (data, context) => {
+    if (!context.auth) {
+      throw new functions.https.HttpsError(
+        'permission-denied',
+        '認証エラーが発生しました。'
+      );
+    }
+    // Firestoreなどから販売者アカウントIDを取得している
+    const account: any = (
+      await db.doc(`connectedAccounts/${context.auth.uid}`).get()
+    ).data();
+
+    // ポータルサイトのURLを取得
+    return stripe.accounts.createLoginLink(account.connectedAccountId);
   });
