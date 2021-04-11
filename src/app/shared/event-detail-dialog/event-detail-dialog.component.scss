@@ -6,7 +6,7 @@
     position: relative;
   }
   &__body {
-    padding: 8px 0;
+    padding: 8px 16px;
     @include sp {
       padding: 16px;
     }
@@ -58,7 +58,8 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 8px;
-  padding-bottom: 24px;
+  padding: 0 16px;
+  margin-bottom: 24px;
   @include sp {
     padding: 16px;
   }
