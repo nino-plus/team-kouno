@@ -104,8 +104,10 @@ export class EventService {
       .valueChanges()
       .pipe(
         switchMap((events) => {
-          if (events.length === 0) {
+          if (events?.length === 0) {
             return of(null);
+          } else {
+            return of(events);
           }
         })
       );
