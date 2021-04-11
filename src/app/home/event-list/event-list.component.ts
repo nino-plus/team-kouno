@@ -35,7 +35,7 @@ export class EventListComponent implements OnInit {
   popularIndex: SearchIndex = this.searchService.index.popularEvents;
   popularEventLists: Event[] = [];
 
-  onliveEvents$: Observable<Event[]> = this.eventService.getOnliveEvents();
+  onliveEventLists$: Observable<Event[]> = this.eventService.getOnliveEvents();
 
   constructor(
     private eventService: EventService,

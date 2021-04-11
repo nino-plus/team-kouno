@@ -9,11 +9,17 @@
     &--margin {
       margin-bottom: 16px;
     }
+    @include sp {
+      padding: 0 16px;
+    }
   }
   &__text {
     font-size: 24px;
     font-weight: 600;
     color: $color-font;
+    @include sp {
+      font-size: 18px;
+    }
   }
   &__list {
     margin-bottom: 16px;
