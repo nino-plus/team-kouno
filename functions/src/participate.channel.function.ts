@@ -63,6 +63,14 @@ async function addUserToParticipantList(
   }
 
   await db.doc(`events/${eventId}/participants/${currentUserId}`).set(userData);
+  await db.doc(`events/${eventId}`).set(
+    {
+      onlive: true,
+    },
+    {
+      merge: true,
+    }
+  );
 }
 
 export const countUpParticipants = functions
