@@ -77,7 +77,7 @@ export const countUpParticipants = functions
   .region('asia-northeast1')
   .firestore.document('events/{eventId}/participants/{uid}')
   .onCreate(async (snap, context) => {
-    const eventId: string = context.eventId;
+    const eventId: string = context.params.eventId;
     const participantCount: number = await db
       .doc(`events/${eventId}`)
       .get()
