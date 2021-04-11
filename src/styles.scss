@@ -273,7 +273,7 @@ img {
   display: none;
   position: absolute;
   bottom: -8px;
-  z-index: 200;
+  z-index: 20;
   left: 50%;
   transform: translateX(-50%);
   @include sp {
