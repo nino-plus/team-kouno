@@ -82,6 +82,27 @@ export class EventService {
       .valueChanges();
   }
 
+  getEventsByCategoryName(category: string): Observable<Event[]> {
+    return this.db
+      .collection<Event>(`events`, (ref) =>
+        ref
+          .where('exitAt', '>=', this.dateNow)
+          .where('category', '==', category)
+          .orderBy('exitAt', 'desc')
+      )
+      .valueChanges();
+  }
+
+  getOnliveEvents(): Observable<Event[]> {
+    return this.db
+      .collection<Event>(`events`, (ref) =>
+        ref
+          .where('startAt', '<=', this.dateNow)
+          .where('exitAt', '>=', this.dateNow)
+      )
+      .valueChanges();
+  }
+
   getReservedUsers(eventId: string): Observable<User[]> {
     return this.db
       .collection<ReserveUid>(`events/${eventId}/reserveUids`)
