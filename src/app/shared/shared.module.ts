@@ -14,6 +14,8 @@ import { UnfollowDialogComponent } from './unfollow-dialog/unfollow-dialog.compo
 import { RouterModule } from '@angular/router';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserCardComponent } from './user-card/user-card.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { InviteCardComponent } from './invite-card/invite-card.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,8 @@ import { UserCardComponent } from './user-card/user-card.component';
     UnfollowDialogComponent,
     UserListComponent,
     UserCardComponent,
+    ConfirmDialogComponent,
+    InviteCardComponent,
   ],
   imports: [
     CommonModule,
