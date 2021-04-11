@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { CanDeactivate } from '@angular/router';
 import { Observable } from 'rxjs';
-import { StreamComponent } from '../event/stream/stream.component';
+import { EventRoomComponent } from '../event/event-room/event-room.component';
 import { AgoraService } from '../services/agora.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class RoomGuard implements CanDeactivate<StreamComponent> {
+export class RoomGuard implements CanDeactivate<EventRoomComponent> {
   constructor(private agoraService: AgoraService) {}
-  canDeactivate(component: StreamComponent): Observable<boolean> | boolean {
+  canDeactivate(component: EventRoomComponent): Observable<boolean> | boolean {
     if (!component.isJoin) {
       return true;
     } else {
