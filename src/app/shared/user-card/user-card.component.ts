@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AngularFireFunctions } from '@angular/fire/functions';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -8,6 +9,7 @@ import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { MeetingService } from 'src/app/services/meeting.service';
 import { MessagingService } from 'src/app/services/messaging.service';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-user-card',
@@ -25,7 +27,8 @@ export class UserCardComponent implements OnInit {
     private fns: AngularFireFunctions,
     private meetingService: MeetingService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {}
@@ -48,17 +51,29 @@ export class UserCardComponent implements OnInit {
       });
   }
 
-  async call(uid: string, currentUser: User) {
-    const roomId = await this.meetingService.createEmptyRoom(
-      this.authService.uid
-    );
-    this.meetingService.createInvite(uid, roomId, this.authService.uid);
-    const tokens$ = this.messagingService.getTokens(uid);
-    tokens$.pipe(take(1)).subscribe((tokens) => {
-      tokens?.map((token) => this.tokens.push(token?.token));
-      this.sendPushMessage(this.tokens, currentUser, roomId);
-    });
+  call(uid: string, currentUser: User, userName: string) {
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        autoFocus: false,
+        data: {
+          text: `${userName}さんに話しかけますか？`,
+        },
+      })
+      .afterClosed()
+      .subscribe(async (status) => {
+        if (status) {
+          const roomId = await this.meetingService.createEmptyRoom(
+            this.authService.uid
+          );
+          this.meetingService.createInvite(uid, roomId, this.authService.uid);
+          const tokens$ = this.messagingService.getTokens(uid);
+          tokens$.pipe(take(1)).subscribe((tokens) => {
+            tokens?.map((token) => this.tokens.push(token?.token));
+            this.sendPushMessage(this.tokens, currentUser, roomId);
+          });
 
-    this.router.navigate(['meeting', roomId]);
+          this.router.navigate(['meeting', roomId]);
+        }
+      });
   }
 }

@@ -103,27 +103,6 @@
           </app-event-card>
         </div>
       </mat-tab>
-
-      <mat-tab label="ミーティング">
-        <ng-container *ngIf="invites$ | async as invites; else empty">
-          <ul>
-            <li *ngFor="let invite of invites">
-              <p>
-                {{
-                  invite.sender.name
-                }}さんからミーティングの招待が届いています({{
-                  invite.createdAt.toMillis() | date: 'yyyy/MM/dd HH:mm'
-                }})
-              </p>
-              <a mat-button [routerLink]="'/meeting/' + invite.roomId"
-                >参加する</a
-              >
-            </li>
-          </ul>
-        </ng-container>
-
-        <ng-template #empty>招待はありません</ng-template>
-      </mat-tab>
     </mat-tab-group>
   </div>
 </section>

@@ -127,14 +127,12 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
 
     await this.db.doc(`rooms/${this.roomId}`).set(
       {
-        owenerId: this.authService.uid,
         offer,
       },
       { merge: true }
     );
 
     roomRef.onSnapshot((snapshot) => {
-      console.log('Got updated room:', snapshot.data());
       const data = snapshot.data();
       if (!this.peerConnection.currentRemoteDescription && data?.answer) {
         const answer = new RTCSessionDescription(data.answer);

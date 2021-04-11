@@ -66,8 +66,6 @@ export class MyPageComponent implements OnInit, OnDestroy {
     })
   );
 
-  invites$: Observable<InviteWithSender[]>;
-
   screenWidth = window.innerWidth;
 
   constructor(
@@ -141,7 +139,6 @@ export class MyPageComponent implements OnInit, OnDestroy {
         this.followService
           .checkFollowing(this.currentUserUid, this.targetId)
           .then((isFollowing) => (this.isFollowing = isFollowing));
-        this.invites$ = this.meetingService.getInvites(uid);
       });
     this.subscription.add(
       this.userService.getUserData(this.targetId).subscribe((user) => {

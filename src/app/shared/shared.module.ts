@@ -18,6 +18,8 @@ import { RegisterCardDialogComponent } from './register-card-dialog/register-car
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { InviteCardComponent } from './invite-card/invite-card.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import { MatInputModule } from '@angular/material/input';
     UserListComponent,
     UserCardComponent,
     RegisterCardDialogComponent,
+    ConfirmDialogComponent,
+    InviteCardComponent,
   ],
   imports: [
     CommonModule,

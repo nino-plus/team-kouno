@@ -227,6 +227,14 @@ img {
   padding: 16px 20px;
 }
 
+.submit-button {
+  background: $color-main;
+  color: #fff;
+  &:hover {
+    background: $color-accent;
+  }
+}
+
 // swiper config
 .swiper-container {
   overflow: visible;
