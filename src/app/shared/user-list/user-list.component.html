@@ -1,24 +1,26 @@
-<button
-  mat-button
-  (click)="changeListSource('all')"
-  [class.active]="listSource === 'all'"
->
-  すべて
-</button>
-<button
-  mat-button
-  (click)="changeListSource('online')"
-  [class.active]="listSource === 'online'"
->
-  オンライン
-</button>
-<button
-  mat-button
-  (click)="changeListSource('follow')"
-  [class.active]="listSource === 'follow'"
->
-  フォロー
-</button>
+<div class="user-list__heading">
+  <button
+    mat-button
+    (click)="changeListSource('all')"
+    [class.active]="listSource === 'all'"
+  >
+    すべて
+  </button>
+  <button
+    mat-button
+    (click)="changeListSource('online')"
+    [class.active]="listSource === 'online'"
+  >
+    オンライン
+  </button>
+  <button
+    mat-button
+    (click)="changeListSource('follow')"
+    [class.active]="listSource === 'follow'"
+  >
+    フォロー
+  </button>
+</div>
 
 <ng-container [ngSwitch]="listSource">
   <ng-container *ngSwitchCase="'all'">
