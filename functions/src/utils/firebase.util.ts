@@ -13,7 +13,7 @@ const leaseTime = 60 * 1000;
 
 export function shouldEventRun(eventId: string): Promise<boolean> {
   const documentRef = db.collection('functionEvents').doc(eventId);
-  return db.runTransaction((transaction) => {
+  return db.runTransaction(async (transaction) => {
     return transaction.get(documentRef).then((doc) => {
       const data = doc.data();
       if (doc.exists && data && data.tried) {
@@ -63,7 +63,7 @@ function deleteQueryBatch(
   query
     .get()
     .then((snapshot) => {
-      if (snapshot.size == 0) {
+      if (snapshot.size === 0) {
         return 0;
       }
 

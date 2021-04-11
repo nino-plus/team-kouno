@@ -17,6 +17,7 @@ export class EventCardComponent implements OnInit {
   @Input() event: Event;
   @Input() uid: string;
   @Input() type: string;
+  @Input() dbType: string;
   ownerEvents: string[];
 
   constructor(

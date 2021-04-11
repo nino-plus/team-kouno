@@ -236,9 +236,7 @@ img {
 }
 
 // swiper config
-.swiper-container {
-  overflow: visible;
-}
+
 .gallery-top {
   position: relative;
   @include sp {
@@ -248,8 +246,23 @@ img {
 
 .gallery-thumbs {
   position: relative;
+  margin-bottom: 16px;
   @include sp {
     display: none;
+  }
+  &::before {
+    content: '';
+    width: 0;
+    height: 0;
+    display: block;
+    border: 20px solid transparent;
+    border-left: 20px solid #1bcbe0;
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: rotate(-90deg) translateY(-50%);
+    z-index: 50;
+    overflow: visible !important;
   }
 }
 
@@ -262,27 +275,13 @@ img {
   opacity: 1;
   border: 3px solid #1bcbe0;
   position: relative;
-  &::before {
-    content: '';
-    width: 0;
-    height: 0;
-    display: block;
-    border: 20px solid transparent;
-    border-left: 20px solid #1bcbe0;
-    position: absolute;
-    top: -40px;
-    left: 50%;
-    transform: rotate(-90deg) translateY(-50%);
-    z-index: 100;
-    overflow: visible !important;
-  }
 }
 
 .pagination {
   display: none;
   position: absolute;
   bottom: -8px;
-  z-index: 200;
+  z-index: 20;
   left: 50%;
   transform: translateX(-50%);
   @include sp {
