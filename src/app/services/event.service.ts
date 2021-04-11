@@ -101,7 +101,14 @@ export class EventService {
           .orderBy('participantCount', 'desc')
           .limit(6)
       )
-      .valueChanges();
+      .valueChanges()
+      .pipe(
+        switchMap((events) => {
+          if (events.length === 0) {
+            return of(null);
+          }
+        })
+      );
   }
 
   getReservedUsers(eventId: string): Observable<User[]> {
