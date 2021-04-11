@@ -5,7 +5,6 @@ import { EventRoutingModule } from './event-routing.module';
 import { EventComponent } from './event/event.component';
 import { EventRoomComponent } from './event-room/event-room.component';
 import { ChatComponent } from './chat/chat.component';
-import { StreamComponent } from './stream/stream.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -29,7 +28,6 @@ import { EventDetailComponent } from './event-detail/event-detail.component';
     EventComponent,
     EventRoomComponent,
     ChatComponent,
-    StreamComponent,
     EventDetailComponent,
   ],
   imports: [

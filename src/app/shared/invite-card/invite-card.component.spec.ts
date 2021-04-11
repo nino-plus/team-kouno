@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StreamComponent } from './stream.component';
+import { InviteCardComponent } from './invite-card.component';
 
-describe('StreamComponent', () => {
-  let component: StreamComponent;
-  let fixture: ComponentFixture<StreamComponent>;
+describe('InviteCardComponent', () => {
+  let component: InviteCardComponent;
+  let fixture: ComponentFixture<InviteCardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ StreamComponent ]
+      declarations: [ InviteCardComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StreamComponent);
+    fixture = TestBed.createComponent(InviteCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
