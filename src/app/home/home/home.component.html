@@ -66,13 +66,7 @@
     >
       <mat-tab label="イベント一覧">
         <div class="container">
-          <div class="event-grid">
-            <app-event-card
-              *ngFor="let event of eventLists"
-              [event]="event"
-              [uid]="user.uid"
-            ></app-event-card>
-          </div></div
+          <app-event-list [user]="user"></app-event-list></div
       ></mat-tab>
       <mat-tab label="カレンダー">
         <app-event-calendar
@@ -80,7 +74,7 @@
           [uid]="user.uid"
         ></app-event-calendar>
       </mat-tab>
-      <mat-tab label="1on1">
+      <mat-tab label="つながり">
         <div class="container">
           <app-user-list></app-user-list>
         </div>
