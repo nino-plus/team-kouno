@@ -97,8 +97,9 @@ export class EventService {
     return this.db
       .collection<Event>(`events`, (ref) =>
         ref
-          .where('startAt', '<=', this.dateNow)
-          .where('exitAt', '>=', this.dateNow)
+          .where('islive', '==', true)
+          .orderBy('participantCount', 'desc')
+          .limit(6)
       )
       .valueChanges();
   }
