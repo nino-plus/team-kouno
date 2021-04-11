@@ -13,6 +13,7 @@ const searchClient = algoliasearch(
 export class SearchService {
   index = {
     events: searchClient.initIndex('events'),
+    popularEvents: searchClient.initIndex('popular'),
   };
 
   constructor() {}
