@@ -55,7 +55,7 @@
         class="unsubscribe__btn"
         mat-button
         [disabled]="user.name !== input.value"
-        (click)="openDeleteDialog()"
+        (click)="openDeleteDialog(user)"
       >
         退会
       </button>
