@@ -44,6 +44,7 @@ import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AutoOpenLoginMenuComponent } from './auto-open-login-menu/auto-open-login-menu.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { QuillModule } from 'ngx-quill';
 
 registerLocaleData(localeJa);
 
@@ -88,11 +89,12 @@ registerLocaleData(localeJa);
     MatTooltipModule,
     AngularFireMessagingModule,
     AngularFireDatabaseModule,
+    QuillModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the app is stable
       // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
+      registrationStrategy: 'registerWhenStable:30000',
     }),
   ],
   providers: [

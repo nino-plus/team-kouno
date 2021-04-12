@@ -4,6 +4,8 @@
 @import '../node_modules/angular-calendar/css/angular-calendar.css';
 @import 'mixins';
 @import '~swiper/swiper-bundle';
+@import '~quill/dist/quill.core.css';
+@import '~quill/dist/quill.snow.css';
 
 @include mat-core();
 
@@ -344,4 +346,9 @@ img {
   &--prev {
     left: 0;
   }
+}
+
+// quill config
+.ql-editor {
+  padding: 0;
 }
