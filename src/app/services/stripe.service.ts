@@ -11,7 +11,7 @@ import Stripe from 'stripe';
 @Injectable({
   providedIn: 'root',
 })
-export class PaymentService {
+export class StripeService {
   constructor(private fns: AngularFireFunctions) {}
 
   async getStripeClient(): Promise<StripeClient> {
@@ -29,8 +29,10 @@ export class PaymentService {
     name: string,
     email: string
   ): Promise<void> {
+    // 設定フローを作成
     const intent = await this.createStripeSetupIntent();
 
+    // 設定フローに支払方法を添付
     const { setupIntent, error } = await client.confirmCardSetup(
       intent.client_secret,
       {
@@ -63,5 +65,10 @@ export class PaymentService {
     const URL = 'https://connect.stripe.com/express/oauth/authorize';
     // 販売アカウント作成画面へリダイレクト
     location.href = `${URL}?client_id=${environment.stripe.clientId}&state=${state}&suggested_capabilities[]=transfers`;
+  }
+
+  createProductAndPrice(data) {
+    const callable = this.fns.httpsCallable('createStripeProductAndPrice');
+    return;
   }
 }

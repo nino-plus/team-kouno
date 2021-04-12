@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { StripeCardElement, Stripe as StripeClient } from '@stripe/stripe-js';
-import { PaymentService } from 'src/app/services/payment.service';
+import { StripeService } from 'src/app/services/stripe.service';
 
 @Component({
   selector: 'app-register-card-dialog',
@@ -26,12 +26,12 @@ export class RegisterCardDialogComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    public paymentService: PaymentService,
+    public stripeService: StripeService,
     private snackBar: MatSnackBar
   ) {}
 
   async buildForm(): Promise<void> {
-    const stripeClient = await this.paymentService.getStripeClient();
+    const stripeClient = await this.stripeService.getStripeClient();
     const elements = stripeClient.elements();
     this.cardElement = elements.create('card');
     this.cardElement.mount(this.cardElementRef.nativeElement);
@@ -39,7 +39,7 @@ export class RegisterCardDialogComponent implements OnInit {
 
   createCard(): void {
     if (this.form.valid) {
-      this.paymentService.setPaymentMethod(
+      this.stripeService.setPaymentMethod(
         this.stripeClient,
         this.cardElement,
         this.form.value.name,
