@@ -11,10 +11,7 @@
   <mat-dialog-content>
     <div class="event__body">
       <div class="event__date-wrap">
-        <div
-          class="event__date"
-          *ngIf="uiService.dialogType === 'search'; else default"
-        >
+        <div class="event__date" *ngIf="data.type === 'search'; else default">
           <p class="event__startAt">
             {{ data.event.startAt | date: 'M/d(E) HH:mm' }}
           </p>
