@@ -20,6 +20,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { PaymentMethodComponent } from './payment-method/payment-method.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     NotificationsComponent,
     ProfileComponent,
     PrivacyComponent,
+    PaymentMethodComponent,
   ],
   imports: [
     CommonModule,
@@ -46,6 +49,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatTooltipModule,
     MatCheckboxModule,
     MatSlideToggleModule,
+    SharedModule,
   ],
 })
 export class SettingsModule {}

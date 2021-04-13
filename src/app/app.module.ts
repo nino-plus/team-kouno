@@ -44,6 +44,7 @@ import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AutoOpenLoginMenuComponent } from './auto-open-login-menu/auto-open-login-menu.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { Pipes } from './pipes';
 
 registerLocaleData(localeJa);
 
@@ -54,6 +55,7 @@ registerLocaleData(localeJa);
     SearchBoxComponent,
     NotFoundComponent,
     AutoOpenLoginMenuComponent,
+    Pipes,
   ],
   imports: [
     BrowserModule,
@@ -92,7 +94,7 @@ registerLocaleData(localeJa);
       enabled: environment.production,
       // Register the ServiceWorker as soon as the app is stable
       // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
+      registrationStrategy: 'registerWhenStable:30000',
     }),
   ],
   providers: [

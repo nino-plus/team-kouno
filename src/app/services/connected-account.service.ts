@@ -39,14 +39,14 @@ export class ConnectedAccountService {
     private fns: AngularFireFunctions
   ) {}
 
-  async createStripeConnectedAccount() {
+  async createStripeConnectedAccount(): Promise<void> {
     const callable = this.fns.httpsCallable('getStripeConnectedAccountState');
     const state = await callable({}).toPromise();
     const url = 'https://connect.stripe.com/express/oauth/authorize';
     location.href = `${url}?client_id=${environment.stripe.clientId}&state=${state}&suggested_capabilities[]=transfers`;
   }
 
-  async setAccountLoginLink() {
+  async setAccountLoginLink(): Promise<void> {
     const callable = this.fns.httpsCallable('getStripeAccountLoginLink');
     this.accountPortalUrl = await callable({})
       .toPromise()
@@ -69,7 +69,7 @@ export class ConnectedAccountService {
     }).toPromise();
   }
 
-  orderPayout() {
+  orderPayout(): Promise<any> {
     const callable = this.fns.httpsCallable('payoutToStripeAccount');
     return callable({
       stripeAccount: this.connectedAccount.connectedAccountId,

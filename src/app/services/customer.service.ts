@@ -24,23 +24,23 @@ export class CustomerService {
     shareReplay(1)
   );
   stripeCustomer: Stripe.Customer;
-  private stripeCustomerSource$: Observable<Stripe.Customer> = this.customer$.pipe(
-    switchMap((customer) => {
-      if (customer) {
-        const callable = this.fns.httpsCallable('getStripeCustomer');
-        return callable(null);
-      } else {
-        return of(null);
-      }
-    }),
-    tap((customer: Stripe.Customer) => {
-      if (customer) {
-        this.getStripeCustomerPortalURL();
-      } else {
-        this.customerPortalUrl = null;
-      }
-    })
-  );
+  // private stripeCustomerSource$: Observable<Stripe.Customer> = this.customer$.pipe(
+  //   switchMap((customer) => {
+  //     if (customer) {
+  //       const callable = this.fns.httpsCallable('getStripeCustomer');
+  //       return callable(null);
+  //     } else {
+  //       return of(null);
+  //     }
+  //   }),
+  //   tap((customer: Stripe.Customer) => {
+  //     if (customer) {
+  //       this.getStripeCustomerPortalURL();
+  //     } else {
+  //       this.customerPortalUrl = null;
+  //     }
+  //   })
+  // );
 
   constructor(
     private db: AngularFirestore,
@@ -48,25 +48,25 @@ export class CustomerService {
     private fns: AngularFireFunctions,
     private ngZone: NgZone
   ) {
-    this.stripeCustomerSource$.subscribe((customer) => {
-      this.ngZone.run(() => {
-        this.stripeCustomer = customer;
-      });
-    });
+    // this.stripeCustomerSource$.subscribe((customer) => {
+    //   this.ngZone.run(() => {
+    //     this.stripeCustomer = customer;
+    //   });
+    // });
   }
 
-  async getStripeCustomerPortalURL() {
-    const callable = this.fns.httpsCallable('getStripeCustomerPortalURL');
-    this.ngZone.run(async () => {
-      this.customerPortalUrl = await callable({})
-        .toPromise()
-        .catch((error) => {
-          console.error(error);
-        });
-    });
-  }
+  // async getStripeCustomerPortalURL(): Promise<void> {
+  //   const callable = this.fns.httpsCallable('getStripeCustomerPortalURL');
+  //   this.ngZone.run(async () => {
+  //     this.customerPortalUrl = await callable({})
+  //       .toPromise()
+  //       .catch((error) => {
+  //         console.error(error);
+  //       });
+  //   });
+  // }
 
-  getBalance() {
+  getBalance(): Promise<any> {
     const callable = this.fns.httpsCallable('getStripeAccountBalance');
     return callable({}).toPromise();
   }

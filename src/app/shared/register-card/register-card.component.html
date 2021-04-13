@@ -1,0 +1,88 @@
+<mat-nav-list dense *ngIf="customerService.customer$ | async as customer">
+  <h3 matSubheader>マイカード</h3>
+  <mat-list-item *ngIf="loading">読み込み中...</mat-list-item>
+  <mat-list-item *ngIf="methods && !methods.length" disabled
+    >カードはありません</mat-list-item
+  >
+  <mat-list-item *ngFor="let method of methods" (click)="setCardToForm(method)">
+    <span matLine
+      >**** **** **** {{ method.card.last4 }} / {{ method.card.brand }}</span
+    >
+    <span matLine *ngIf="customer.defaultPaymentMethod === method.id"
+      >デフォルト</span
+    >
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="menuRef"
+      *ngIf="customer.defaultPaymentMethod !== method.id"
+    >
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menuRef="matMenu">
+      <button
+        mat-menu-item
+        (click)="paymentService.setDefaultMethod(method.id)"
+      >
+        <mat-icon>credit_card</mat-icon>
+        <span>デフォルトに設定する</span>
+      </button>
+      <button mat-menu-item (click)="deleteStripePaymentMethod(method.id)">
+        <mat-icon>delete</mat-icon>
+        <span>削除</span>
+      </button>
+    </mat-menu>
+  </mat-list-item>
+
+  <mat-divider></mat-divider>
+
+  <h3 matSubheader>テスト用カード</h3>
+  <mat-list-item *ngFor="let mock of mocks" [cdkCopyToClipboard]="mock">
+    <span matLine>正常</span>
+    <span>
+      <mat-icon class="mat-18" inline>content_copy</mat-icon>
+    </span>
+  </mat-list-item>
+  <mat-list-item *ngFor="let mock of errorMocks" [cdkCopyToClipboard]="mock">
+    <span matLine>期限切れ</span>
+    <span>
+      <mat-icon class="mat-18" inline>content_copy</mat-icon>
+    </span>
+  </mat-list-item>
+</mat-nav-list>
+
+<mat-card>
+  <p>
+    テスト環境なので本物のカードを登録することはできません。サイドメニューよりテスト用カードを選択（コピー）して利用してください。名前やメールアドレス、郵便番号はなんでもOKです。
+  </p>
+  <form [formGroup]="form" (ngSubmit)="createCard()">
+    <mat-form-field>
+      <mat-label>名前</mat-label>
+      <input
+        type="text"
+        matInput
+        required
+        formControlName="name"
+        autocomplete="name"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>メール</mat-label>
+      <input
+        type="email"
+        matInput
+        required
+        formControlName="email"
+        autocomplete="email"
+      />
+    </mat-form-field>
+    <div class="card-element" #cardElement></div>
+
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="form.invalid || form.pristine || !isComplete || loading"
+    >
+      保存
+    </button>
+  </form>
+</mat-card>

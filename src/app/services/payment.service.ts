@@ -70,7 +70,7 @@ export class PaymentService {
   }
 
   getPaymentMethods(): Promise<Stripe.ApiList<Stripe.PaymentMethod>> {
-    const callable = this.fns.httpsCallable('getPaymentMethods');
+    const callable = this.fns.httpsCallable('getStripePaymentMethod');
     return callable({}).toPromise();
   }
 
@@ -109,17 +109,17 @@ export class PaymentService {
     }).toPromise();
   }
 
-  restartStripeSubscription(subscriptionId: string) {
+  restartStripeSubscription(subscriptionId: string): Promise<any> {
     const callable = this.fns.httpsCallable('restartStripeSubscription');
     return callable(subscriptionId).toPromise();
   }
 
-  cancelStripeSubscription(subscriptionId: string) {
+  cancelStripeSubscription(subscriptionId: string): Promise<any> {
     const callable = this.fns.httpsCallable('cancelStripeSubscription');
     return callable(subscriptionId).toPromise();
   }
 
-  deleteSubscription(subscriptionId: string) {
+  deleteSubscription(subscriptionId: string): Promise<any> {
     this.snackBar.open('課金を停止しています', null, {
       duration: 2000,
     });
@@ -153,7 +153,7 @@ export class PaymentService {
     return callable(productId).toPromise();
   }
 
-  chargeToConnectedAccount() {
+  chargeToConnectedAccount(): Promise<void> {
     const process = this.snackBar.open('決済開始', null, { duration: null });
     const callable = this.fns.httpsCallable('chargeToConnectedAccount');
     return callable({})
@@ -168,13 +168,10 @@ export class PaymentService {
       .finally(() => process.dismiss());
   }
 
-  setDefaultMethod(id: string): Promise<void> {
+  async setDefaultMethod(id: string): Promise<void> {
     const callable = this.fns.httpsCallable('setStripeDefaultPaymentMethod');
-    return callable({ id })
-      .toPromise()
-      .then(() => {
-        this.snackBar.open('デフォルトのカードに設定しました');
-      });
+    await callable({ id }).toPromise();
+    this.snackBar.open('デフォルトのカードに設定しました');
   }
 
   getCoupons(): Promise<Stripe.Coupon[]> {
