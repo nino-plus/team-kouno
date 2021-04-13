@@ -6,6 +6,8 @@
 @import '~swiper/swiper-bundle';
 @import '~quill/dist/quill.core.css';
 @import '~quill/dist/quill.snow.css';
+@import '~quill/dist/quill.bubble.css';
+@import 'quill-emoji/dist/quill-emoji.css';
 
 @include mat-core();
 
@@ -352,3 +354,26 @@ img {
 .ql-editor {
   padding: 0;
 }
+
+.chat-form {
+  .ql-editor {
+    padding: 12px 40px 12px 8px;
+    background: #eee;
+    border-radius: 40px;
+    position: relative;
+    p {
+      height: 39px;
+    }
+  }
+  .ql-container.ql-snow {
+    border: none;
+  }
+}
+
+// .ql-toolbar {
+//   visibility: hidden;
+//   transition: ease-in-out 0.3s;
+//   background: #eee;
+//   border-radius: 40px;
+//   border: none;
+// }
