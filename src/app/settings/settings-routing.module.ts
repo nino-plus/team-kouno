@@ -5,6 +5,7 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { PaymentMethodComponent } from './payment-method/payment-method.component';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { ProfileComponent } from './profile/profile.component';
+import { PurchaseListComponent } from './purchase-list/purchase-list.component';
 import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
@@ -31,6 +32,10 @@ const routes: Routes = [
       {
         path: 'payment-method',
         component: PaymentMethodComponent,
+      },
+      {
+        path: 'purchase-list',
+        component: PurchaseListComponent,
       },
     ],
   },

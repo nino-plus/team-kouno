@@ -22,6 +22,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { PaymentMethodComponent } from './payment-method/payment-method.component';
 import { SharedModule } from '../shared/shared.module';
+import { PurchaseListComponent } from './purchase-list/purchase-list.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import { SharedModule } from '../shared/shared.module';
     ProfileComponent,
     PrivacyComponent,
     PaymentMethodComponent,
+    PurchaseListComponent,
   ],
   imports: [
     CommonModule,
@@ -50,6 +53,7 @@ import { SharedModule } from '../shared/shared.module';
     MatCheckboxModule,
     MatSlideToggleModule,
     SharedModule,
+    MatProgressSpinnerModule,
   ],
 })
 export class SettingsModule {}
