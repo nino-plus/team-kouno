@@ -3,7 +3,6 @@ import Stripe from 'stripe';
 import * as admin from 'firebase-admin';
 import { stripe } from '../stripe/client';
 import { Customer } from '../interfaces/customer';
-import { ConnectedAccount } from '../interfaces/connected-account';
 const db = admin.firestore();
 
 export const charge = functions.region('asia-northeast1').https.onCall(
@@ -54,46 +53,3 @@ export const charge = functions.region('asia-northeast1').https.onCall(
     }
   }
 );
-
-export const payoutToStripeAccount = functions
-  .region('asia-northeast1')
-  .https.onCall(async (data, context) => {
-    if (!context.auth) {
-      throw new functions.https.HttpsError(
-        'permission-denied',
-        '認証が必要です'
-      );
-    }
-
-    const connectedAccount: ConnectedAccount = (
-      await db.doc(`connectedAccounts/${context.auth.uid}`).get()
-    )?.data() as ConnectedAccount;
-    // 現在の残高を取得
-    const balance = await stripe.balance.retrieve({
-      stripeAccount: connectedAccount.connectedAccountId,
-    });
-
-    // 残高のうち、振込可能な残高を取得
-    const amount: number = balance.available[0].amount;
-
-    // 振込手数料を計算（Stripe手数料と同額）
-    const fee: number = Math.floor((Math.round(amount * 0.0025) + 450) * 1.1);
-
-    // 振込手数料を引いた金額を振込
-    await stripe.payouts.create(
-      {
-        amount: balance.available[0].amount - fee,
-        currency: 'jpy',
-      },
-      {
-        stripeAccount: connectedAccount.connectedAccountId,
-      }
-    );
-
-    // 振込手数料をプラットフォームに転送
-    return stripe.charges.create({
-      amount: fee,
-      currency: 'jpy',
-      source: 'connectedAccount.connectedAccountId',
-    });
-  });

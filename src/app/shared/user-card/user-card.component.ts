@@ -10,6 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { MeetingService } from 'src/app/services/meeting.service';
 import { MessagingService } from 'src/app/services/messaging.service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { UserStoreComponent } from '../user-store/user-store.component';
 
 @Component({
   selector: 'app-user-card',
@@ -51,7 +52,7 @@ export class UserCardComponent implements OnInit {
       });
   }
 
-  call(uid: string, currentUser: User, userName: string) {
+  call(uid: string, currentUser: User, userName: string): void {
     this.dialog
       .open(ConfirmDialogComponent, {
         autoFocus: false,
@@ -75,5 +76,9 @@ export class UserCardComponent implements OnInit {
           this.router.navigate(['meeting', roomId]);
         }
       });
+  }
+
+  openTicketDialog(): void {
+    this.dialog.open(UserStoreComponent);
   }
 }

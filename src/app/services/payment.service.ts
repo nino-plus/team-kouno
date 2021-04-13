@@ -119,16 +119,13 @@ export class PaymentService {
     return callable(subscriptionId).toPromise();
   }
 
-  deleteSubscription(subscriptionId: string): Promise<any> {
+  async deleteSubscription(subscriptionId: string): Promise<any> {
     this.snackBar.open('課金を停止しています', null, {
       duration: 2000,
     });
     const callable = this.fns.httpsCallable('deleteSubscription');
-    return callable(subscriptionId)
-      .toPromise()
-      .then(() => {
-        this.snackBar.open('課金を停止しました');
-      });
+    await callable(subscriptionId).toPromise();
+    this.snackBar.open('課金を停止しました');
   }
 
   deleteStripePaymentMethod(id: string): Promise<void> {

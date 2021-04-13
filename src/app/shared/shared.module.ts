@@ -24,6 +24,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCardModule } from '@angular/material/card';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { UserStoreComponent } from './user-store/user-store.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
     RegisterCardComponent,
     ConfirmDialogComponent,
     InviteCardComponent,
+    UserStoreComponent,
   ],
   imports: [
     CommonModule,
@@ -64,6 +66,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
     UnfollowDialogComponent,
     UserListComponent,
     RegisterCardComponent,
+    UserStoreComponent,
   ],
 })
 export class SharedModule {}

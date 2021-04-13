@@ -15,6 +15,10 @@
 </p>
 
 <div class="card__actions">
+  <button mat-flat-button class="card__btn" (click)="openTicketDialog()">
+    チケット
+  </button>
+
   <button mat-flat-button class="card__btn" [routerLink]="user.uid">
     プロフィール
   </button>
