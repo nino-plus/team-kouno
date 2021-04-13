@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ManagePlansComponent } from '../shared/manage-plans/manage-plans.component';
 import { AccountComponent } from './account/account.component';
 import { NotificationsComponent } from './notifications/notifications.component';
-import { PaymentMethodComponent } from './payment-method/payment-method.component';
+import { PaymentComponent } from './payment/payment.component';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { ProfileComponent } from './profile/profile.component';
-import { PurchaseListComponent } from './purchase-list/purchase-list.component';
 import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
@@ -30,12 +30,12 @@ const routes: Routes = [
         component: PrivacyComponent,
       },
       {
-        path: 'payment-method',
-        component: PaymentMethodComponent,
+        path: 'payment',
+        component: PaymentComponent,
       },
       {
-        path: 'purchase-list',
-        component: PurchaseListComponent,
+        path: 'manage-plans',
+        component: ManagePlansComponent,
       },
     ],
   },

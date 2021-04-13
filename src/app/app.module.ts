@@ -44,7 +44,6 @@ import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AutoOpenLoginMenuComponent } from './auto-open-login-menu/auto-open-login-menu.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { Pipes } from './pipes';
 
 registerLocaleData(localeJa);
 
@@ -55,7 +54,6 @@ registerLocaleData(localeJa);
     SearchBoxComponent,
     NotFoundComponent,
     AutoOpenLoginMenuComponent,
-    Pipes,
   ],
   imports: [
     BrowserModule,

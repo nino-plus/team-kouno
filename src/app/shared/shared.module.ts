@@ -25,6 +25,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatCardModule } from '@angular/material/card';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { UserStoreComponent } from './user-store/user-store.component';
+import { ManagePlansComponent } from './manage-plans/manage-plans.component';
+import { MatSelectModule } from '@angular/material/select';
+import { StripeIntervalPipe } from '../pipes/stripe-interval.pipe';
 
 @NgModule({
   declarations: [
@@ -40,6 +43,8 @@ import { UserStoreComponent } from './user-store/user-store.component';
     ConfirmDialogComponent,
     InviteCardComponent,
     UserStoreComponent,
+    ManagePlansComponent,
+    StripeIntervalPipe,
   ],
   imports: [
     CommonModule,
@@ -57,6 +62,7 @@ import { UserStoreComponent } from './user-store/user-store.component';
     MatMenuModule,
     MatCardModule,
     ClipboardModule,
+    MatSelectModule,
   ],
   exports: [
     EventCardComponent,
@@ -67,6 +73,8 @@ import { UserStoreComponent } from './user-store/user-store.component';
     UserListComponent,
     RegisterCardComponent,
     UserStoreComponent,
+    ManagePlansComponent,
+    StripeIntervalPipe,
   ],
 })
 export class SharedModule {}

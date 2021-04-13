@@ -1,9 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'pipes',
+  name: 'stripeInterval',
 })
-export class Pipes implements PipeTransform {
+export class StripeIntervalPipe implements PipeTransform {
   transform(interval: string): unknown {
     switch (interval) {
       case 'day':

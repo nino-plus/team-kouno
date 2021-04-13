@@ -1,0 +1,13 @@
+:host {
+  display: grid;
+  margin: 24px;
+  grid-template-columns: 320px 1fr;
+}
+
+mat-card {
+  margin-right: 40px;
+}
+
+mat-form-field {
+  display: block;
+}

@@ -42,21 +42,27 @@
               <p>プライバシー</p>
             </a>
             <a
-              routerLink="payment-method"
+              routerLink="payment"
               [routerLinkActive]="['active']"
               mat-list-item
               class="settings__item"
             >
-              <p>お支払い方法</p>
+              <p>お支払い管理</p>
             </a>
             <a
-              routerLink="purchase-list"
+              routerLink="manage-plans"
               [routerLinkActive]="['active']"
               mat-list-item
               class="settings__item"
             >
-              <p>購入履歴</p>
+              <p>チケット作成</p>
             </a>
+            <div
+              (click)="connectedAccountService.createStripeConnectedAccount()"
+            >
+              <mat-icon mat-list-icon>person_add</mat-icon>
+              <span matLine>販売アカウントを作成</span>
+            </div>
           </mat-nav-list>
         </aside>
 

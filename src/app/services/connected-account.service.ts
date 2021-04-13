@@ -21,12 +21,20 @@ export class ConnectedAccountService {
         .doc<ConnectedAccount>(`connectedAccounts/${user.uid}`)
         .valueChanges();
     }),
-    tap((account) => (this.connectedAccount = account)),
+    tap((account) => {
+      console.log(account);
+
+      this.connectedAccount = account;
+    }),
     map((account) => account?.connectedAccountId),
     tap((accountId) => {
       if (accountId) {
+        console.log('true');
+
         this.setAccountLoginLink();
       } else {
+        console.log('false');
+
         this.accountPortalUrl = null;
       }
     }),
