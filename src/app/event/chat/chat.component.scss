@@ -1,35 +1,31 @@
 @import 'custom-style';
-
-mat-form-field {
-  width: 100%;
-  background-color: white;
-}
+@import 'mixins';
 
 .chat {
   height: calc(100vh - 56px - 81px - 40px);
-  padding: 8px 8px 81px;
+  padding: 8px 16px 81px;
   overflow-y: scroll;
   color: $color-font;
   position: relative;
-  width: 300px;
+  width: 344px;
   &__heading {
     color: $color-font;
     text-align: center;
   }
   &__item {
-    padding: 8px 0;
+    padding: 8px 8px;
     display: grid;
     gap: 8px;
-    grid-template-columns: 40px 1fr 40px;
+    grid-template-columns: 24px 1fr 32px;
   }
   &__avatar {
-    width: 40px;
-    height: 40px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     background: center/cover rgba(0, 0, 0, 0.5);
   }
   &__date {
-    font-size: 13px;
+    font-size: 11px;
   }
   &__name {
     font-size: 13px;
@@ -37,13 +33,38 @@ mat-form-field {
     margin-right: 8px;
   }
 }
+
 .chat-form {
+  width: 100%;
   position: absolute;
-  bottom: -13.5px;
-  width: 300px;
+  bottom: 0;
   right: 8px;
   z-index: 10;
+  display: flex;
+  flex-flow: column;
+  padding: 8px;
+  @include sp {
+    display: none;
+  }
+  &__submit {
+    margin: 8px 0 0 auto;
+    opacity: 0.8;
+    cursor: pointer;
+    position: absolute;
+    bottom: 16px;
+    right: 8px;
+  }
+  &__toggle {
+    z-index: 100;
+  }
+  &--sp {
+    display: none;
+    @include sp {
+      display: block;
+    }
+  }
 }
+
 mat-divider {
   margin-right: 8px;
 }

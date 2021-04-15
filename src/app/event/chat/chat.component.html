@@ -11,7 +11,8 @@
           <span class="chat__name">
             {{ chat.user?.name }}
           </span>
-          {{ chat.chatBody }}
+          <quill-view-html [content]="chat.chatBody" theme="snow">
+          </quill-view-html>
         </p>
         <p class="chat__date">
           {{ chat.createdAt.toDate() | date: 'M/d HH:mm' }}
@@ -35,14 +36,60 @@
     </div>
   </div>
 </div>
+
+<div class="chat-form chat-form--sp">
+  <button mat-icon-button (click)="toggleToolBar()">
+    <mat-icon class="cat-form__icon">add_circle</mat-icon>
+  </button>
+  <quill-editor
+    [formControl]="form"
+    [styles]="{ height: '40px', width: '80%' }"
+    [placeholder]="'コメントを入力'"
+  >
+    <div quill-editor-toolbar>
+      <span class="ql-formats">
+        <button class="ql-bold" [title]="'Bold'"></button>
+      </span>
+      <span class="ql-formats">
+        <button class="ql-emoji" [title]="'emoji'"></button>
+      </span>
+      <span class="ql-formats">
+        <button class="ql-link" [title]="'link'"></button>
+      </span>
+      <span class="ql-formats">
+        <button class="ql-image" [title]="'image'"></button>
+      </span>
+      <span class="ql-formats">
+        <button class="ql-video" [title]="'video'"></button>
+      </span>
+    </div>
+  </quill-editor>
+</div>
+
 <div class="chat-form">
-  <mat-form-field appearance="fill">
-    <textarea
-      placeholder="コメントを追加"
-      [formControl]="form"
-      matTextareaAutosize
-      matInput
-    ></textarea>
-    <mat-icon (click)="createChat()" matSuffix>send</mat-icon>
-  </mat-form-field>
+  <quill-editor
+    [formControl]="form"
+    [styles]="{ height: '40px' }"
+    [placeholder]="'コメントを入力'"
+    customToolbarPosition="bottom"
+  >
+    <div quill-editor-toolbar>
+      <span class="ql-formats">
+        <button class="ql-bold" [title]="'Bold'"></button>
+      </span>
+      <span class="ql-formats">
+        <button class="ql-emoji" [title]="'emoji'"></button>
+      </span>
+      <span class="ql-formats">
+        <button class="ql-link" [title]="'link'"></button>
+      </span>
+      <span class="ql-formats">
+        <button class="ql-image" [title]="'image'"></button>
+      </span>
+      <span class="ql-formats">
+        <button class="ql-video" [title]="'video'"></button>
+      </span>
+    </div>
+    <mat-icon class="chat-form__submit" (click)="createChat()">send</mat-icon>
+  </quill-editor>
 </div>
