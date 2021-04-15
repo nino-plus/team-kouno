@@ -359,14 +359,20 @@ img {
   .ql-editor {
     padding: 12px 40px 12px 8px;
     background: #eee;
-    border-radius: 40px;
-    position: relative;
+    @include sp {
+      border-radius: 40px;
+      position: relative;
+    }
     p {
       height: 39px;
     }
   }
   .ql-container.ql-snow {
     border: none;
+  }
+  .ql-toolbar.ql-snow {
+    border: none;
+    background: #eee;
   }
 }
 
