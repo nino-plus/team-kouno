@@ -44,6 +44,9 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
   isRemoteMute: boolean;
   isOwner: boolean;
 
+  isPublishVideo: boolean;
+  isPublishMicrophone: boolean;
+
   readonly roomId = this.route.snapshot.paramMap.get('roomId');
   room$: Observable<Room> = this.meetingService.getRoom(this.roomId);
   room: Room;
@@ -191,6 +194,7 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
       });
     });
 
+    this.isCreateRoom = true;
     this.detectClosed();
   }
 
@@ -289,4 +293,12 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
       }
     };
   }
+
+  publishVideo() {}
+
+  unPublishVideo() {}
+
+  publishAudio() {}
+
+  unPublishAudio() {}
 }

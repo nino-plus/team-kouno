@@ -107,7 +107,6 @@ app-stream {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
   border-radius: 30px;
   &__btn {
     width: 48px;
@@ -122,6 +121,9 @@ app-stream {
     position: relative;
     cursor: pointer;
     z-index: 0;
+    & + & {
+      margin-left: 16px;
+    }
     &:before {
       content: '';
       width: 100%;
