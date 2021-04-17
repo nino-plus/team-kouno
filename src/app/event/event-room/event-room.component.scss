@@ -8,19 +8,32 @@
   margin-top: 16px;
   position: relative;
   color: $color-font;
+  @include sp {
+    margin-top: 0;
+  }
   &__title {
     font-size: 24px;
+    @include sp {
+      font-size: 14px;
+    }
   }
   &__count {
     font-size: 12px;
     margin-left: 8px;
+    @include sp {
+      font-size: 10px;
+    }
   }
 }
 
 .drawer-container {
   width: 100%;
-  height: calc(100vh - 56px - 81px - 40px);
+  height: calc(100vh - 64px - 52px - 68px);
   padding: 8px 16px 0;
+  @include sp {
+    padding: 0;
+    height: calc(100vh - 56px - 81px);
+  }
 }
 
 app-stream {
@@ -103,12 +116,15 @@ app-stream {
   // transform: translateY(17%) translateX(-50%);
   // -webkit-transform: translateY(17%) translateX(-50%);
   /* width: 100%; */
-  padding: 10px;
+  padding: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 16px;
   border-radius: 30px;
+  // @include sp {
+  //   padding: 8px;
+  // }
   &__btn {
     width: 48px;
     height: 48px;
@@ -122,6 +138,10 @@ app-stream {
     position: relative;
     cursor: pointer;
     z-index: 0;
+    @include sp {
+      width: 40px;
+      height: 40px;
+    }
     &:before {
       content: '';
       width: 100%;
