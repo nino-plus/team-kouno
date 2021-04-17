@@ -1,7 +1,6 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
-import { MatDrawer } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -62,16 +61,6 @@ export class EventRoomComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.isJoin) {
       this.agoraService.leaveAgoraChannel(this.eventId);
-    }
-  }
-
-  onOpenedChange(event): void {
-    console.log(event);
-
-    if (event) {
-      setTimeout(() => {
-        this.uiService.target.nativeElement.scrollIntoView(false);
-      }, 1000);
     }
   }
 
