@@ -1,10 +1,19 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { ChatWithUser } from 'src/app/interfaces/chat';
 import { AuthService } from 'src/app/services/auth.service';
 import { ChatService } from 'src/app/services/chat.service';
 import 'quill-emoji/dist/quill-emoji.js';
+import { UiService } from 'src/app/services/ui.service';
+import { shareReplay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chat',
@@ -13,6 +22,7 @@ import 'quill-emoji/dist/quill-emoji.js';
 })
 export class ChatComponent implements OnInit {
   @Input() eventId: string;
+  @ViewChild('target') target: ElementRef;
   uid = this.authService.uid;
   form = new FormControl();
   chats$: Observable<ChatWithUser[]>;
@@ -20,8 +30,26 @@ export class ChatComponent implements OnInit {
 
   constructor(
     private chatService: ChatService,
-    private authService: AuthService
+    private authService: AuthService,
+    private uiService: UiService
   ) {}
+
+  ngOnInit(): void {
+    this.chats$ = this.chatService.getChatsWithUser(this.eventId);
+    this.chats$.pipe(shareReplay(1)).subscribe(() => {
+      if (this.uiService.isOpen) {
+        setTimeout(() => {
+          this.target.nativeElement.scrollIntoView(false);
+        }, 1000);
+      }
+    });
+  }
+
+  // ngAfterViewInit(): void {
+  //   setTimeout(() => {
+  //     this.target.nativeElement.scrollIntoView(false);
+  //   }, 1000);
+  // }
 
   toggleToolBar() {
     this.isShow = !this.isShow;
@@ -39,25 +67,4 @@ export class ChatComponent implements OnInit {
   deleteChat(chatId): void {
     this.chatService.deleteChat(this.eventId, chatId);
   }
-
-  ngOnInit(): void {
-    this.chats$ = this.chatService.getChatsWithUser(this.eventId);
-  }
-
-  // onSelectionChanged = (event) => {
-  //   if (event.oldRange == null) {
-  //     this.onFocus(event);
-  //   }
-  //   if (event.range == null) {
-  //     this.onBlur(event);
-  //   }
-  // };
-
-  // onFocus(event) {
-  //   event.editor.theme.modules.toolbar.container.style.visibility = 'visible';
-  // }
-
-  // onBlur(event) {
-  //   event.editor.theme.modules.toolbar.container.style.visibility = 'hidden';
-  // }
 }

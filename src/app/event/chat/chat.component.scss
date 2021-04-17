@@ -2,12 +2,16 @@
 @import 'mixins';
 
 .chat {
-  height: calc(100vh - 56px - 81px - 40px);
-  padding: 8px 16px 81px;
+  height: calc(100vh - 64px - 52px - 68px - 96px);
+  padding: 8px 16px;
   overflow-y: scroll;
   color: $color-font;
   position: relative;
   width: 344px;
+  @include sp {
+    width: 100vw;
+    height: calc(100vh - 56px - 21px - 48px - 68px);
+  }
   &__heading {
     color: $color-font;
     text-align: center;
@@ -36,23 +40,43 @@
 
 .chat-form {
   width: 100%;
-  position: absolute;
-  bottom: 0;
-  right: 8px;
-  z-index: 10;
+  position: relative;
   display: flex;
   flex-flow: column;
-  padding: 8px;
+  padding: 8px 16px 0;
   @include sp {
     display: none;
+    padding: 8px 16px;
   }
   &__submit {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-size: 16px;
     margin: 8px 0 0 auto;
     opacity: 0.8;
     cursor: pointer;
     position: absolute;
-    bottom: 16px;
-    right: 8px;
+    bottom: 52px;
+    right: 24px;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    transform: rotate(-30deg);
+    @include sp {
+      display: none;
+    }
+    &--sp {
+      display: none;
+      @include sp {
+        background: #fff;
+        color: $color-font;
+        display: block;
+        bottom: 12px;
+      }
+    }
   }
   &__toggle {
     z-index: 100;
