@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { tap } from 'rxjs/operators';
 import { ConnectedAccountService } from 'src/app/services/connected-account.service';
 import { PaymentService } from 'src/app/services/payment.service';
+import { ProductService } from 'src/app/services/product.service';
 import Stripe from 'stripe';
 
 @Component({
@@ -10,28 +13,32 @@ import Stripe from 'stripe';
   styleUrls: ['./user-store.component.scss'],
 })
 export class UserStoreComponent implements OnInit {
-  items: Stripe.Price[];
+  // items: Stripe.Price[];
+  items = this.productService.getActiveProducts(this.data.userId);
 
   constructor(
     private paymentService: PaymentService,
     private connectedaccountService: ConnectedAccountService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private productService: ProductService,
+    @Inject(MAT_DIALOG_DATA) public data: { userId: string }
   ) {}
 
   ngOnInit(): void {
-    this.getAllPrices();
+    // this.getUserPrices();
   }
 
-  private getAllPrices(): void {
-    this.paymentService.getStripePricesFromConnectedAccount().then((res) => {
-      this.items = res.filter((item) => !item.recurring);
-    });
-  }
+  // private getUserPrices(): void {
+  //   this.paymentService
+  //     .getStripePricesFromUserId(this.data.userId)
+  //     .then((res) => {
+  //       console.log(res);
 
-  charge(id: string): void {
-    this.paymentService.charge(
-      id,
-      this.connectedaccountService.connectedAccount.connectedAccountId
-    );
+  //       this.items = res.filter((item) => !item.recurring);
+  //     });
+  // }
+
+  charge(item): void {
+    this.paymentService.charge(item);
   }
 }

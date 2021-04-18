@@ -79,7 +79,7 @@ export const createStripeConnectedAccount = functions
       });
 
       // 実際には環境変数を使うなどしてリダイレクト先のホストを本番環境に向ける
-      resp.redirect(`https://eventstand-3c145.web.app/`);
+      resp.redirect(`http://localhost:4200`);
       return;
     } catch (err) {
       if (err.type === 'StripeInvalidGrantError') {
@@ -101,6 +101,7 @@ export const getStripeAccountLoginLink = functions
         '認証エラーが発生しました。'
       );
     }
+
     // Firestoreなどから販売者アカウントIDを取得している
     const account: any = (
       await db.doc(`connectedAccounts/${context.auth.uid}`).get()
@@ -115,44 +116,6 @@ export const getStripeAccountLoginLink = functions
 
     // ポータルサイトのURLを取得
     return stripe.accounts.createLoginLink(account.connectedAccountId);
-  });
-
-export const getStripePricesFromConnectedAccount = functions
-  .region('asia-northeast1')
-  .https.onCall(async (data, context) => {
-    if (!context.auth) {
-      throw new functions.https.HttpsError(
-        'permission-denied',
-        '認証が必要です'
-      );
-    }
-
-    const connectedAccount: ConnectedAccount = (
-      await db.doc(`connectedAccounts/${context.auth.uid}`).get()
-    )?.data() as ConnectedAccount;
-
-    if (!connectedAccount) {
-      throw new functions.https.HttpsError(
-        'unauthenticated',
-        '販売アカウントが存在しません'
-      );
-    }
-
-    if (!connectedAccount.products || !connectedAccount.products.length) {
-      return null;
-    }
-
-    return Promise.all(
-      connectedAccount.products.map((product) => {
-        return stripe.prices
-          .list({
-            active: true,
-            product,
-            expand: ['data.product'],
-          })
-          .then((res) => res.data && res.data[0]);
-      })
-    );
   });
 
 export const getStripeAccountBalance = functions

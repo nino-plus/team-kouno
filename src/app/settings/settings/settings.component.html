@@ -57,12 +57,12 @@
             >
               <p>チケット作成</p>
             </a>
-            <div
+            <a
               (click)="connectedAccountService.createStripeConnectedAccount()"
+              mat-list-item
             >
-              <mat-icon mat-list-icon>person_add</mat-icon>
-              <span matLine>販売アカウントを作成</span>
-            </div>
+              販売アカウントを作成
+            </a>
           </mat-nav-list>
         </aside>
 

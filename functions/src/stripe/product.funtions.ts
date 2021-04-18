@@ -40,13 +40,39 @@ export const createStripeProductAndPrice = functions
       };
 
       // 価格を作成
-      await stripe.prices.create(params);
+      let createdPricesRef: any;
+      await stripe.prices
+        .create(params)
+        .then((res) => (createdPricesRef = res));
 
       // 商品データベースに追加
-      return db.doc(`products/${product.id}`).set({
+      return db.doc(`/products/${product.id}`).set({
         id: product.id,
         name: data.name,
         userId: context.auth.uid,
+        price: data.amount,
+        priceId: createdPricesRef.id,
+        active: true,
       });
     }
   );
+
+export const deleteStripePrice = functions
+  .region('asia-northeast1')
+  .https.onCall(async (id: string, context) => {
+    if (!context.auth) {
+      throw new functions.https.HttpsError('permission-denied', 'not user');
+    }
+
+    if (!id) {
+      throw new functions.https.HttpsError('data-loss', 'data loss');
+    }
+
+    await stripe.prices.update(id, {
+      active: false,
+    });
+
+    return db.doc(`createdAccounts/${context.auth.uid}`).update({
+      products: admin.firestore.FieldValue.arrayRemove(id),
+    });
+  });

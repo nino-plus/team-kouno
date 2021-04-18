@@ -2,7 +2,7 @@ import { environment } from 'src/environments/environment';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { switchMap, tap, shareReplay, map } from 'rxjs/operators';
+import { switchMap, shareReplay } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ConnectedAccount } from '@interfaces/connected-account';
@@ -14,29 +14,12 @@ import { TransferWithCharge } from '../interfaces/transfer';
 })
 export class ConnectedAccountService {
   accountPortalUrl: string;
-  connectedAccount: ConnectedAccount;
-  connectedAccountId$: Observable<string> = this.afAuth.user.pipe(
+  connectedAccountId = [];
+  connectedAccountId$: Observable<ConnectedAccount> = this.afAuth.user.pipe(
     switchMap((user) => {
       return this.db
         .doc<ConnectedAccount>(`connectedAccounts/${user.uid}`)
         .valueChanges();
-    }),
-    tap((account) => {
-      console.log(account);
-
-      this.connectedAccount = account;
-    }),
-    map((account) => account?.connectedAccountId),
-    tap((accountId) => {
-      if (accountId) {
-        console.log('true');
-
-        this.setAccountLoginLink();
-      } else {
-        console.log('false');
-
-        this.accountPortalUrl = null;
-      }
     }),
     shareReplay(1)
   );
@@ -45,7 +28,12 @@ export class ConnectedAccountService {
     private afAuth: AngularFireAuth,
     private db: AngularFirestore,
     private fns: AngularFireFunctions
-  ) {}
+  ) {
+    this.connectedAccountId$.subscribe((account) => {
+      this.connectedAccountId.push(account.connectedAccountId);
+      console.log(this.connectedAccountId);
+    });
+  }
 
   async createStripeConnectedAccount(): Promise<void> {
     const callable = this.fns.httpsCallable('getStripeConnectedAccountState');
@@ -63,24 +51,30 @@ export class ConnectedAccountService {
 
   async getStripeTransfers(): Promise<TransferWithCharge[]> {
     const callable = this.fns.httpsCallable('getStripeTransfers');
-    return callable({
-      stripeAccount: this.connectedAccount.connectedAccountId,
-    })
-      .toPromise()
-      .then((res) => res.data as TransferWithCharge[]);
+    if (this.connectedAccountId[0]) {
+      console.log(this.connectedAccountId[0]);
+
+      return callable({
+        stripeAccount: this.connectedAccountId[0],
+      })
+        .toPromise()
+        .then((res) => res.data as TransferWithCharge[]);
+    }
   }
 
   getBalance(): Promise<Stripe.Balance> {
+    console.log(this.connectedAccountId[0]);
     const callable = this.fns.httpsCallable('getStripeAccountBalance');
     return callable({
-      stripeAccount: this.connectedAccount.connectedAccountId,
+      stripeAccount: this.connectedAccountId[0],
     }).toPromise();
   }
 
   orderPayout(): Promise<any> {
+    console.log(this.connectedAccountId[0]);
     const callable = this.fns.httpsCallable('payoutToStripeAccount');
     return callable({
-      stripeAccount: this.connectedAccount.connectedAccountId,
+      stripeAccount: this.connectedAccountId[0],
     }).toPromise();
   }
 }

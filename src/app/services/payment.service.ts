@@ -9,14 +9,21 @@ import {
 } from '@stripe/stripe-js';
 import Stripe from 'stripe';
 import { PriceWithProduct } from '../interfaces/price';
+import { ConnectedAccountService } from './connected-account.service';
+import { ProductService } from './product.service';
+import { Product } from '../interfaces/product';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PaymentService {
+  connectedAccountId = this.connectedAccountService.connectedAccountId;
+
   constructor(
     private fns: AngularFireFunctions,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private connectedAccountService: ConnectedAccountService,
+    private productService: ProductService
   ) {}
 
   async getStripeClient(): Promise<StripeClient> {
@@ -29,7 +36,7 @@ export class PaymentService {
   }
 
   // getStripePricesFromPlatform(): Promise<PriceWithProduct[]> {
-  //   const callable = this.fns.httpsCallable('getStripePrices');
+  //   const callable = this.fns.httpsCallable('getStripePricesFromPlatform');
 
   //   return Promise.all(
   //     environment.plans.map((plan) =>
@@ -74,17 +81,21 @@ export class PaymentService {
     return callable({}).toPromise();
   }
 
-  async charge(priceId: string, connectedAccountId?: string): Promise<void> {
+  async charge(product: Product): Promise<void> {
     const callable = this.fns.httpsCallable('payStripeProduct');
     const process = this.snackBar.open('決済を開始します', null, {
       duration: null,
     });
+    console.log(this.connectedAccountId);
+
     return callable({
-      priceId,
-      connectedAccountId,
+      priceId: product.priceId,
+      connectedAccountId: this.connectedAccountId,
     })
       .toPromise()
       .then(() => {
+        const updateData = { active: false };
+        this.productService.updateProductByProductId(product.id, updateData);
         this.snackBar.open('決済成功');
       })
       .catch((error) => {
@@ -96,41 +107,14 @@ export class PaymentService {
       });
   }
 
-  async createStripeSubscription(
-    priceId: string,
-    couponId?: string,
-    stripeAccount?: string
-  ): Promise<void> {
-    const callable = this.fns.httpsCallable('createStripeSubscription');
-    return callable({
-      priceId,
-      couponId,
-      stripeAccount,
-    }).toPromise();
-  }
-
-  restartStripeSubscription(subscriptionId: string): Promise<any> {
-    const callable = this.fns.httpsCallable('restartStripeSubscription');
-    return callable(subscriptionId).toPromise();
-  }
-
-  cancelStripeSubscription(subscriptionId: string): Promise<any> {
-    const callable = this.fns.httpsCallable('cancelStripeSubscription');
-    return callable(subscriptionId).toPromise();
-  }
-
-  async deleteSubscription(subscriptionId: string): Promise<any> {
-    this.snackBar.open('課金を停止しています', null, {
-      duration: 2000,
-    });
-    const callable = this.fns.httpsCallable('deleteSubscription');
-    await callable(subscriptionId).toPromise();
-    this.snackBar.open('課金を停止しました');
-  }
-
   deleteStripePaymentMethod(id: string): Promise<void> {
     const callable = this.fns.httpsCallable('deleteStripePaymentMethod');
     return callable({ id }).toPromise();
+  }
+
+  getStripePricesFromUserId(userId): Promise<Stripe.Price[]> {
+    const callable = this.fns.httpsCallable('getStripePricesFromUserId');
+    return callable(userId).toPromise();
   }
 
   getStripePricesFromConnectedAccount(): Promise<Stripe.Price[]> {

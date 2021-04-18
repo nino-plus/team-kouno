@@ -78,7 +78,11 @@ export class UserCardComponent implements OnInit {
       });
   }
 
-  openTicketDialog(): void {
-    this.dialog.open(UserStoreComponent);
+  openTicketDialog(uid: string): void {
+    this.dialog.open(UserStoreComponent, {
+      data: {
+        userId: uid,
+      },
+    });
   }
 }

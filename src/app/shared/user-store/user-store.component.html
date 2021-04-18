@@ -1,9 +1,9 @@
 <mat-list>
   <h3 matSubheader>商品一覧</h3>
-  <mat-list-item *ngFor="let item of items">
-    <span matLine>{{ item.nickname }}</span>
-    <span matLine>{{ item.unit_amount | number }}円</span>
-    <button mat-raised-button color="primary" (click)="charge(item.id)">
+  <mat-list-item *ngFor="let item of items | async">
+    <span matLine>{{ item.name }}</span>
+    <span matLine>{{ item.price | number }}円</span>
+    <button mat-raised-button color="primary" (click)="charge(item)">
       購入
     </button>
   </mat-list-item>
