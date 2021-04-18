@@ -1,35 +1,35 @@
 @import 'custom-style';
-
-mat-form-field {
-  width: 100%;
-  background-color: white;
-}
+@import 'mixins';
 
 .chat {
-  height: calc(100vh - 56px - 81px - 40px);
-  padding: 8px 8px 81px;
+  height: calc(100vh - 64px - 52px - 68px - 96px);
+  padding: 8px 16px;
   overflow-y: scroll;
   color: $color-font;
   position: relative;
-  width: 300px;
+  width: 344px;
+  @include sp {
+    width: 100vw;
+    height: calc(100vh - 56px - 21px - 48px - 68px);
+  }
   &__heading {
     color: $color-font;
     text-align: center;
   }
   &__item {
-    padding: 8px 0;
+    padding: 8px 8px;
     display: grid;
     gap: 8px;
-    grid-template-columns: 40px 1fr 40px;
+    grid-template-columns: 24px 1fr 32px;
   }
   &__avatar {
-    width: 40px;
-    height: 40px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     background: center/cover rgba(0, 0, 0, 0.5);
   }
   &__date {
-    font-size: 13px;
+    font-size: 11px;
   }
   &__name {
     font-size: 13px;
@@ -37,13 +37,58 @@ mat-form-field {
     margin-right: 8px;
   }
 }
+
 .chat-form {
-  position: absolute;
-  bottom: -13.5px;
-  width: 300px;
-  right: 8px;
-  z-index: 10;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-flow: column;
+  padding: 8px 16px 0;
+  @include sp {
+    display: none;
+    padding: 8px 16px;
+  }
+  &__submit {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-size: 16px;
+    margin: 8px 0 0 auto;
+    opacity: 0.8;
+    cursor: pointer;
+    position: absolute;
+    bottom: 52px;
+    right: 24px;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    transform: rotate(-30deg);
+    @include sp {
+      display: none;
+    }
+    &--sp {
+      display: none;
+      @include sp {
+        background: #fff;
+        color: $color-font;
+        display: block;
+        bottom: 12px;
+      }
+    }
+  }
+  &__toggle {
+    z-index: 100;
+  }
+  &--sp {
+    display: none;
+    @include sp {
+      display: block;
+    }
+  }
 }
+
 mat-divider {
   margin-right: 8px;
 }
