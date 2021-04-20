@@ -11,6 +11,7 @@ import { switchMap, map, take, filter } from 'rxjs/operators';
 import { User } from '../interfaces/user';
 import { UserService } from './user.service';
 import { AngularFireFunctions } from '@angular/fire/functions';
+import { Log } from '../interfaces/log';
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +30,8 @@ export class EventService {
 
   async createEvent(
     event: Omit<Event, 'eventId' | 'thumbnailURL' | 'updatedAt'>,
-    thumbnailURL: string
+    thumbnailURL: string,
+    uid: string
   ): Promise<void> {
     const id = this.db.createId();
     const image = await this.setThumbnailToStorage(id, thumbnailURL);
@@ -45,6 +47,12 @@ export class EventService {
         this.snackBar.open('イベントを作成しました！');
         this.router.navigateByUrl('/');
       });
+    await this.db.doc<Log>(`users/${uid}/logs/${id}`).set({
+      uid,
+      logId: id,
+      createdAt: firebase.firestore.Timestamp.now(),
+      type: 'create',
+    });
   }
 
   async setThumbnailToStorage(eventId: string, file: string): Promise<string> {

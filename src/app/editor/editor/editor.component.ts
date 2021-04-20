@@ -113,12 +113,12 @@ export class EditorComponent implements OnInit {
     if (!this.event) {
       if (this.imageFile !== undefined) {
         await this.eventService
-          .createEvent(eventData, this.imageFile)
+          .createEvent(eventData, this.imageFile, this.uid)
           .finally(() => (this.isProcessing = false));
       } else {
         const defaultImage = 'assets/images/default-image.jpg';
         await this.eventService
-          .createEvent(eventData, defaultImage)
+          .createEvent(eventData, defaultImage, this.uid)
           .finally(() => (this.isProcessing = false));
       }
     } else {
