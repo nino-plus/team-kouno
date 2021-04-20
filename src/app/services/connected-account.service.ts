@@ -31,7 +31,6 @@ export class ConnectedAccountService {
   ) {
     this.connectedAccountId$.subscribe((account) => {
       this.connectedAccountId.push(account.connectedAccountId);
-      console.log(this.connectedAccountId);
     });
   }
 
@@ -52,8 +51,6 @@ export class ConnectedAccountService {
   async getStripeTransfers(): Promise<TransferWithCharge[]> {
     const callable = this.fns.httpsCallable('getStripeTransfers');
     if (this.connectedAccountId[0]) {
-      console.log(this.connectedAccountId[0]);
-
       return callable({
         stripeAccount: this.connectedAccountId[0],
       })
@@ -63,7 +60,6 @@ export class ConnectedAccountService {
   }
 
   getBalance(): Promise<Stripe.Balance> {
-    console.log(this.connectedAccountId[0]);
     const callable = this.fns.httpsCallable('getStripeAccountBalance');
     return callable({
       stripeAccount: this.connectedAccountId[0],
@@ -71,10 +67,15 @@ export class ConnectedAccountService {
   }
 
   orderPayout(): Promise<any> {
-    console.log(this.connectedAccountId[0]);
     const callable = this.fns.httpsCallable('payoutToStripeAccount');
     return callable({
       stripeAccount: this.connectedAccountId[0],
     }).toPromise();
+  }
+
+  getConnectedAccount(uid: string): Observable<ConnectedAccount> {
+    return this.db
+      .doc<ConnectedAccount>(`connectedAccounts/${uid}`)
+      .valueChanges();
   }
 }

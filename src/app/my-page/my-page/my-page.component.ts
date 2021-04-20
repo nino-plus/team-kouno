@@ -16,6 +16,12 @@ import { FollowingsDialogComponent } from '../followings-dialog/followings-dialo
 import { MeetingService } from 'src/app/services/meeting.service';
 import { InviteWithSender } from 'src/app/intefaces/invite';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { CustomerService } from 'src/app/services/customer.service';
+import { Customer } from 'src/app/interfaces/customer';
+import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
+import { MessagingService } from 'src/app/services/messaging.service';
+import { AngularFireFunctions } from '@angular/fire/functions';
+import { UserStoreComponent } from 'src/app/shared/user-store/user-store.component';
 
 @Component({
   selector: 'app-my-page',
@@ -66,7 +72,11 @@ export class MyPageComponent implements OnInit, OnDestroy {
     })
   );
 
+  isReserveOneOnOneBtn?: boolean = this.route.snapshot.queryParams.reserve;
+  customer$: Observable<Customer>;
+
   screenWidth = window.innerWidth;
+  tokens: string[] = [];
 
   constructor(
     private authService: AuthService,
@@ -76,8 +86,11 @@ export class MyPageComponent implements OnInit, OnDestroy {
     private followService: UserFollowService,
     private dialog: MatDialog,
     private router: Router,
+    private afAuth: AngularFireAuth,
+    private customerService: CustomerService,
     private meetingService: MeetingService,
-    private afAuth: AngularFireAuth
+    private messagingService: MessagingService,
+    private fns: AngularFireFunctions
   ) {
     this.followers$.subscribe((users) => {
       this.followers = users;
@@ -136,6 +149,7 @@ export class MyPageComponent implements OnInit, OnDestroy {
       .toPromise()
       .then((uid) => {
         this.currentUserUid = uid;
+        this.customer$ = this.customerService.getCustomer(uid);
         this.followService
           .checkFollowing(this.currentUserUid, this.targetId)
           .then((isFollowing) => (this.isFollowing = isFollowing));
@@ -147,6 +161,58 @@ export class MyPageComponent implements OnInit, OnDestroy {
         }
       })
     );
+  }
+
+  async sendPushMessage(
+    tokens: string[],
+    currentUser: User,
+    roomId: string
+  ): Promise<void> {
+    const callable = this.fns.httpsCallable('sendPushMessage');
+    return callable({
+      tokens,
+      icon: currentUser.avatarURL,
+      name: currentUser.name,
+      roomId,
+    })
+      .toPromise()
+      .then(() => {
+        this.messagingService.receiveMessage();
+      });
+  }
+
+  call(uid: string, currentUser: User, userName: string): void {
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        autoFocus: false,
+        data: {
+          text: `${userName}さんに話しかけますか？`,
+        },
+      })
+      .afterClosed()
+      .subscribe(async (status) => {
+        if (status) {
+          const roomId = await this.meetingService.createEmptyRoom(
+            this.authService.uid
+          );
+          this.meetingService.createInvite(uid, roomId, this.authService.uid);
+          const tokens$ = this.messagingService.getTokens(uid);
+          tokens$.pipe(take(1)).subscribe((tokens) => {
+            tokens?.map((token) => this.tokens.push(token?.token));
+            this.sendPushMessage(this.tokens, currentUser, roomId);
+          });
+
+          this.router.navigate(['meeting', roomId]);
+        }
+      });
+  }
+
+  openTicketDialog(uid: string): void {
+    this.dialog.open(UserStoreComponent, {
+      data: {
+        userId: uid,
+      },
+    });
   }
 
   ngOnDestroy(): void {

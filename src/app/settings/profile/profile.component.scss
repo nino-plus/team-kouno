@@ -30,6 +30,24 @@
   &__name {
     font-size: 24px;
   }
+  &__ticket-wrap {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+  &__ticket-account-btn {
+    height: 50px;
+    margin-bottom: 12px;
+  }
+  &__ticket {
+    cursor: pointer;
+    color: #1bcbe0;
+    text-decoration: underline;
+    &:hover {
+      text-decoration: none;
+    }
+  }
   &__property {
     display: grid;
     grid-template-columns: 120px 1fr;

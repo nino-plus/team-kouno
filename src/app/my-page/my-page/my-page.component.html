@@ -6,7 +6,38 @@
       </div>
 
       <div class="my-page__body" *ngIf="currentUser$ | async as currentUser">
-        <p class="my-page__name">{{ user.name }}</p>
+        <div class="my-page__name-box">
+          <p class="my-page__name">
+            {{ user.name }}
+          </p>
+          <ng-container *ngIf="user.uid !== currentUserUid; else edit">
+            <button
+              mat-button
+              *ngIf="!isFollowing"
+              class="my-page__follow-button"
+              (click)="follow()"
+            >
+              フォローする
+            </button>
+            <button
+              mat-button
+              *ngIf="isFollowing"
+              class="my-page__following-button"
+              (click)="openUnFollowDialog()"
+            >
+              フォロー中
+            </button>
+          </ng-container>
+          <ng-template #edit>
+            <div class="my-page__edit">
+              <ng-container *ngIf="user.uid === currentUserUid">
+                <a routerLink="/settings/profile" mat-stroked-button
+                  >プロフィールを編集</a
+                >
+              </ng-container>
+            </div>
+          </ng-template>
+        </div>
         <div class="my-page__flex">
           <mat-icon class="my-page__icon">supervised_user_circle</mat-icon>
           <p
@@ -35,33 +66,43 @@
             フォロー中 <span>{{ user.followingCount }}人</span>
           </p>
         </div>
-        <p class="my-page__description">{{ user.description }}</p>
-        <ng-container *ngIf="user.uid !== currentUserUid">
-          <button
-            mat-button
-            *ngIf="!isFollowing"
-            class="my-page__follow-button"
-            (click)="follow()"
-          >
-            フォローする
-          </button>
-          <button
-            mat-button
-            *ngIf="isFollowing"
-            class="my-page__following-button"
-            (click)="openUnFollowDialog()"
-          >
-            フォロー中
-          </button>
-        </ng-container>
-      </div>
 
-      <div class="my-page__edit">
-        <ng-container *ngIf="user.uid === currentUserUid">
-          <a routerLink="/settings/profile" mat-stroked-button
-            >プロフィールを編集</a
+        <p class="my-page__description">{{ user.description }}</p>
+        <div class="my-page__call">
+          <button
+            class="my-page__call-btn"
+            mat-flat-button
+            (click)="
+              [
+                user.ticketPrice
+                  ? openTicketDialog(user.uid)
+                  : call(user.uid, currentUser, user.name)
+              ]
+            "
+            [disabled]="
+              !(customer$ | async)?.defaultPaymentMethod &&
+              !(customer$ | async)?.paymentMethods
+            "
           >
-        </ng-container>
+            話しかける<mat-icon *ngIf="user.ticketPrice">sell</mat-icon>
+          </button>
+          <p
+            *ngIf="
+              !(customer$ | async)?.defaultPaymentMethod &&
+              !(customer$ | async)?.paymentMethods
+            "
+            class="my-page__call-hint"
+          >
+            話しかけるにはチケットが必要です。お支払いカードを設定してください。
+            <span
+              ><a
+                class="my-page__call-hint--link"
+                routerLink="/settings/payment"
+                >設定はこちら</a
+              ></span
+            >
+          </p>
+        </div>
       </div>
     </div>
     <p class="my-page__sp-description">{{ user.description }}</p>

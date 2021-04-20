@@ -124,14 +124,20 @@ export class PaymentService {
     return callable({}).toPromise();
   }
 
-  createStripeProductAndPrice(data): Promise<Stripe.Price[]> {
+  createStripeProductAndPrice(price: number): Promise<Stripe.Price[]> {
+    const data = {
+      name: 'チケット',
+      amount: price,
+    };
     const callable = this.fns.httpsCallable('createStripeProductAndPrice');
     return callable(data).toPromise();
   }
 
-  deleteStripePrice(productId: string): Promise<Stripe.Price[]> {
+  deleteStripePrice(product: Product): Promise<Stripe.Price[]> {
+    console.log(product);
+
     const callable = this.fns.httpsCallable('deleteStripePrice');
-    return callable(productId).toPromise();
+    return callable(product).toPromise();
   }
 
   chargeToConnectedAccount(): Promise<void> {

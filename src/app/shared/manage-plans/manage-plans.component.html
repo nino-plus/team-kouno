@@ -25,31 +25,6 @@
       <span matSuffix>円</span>
     </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>請求期間</mat-label>
-      <mat-select formControlName="interval" required>
-        <mat-option value="none">単発購入</mat-option>
-        <mat-option value="day">毎日</mat-option>
-        <mat-option value="week">毎週</mat-option>
-        <mat-option value="month">毎月</mat-option>
-        <mat-option value="year">毎年</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>無料期間</mat-label>
-      <input
-        type="number"
-        formControlName="trialPeriodDays"
-        step="1"
-        matInput
-        autocomplete="off"
-        required
-        placeholder="7"
-      />
-      <span matSuffix>日</span>
-    </mat-form-field>
-
     <button
       [disabled]="form.invalid || isRunning"
       mat-raised-button
@@ -60,23 +35,3 @@
     </button>
   </form>
 </mat-card>
-
-<div>
-  <mat-list *ngIf="prices" dense>
-    <h3 mat-subheader>プロダクト一覧</h3>
-    <mat-list-item *ngFor="let price of prices">
-      <span matLine>{{ price.nickname }}</span>
-      <span matLine>{{ price.unit_amount | number }}円</span>
-      <span *ngIf="price.recurring" matLine
-        >{{ price.recurring.interval | stripeInterval }} / 無料トライアル:
-        {{ price.recurring?.trial_period_days }}日</span
-      >
-      <button mat-icon-button (click)="deleteProduct(price.id)">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </mat-list-item>
-    <mat-list-item disabled *ngIf="prices && !prices.length"
-      >プランはありません</mat-list-item
-    >
-  </mat-list>
-</div>

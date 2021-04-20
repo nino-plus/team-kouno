@@ -24,23 +24,23 @@ export class CustomerService {
     shareReplay(1)
   );
   stripeCustomer: Stripe.Customer;
-  // private stripeCustomerSource$: Observable<Stripe.Customer> = this.customer$.pipe(
-  //   switchMap((customer) => {
-  //     if (customer) {
-  //       const callable = this.fns.httpsCallable('getStripeCustomer');
-  //       return callable(null);
-  //     } else {
-  //       return of(null);
-  //     }
-  //   }),
-  //   tap((customer: Stripe.Customer) => {
-  //     if (customer) {
-  //       this.getStripeCustomerPortalURL();
-  //     } else {
-  //       this.customerPortalUrl = null;
-  //     }
-  //   })
-  // );
+  private stripeCustomerSource$: Observable<Stripe.Customer> = this.customer$.pipe(
+    switchMap((customer) => {
+      if (customer) {
+        const callable = this.fns.httpsCallable('getStripeCustomer');
+        return callable(null);
+      } else {
+        return of(null);
+      }
+    })
+    // tap((customer: Stripe.Customer) => {
+    //   if (customer) {
+    //     this.getStripeCustomerPortalURL();
+    //   } else {
+    //     this.customerPortalUrl = null;
+    //   }
+    // })
+  );
 
   constructor(
     private db: AngularFirestore,
@@ -48,11 +48,11 @@ export class CustomerService {
     private fns: AngularFireFunctions,
     private ngZone: NgZone
   ) {
-    // this.stripeCustomerSource$.subscribe((customer) => {
-    //   this.ngZone.run(() => {
-    //     this.stripeCustomer = customer;
-    //   });
-    // });
+    this.stripeCustomerSource$.subscribe((customer) => {
+      this.ngZone.run(() => {
+        this.stripeCustomer = customer;
+      });
+    });
   }
 
   // async getStripeCustomerPortalURL(): Promise<void> {
@@ -78,5 +78,9 @@ export class CustomerService {
   }): Promise<Stripe.ApiList<ChargeWithInvoice>> {
     const callable = this.fns.httpsCallable('getStripeInvoices');
     return callable(params).toPromise();
+  }
+
+  getCustomer(userId: string): Observable<Customer> {
+    return this.db.doc<Customer>(`customers/${userId}`).valueChanges();
   }
 }
