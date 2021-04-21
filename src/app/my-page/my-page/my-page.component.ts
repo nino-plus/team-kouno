@@ -1,21 +1,20 @@
-import { MatDialog } from '@angular/material/dialog';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import firebase from 'firebase/app';
 import { Observable, Subscription } from 'rxjs';
-import { map, switchMap, take, tap } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { EventService } from 'src/app/services/event.service';
+import { MeetingService } from 'src/app/services/meeting.service';
 import { UserFollowService } from 'src/app/services/user-follow.service';
 import { UserService } from 'src/app/services/user.service';
 import { UnfollowDialogComponent } from 'src/app/shared/unfollow-dialog/unfollow-dialog.component';
 import { FollowersDialogComponent } from '../followers-dialog/followers-dialog.component';
 import { FollowingsDialogComponent } from '../followings-dialog/followings-dialog.component';
-import { MeetingService } from 'src/app/services/meeting.service';
-import { InviteWithSender } from 'src/app/intefaces/invite';
-import { AngularFireAuth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-my-page',
@@ -108,6 +107,7 @@ export class MyPageComponent implements OnInit, OnDestroy {
 
   openFollowersDialog(currentUser: User): void {
     this.dialog.open(FollowersDialogComponent, {
+      width: '400px',
       autoFocus: false,
       data: {
         currentUser,
@@ -118,6 +118,7 @@ export class MyPageComponent implements OnInit, OnDestroy {
 
   openFollowingsDialog(currentUser: User): void {
     this.dialog.open(FollowingsDialogComponent, {
+      width: '400px',
       autoFocus: false,
       data: {
         currentUser,
