@@ -33,8 +33,11 @@
   &__ticket-wrap {
     display: grid;
     gap: 8px;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: auto 160px;
     align-items: center;
+    @include tablet {
+      grid-template-columns: 1fr;
+    }
   }
   &__ticket-account-btn {
     height: 50px;

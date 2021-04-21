@@ -68,7 +68,7 @@
         </div>
 
         <p class="my-page__description">{{ user.description }}</p>
-        <div *ngIf="user.uid === currentUserUid" class="my-page__call">
+        <div *ngIf="user.uid !== currentUserUid" class="my-page__call">
           <button
             class="my-page__call-btn"
             mat-flat-button
