@@ -129,8 +129,12 @@
   @include sp {
     padding: 16px;
   }
+  &__back {
+    width: 40%;
+    margin: 0 auto;
+  }
   &__submit {
-    width: 50%;
+    width: 40%;
     margin: 0 auto;
     background: $color-main;
     color: #fff;

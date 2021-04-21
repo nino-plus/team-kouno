@@ -87,7 +87,9 @@
     </div>
 
     <div class="actions">
-      <button routerLink="/" mat-button type="button">戻る</button>
+      <button routerLink="/" mat-button type="button" class="actions__back">
+        戻る
+      </button>
       <ng-container [ngSwitch]="type">
         <ng-container *ngSwitchDefault>
           <ng-container *ngIf="user$ | async as user; else default">
