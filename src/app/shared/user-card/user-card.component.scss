@@ -39,6 +39,10 @@
     margin-bottom: 8px;
     line-height: 1.7;
     min-height: 46px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
   &__actions {
     display: flex;
