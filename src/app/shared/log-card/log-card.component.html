@@ -1,0 +1,27 @@
+<div class="card__head">
+  <ng-container *ngIf="log.user.state == 'online'">
+    <span @fade class="card__active-ring"></span>
+  </ng-container>
+  <img [src]="log.user.avatarURL" alt="" class="card__avatar" />
+  <div class="card__info-wrap">
+    <p class="card__name">
+      {{ log.user.name }}さんからミーティングの招待が届いています({{
+        log.createdAt.toMillis() | date: 'yyyy/MM/dd HH:mm'
+      }})
+    </p>
+    <p class="card__info">
+      フォロワー{{ log.user.followerCount ? log.user.followerCount : 0 }}人
+    </p>
+  </div>
+</div>
+<p class="card__description">
+  {{
+    log.user.description ? log.user.description : '自己紹介はまだありません。'
+  }}
+</p>
+
+<div class="card__actions">
+  <button mat-flat-button class="card__btn" [routerLink]="log.user.uid">
+    プロフィール
+  </button>
+</div>

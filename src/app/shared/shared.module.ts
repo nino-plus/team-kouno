@@ -20,6 +20,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { InviteCardComponent } from './invite-card/invite-card.component';
+import { LogCardComponent } from './log-card/log-card.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { InviteCardComponent } from './invite-card/invite-card.component';
     RegisterCardDialogComponent,
     ConfirmDialogComponent,
     InviteCardComponent,
+    LogCardComponent,
   ],
   imports: [
     CommonModule,
