@@ -26,7 +26,7 @@ export class LogService {
     return followings$.pipe(
       switchMap((followings: User[]) => {
         const logs$: Observable<Log[][]> = combineLatest(
-          followings.map((follow: User) => this.getLogs(follow.uid))
+          followings?.map((follow: User) => this.getLogs(follow.uid))
         );
         return combineLatest([logs$, of(followings)]);
       }),
