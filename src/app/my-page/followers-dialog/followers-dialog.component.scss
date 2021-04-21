@@ -1,15 +1,16 @@
+@import 'custom-style';
+
 .dialog-header {
   text-align: center;
 }
 
 .follower {
-  display: grid;
-  grid-template-columns: 48px 1fr 80px;
-  gap: 16px;
-  place-items: center;
+  display: flex;
+  align-items: center;
   margin: 16px 0;
   &__avatar {
     overflow: hidden;
+    margin-right: 16px;
     img {
       text-align: center;
       width: 48px;
@@ -19,6 +20,7 @@
   }
   &__name {
     text-align: center;
+    color: $color-font;
     &:hover {
       opacity: 0.6;
     }
