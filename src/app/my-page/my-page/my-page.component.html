@@ -68,14 +68,14 @@
         </div>
 
         <p class="my-page__description">{{ user.description }}</p>
-        <div class="my-page__call">
+        <div *ngIf="user.uid === currentUserUid" class="my-page__call">
           <button
             class="my-page__call-btn"
             mat-flat-button
             (click)="
               [
                 user.ticketPrice
-                  ? openTicketDialog(user.uid)
+                  ? openTicketDialog(user)
                   : call(user.uid, currentUser, user.name)
               ]
             "

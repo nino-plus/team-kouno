@@ -1,10 +1,43 @@
-<mat-list>
-  <h3 matSubheader>商品一覧</h3>
-  <mat-list-item *ngFor="let item of items | async">
-    <span matLine>{{ item.name }}</span>
-    <span matLine>{{ item.price | number }}円</span>
-    <button mat-raised-button color="primary" (click)="charge(item)">
-      購入
-    </button>
-  </mat-list-item>
-</mat-list>
+<div class="close">
+  <button
+    class="close__button"
+    [disabled]="uiService.loading"
+    mat-mini-fab
+    mat-dialog-close
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<h3 class="heading">入室</h3>
+
+<ng-container *ngFor="let ticket of products$ | async">
+  <ul class="ticket">
+    <li class="ticket__item">
+      <img
+        class="ticket__avatar"
+        [style.background-image]="'url(' + user.avatarURL + ')'"
+      />
+      <p>{{ user.name }}</p>
+    </li>
+    <li class="ticket__item">
+      <p class="ticket__name">チケット</p>
+      <p>¥{{ ticket.price }}/時</p>
+    </li>
+  </ul>
+  <button
+    *ngIf="!uiService.loading"
+    class="ticket__charge"
+    mat-flat-button
+    (click)="charge(ticket)"
+  >
+    チケットを購入して入室する
+  </button>
+  <button *ngIf="uiService.loading" class="ticket__charge" mat-flat-button>
+    <div class="ticket__charge--loading">
+      <div class="ticket-spinner">
+        <mat-spinner diameter="30"></mat-spinner>
+      </div>
+      <p>お支払い中です</p>
+    </div>
+  </button>
+</ng-container>

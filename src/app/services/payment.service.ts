@@ -12,6 +12,8 @@ import { PriceWithProduct } from '../interfaces/price';
 import { ConnectedAccountService } from './connected-account.service';
 import { ProductService } from './product.service';
 import { Product } from '../interfaces/product';
+import { UiService } from './ui.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +25,9 @@ export class PaymentService {
     private fns: AngularFireFunctions,
     private snackBar: MatSnackBar,
     private connectedAccountService: ConnectedAccountService,
-    private productService: ProductService
+    private productService: ProductService,
+    private uiService: UiService,
+    private dialog: MatDialog
   ) {}
 
   async getStripeClient(): Promise<StripeClient> {
@@ -83,27 +87,25 @@ export class PaymentService {
 
   async charge(product: Product): Promise<void> {
     const callable = this.fns.httpsCallable('payStripeProduct');
-    const process = this.snackBar.open('決済を開始します', null, {
-      duration: null,
-    });
-    console.log(this.connectedAccountId);
+    // const process = this.snackBar.open('お支払い中です', null, {
+    //   duration: null,
+    // });
+    this.uiService.loading = true;
 
     return callable({
       priceId: product.priceId,
       connectedAccountId: this.connectedAccountId,
     })
       .toPromise()
-      .then(() => {
-        const updateData = { active: false };
-        this.productService.updateProductByProductId(product.id, updateData);
-        this.snackBar.open('決済成功');
-      })
+      .then(() => {})
       .catch((error) => {
         console.error(error?.message);
-        this.snackBar.open('決済失敗');
+        this.snackBar.open('お支払いが完了できませんでした');
       })
       .finally(() => {
-        process.dismiss();
+        // process.dismiss();
+        this.uiService.loading = false;
+        this.dialog.closeAll();
       });
   }
 

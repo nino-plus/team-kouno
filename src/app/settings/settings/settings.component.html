@@ -49,20 +49,6 @@
             >
               <p>お支払い管理</p>
             </a>
-            <a
-              routerLink="manage-plans"
-              [routerLinkActive]="['active']"
-              mat-list-item
-              class="settings__item"
-            >
-              <p>チケット作成</p>
-            </a>
-            <a
-              (click)="connectedAccountService.createStripeConnectedAccount()"
-              mat-list-item
-            >
-              販売アカウントを作成
-            </a>
           </mat-nav-list>
         </aside>
 

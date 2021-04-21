@@ -346,3 +346,10 @@ img {
     left: 0;
   }
 }
+
+.ticket-spinner {
+  .mat-progress-spinner circle,
+  .mat-spinner circle {
+    stroke: #fff;
+  }
+}

@@ -14,7 +14,6 @@ import { UnfollowDialogComponent } from 'src/app/shared/unfollow-dialog/unfollow
 import { FollowersDialogComponent } from '../followers-dialog/followers-dialog.component';
 import { FollowingsDialogComponent } from '../followings-dialog/followings-dialog.component';
 import { MeetingService } from 'src/app/services/meeting.service';
-import { InviteWithSender } from 'src/app/intefaces/invite';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { CustomerService } from 'src/app/services/customer.service';
 import { Customer } from 'src/app/interfaces/customer';
@@ -207,10 +206,10 @@ export class MyPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  openTicketDialog(uid: string): void {
+  openTicketDialog(obj: User): void {
     this.dialog.open(UserStoreComponent, {
       data: {
-        userId: uid,
+        user: obj,
       },
     });
   }

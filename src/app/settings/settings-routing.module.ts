@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ConnectedAccountGuard } from '../guards/connected-account.guard';
-import { ManagePlansComponent } from '../shared/manage-plans/manage-plans.component';
 import { AccountComponent } from './account/account.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { PaymentComponent } from './payment/payment.component';
@@ -33,10 +32,6 @@ const routes: Routes = [
       {
         path: 'payment',
         component: PaymentComponent,
-      },
-      {
-        path: 'manage-plans',
-        component: ManagePlansComponent,
       },
     ],
   },

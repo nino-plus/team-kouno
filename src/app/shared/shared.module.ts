@@ -25,9 +25,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatCardModule } from '@angular/material/card';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { UserStoreComponent } from './user-store/user-store.component';
-import { ManagePlansComponent } from './manage-plans/manage-plans.component';
 import { MatSelectModule } from '@angular/material/select';
 import { StripeIntervalPipe } from '../pipes/stripe-interval.pipe';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -43,7 +43,6 @@ import { StripeIntervalPipe } from '../pipes/stripe-interval.pipe';
     ConfirmDialogComponent,
     InviteCardComponent,
     UserStoreComponent,
-    ManagePlansComponent,
     StripeIntervalPipe,
   ],
   imports: [
@@ -63,6 +62,7 @@ import { StripeIntervalPipe } from '../pipes/stripe-interval.pipe';
     MatCardModule,
     ClipboardModule,
     MatSelectModule,
+    MatProgressSpinnerModule,
   ],
   exports: [
     EventCardComponent,
@@ -73,7 +73,6 @@ import { StripeIntervalPipe } from '../pipes/stripe-interval.pipe';
     UserListComponent,
     RegisterCardComponent,
     UserStoreComponent,
-    ManagePlansComponent,
     StripeIntervalPipe,
   ],
 })

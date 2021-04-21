@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { User } from 'src/app/interfaces/user';
@@ -41,7 +40,6 @@ export class ProfileComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private snackBar: MatSnackBar,
-    private route: ActivatedRoute,
     public connectedAccountService: ConnectedAccountService,
     private paymentService: PaymentService,
     private productService: ProductService
@@ -68,11 +66,10 @@ export class ProfileComponent implements OnInit {
     this.isProcessing = true;
     if (this.form.controls.ticketPrice.dirty) {
       this.getActiveProducts();
-      console.log(this.activeProducts);
 
       await this.paymentService
         .createStripeProductAndPrice(this.form.controls.ticketPrice.value)
-        .then(() => this.deleteProducts())
+        .then(() => this.deleteOldProducts())
         .catch((error) => {
           this.snackBar.open('チケット料金の設定に失敗しました');
           throw new Error(error.message);
@@ -113,9 +110,11 @@ export class ProfileComponent implements OnInit {
       });
   }
 
-  deleteProducts(): void {
-    for (const product of this.activeProducts) {
-      this.paymentService.deleteStripePrice(product);
+  deleteOldProducts(): void {
+    if (this.activeProducts.length) {
+      for (const product of this.activeProducts) {
+        this.paymentService.deleteStripePrice(product);
+      }
     }
   }
 }

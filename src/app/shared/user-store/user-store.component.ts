@@ -1,11 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { tap } from 'rxjs/operators';
-import { ConnectedAccountService } from 'src/app/services/connected-account.service';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
+import { Product } from 'src/app/interfaces/product';
+import { User } from 'src/app/interfaces/user';
 import { PaymentService } from 'src/app/services/payment.service';
 import { ProductService } from 'src/app/services/product.service';
-import Stripe from 'stripe';
+import { UiService } from 'src/app/services/ui.service';
 
 @Component({
   selector: 'app-user-store',
@@ -13,32 +13,20 @@ import Stripe from 'stripe';
   styleUrls: ['./user-store.component.scss'],
 })
 export class UserStoreComponent implements OnInit {
-  // items: Stripe.Price[];
-  items = this.productService.getActiveProducts(this.data.userId);
-
+  products$: Observable<Product[]> = this.productService.getActiveProducts(
+    this.data.user.uid
+  );
+  user: User = this.data.user;
   constructor(
     private paymentService: PaymentService,
-    private connectedaccountService: ConnectedAccountService,
-    private snackBar: MatSnackBar,
     private productService: ProductService,
-    @Inject(MAT_DIALOG_DATA) public data: { userId: string }
+    public uiService: UiService,
+    @Inject(MAT_DIALOG_DATA) public data: { user: User }
   ) {}
 
-  ngOnInit(): void {
-    // this.getUserPrices();
-  }
+  ngOnInit(): void {}
 
-  // private getUserPrices(): void {
-  //   this.paymentService
-  //     .getStripePricesFromUserId(this.data.userId)
-  //     .then((res) => {
-  //       console.log(res);
-
-  //       this.items = res.filter((item) => !item.recurring);
-  //     });
-  // }
-
-  charge(item): void {
-    this.paymentService.charge(item);
+  charge(ticket: Product): void {
+    this.paymentService.charge(ticket);
   }
 }
