@@ -10,7 +10,6 @@ import { AuthService } from 'src/app/services/auth.service';
 import { MeetingService } from 'src/app/services/meeting.service';
 import { MessagingService } from 'src/app/services/messaging.service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
-import { UserStoreComponent } from '../user-store/user-store.component';
 
 @Component({
   selector: 'app-user-card',

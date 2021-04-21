@@ -8,9 +8,7 @@ import {
   StripeCardElement,
 } from '@stripe/stripe-js';
 import Stripe from 'stripe';
-import { PriceWithProduct } from '../interfaces/price';
 import { ConnectedAccountService } from './connected-account.service';
-import { ProductService } from './product.service';
 import { Product } from '../interfaces/product';
 import { UiService } from './ui.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -25,7 +23,6 @@ export class PaymentService {
     private fns: AngularFireFunctions,
     private snackBar: MatSnackBar,
     private connectedAccountService: ConnectedAccountService,
-    private productService: ProductService,
     private uiService: UiService,
     private dialog: MatDialog
   ) {}
@@ -38,16 +35,6 @@ export class PaymentService {
     const callable = this.fns.httpsCallable('createStripeSetupIntent');
     return callable({}).toPromise();
   }
-
-  // getStripePricesFromPlatform(): Promise<PriceWithProduct[]> {
-  //   const callable = this.fns.httpsCallable('getStripePricesFromPlatform');
-
-  //   return Promise.all(
-  //     environment.plans.map((plan) =>
-  //       callable({ product: plan.id }).toPromise()
-  //     )
-  //   );
-  // }
 
   async setPaymentMethod(
     client: StripeClient,
@@ -87,9 +74,6 @@ export class PaymentService {
 
   async charge(product: Product): Promise<void> {
     const callable = this.fns.httpsCallable('payStripeProduct');
-    // const process = this.snackBar.open('お支払い中です', null, {
-    //   duration: null,
-    // });
     this.uiService.loading = true;
 
     return callable({
@@ -103,7 +87,6 @@ export class PaymentService {
         this.snackBar.open('お支払いが完了できませんでした');
       })
       .finally(() => {
-        // process.dismiss();
         this.uiService.loading = false;
         this.dialog.closeAll();
       });
@@ -161,10 +144,5 @@ export class PaymentService {
     const callable = this.fns.httpsCallable('setStripeDefaultPaymentMethod');
     await callable({ id }).toPromise();
     this.snackBar.open('デフォルトのカードに設定しました');
-  }
-
-  getCoupons(): Promise<Stripe.Coupon[]> {
-    const callable = this.fns.httpsCallable('getAllStripeCoupons');
-    return callable({}).toPromise();
   }
 }
