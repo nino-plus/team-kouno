@@ -200,7 +200,7 @@ export class EventService {
   }
 
   async reserveEvent(event: Event, uid: string): Promise<void> {
-    this.db
+    await this.db
       .doc<ReserveUid>(`events/${event.eventId}/reserveUids/${uid}`)
       .set({
         uid,
@@ -208,6 +208,12 @@ export class EventService {
       })
       .then(() => this.snackBar.open('イベントを予約しました'))
       .finally(() => this.router.navigateByUrl('/'));
+    await this.db.doc<Log>(`users/${uid}/logs/${event.eventId}`).set({
+      uid,
+      logId: event.eventId,
+      createdAt: firebase.firestore.Timestamp.now(),
+      type: 'reserve',
+    });
   }
 
   async cancelReserve(event: Event, uid: string): Promise<void> {
