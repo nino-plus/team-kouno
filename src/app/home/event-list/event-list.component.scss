@@ -1,0 +1,58 @@
+@import 'custom-style';
+@import 'mixins';
+
+.event-list {
+  &__heading {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    &--margin {
+      margin-bottom: 16px;
+    }
+    @include sp {
+      padding: 0 16px;
+    }
+  }
+  &__text {
+    font-size: 24px;
+    font-weight: 600;
+    color: $color-font;
+    @include sp {
+      font-size: 18px;
+    }
+  }
+  &__list {
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
+    overflow-x: auto;
+    color: $color-font;
+    @include sp {
+      padding-left: 16px;
+    }
+  }
+  &__item {
+    margin-right: 8px;
+    flex: 0 0 auto;
+    font-size: 14px;
+    @include sp {
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+  }
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+    @include sp {
+      grid-template-columns: 1fr;
+      margin: 16px;
+    }
+  }
+}
+
+.active {
+  color: $color-font-main;
+}

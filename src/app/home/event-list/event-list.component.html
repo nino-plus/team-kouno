@@ -1,0 +1,56 @@
+<div class="event-list">
+  <div class="event-list__heading">
+    <p class="event-list__text">😊 カテゴリー</p>
+  </div>
+
+  <div class="event-list__list">
+    <button
+      mat-button
+      *ngFor="let category of categoryData"
+      (click)="changeListSource(category)"
+      class="event-list__item"
+      [class.active]="listSource === category"
+    >
+      #{{ category }}
+    </button>
+  </div>
+
+  <div class="event-list__grid" *ngIf="eventLists$ | async as eventLists">
+    <app-event-card
+      *ngFor="let event of eventLists"
+      [event]="event"
+      [uid]="user.uid"
+    ></app-event-card>
+  </div>
+
+  <ng-container *ngIf="onliveEventLists$ | async as eventLists">
+    <div
+      class="event-list__heading event-list__heading--margin"
+      *ngIf="eventLists.length > 0"
+    >
+      <p class="event-list__text">🥳 オンライブ</p>
+    </div>
+
+    <div class="event-list__grid">
+      <app-event-card
+        *ngFor="let event of eventLists"
+        [event]="event"
+        [uid]="user.uid"
+      ></app-event-card>
+    </div>
+  </ng-container>
+
+  <div class="event-list__heading event-list__heading--margin">
+    <p class="event-list__text">😍 人気</p>
+  </div>
+
+  <div class="event-list__grid" *ngIf="popularEventLists as eventLists">
+    <app-event-card
+      *ngFor="let event of eventLists"
+      [event]="event"
+      [uid]="user.uid"
+      [dbType]="'algolia'"
+      [type]="'search'"
+    ></app-event-card>
+  </div>
+</div>

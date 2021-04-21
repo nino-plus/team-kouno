@@ -20,6 +20,7 @@ import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home/home.component';
 import { SpecialComponent } from './special/special.component';
 import { SwiperModule } from 'swiper/angular';
+import { EventListComponent } from './event-list/event-list.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { SwiperModule } from 'swiper/angular';
     EventCalendarComponent,
     FooterComponent,
     SpecialComponent,
+    EventListComponent,
   ],
   imports: [
     CommonModule,

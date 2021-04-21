@@ -44,6 +44,7 @@ import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AutoOpenLoginMenuComponent } from './auto-open-login-menu/auto-open-login-menu.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { QuillModule } from 'ngx-quill';
 
 registerLocaleData(localeJa);
 
@@ -93,6 +94,14 @@ registerLocaleData(localeJa);
       // Register the ServiceWorker as soon as the app is stable
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000',
+    }),
+    QuillModule.forRoot({
+      modules: {
+        toolbar: [['emoji']],
+        'emoji-toolbar': true,
+        'emoji-textarea': false,
+        'emoji-shortname': true,
+      },
     }),
   ],
   providers: [

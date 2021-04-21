@@ -54,8 +54,9 @@
       class="drawer"
       #drawer
       position="end"
-      [mode]="isPcScreen ? 'side' : 'push'"
+      [mode]="isPcScreen ? 'side' : 'over'"
       [autoFocus]="false"
+      [opened]="uiService.isOpen"
     >
       <app-chat [eventId]="eventId"></app-chat>
     </mat-drawer>
@@ -126,8 +127,8 @@
     <button
       matTooltip="コメント"
       class="actions__btn"
-      [class.actions__btn--active]="hide"
-      (click)="drawer.toggle(); hide = !hide"
+      [class.actions__btn--active]="uiService.isOpen"
+      (click)="uiService.isOpen = !uiService.isOpen"
     >
       <mat-icon class="actions__icon">comment</mat-icon>
     </button>

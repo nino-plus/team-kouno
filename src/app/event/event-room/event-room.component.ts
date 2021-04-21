@@ -22,7 +22,7 @@ export class EventRoomComponent implements OnInit, OnDestroy {
   user$: Observable<User> = this.authService.user$;
   eventWithOwner$: Observable<EventWithOwner>;
   uid: string;
-  hide = false;
+  isOpen = true;
 
   players: any;
 
@@ -48,7 +48,7 @@ export class EventRoomComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private bottomSheet: MatBottomSheet,
-    private uiService: UiService
+    public uiService: UiService
   ) {}
 
   ngOnInit(): void {

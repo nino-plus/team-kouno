@@ -31,15 +31,28 @@
 
   <div class="card__body">
     <div class="card__date-wrap">
-      <p class="card__date">
-        {{ event.startAt.toDate() | date: 'M/dd' }}
-      </p>
-      <p class="card__day">
-        {{ event.startAt.toDate() | date: 'E' }}
-      </p>
-      <p class="card__startAt">
-        {{ event.startAt.toDate() | date: 'HH:mm〜' }}
-      </p>
+      <ng-container *ngIf="dbType === 'algolia'; else firestore">
+        <p class="card__date">
+          {{ event.startAt | date: 'M/dd' }}
+        </p>
+        <p class="card__day">
+          {{ event.startAt | date: 'E' }}
+        </p>
+        <p class="card__startAt">
+          {{ event.startAt | date: 'HH:mm〜' }}
+        </p>
+      </ng-container>
+      <ng-template #firestore>
+        <p class="card__date">
+          {{ event.startAt?.toDate() | date: 'M/dd' }}
+        </p>
+        <p class="card__day">
+          {{ event.startAt?.toDate() | date: 'E' }}
+        </p>
+        <p class="card__startAt">
+          {{ event.startAt?.toDate() | date: 'HH:mm〜' }}
+        </p>
+      </ng-template>
     </div>
 
     <span class="card__pipe"></span>
