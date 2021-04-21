@@ -2,8 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
+import { ConnectedAccountService } from 'src/app/services/connected-account.service';
+import { PaymentService } from 'src/app/services/payment.service';
+import { ProductService } from 'src/app/services/product.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -21,16 +25,24 @@ export class ProfileComponent implements OnInit {
     name: ['', [Validators.required, Validators.maxLength(this.nameMaxLength)]],
     email: ['', [Validators.email]],
     description: ['', [Validators.maxLength(this.descriptionMaxLength)]],
+    ticketPrice: [
+      '',
+      [Validators.pattern(/\d+/), Validators.min(100), Validators.max(1000000)],
+    ],
   });
 
   user$: Observable<User> = this.authService.user$;
+  activeProducts = [];
   isProcessing: boolean;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private userService: UserService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    public connectedAccountService: ConnectedAccountService,
+    private paymentService: PaymentService,
+    private productService: ProductService
   ) {}
 
   ngOnInit(): void {
@@ -41,6 +53,7 @@ export class ProfileComponent implements OnInit {
         ...user,
       });
     });
+
     console.log(this.newImageFile);
   }
 
@@ -51,6 +64,18 @@ export class ProfileComponent implements OnInit {
 
   async updateUser(): Promise<void> {
     this.isProcessing = true;
+    if (this.form.controls.ticketPrice.dirty) {
+      this.getActiveProducts();
+
+      await this.paymentService
+        .createStripeProductAndPrice(this.form.controls.ticketPrice.value)
+        .then(() => this.deleteOldProducts())
+        .catch((error) => {
+          this.snackBar.open('チケット料金の設定に失敗しました');
+          throw new Error(error.message);
+        });
+    }
+
     const formData = {
       ...this.form.value,
     };
@@ -72,6 +97,24 @@ export class ProfileComponent implements OnInit {
         .updateUser(formData)
         .then(() => (this.isProcessing = false))
         .then(() => this.snackBar.open('ユーザー情報を更新しました'));
+    }
+  }
+
+  getActiveProducts(): void {
+    this.productService
+      .getActiveProducts(this.authService.uid)
+      .pipe(take(1))
+      .toPromise()
+      .then((products) => {
+        products.forEach((product) => this.activeProducts.push(product));
+      });
+  }
+
+  deleteOldProducts(): void {
+    if (this.activeProducts.length) {
+      for (const product of this.activeProducts) {
+        this.paymentService.deleteStripePrice(product);
+      }
     }
   }
 }

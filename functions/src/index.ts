@@ -21,4 +21,5 @@ export * from './stripe/customer.function';
 export * from './stripe/invoice.function';
 export * from './stripe/payment-method.function';
 export * from './stripe/product.funtions';
-export * from './stripe/saller.functions';
+export * from './stripe/connect.function';
+export * from './stripe/transfer.functoin';

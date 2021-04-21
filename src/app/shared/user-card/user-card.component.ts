@@ -51,7 +51,7 @@ export class UserCardComponent implements OnInit {
       });
   }
 
-  call(uid: string, currentUser: User, userName: string) {
+  call(uid: string, currentUser: User, userName: string): void {
     this.dialog
       .open(ConfirmDialogComponent, {
         autoFocus: false,
