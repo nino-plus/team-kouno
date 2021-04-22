@@ -64,17 +64,11 @@
       mat-align-tabs="center"
       *ngIf="events$ | async as eventLists"
     >
-      <mat-tab label="イベント一覧">
+      <mat-tab label="イベント">
         <div class="container">
           <app-event-list [user]="user"></app-event-list></div
       ></mat-tab>
-      <mat-tab label="カレンダー">
-        <app-event-calendar
-          [eventLists]="eventLists"
-          [uid]="user.uid"
-        ></app-event-calendar>
-      </mat-tab>
-      <mat-tab label="つながり">
+      <mat-tab label="人">
         <div class="container">
           <app-user-list></app-user-list>
         </div>
