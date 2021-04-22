@@ -20,6 +20,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { InviteCardComponent } from './invite-card/invite-card.component';
+import { LogCardComponent } from './log-card/log-card.component';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCardModule } from '@angular/material/card';
@@ -42,6 +43,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     RegisterCardComponent,
     ConfirmDialogComponent,
     InviteCardComponent,
+    LogCardComponent,
     UserStoreComponent,
     StripeIntervalPipe,
   ],

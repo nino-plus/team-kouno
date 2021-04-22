@@ -1,0 +1,44 @@
+@import 'custom-style';
+
+.calendar {
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 24px;
+  }
+  &__icon {
+    font-size: 24px;
+    cursor: pointer;
+  }
+  &__select-btn {
+    padding: 4px 8px;
+    background: $color-main;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+    transition: ease-in-out 0.3s;
+    &.active {
+      background: $color-accent;
+    }
+  }
+  &__warning-section {
+    display: flex;
+    align-items: center;
+    margin: 16px 0;
+  }
+  &__warning-icon {
+    margin-right: 8px;
+    color: red;
+  }
+}
+
+.btn-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  &__day {
+    transform: translateY(-2px);
+  }
+}

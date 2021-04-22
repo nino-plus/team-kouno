@@ -1,11 +1,10 @@
 @import 'custom-style';
 
 .card {
-  &__head {
+  &__wrap {
     display: grid;
     grid-template-columns: 100px 1fr;
     gap: 16px;
-    margin-bottom: 8px;
     position: relative;
   }
   &__active-ring {
@@ -26,23 +25,18 @@
     z-index: 2;
   }
   &__name {
-    font-weight: 500;
-    margin-bottom: 8px;
-  }
-  &__info {
     font-size: 14px;
     margin-bottom: 8px;
-  }
-  &__description {
-    font-size: 14px;
-    opacity: 0.8;
-    margin-bottom: 8px;
-    line-height: 1.7;
-    min-height: 46px;
+    min-height: 64px;
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
+  }
+  &__bottom-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
   &__actions {
     display: flex;

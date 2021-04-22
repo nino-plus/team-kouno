@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { switchMap, take, tap } from 'rxjs/operators';
+import { switchMap, take } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
@@ -53,6 +53,7 @@ export class EditorComponent implements OnInit {
     { value: 'プログラミング' },
     { value: 'ゲーム' },
     { value: 'アニメ' },
+    { value: 'アイドルØ' },
     { value: '映画' },
     { value: '漫画' },
     { value: '政治経済' },
@@ -113,12 +114,12 @@ export class EditorComponent implements OnInit {
     if (!this.event) {
       if (this.imageFile !== undefined) {
         await this.eventService
-          .createEvent(eventData, this.imageFile)
+          .createEvent(eventData, this.imageFile, this.uid)
           .finally(() => (this.isProcessing = false));
       } else {
         const defaultImage = 'assets/images/default-image.jpg';
         await this.eventService
-          .createEvent(eventData, defaultImage)
+          .createEvent(eventData, defaultImage, this.uid)
           .finally(() => (this.isProcessing = false));
       }
     } else {

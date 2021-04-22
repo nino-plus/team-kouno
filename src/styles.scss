@@ -413,10 +413,11 @@ img {
   background: #fff;
 }
 
-// .ql-toolbar {
-//   visibility: hidden;
-//   transition: ease-in-out 0.3s;
-//   background: #eee;
-//   border-radius: 40px;
-//   border: none;
-// }
+.home-tab-group {
+  .mat-tab-label .mat-tab-label-content {
+    font-size: 20px;
+    @include sp {
+      font-size: 16px;
+    }
+  }
+}
