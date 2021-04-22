@@ -9,6 +9,7 @@
         [muted]="isLocalMute"
         #webcamVideo
         [srcObject]="localStream"
+        id="local-video"
       ></video>
       <ng-template #sublocal>
         <video src=""></video>
@@ -84,9 +85,9 @@
       <mat-icon class="actions__icon">volume_off</mat-icon>
     </button>
 
-    <ng-template #headset>
+    <ng-template #speaker>
       <button
-        matTooltip="ボイスをオン"
+        matTooltip="スピーカーをオン"
         class="actions__btn"
         (click)="isRemoteMute = false"
       >
@@ -95,8 +96,8 @@
     </ng-template>
 
     <button
-      *ngIf="!isRemoteMute; else headset"
-      matTooltip="ミュート"
+      *ngIf="!isRemoteMute; else speaker"
+      matTooltip="スピーカーをオフ"
       class="actions__btn actions__btn--active"
       (click)="isRemoteMute = true"
     >

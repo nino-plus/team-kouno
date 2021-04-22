@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   AngularFirestore,
   DocumentReference,
@@ -18,8 +24,9 @@ import { MeetingService } from 'src/app/services/meeting.service';
   styleUrls: ['./meeting-room.component.scss'],
 })
 export class MeetingRoomComponent implements OnInit, AfterViewInit {
-  @ViewChild('webcamVideo') webcamVideo: HTMLVideoElement;
-  @ViewChild('remoteVideo') remoteVideo: HTMLVideoElement;
+  @ViewChild('webcamVideo') webcamVideo: ElementRef<HTMLVideoElement>;
+  @ViewChild('remoteVideo') remoteVideo: ElementRef<HTMLVideoElement>;
+  localVideo: HTMLElement;
 
   readonly servers: RTCConfiguration = {
     iceServers: [
@@ -75,7 +82,26 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
         }
       });
     });
+    setTimeout(() => {
+      this.localVideo = document.getElementById('local-video');
+      console.log(this.localVideo);
+      this.localVideo.onmousedown = (event) => {
+        document.addEventListener('mousemove', this.onMouseMove);
+      };
+      this.localVideo.onmouseup = () => {
+        document.removeEventListener('mousemove', this.onMouseMove);
+      };
+    }, 2000);
   }
+
+  onMouseMove = (event) => {
+    const x = event.clientX;
+    const y = event.clientY;
+    const width = this.localVideo.offsetWidth;
+    const height = this.localVideo.offsetHeight;
+    this.localVideo.style.top = y - height / 2 + 'px';
+    this.localVideo.style.left = x - width / 2 + 'px';
+  };
 
   async snapshotRoom(): Promise<Room> {
     const room = await this.room$.pipe(take(1)).toPromise();
@@ -105,6 +131,8 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
     // this.remoteVideo.srcObject = this.remoteStream;
 
     this.isPublishWebcam = true;
+    this.isPublishVideo = true;
+    this.isPublishMicrophone = true;
   }
 
   async createRoom() {
@@ -294,9 +322,42 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
     };
   }
 
-  publishVideo() {}
+  async publishVideo() {
+    const senderList = this.peerConnection.getSenders();
 
-  unPublishVideo() {}
+    senderList.forEach((sender) => {
+      sender.track.enabled = true;
+    });
+
+    // this.webcamVideo.srcObject = this.localStream;
+    // this.remoteVideo.srcObject = this.remoteStream;
+
+    this.isPublishVideo = true;
+  }
+
+  async unPublishVideo() {
+    this.localStream = await navigator.mediaDevices.getUserMedia({
+      video: false,
+      audio: this.isPublishMicrophone,
+    });
+    // this.remoteStream = new MediaStream();
+
+    // // Push tracks from local stream to peer connection
+    // await this.localStream.getTracks().forEach((track) => {
+    //   this.peerConnection.removeTrack(track)
+    // });
+
+    const senderList = this.peerConnection.getSenders();
+
+    senderList.forEach((sender) => {
+      sender.track.enabled = false;
+    });
+
+    // this.webcamVideo.srcObject = this.localStream;
+    // this.remoteVideo.srcObject = this.remoteStream;
+
+    this.isPublishVideo = false;
+  }
 
   publishAudio() {}
 
