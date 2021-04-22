@@ -1,0 +1,30 @@
+<mat-list dense>
+  <h1 matSubheader>購入履歴</h1>
+  <mat-list-item *ngFor="let charge of charges">
+    <span matLine
+      >{{
+        (charge.invoice?.lines?.data)[0]?.description || charge.description
+      }}
+      / {{ charge.amount | number }}円</span
+    >
+    <span matLine>{{ charge.created * 1000 | date: 'yyyy/MM/dd' }}</span>
+    <a mat-icon-button [href]="charge.receipt_url" target="_blank">
+      <mat-icon inline>receipt</mat-icon>
+    </a>
+  </mat-list-item>
+  <mat-list-item *ngIf="charges && !charges.length"
+    >購入履歴はありません</mat-list-item
+  >
+</mat-list>
+
+<mat-spinner [diameter]="40" *ngIf="loading"></mat-spinner>
+
+<mat-divider></mat-divider>
+
+<button mat-button (click)="prevPage()" *ngIf="page" [disabled]="loading">
+  前へ
+</button>
+
+<button mat-button (click)="nextPage()" *ngIf="hasNext" [disabled]="loading">
+  次へ
+</button>

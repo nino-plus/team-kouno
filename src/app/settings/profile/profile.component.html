@@ -101,6 +101,57 @@
           </div>
         </div>
 
+        <div class="settings__property">
+          <div class="settings__label">
+            <p>チケット</p>
+            <mat-icon matTooltip="1on1チケットの料金設定"
+              >help_outline</mat-icon
+            >
+          </div>
+
+          <div class="settings__value">
+            <ng-container
+              *ngIf="
+                connectedAccountService.connectedAccountId.length;
+                else createAccount
+              "
+            >
+              <div class="settings__ticket-wrap">
+                <mat-form-field appearance="outline">
+                  <mat-label>金額</mat-label>
+                  <input
+                    type="number"
+                    formControlName="ticketPrice"
+                    step="100"
+                    matInput
+                    autocomplete="off"
+                    placeholder="1000"
+                  />
+                  <span matSuffix>円</span>
+                </mat-form-field>
+                <button
+                  class="settings__ticket-account-btn"
+                  color="basic"
+                  mat-stroked-button
+                >
+                  販売アカウント変更
+                </button>
+              </div>
+            </ng-container>
+            <ng-template #createAccount>
+              <p>
+                チケット料金の設定をするには、販売アカウントを作成してください。<a
+                  class="settings__ticket"
+                  (click)="
+                    connectedAccountService.createStripeConnectedAccount()
+                  "
+                  >販売アカウント作成</a
+                >
+              </p>
+            </ng-template>
+          </div>
+        </div>
+
         <button
           class="settings__update-btn"
           [disabled]="(form.invalid || form.pristine) && !newImageFile"

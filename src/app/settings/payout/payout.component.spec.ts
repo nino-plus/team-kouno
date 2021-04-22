@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RegisterCardDialogComponent } from './register-card-dialog.component';
+import { PayoutComponent } from './payout.component';
 
-describe('RegisterCardDialogComponent', () => {
-  let component: RegisterCardDialogComponent;
-  let fixture: ComponentFixture<RegisterCardDialogComponent>;
+describe('PayoutComponent', () => {
+  let component: PayoutComponent;
+  let fixture: ComponentFixture<PayoutComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RegisterCardDialogComponent ]
+      declarations: [ PayoutComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RegisterCardDialogComponent);
+    fixture = TestBed.createComponent(PayoutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -102,7 +102,7 @@ export class UserService {
       });
   }
 
-  getFollowers(uid: string) {
+  getFollowers(uid: string): Observable<User[]> {
     return this.db
       .collection<Follower>(`users/${uid}/followers`, (ref) =>
         ref.orderBy('createdAt', 'desc')

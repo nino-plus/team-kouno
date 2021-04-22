@@ -1,0 +1,35 @@
+<h1 matDialogTitle>振込申請</h1>
+
+<mat-dialog-content>
+  <mat-spinner *ngIf="loading" class="loading" [diameter]="40"></mat-spinner>
+  <div *ngIf="balance">
+    <p>
+      取引から7日以上経過した売上に対し振込依頼をすることができます。振込手数料はStripe（決済システム）の利用に必要な金額となっています。ご了承ください。
+    </p>
+    <h3>振込依頼可能な金額</h3>
+    <p>{{ available | number }}円に対し振込申請が可能です。</p>
+    <p>
+      振込手数料は: {{ dynamicFee | number }}(金額の0.25%) +
+      {{ fixedFee | number }} = {{ totalFee | number }}円（+消費税:
+      {{ feeTax | number }}円）
+    </p>
+    <p>
+      振込予定金額:
+      {{ payoutAmount | number }}円
+    </p>
+    <h3>まだ振込依頼できない金額</h3>
+    <p>{{ pending | number }}円が待機中です。</p>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button matDialogClose>キャンセル</button>
+  <button
+    mat-raised-button
+    color="primary"
+    [disabled]="!payoutAmount"
+    (click)="connectedAccountService.orderPayout()"
+  >
+    振込依頼
+  </button>
+</mat-dialog-actions>

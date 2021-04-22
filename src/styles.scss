@@ -350,6 +350,12 @@ img {
   }
 }
 
+.ticket-spinner {
+  .mat-progress-spinner circle,
+  .mat-spinner circle {
+    stroke: #fff;
+  }
+}
 // quill config
 .ql-editor {
   padding: 0;

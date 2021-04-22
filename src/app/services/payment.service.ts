@@ -1,18 +1,31 @@
-import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { Injectable } from '@angular/core';
+import { AngularFireFunctions } from '@angular/fire/functions';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   loadStripe,
   Stripe as StripeClient,
   StripeCardElement,
 } from '@stripe/stripe-js';
-import { AngularFireFunctions } from '@angular/fire/functions';
 import Stripe from 'stripe';
+import { ConnectedAccountService } from './connected-account.service';
+import { Product } from '../interfaces/product';
+import { UiService } from './ui.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PaymentService {
-  constructor(private fns: AngularFireFunctions) {}
+  connectedAccountId = this.connectedAccountService.connectedAccountId;
+
+  constructor(
+    private fns: AngularFireFunctions,
+    private snackBar: MatSnackBar,
+    private connectedAccountService: ConnectedAccountService,
+    private uiService: UiService,
+    private dialog: MatDialog
+  ) {}
 
   async getStripeClient(): Promise<StripeClient> {
     return loadStripe(environment.stripe.publicKey);
@@ -30,7 +43,6 @@ export class PaymentService {
     email: string
   ): Promise<void> {
     const intent = await this.createStripeSetupIntent();
-
     const { setupIntent, error } = await client.confirmCardSetup(
       intent.client_secret,
       {
@@ -55,13 +67,82 @@ export class PaymentService {
     }
   }
 
-  async createStripeConnectedAccount(): Promise<void> {
-    // ステートを作成&取得
-    const callable = this.fns.httpsCallable('getStripeConnectedAccountState');
-    const state = await callable({}).toPromise();
+  getPaymentMethods(): Promise<Stripe.ApiList<Stripe.PaymentMethod>> {
+    const callable = this.fns.httpsCallable('getStripePaymentMethod');
+    return callable({}).toPromise();
+  }
 
-    const URL = 'https://connect.stripe.com/express/oauth/authorize';
-    // 販売アカウント作成画面へリダイレクト
-    location.href = `${URL}?client_id=${environment.stripe.clientId}&state=${state}&suggested_capabilities[]=transfers`;
+  async charge(product: Product): Promise<void> {
+    const callable = this.fns.httpsCallable('payStripeProduct');
+    this.uiService.loading = true;
+
+    return callable({
+      priceId: product.priceId,
+      connectedAccountId: this.connectedAccountId,
+    })
+      .toPromise()
+      .then(() => {})
+      .catch((error) => {
+        console.error(error?.message);
+        this.snackBar.open('お支払いが完了できませんでした');
+      })
+      .finally(() => {
+        this.uiService.loading = false;
+        this.dialog.closeAll();
+      });
+  }
+
+  deleteStripePaymentMethod(id: string): Promise<void> {
+    const callable = this.fns.httpsCallable('deleteStripePaymentMethod');
+    return callable({ id }).toPromise();
+  }
+
+  getStripePricesFromUserId(userId): Promise<Stripe.Price[]> {
+    const callable = this.fns.httpsCallable('getStripePricesFromUserId');
+    return callable(userId).toPromise();
+  }
+
+  getStripePricesFromConnectedAccount(): Promise<Stripe.Price[]> {
+    const callable = this.fns.httpsCallable(
+      'getStripePricesFromConnectedAccount'
+    );
+    return callable({}).toPromise();
+  }
+
+  createStripeProductAndPrice(price: number): Promise<Stripe.Price[]> {
+    const data = {
+      name: 'チケット',
+      amount: price,
+    };
+    const callable = this.fns.httpsCallable('createStripeProductAndPrice');
+    return callable(data).toPromise();
+  }
+
+  deleteStripePrice(product: Product): Promise<Stripe.Price[]> {
+    console.log(product);
+
+    const callable = this.fns.httpsCallable('deleteStripePrice');
+    return callable(product).toPromise();
+  }
+
+  chargeToConnectedAccount(): Promise<void> {
+    const process = this.snackBar.open('決済開始', null, { duration: null });
+    const callable = this.fns.httpsCallable('chargeToConnectedAccount');
+    return callable({})
+      .toPromise()
+      .then(() => {
+        this.snackBar.open('決済成功');
+      })
+      .catch((error) => {
+        console.error(error?.message);
+        this.snackBar.open('決済失敗');
+      })
+      .finally(() => process.dismiss());
+  }
+
+  async setDefaultMethod(id: string): Promise<void> {
+    const callable = this.fns.httpsCallable('setStripeDefaultPaymentMethod');
+    await callable({ id }).toPromise();
+    this.snackBar.open('デフォルトのカードに設定しました');
   }
 }

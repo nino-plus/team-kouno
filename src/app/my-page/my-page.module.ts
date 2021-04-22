@@ -16,7 +16,14 @@ import { FollowersComponent } from './followers/followers.component';
 import { FollowingsComponent } from './followings/followings.component';
 
 @NgModule({
-  declarations: [MyPageComponent, MyEventComponent, FollowersDialogComponent, FollowingsDialogComponent, FollowersComponent, FollowingsComponent],
+  declarations: [
+    MyPageComponent,
+    MyEventComponent,
+    FollowersDialogComponent,
+    FollowingsDialogComponent,
+    FollowersComponent,
+    FollowingsComponent,
+  ],
   imports: [
     CommonModule,
     MyPageRoutingModule,

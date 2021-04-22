@@ -1,0 +1,15 @@
+<mat-list dense>
+  <mat-list-item *ngFor="let invoice of invoices"
+    ><span matLine
+      >{{ invoice.amount | number }}円<span
+        *ngIf="invoice.destination_payment.application_fee_amount"
+      >
+        - 販売手数料{{
+          invoice.destination_payment.application_fee_amount | number
+        }}円</span
+      ></span
+    ><span matLine>{{
+      invoice.created * 1000 | date: 'yyyy年MM月dd日'
+    }}</span></mat-list-item
+  >
+</mat-list>
