@@ -145,7 +145,7 @@ export class MyPageComponent implements OnInit, OnDestroy {
     this.afAuth.user
       .pipe(
         take(1),
-        map((user) => user.uid)
+        map((user) => user?.uid)
       )
       .toPromise()
       .then((uid) => {
