@@ -14,12 +14,21 @@ import { UnfollowDialogComponent } from './unfollow-dialog/unfollow-dialog.compo
 import { RouterModule } from '@angular/router';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserCardComponent } from './user-card/user-card.component';
-import { RegisterCardDialogComponent } from './register-card-dialog/register-card-dialog.component';
+import { RegisterCardComponent } from './register-card/register-card.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { InviteCardComponent } from './invite-card/invite-card.component';
+import { LogCardComponent } from './log-card/log-card.component';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatCardModule } from '@angular/material/card';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { UserStoreComponent } from './user-store/user-store.component';
+import { MatSelectModule } from '@angular/material/select';
+import { StripeIntervalPipe } from '../pipes/stripe-interval.pipe';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -31,9 +40,12 @@ import { InviteCardComponent } from './invite-card/invite-card.component';
     UnfollowDialogComponent,
     UserListComponent,
     UserCardComponent,
-    RegisterCardDialogComponent,
+    RegisterCardComponent,
     ConfirmDialogComponent,
     InviteCardComponent,
+    LogCardComponent,
+    UserStoreComponent,
+    StripeIntervalPipe,
   ],
   imports: [
     CommonModule,
@@ -47,6 +59,12 @@ import { InviteCardComponent } from './invite-card/invite-card.component';
     MatButtonModule,
     MatTooltipModule,
     RouterModule,
+    MatListModule,
+    MatMenuModule,
+    MatCardModule,
+    ClipboardModule,
+    MatSelectModule,
+    MatProgressSpinnerModule,
   ],
   exports: [
     EventCardComponent,
@@ -55,6 +73,9 @@ import { InviteCardComponent } from './invite-card/invite-card.component';
     DeleteDialogComponent,
     UnfollowDialogComponent,
     UserListComponent,
+    RegisterCardComponent,
+    UserStoreComponent,
+    StripeIntervalPipe,
   ],
 })
 export class SharedModule {}

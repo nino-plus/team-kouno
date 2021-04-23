@@ -43,6 +43,13 @@ const routes: Routes = [
       import('./meeting/meeting.module').then((m) => m.MeetingModule),
   },
   {
+    path: 'calendar',
+    loadChildren: () =>
+      import('./event-calendar/event-calendar.module').then(
+        (m) => m.EventCalendarModule
+      ),
+  },
+  {
     path: '404',
     component: NotFoundComponent,
   },

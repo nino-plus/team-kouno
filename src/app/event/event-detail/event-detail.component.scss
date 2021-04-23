@@ -129,9 +129,18 @@
   @include sp {
     padding: 16px;
   }
+  &__back {
+    width: 40%;
+    margin: 0 auto;
+  }
   &__submit {
+    width: 40%;
+    margin: 0 auto;
     background: $color-main;
     color: #fff;
+    @include sp {
+      width: 100%;
+    }
     &:hover {
       background: $color-accent;
     }
@@ -139,6 +148,11 @@
       background: #eee;
       color: $color-font;
     }
+  }
+  &__info {
+    text-align: center;
+    font-size: 12px;
+    color: $color-font;
   }
 }
 

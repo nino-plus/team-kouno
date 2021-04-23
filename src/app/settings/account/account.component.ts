@@ -17,7 +17,6 @@ import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component'
 })
 export class AccountComponent implements OnInit {
   isOpen = false;
-  user: User;
   user$: Observable<User> = this.authService.user$;
   snsList = ['google', 'twitter', 'facebook', 'github'];
   linkedProviders$: Observable<
@@ -36,7 +35,7 @@ export class AccountComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  openDeleteDialog(): void {
+  openDeleteDialog(user): void {
     this.dialog
       .open(DeleteDialogComponent, {
         data: { title: '退会しますか？' },
@@ -44,7 +43,7 @@ export class AccountComponent implements OnInit {
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          this.userService.deleteUser(this.user);
+          this.userService.deleteUser(user);
         } else {
           return;
         }

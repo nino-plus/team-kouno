@@ -3,8 +3,10 @@ import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { fade } from 'src/app/animations/animations';
 import { InviteWithSender } from 'src/app/intefaces/invite';
+import { LogWithUser } from 'src/app/interfaces/log';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
+import { LogService } from 'src/app/services/log.service';
 import { MeetingService } from 'src/app/services/meeting.service';
 import { UserService } from 'src/app/services/user.service';
 @Component({
@@ -19,13 +21,15 @@ export class UserListComponent implements OnInit {
   followings$: Observable<User[]>;
   user$: Observable<User> = this.authService.user$;
   uid: string;
-  listSource: string = 'all';
+  listSource: string = 'feed';
   invites$: Observable<InviteWithSender[]>;
+  logs$: Observable<LogWithUser[]>;
 
   constructor(
     private authService: AuthService,
     private userService: UserService,
-    private meetingService: MeetingService
+    private meetingService: MeetingService,
+    private logService: LogService
   ) {}
 
   ngOnInit(): void {
@@ -38,6 +42,7 @@ export class UserListComponent implements OnInit {
       });
     this.user$.subscribe((user) => {
       this.uid = user?.uid;
+      this.logs$ = this.logService.getLogsWithUser(this.uid);
     });
   }
 

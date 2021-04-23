@@ -87,7 +87,9 @@
     </div>
 
     <div class="actions">
-      <button routerLink="/" mat-button type="button">戻る</button>
+      <button routerLink="/" mat-button type="button" class="actions__back">
+        戻る
+      </button>
       <ng-container [ngSwitch]="type">
         <ng-container *ngSwitchDefault>
           <ng-container *ngIf="user$ | async as user; else default">
@@ -101,6 +103,9 @@
                 >
                   イベントを予約
                 </button>
+                <p class="actions__info">
+                  予約すると自分のカレンダーに表示されるようになります❤️
+                </p>
               </ng-container>
               <ng-template #cancel>
                 <button
@@ -135,6 +140,9 @@
           >
             イベントを予約
           </button>
+          <p class="actions__info">
+            予約すると自分のカレンダーに表示されるようになります❤️
+          </p>
           <button
             mat-raised-button
             class="actions__submit"

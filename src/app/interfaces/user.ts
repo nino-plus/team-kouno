@@ -11,4 +11,5 @@ export interface User {
   myEventCount?: number;
   lastChangedAt?: firebase.default.firestore.Timestamp;
   state?: 'online' | 'offline' | 'away';
+  ticketPrice?: number;
 }

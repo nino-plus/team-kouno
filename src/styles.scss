@@ -4,6 +4,10 @@
 @import '../node_modules/angular-calendar/css/angular-calendar.css';
 @import 'mixins';
 @import '~swiper/swiper-bundle';
+@import '~quill/dist/quill.core.css';
+@import '~quill/dist/quill.snow.css';
+@import '~quill/dist/quill.bubble.css';
+@import 'quill-emoji/dist/quill-emoji.css';
 
 @include mat-core();
 
@@ -343,5 +347,77 @@ img {
   }
   &--prev {
     left: 0;
+  }
+}
+
+.ticket-spinner {
+  .mat-progress-spinner circle,
+  .mat-spinner circle {
+    stroke: #fff;
+  }
+}
+// quill config
+.ql-editor {
+  padding: 0;
+}
+
+.chat-form {
+  @include sp {
+    background: #000;
+    padding: 8px 0;
+  }
+  .ql-editor {
+    padding: 12px 40px 12px 8px;
+    background: #fff;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    @include sp {
+      border-radius: 40px;
+      position: relative;
+      display: flex;
+    }
+  }
+  .ql-container.ql-snow {
+    border: none;
+  }
+  .ql-toolbar.ql-snow {
+    @include sp {
+      display: flex;
+      background: #000;
+      color: #fff;
+    }
+    border: none;
+    background: #fff;
+  }
+  .ql-toolbar.ql-snow .ql-formats {
+    @include sp {
+      margin-right: 0;
+    }
+  }
+}
+
+.mat-drawer {
+  background: #fff;
+  @include sp {
+    background: transparent;
+    width: 100vw;
+  }
+}
+
+@include sp {
+  quill-editor {
+    display: flex;
+  }
+}
+
+.mat-drawer-container {
+  background: #fff;
+}
+
+.home-tab-group {
+  .mat-tab-label .mat-tab-label-content {
+    font-size: 20px;
+    @include sp {
+      font-size: 16px;
+    }
   }
 }

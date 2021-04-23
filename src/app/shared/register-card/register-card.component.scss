@@ -1,0 +1,19 @@
+:host {
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+}
+
+mat-nav-list {
+  margin-right: 40px;
+}
+
+mat-form-field,
+ngx-stripe-card {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.card-element {
+  margin-bottom: 24px;
+}

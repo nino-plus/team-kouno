@@ -22,6 +22,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { EventDetailComponent } from './event-detail/event-detail.component';
+import { QuillModule } from 'ngx-quill';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { EventDetailComponent } from './event-detail/event-detail.component';
     MatMenuModule,
     MatSidenavModule,
     MatBottomSheetModule,
+    QuillModule,
   ],
 })
 export class EventModule {}

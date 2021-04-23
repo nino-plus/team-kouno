@@ -15,7 +15,12 @@
 </p>
 
 <div class="card__actions">
-  <button mat-flat-button class="card__btn" [routerLink]="user.uid">
+  <button
+    mat-flat-button
+    class="card__btn"
+    [routerLink]="user.uid"
+    [queryParams]="{ reserve: true }"
+  >
     プロフィール
   </button>
 

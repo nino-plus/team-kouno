@@ -32,7 +32,7 @@ export class ChatService {
   getChatsWithUser(eventId: string): Observable<ChatWithUser[]> {
     return this.db
       .collection<Chat>(`events/${eventId}/chats`, (ref) =>
-        ref.orderBy('createdAt', 'desc')
+        ref.orderBy('createdAt', 'asc')
       )
       .valueChanges()
       .pipe(

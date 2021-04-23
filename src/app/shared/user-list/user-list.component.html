@@ -1,6 +1,13 @@
 <div class="user-list__heading">
   <button
     mat-button
+    (click)="changeListSource('feed')"
+    [class.active]="listSource === 'feed'"
+  >
+    フィード
+  </button>
+  <button
+    mat-button
     (click)="changeListSource('all')"
     [class.active]="listSource === 'all'"
   >
@@ -30,6 +37,15 @@
 </div>
 
 <ng-container [ngSwitch]="listSource">
+  <ng-container *ngSwitchCase="'feed'">
+    <div *ngIf="logs$ | async as logs" class="card-wrap">
+      <app-log-card
+        class="card"
+        *ngFor="let log of logs"
+        [log]="log"
+      ></app-log-card>
+    </div>
+  </ng-container>
   <ng-container *ngSwitchCase="'all'">
     <div *ngIf="allUsers$ | async as users" class="card-wrap">
       <app-user-card

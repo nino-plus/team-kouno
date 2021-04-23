@@ -20,6 +20,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { SharedModule } from '../shared/shared.module';
+import { PurchaseListComponent } from './purchase-list/purchase-list.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { PaymentComponent } from './payment/payment.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { PayoutComponent } from './payout/payout.component';
+import { InvoiceListComponent } from './invoice-list/invoice-list.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +36,10 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     NotificationsComponent,
     ProfileComponent,
     PrivacyComponent,
+    PurchaseListComponent,
+    PaymentComponent,
+    PayoutComponent,
+    InvoiceListComponent,
   ],
   imports: [
     CommonModule,
@@ -46,6 +57,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatTooltipModule,
     MatCheckboxModule,
     MatSlideToggleModule,
+    SharedModule,
+    MatProgressSpinnerModule,
+    MatTabsModule,
   ],
 })
 export class SettingsModule {}

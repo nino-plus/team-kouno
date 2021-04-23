@@ -4,7 +4,7 @@
 .my-page {
   &__header {
     display: grid;
-    grid-template-columns: 240px 1fr 160px;
+    grid-template-columns: 240px 1fr;
     gap: 24px;
     align-items: center;
     padding: 24px;
@@ -31,6 +31,15 @@
       }
     }
   }
+  &__body {
+    max-width: 600px;
+  }
+  &__name-box {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
   &__name {
     font-size: 32px;
     font-weight: 500;
@@ -41,6 +50,19 @@
     @include sp-s {
       font-size: 20px;
     }
+  }
+  &__follow-button {
+    height: 36px;
+    color: white;
+    background-color: #1bcbe0;
+  }
+  &__following-button {
+    height: 36px;
+    width: 102px;
+    padding: 0;
+    color: black;
+    border: solid 1px gray;
+    box-sizing: border-box;
   }
   &__flex {
     display: flex;
@@ -90,26 +112,36 @@
       display: none;
     }
   }
+  &__call {
+    display: grid;
+  }
+  &__call-btn {
+    margin-top: 16px;
+    color: #fff;
+    background-color: #1bcbe0;
+    width: 100%;
+    mat-icon {
+      font-size: 20px;
+      margin-left: 8px;
+    }
+  }
+  &__call-hint {
+    padding-top: 8px;
+    font-size: 14px;
+    &--link {
+      color: #1bcbe0;
+      text-decoration: underline;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
   &__sp-description {
     display: none;
     @include sp {
       display: block;
       padding: 0 16px 16px;
     }
-  }
-  &__follow-button {
-    margin-top: 16px;
-    color: white;
-    background-color: #1bcbe0;
-  }
-  &__following-button {
-    margin-top: 16px;
-    height: 36px;
-    width: 102px;
-    padding: 0;
-    color: black;
-    border: solid 1px gray;
-    box-sizing: border-box;
   }
 }
 
