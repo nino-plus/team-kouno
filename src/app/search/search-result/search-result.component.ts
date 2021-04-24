@@ -51,7 +51,7 @@ export class SearchResultComponent implements OnInit {
 
   ngOnInit(): void {
     this.user$.subscribe((user) => {
-      this.uid = user.uid;
+      this.uid = user?.uid;
     });
     this.route.queryParamMap.subscribe((params) => {
       this.events = [];
