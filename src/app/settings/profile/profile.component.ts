@@ -53,9 +53,8 @@ export class ProfileComponent implements OnInit {
         ...user,
       });
     });
-
-    console.log(this.newImageFile);
   }
+
 
   onCroppedImage(image: string): void {
     this.newImageFile = image;
@@ -93,8 +92,12 @@ export class ProfileComponent implements OnInit {
             .then(() => this.snackBar.open('ユーザー情報を更新しました'));
         });
     } else {
+      const value: User = {
+        ...formData,
+        uid: this.user.uid,
+      };
       await this.userService
-        .updateUser(formData)
+        .updateUser(value)
         .then(() => (this.isProcessing = false))
         .then(() => this.snackBar.open('ユーザー情報を更新しました'));
     }

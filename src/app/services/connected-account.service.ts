@@ -29,6 +29,13 @@ export class ConnectedAccountService {
     private db: AngularFirestore,
     private fns: AngularFireFunctions
   ) {
+    this.connectedAccountId$ = this.afAuth.user.pipe(
+      switchMap((user) => {
+        return this.db
+          .doc<ConnectedAccount>(`connectedAccounts/${user.uid}`)
+          .valueChanges();
+      }),
+    );
     this.connectedAccountId$.subscribe((account) => {
       this.connectedAccountId.push(account.connectedAccountId);
     });

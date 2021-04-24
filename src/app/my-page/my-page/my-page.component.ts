@@ -30,6 +30,7 @@ import { UserStoreComponent } from 'src/app/shared/user-store/user-store.compone
 export class MyPageComponent implements OnInit, OnDestroy {
   readonly subscription = new Subscription();
   dateNow: firebase.firestore.Timestamp = firebase.firestore.Timestamp.now();
+  // uid = this.route.snapshot.paramMap.get('uid');
   user$: Observable<User> = this.route.paramMap.pipe(
     switchMap((params) => {
       return this.userService.getUserData(params.get('uid'));

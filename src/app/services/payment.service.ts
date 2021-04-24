@@ -119,8 +119,6 @@ export class PaymentService {
   }
 
   deleteStripePrice(product: Product): Promise<Stripe.Price[]> {
-    console.log(product);
-
     const callable = this.fns.httpsCallable('deleteStripePrice');
     return callable(product).toPromise();
   }
