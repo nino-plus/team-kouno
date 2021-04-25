@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import firebase from 'firebase/app';
 import { Observable, Subscription } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { map, shareReplay, switchMap, take, tap } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
@@ -30,53 +30,32 @@ import { UserStoreComponent } from 'src/app/shared/user-store/user-store.compone
 export class MyPageComponent implements OnInit, OnDestroy {
   readonly subscription = new Subscription();
   dateNow: firebase.firestore.Timestamp = firebase.firestore.Timestamp.now();
-  // uid = this.route.snapshot.paramMap.get('uid');
-  user$: Observable<User> = this.route.paramMap.pipe(
-    switchMap((params) => {
-      return this.userService.getUserData(params.get('uid'));
-    })
+  targetUid: string = this.route.snapshot.params.uid;
+  targetUser$: Observable<User> = this.userService.getUserData(this.targetUid);
+  authUser$: Observable<User> = this.authService.user$;
+  reservedEvents$: Observable<
+    Event[]
+  > = this.eventService.getFutureReservedEvents(this.targetUid);
+  pastEvents$: Observable<Event[]> = this.eventService.getPastReservedEvents(
+    this.targetUid
   );
-  user: User;
-  currentUser$: Observable<User> = this.authService.user$;
-  currentUserUid: string;
-  reservedEvents$: Observable<Event[]> = this.user$.pipe(
-    switchMap((user) => {
-      return this.eventService.getFutureReservedEvents(user.uid);
-    })
+  ownerEvents$: Observable<Event[]> = this.eventService.getOwnerEvents(
+    this.targetUid
   );
-  pastEvents$: Observable<Event[]> = this.user$.pipe(
-    switchMap((user) => {
-      return this.eventService.getPastReservedEvents(user.uid);
-    })
+  targetUserFollowings$: Observable<User[]> = this.userService.getFollowings(
+    this.targetUid
   );
-  ownerEvents$: Observable<Event[]> = this.user$.pipe(
-    switchMap((user) => {
-      return this.eventService.getOwnerEvents(user.uid);
-    })
+  targetUserFollowers$: Observable<User[]> = this.userService.getFollowers(
+    this.targetUid
   );
-  targetId: string;
-  isFollowing: boolean;
-  uid: string;
-  followings: User[];
-  followers: User[];
-
-  followings$: Observable<User[]> = this.user$.pipe(
-    switchMap((user) => {
-      return this.userService.getFollowings(user.uid);
-    })
+  customer$: Observable<Customer> = this.customerService.getCustomer(
+    this.targetUid
   );
-
-  followers$: Observable<User[]> = this.user$.pipe(
-    switchMap((user) => {
-      return this.userService.getFollowers(user.uid);
-    })
-  );
+  isFollowing: Observable<boolean>;
 
   isReserveOneOnOneBtn?: boolean = this.route.snapshot.queryParams.reserve;
-  customer$: Observable<Customer>;
-
-  screenWidth = window.innerWidth;
   tokens: string[] = [];
+  screenWidth = window.innerWidth;
 
   constructor(
     private authService: AuthService,
@@ -86,78 +65,14 @@ export class MyPageComponent implements OnInit, OnDestroy {
     private followService: UserFollowService,
     private dialog: MatDialog,
     private router: Router,
-    private afAuth: AngularFireAuth,
     private customerService: CustomerService,
     private meetingService: MeetingService,
-    private messagingService: MessagingService,
-    private fns: AngularFireFunctions
-  ) {
-    this.followers$.subscribe((users) => {
-      this.followers = users;
-    });
-    this.followings$.subscribe((users) => {
-      this.followings = users;
-    });
-  }
-
-  follow(): void {
-    this.isFollowing = true;
-    this.followService.follow(this.currentUserUid, this.targetId);
-  }
-
-  openUnFollowDialog(): void {
-    this.dialog
-      .open(UnfollowDialogComponent, {
-        width: '250px',
-      })
-      .afterClosed()
-      .subscribe((status) => {
-        if (status) {
-          this.isFollowing = false;
-          this.followService.unFollow(this.currentUserUid, this.targetId);
-        }
-      });
-  }
-
-  openFollowersDialog(currentUser: User): void {
-    this.dialog.open(FollowersDialogComponent, {
-      width: '400px',
-      autoFocus: false,
-      data: {
-        currentUser,
-        followers: this.followers,
-      },
-    });
-  }
-
-  openFollowingsDialog(currentUser: User): void {
-    this.dialog.open(FollowingsDialogComponent, {
-      width: '400px',
-      autoFocus: false,
-      data: {
-        currentUser,
-        followings: this.followings,
-      },
-    });
-  }
+    private messagingService: MessagingService
+  ) {}
 
   ngOnInit(): void {
-    this.targetId = this.route.snapshot.params.uid;
-    this.afAuth.user
-      .pipe(
-        take(1),
-        map((user) => user?.uid)
-      )
-      .toPromise()
-      .then((uid) => {
-        this.currentUserUid = uid;
-        this.customer$ = this.customerService.getCustomer(uid);
-        this.followService
-          .checkFollowing(this.currentUserUid, this.targetId)
-          .then((isFollowing) => (this.isFollowing = isFollowing));
-      });
     this.subscription.add(
-      this.userService.getUserData(this.targetId).subscribe((user) => {
+      this.userService.getUserData(this.targetUid).subscribe((user) => {
         if (!user) {
           this.router.navigate(['/404']);
         }
@@ -165,25 +80,63 @@ export class MyPageComponent implements OnInit, OnDestroy {
     );
   }
 
-  async sendPushMessage(
-    tokens: string[],
-    currentUser: User,
-    roomId: string
-  ): Promise<void> {
-    const callable = this.fns.httpsCallable('sendPushMessage');
-    return callable({
-      tokens,
-      icon: currentUser.avatarURL,
-      name: currentUser.name,
-      roomId,
-    })
-      .toPromise()
-      .then(() => {
-        this.messagingService.receiveMessage();
+  follow(authUid: string): void {
+    this.followService.follow(authUid, this.targetUid);
+  }
+
+  openUnFollowDialog(authUid: string): void {
+    this.dialog
+      .open(UnfollowDialogComponent, {
+        width: '250px',
+      })
+      .afterClosed()
+      .subscribe((status) => {
+        if (status) {
+          this.followService.unFollow(authUid, this.targetUid);
+        }
       });
   }
 
-  call(uid: string, currentUser: User, userName: string): void {
+  openFollowersDialog(uid: string): void {
+    this.dialog.open(FollowersDialogComponent, {
+      width: '400px',
+      autoFocus: false,
+      data: {
+        authUid: uid,
+        targetUid: this.targetUid,
+      },
+    });
+  }
+
+  openFollowingsDialog(uid: string): void {
+    this.dialog.open(FollowingsDialogComponent, {
+      width: '400px',
+      autoFocus: false,
+      data: {
+        authUid: uid,
+        targetUid: this.targetUid,
+      },
+    });
+  }
+
+  openTicketDialog(authUid: string, targetUser: User): void {
+    this.dialog.open(UserStoreComponent, {
+      data: {
+        authUid,
+        targetUser: targetUser,
+      },
+    });
+  }
+
+  async sendPushMessage(
+    tokens: string[],
+    authUser: User,
+    roomId: string
+  ): Promise<void> {
+    this.messagingService.sendPushMessage(tokens, authUser, roomId);
+  }
+
+  call(uid: string, authUser: User, userName: string): void {
     this.dialog
       .open(ConfirmDialogComponent, {
         autoFocus: false,
@@ -201,20 +154,12 @@ export class MyPageComponent implements OnInit, OnDestroy {
           const tokens$ = this.messagingService.getTokens(uid);
           tokens$.pipe(take(1)).subscribe((tokens) => {
             tokens?.map((token) => this.tokens.push(token?.token));
-            this.sendPushMessage(this.tokens, currentUser, roomId);
+            this.sendPushMessage(this.tokens, authUser, roomId);
           });
 
           this.router.navigate(['meeting', roomId]);
         }
       });
-  }
-
-  openTicketDialog(obj: User): void {
-    this.dialog.open(UserStoreComponent, {
-      data: {
-        user: obj,
-      },
-    });
   }
 
   ngOnDestroy(): void {

@@ -1,36 +1,36 @@
-<section class="my-page" *ngIf="user$ | async as user">
+<section class="my-page" *ngIf="targetUser$ | async as targetUser">
   <div class="container">
     <div class="my-page__header">
       <div class="my-page__avatar">
-        <img [src]="user.avatarURL" alt="" />
+        <img [src]="targetUser.avatarURL" alt="" />
       </div>
 
-      <div class="my-page__body" *ngIf="currentUser$ | async as currentUser">
+      <div class="my-page__body" *ngIf="authUser$ | async as authUser">
         <div class="my-page__name-box">
           <p class="my-page__name">
-            {{ user.name }}
+            {{ targetUser.name }}
           </p>
-          <ng-container *ngIf="user.uid !== currentUserUid; else edit">
+          <ng-container *ngIf="targetUid !== authUser.uid; else edit">
             <button
               mat-button
-              *ngIf="!isFollowing"
+              *ngIf="!(isFollowing | async)"
               class="my-page__follow-button"
-              (click)="follow()"
+              (click)="follow(authUser.uid)"
             >
               フォローする
             </button>
             <button
               mat-button
-              *ngIf="isFollowing"
+              *ngIf="isFollowing | async"
               class="my-page__following-button"
-              (click)="openUnFollowDialog()"
+              (click)="openUnFollowDialog(authUser.uid)"
             >
               フォロー中
             </button>
           </ng-container>
           <ng-template #edit>
             <div class="my-page__edit">
-              <ng-container *ngIf="user.uid === currentUserUid">
+              <ng-container *ngIf="targetUid === authUser.uid">
                 <a routerLink="/settings/profile" mat-stroked-button
                   >プロフィールを編集</a
                 >
@@ -42,41 +42,43 @@
           <mat-icon class="my-page__icon">supervised_user_circle</mat-icon>
           <p
             class="my-page__flex-item"
-            (click)="openFollowersDialog(currentUser)"
+            [class.my-page__flex-item--active]="targetUser.followerCount"
+            (click)="targetUser.followerCount ? openFollowersDialog(authUser.uid) : ''"
           >
-            フォロワー <span>{{ user.followerCount }}人</span>
+            フォロワー <span>{{ targetUser.followerCount }}人</span>
           </p>
           <a
             class="my-page__flex-item my-page__flex-item--sp"
             routerLink="followers"
           >
-            フォロワー <span>{{ user.followerCount }}人</span>
+            フォロワー <span>{{ targetUser.followerCount }}人</span>
           </a>
           <mat-icon class="my-page__icon">supervised_user_circle</mat-icon>
           <p
             class="my-page__flex-item"
-            (click)="openFollowingsDialog(currentUser)"
+            [class.my-page__flex-item--active]="targetUser.followingCount"
+            (click)="targetUser.followingCount ? openFollowingsDialog(authUser.uid): ''"
           >
-            フォロー中 <span>{{ user.followingCount }}人</span>
+            フォロー中 <span>{{ targetUser.followingCount }}人</span>
           </p>
           <p
             class="my-page__flex-item my-page__flex-item--sp"
             routerLink="followings"
           >
-            フォロー中 <span>{{ user.followingCount }}人</span>
+            フォロー中 <span>{{ targetUser.followingCount }}人</span>
           </p>
         </div>
 
-        <p class="my-page__description">{{ user.description }}</p>
-        <div *ngIf="user.uid !== currentUserUid" class="my-page__call">
+        <p class="my-page__description">{{ targetUser.description }}</p>
+        <div *ngIf="targetUser.uid !== authUser.uid" class="my-page__call">
           <button
             class="my-page__call-btn"
             mat-flat-button
             (click)="
               [
-                user.ticketPrice
-                  ? openTicketDialog(user)
-                  : call(user.uid, currentUser, user.name)
+                targetUser.ticketPrice
+                  ? openTicketDialog(authUser.uid, targetUser)
+                  : call(targetUser.uid, authUser, targetUser.name)
               ]
             "
             [disabled]="
@@ -84,7 +86,7 @@
               !(customer$ | async)?.paymentMethods
             "
           >
-            話しかける<mat-icon *ngIf="user.ticketPrice">sell</mat-icon>
+            話しかける<mat-icon *ngIf="targetUser.ticketPrice">sell</mat-icon>
           </button>
           <p
             *ngIf="
@@ -105,7 +107,7 @@
         </div>
       </div>
     </div>
-    <p class="my-page__sp-description">{{ user.description }}</p>
+    <p class="my-page__sp-description">{{ targetUser.description }}</p>
 
     <mat-tab-group mat-align-tabs="center">
       <mat-tab label="参加イベント">
@@ -113,7 +115,7 @@
           <app-event-card
             *ngFor="let event of reservedEvents$ | async"
             [event]="event"
-            [uid]="user.uid"
+            [uid]="targetUser.uid"
           >
             ></app-event-card
           >
@@ -125,7 +127,7 @@
           <app-event-card
             *ngFor="let event of ownerEvents$ | async"
             [event]="event"
-            [uid]="user.uid"
+            [uid]="targetUser.uid"
             [type]="'owner'"
           >
             ></app-event-card
@@ -138,7 +140,7 @@
           <app-event-card
             *ngFor="let event of pastEvents$ | async"
             [event]="event"
-            [uid]="user.uid"
+            [uid]="targetUser.uid"
             [type]="'past'"
           >
           </app-event-card>
