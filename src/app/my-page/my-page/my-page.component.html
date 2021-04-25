@@ -23,7 +23,7 @@
               mat-button
               *ngIf="isFollowing | async"
               class="my-page__following-button"
-              (click)="openUnFollowDialog(authUser.uid)"
+              (click)="unFollow(authUser.uid)"
             >
               フォロー中
             </button>

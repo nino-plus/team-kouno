@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import firebase from 'firebase/app';
 import { Observable, Subscription } from 'rxjs';
-import { map, shareReplay, switchMap, take, tap } from 'rxjs/operators';
+import { shareReplay, take, tap } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
@@ -19,8 +18,8 @@ import { CustomerService } from 'src/app/services/customer.service';
 import { Customer } from 'src/app/interfaces/customer';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { MessagingService } from 'src/app/services/messaging.service';
-import { AngularFireFunctions } from '@angular/fire/functions';
 import { UserStoreComponent } from 'src/app/shared/user-store/user-store.component';
+import { el } from 'date-fns/locale';
 
 @Component({
   selector: 'app-my-page',
@@ -32,7 +31,18 @@ export class MyPageComponent implements OnInit, OnDestroy {
   dateNow: firebase.firestore.Timestamp = firebase.firestore.Timestamp.now();
   targetUid: string = this.route.snapshot.params.uid;
   targetUser$: Observable<User> = this.userService.getUserData(this.targetUid);
-  authUser$: Observable<User> = this.authService.user$;
+  authUser$: Observable<User> = this.authService.user$.pipe(
+    tap((user) => {
+      if (user) {
+        this.isFollowing = this.followService.checkFollowing(
+          user.uid,
+          this.targetUid
+        );
+      } else {
+        return;
+      }
+    })
+  );
   reservedEvents$: Observable<
     Event[]
   > = this.eventService.getFutureReservedEvents(this.targetUid);
@@ -84,17 +94,8 @@ export class MyPageComponent implements OnInit, OnDestroy {
     this.followService.follow(authUid, this.targetUid);
   }
 
-  openUnFollowDialog(authUid: string): void {
-    this.dialog
-      .open(UnfollowDialogComponent, {
-        width: '250px',
-      })
-      .afterClosed()
-      .subscribe((status) => {
-        if (status) {
-          this.followService.unFollow(authUid, this.targetUid);
-        }
-      });
+  unFollow(authUid: string): void {
+    this.followService.unFollow(authUid, this.targetUid);
   }
 
   openFollowersDialog(uid: string): void {
