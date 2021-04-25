@@ -14,10 +14,9 @@ import { ConnectedAccountService } from '../services/connected-account.service';
 })
 export class ConnectedAccountGuard implements CanActivate {
   constructor(private connectedAccountService: ConnectedAccountService) {}
-
-  canActivate(): Observable<boolean> {
-    return this.connectedAccountService.connectedAccountId$.pipe(
-      map((account) => !!account)
-    );
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
+    throw new Error('Method not implemented.');
   }
+
+
 }

@@ -3,7 +3,6 @@ import * as cryptoRandomString from 'crypto-random-string';
 import * as admin from 'firebase-admin';
 import { ConnectedAccount } from './../interfaces/connected-account';
 import { stripe } from './client';
-import Stripe from 'stripe';
 const db = admin.firestore();
 
 export const getStripeConnectedAccountState = functions
@@ -121,7 +120,7 @@ export const getStripeAccountLoginLink = functions
 export const getStripeAccountBalance = functions
   .region('asia-northeast1')
   .https.onCall(
-    async (data, context): Promise<Stripe.Balance> => {
+    async (data, context): Promise<any> => {
       if (!context.auth) {
         throw new functions.https.HttpsError(
           'permission-denied',
@@ -134,10 +133,7 @@ export const getStripeAccountBalance = functions
       )?.data() as ConnectedAccount;
 
       if (!connectedAccount) {
-        throw new functions.https.HttpsError(
-          'unauthenticated',
-          '販売アカウントが存在しません'
-        );
+        return
       }
 
       return stripe.balance.retrieve({
@@ -161,10 +157,7 @@ export const payoutToStripeAccount = functions
     )?.data() as ConnectedAccount;
 
     if (!connectedAccount) {
-      throw new functions.https.HttpsError(
-        'unauthenticated',
-        '販売アカウントが存在しません'
-      );
+      return null
     }
     // 現在の残高を取得
     const balance = await stripe.balance.retrieve({

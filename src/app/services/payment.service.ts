@@ -17,7 +17,6 @@ import { MatDialog } from '@angular/material/dialog';
   providedIn: 'root',
 })
 export class PaymentService {
-  connectedAccountId = this.connectedAccountService.connectedAccountId;
 
   constructor(
     private fns: AngularFireFunctions,
@@ -72,13 +71,13 @@ export class PaymentService {
     return callable({}).toPromise();
   }
 
-  async charge(product: Product): Promise<void> {
+  async charge(product: Product, connectedAccountId: string): Promise<void> {
     const callable = this.fns.httpsCallable('payStripeProduct');
     this.uiService.loading = true;
 
     return callable({
       priceId: product.priceId,
-      connectedAccountId: this.connectedAccountId,
+      connectedAccountId,
     })
       .toPromise()
       .then(() => {})

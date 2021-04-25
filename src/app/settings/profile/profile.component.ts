@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { ConnectedAccountService } from 'src/app/services/connected-account.service';
@@ -32,6 +32,7 @@ export class ProfileComponent implements OnInit {
   });
 
   user$: Observable<User> = this.authService.user$;
+  connectedAccountId$: Observable<string>;
   activeProducts = [];
   isProcessing: boolean;
 
@@ -52,9 +53,17 @@ export class ProfileComponent implements OnInit {
       this.form.patchValue({
         ...user,
       });
+      this.connectedAccountId$ = this.connectedAccountService
+        .getConnectedAccount(user.uid)
+        .pipe(
+          map((account) => {
+            if (account) {
+              return account.connectedAccountId;
+            }
+          })
+        );
     });
   }
-
 
   onCroppedImage(image: string): void {
     this.newImageFile = image;

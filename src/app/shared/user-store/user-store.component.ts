@@ -1,8 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Product } from 'src/app/interfaces/product';
 import { User } from 'src/app/interfaces/user';
+import { ConnectedAccountService } from 'src/app/services/connected-account.service';
 import { PaymentService } from 'src/app/services/payment.service';
 import { ProductService } from 'src/app/services/product.service';
 import { UiService } from 'src/app/services/ui.service';
@@ -14,19 +16,27 @@ import { UiService } from 'src/app/services/ui.service';
 })
 export class UserStoreComponent implements OnInit {
   products$: Observable<Product[]> = this.productService.getActiveProducts(
-    this.data.user.uid
+    this.data.targetUser.uid
   );
-  user: User = this.data.user;
+  connectedAccountId$: Observable<string> = this.connectedAccountService
+    .getConnectedAccount(this.data.authUid)
+    .pipe(map((account) => account.connectedAccountId));
+
   constructor(
     private paymentService: PaymentService,
     private productService: ProductService,
+    private connectedAccountService: ConnectedAccountService,
     public uiService: UiService,
-    @Inject(MAT_DIALOG_DATA) public data: { user: User }
+    @Inject(MAT_DIALOG_DATA)
+    public data: {
+      authUid: string;
+      targetUser: User;
+    }
   ) {}
 
   ngOnInit(): void {}
 
-  charge(ticket: Product): void {
-    this.paymentService.charge(ticket);
+  charge(ticket: Product, connectedAccountId: string): void {
+    this.paymentService.charge(ticket, connectedAccountId);
   }
 }
