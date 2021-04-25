@@ -12,20 +12,7 @@ export const createAlgoliaEvent = functions
     return algolia.saveRecord({
       indexName: 'events',
       largeConcentKey: 'description',
-      data: {
-        eventId: data.eventId,
-        name: data.name,
-        category: data.category,
-        createdAt: data.createdAt,
-        updatedAt: data.updatedAt,
-        thumbnailURL: data.thumbnailURL,
-        description: data.description,
-        startAt: data.startAt,
-        exitAt: data.exitAt,
-        ownerId: data.ownerId,
-        participantCount: data.participantCount,
-        reserveUserCount: data.reserveUserCount,
-      },
+      data,
     });
   });
 
@@ -54,19 +41,6 @@ export const updateAlgoliaEvent = functions
       indexName: 'events',
       largeConcentKey: 'description',
       isUpdate: true,
-      data: {
-        eventId: data.eventId,
-        name: data.name,
-        category: data.category,
-        createdAt: data.createdAt,
-        updatedAt: data.updatedAt,
-        thumbnailURL: data.thumbnailURL,
-        description: data.description,
-        startAt: data.startAt,
-        exitAt: data.exitAt,
-        ownerId: data.ownerId,
-        participantCount: data.participantCount,
-        reserveUserCount: data.reserveUserCount,
-      },
+      data,
     });
   });
