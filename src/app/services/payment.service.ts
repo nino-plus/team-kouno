@@ -88,6 +88,7 @@ export class PaymentService {
       .finally(() => {
         this.uiService.loading = false;
         this.dialog.closeAll();
+
       });
   }
 

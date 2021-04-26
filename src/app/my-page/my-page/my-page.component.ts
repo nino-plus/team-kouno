@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import firebase from 'firebase/app';
 import { Observable, Subscription } from 'rxjs';
-import { shareReplay, take, tap } from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
@@ -11,7 +11,6 @@ import { EventService } from 'src/app/services/event.service';
 import { MeetingService } from 'src/app/services/meeting.service';
 import { UserFollowService } from 'src/app/services/user-follow.service';
 import { UserService } from 'src/app/services/user.service';
-import { UnfollowDialogComponent } from 'src/app/shared/unfollow-dialog/unfollow-dialog.component';
 import { FollowersDialogComponent } from '../followers-dialog/followers-dialog.component';
 import { FollowingsDialogComponent } from '../followings-dialog/followings-dialog.component';
 import { CustomerService } from 'src/app/services/customer.service';
@@ -19,7 +18,6 @@ import { Customer } from 'src/app/interfaces/customer';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { MessagingService } from 'src/app/services/messaging.service';
 import { UserStoreComponent } from 'src/app/shared/user-store/user-store.component';
-import { el } from 'date-fns/locale';
 
 @Component({
   selector: 'app-my-page',

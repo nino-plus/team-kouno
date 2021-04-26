@@ -174,7 +174,7 @@ export const payoutToStripeAccount = functions
     // 振込手数料を引いた金額を振込
     await stripe.payouts.create(
       {
-        amount: balance.available[0].amount - fee,
+        amount: amount - fee,
         currency: 'jpy',
       },
       {

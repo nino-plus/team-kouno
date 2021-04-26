@@ -19,7 +19,7 @@ export class UserStoreComponent implements OnInit {
     this.data.targetUser.uid
   );
   connectedAccountId$: Observable<string> = this.connectedAccountService
-    .getConnectedAccount(this.data.authUid)
+    .getConnectedAccount(this.data.targetUser.uid)
     .pipe(map((account) => account.connectedAccountId));
 
   constructor(

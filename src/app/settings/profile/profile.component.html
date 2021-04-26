@@ -127,9 +127,13 @@
                   <span matSuffix>円</span>
                 </mat-form-field>
                 <button
+                  type="button"
                   class="settings__ticket-account-btn"
                   color="basic"
                   mat-stroked-button
+                  (click)="
+                    connectedAccountService.createStripeConnectedAccount()
+                  "
                 >
                   販売アカウント変更
                 </button>

@@ -1,11 +1,9 @@
 import { environment } from 'src/environments/environment';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ConnectedAccount } from '@interfaces/connected-account';
-import Stripe from 'stripe';
 import { TransferWithCharge } from '../interfaces/transfer';
 
 @Injectable({
