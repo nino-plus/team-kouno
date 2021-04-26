@@ -39,6 +39,8 @@ export class EventRoomComponent implements OnInit, OnDestroy {
   videoPublishUserIds: string[];
   videoPublishUserIds$: Observable<string[]>;
 
+  isFullScreen: boolean;
+
   constructor(
     private authService: AuthService,
     private route: ActivatedRoute,
@@ -76,6 +78,17 @@ export class EventRoomComponent implements OnInit, OnDestroy {
     this.videoPublishUserIds$ = this.eventService.getVideoPublishUserIds(
       this.eventId
     );
+  }
+
+  goFullscreen(): void {
+    const channel = document.getElementById('channel');
+    channel.requestFullscreen();
+    this.isFullScreen = true;
+  }
+
+  exitFullscreen(): void {
+    document.exitFullscreen();
+    this.isFullScreen = false;
   }
 
   async leaveChannel(): Promise<void> {

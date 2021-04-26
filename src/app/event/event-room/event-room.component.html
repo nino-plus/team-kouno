@@ -6,7 +6,15 @@
 
   <mat-drawer-container class="drawer-container" autosize>
     <ng-container *ngIf="event$ | async as event">
-      <div class="channel">
+      <div class="channel" id="channel">
+        <button
+          *ngIf="isFullScreen"
+          matTooltip="戻る"
+          class="actions__btn actions__btn--close"
+          (click)="exitFullscreen()"
+        >
+          <mat-icon class="actions__icon">close_fullscreen</mat-icon>
+        </button>
         <ng-container *ngIf="participants$ | async as participants">
           <div
             id="local-player"
@@ -139,6 +147,13 @@
       (click)="leaveChannel()"
     >
       <mat-icon class="actions__icon">exit_to_app</mat-icon>
+    </button>
+    <button
+      matTooltip="全画面表示"
+      class="actions__btn"
+      (click)="goFullscreen()"
+    >
+      <mat-icon class="actions__icon">fullscreen</mat-icon>
     </button>
   </div>
 </ng-container>
