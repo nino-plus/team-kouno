@@ -77,9 +77,11 @@
   }
   &__flex-item {
     margin-right: 16px;
-    cursor: pointer;
-    &:hover {
-      color: #1bcbe0;
+    &--active {
+      &:hover {
+        cursor: pointer;
+        color: #1bcbe0;
+      }
     }
     @include sp {
       display: none;

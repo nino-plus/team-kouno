@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ConnectedAccountGuard } from '../guards/connected-account.guard';
 import { AccountComponent } from './account/account.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { PaymentComponent } from './payment/payment.component';

@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User } from 'src/app/interfaces/user';
+import { UserFollowService } from 'src/app/services/user-follow.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -11,25 +12,28 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./followings-dialog.component.scss'],
 })
 export class FollowingsDialogComponent implements OnInit {
-  myFollowingUids$: Observable<string[]>;
-  followings$: Observable<User[]> = this.userService.getFollowings(
-    this.data.currentUser.uid
+  targetUserFollowings$: Observable<User[]> = this.userService.getFollowings(
+    this.data.targetUid
+  );
+  myFollowingUids$: Observable<string[]> = this.userService.getFollowings(this.data.authUid).pipe(
+    map((users) => {
+      if (users) {
+        return users.map((user) => user.uid);
+      } else {
+        return null;
+      }
+    })
   );
 
   constructor(
     private userService: UserService,
+    public followService: UserFollowService,
     @Inject(MAT_DIALOG_DATA)
     public data: {
-      currentUser: User;
-      followings: User[];
+      authUid: string;
+      targetUid: string;
     }
-  ) {
-    this.myFollowingUids$ = this.followings$.pipe(
-      map((users) => {
-        return users.map((user) => user.uid);
-      })
-    );
-  }
+  ) {}
 
   ngOnInit(): void {}
 }

@@ -15,9 +15,9 @@
     <li class="ticket__item">
       <img
         class="ticket__avatar"
-        [style.background-image]="'url(' + user.avatarURL + ')'"
+        [style.background-image]="'url(' + data.targetUser.avatarURL + ')'"
       />
-      <p>{{ user.name }}</p>
+      <p>{{ data.targetUser.name }}</p>
     </li>
     <li class="ticket__item">
       <p class="ticket__name">チケット</p>
@@ -25,10 +25,10 @@
     </li>
   </ul>
   <button
-    *ngIf="!uiService.loading"
+    *ngIf="!uiService.loading && connectedAccountId$ | async as connectedAccountId"
     class="ticket__charge"
     mat-flat-button
-    (click)="charge(ticket)"
+    (click)="charge(ticket, connectedAccountId)"
   >
     チケットを購入して入室する
   </button>
