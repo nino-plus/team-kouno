@@ -53,7 +53,8 @@ export class EventCardComponent implements OnInit {
 
   joinChannel(event: Event, $event): void {
     if (
-      event.startAt < this.eventService.dateNow &&
+      event.startAt.toMillis() <
+        this.eventService.dateNow.toMillis() - 600000 &&
       event.exitAt >= this.eventService.dateNow
     ) {
       this.router.navigateByUrl(`/event/${event.eventId}/${this.uid}`);

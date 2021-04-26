@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  ViewChild,
-  ElementRef,
-  AfterViewInit,
-} from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { ChatWithUser } from 'src/app/interfaces/chat';
@@ -26,7 +19,6 @@ export class ChatComponent implements OnInit {
   uid = this.authService.uid;
   form = new FormControl();
   chats$: Observable<ChatWithUser[]>;
-  isShow: boolean;
 
   constructor(
     private chatService: ChatService,
@@ -39,21 +31,10 @@ export class ChatComponent implements OnInit {
     this.chats$.pipe(shareReplay(1)).subscribe(() => {
       if (this.uiService.isOpen) {
         setTimeout(() => {
-          this.target.nativeElement.scrollIntoView(false);
+          this.target?.nativeElement.scrollIntoView(false);
         }, 1000);
       }
     });
-  }
-
-  // ngAfterViewInit(): void {
-  //   setTimeout(() => {
-  //     this.target.nativeElement.scrollIntoView(false);
-  //   }, 1000);
-  // }
-
-  toggleToolBar() {
-    this.isShow = !this.isShow;
-    console.log(this.isShow);
   }
 
   createChat(): void {
