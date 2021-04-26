@@ -111,10 +111,7 @@
 
           <div class="settings__value">
             <ng-container
-              *ngIf="
-                connectedAccountService.connectedAccountId.length;
-                else createAccount
-              "
+              *ngIf="connectedAccountId$ | async; else createAccount"
             >
               <div class="settings__ticket-wrap">
                 <mat-form-field appearance="outline">
@@ -130,9 +127,13 @@
                   <span matSuffix>円</span>
                 </mat-form-field>
                 <button
+                  type="button"
                   class="settings__ticket-account-btn"
                   color="basic"
                   mat-stroked-button
+                  (click)="
+                    connectedAccountService.createStripeConnectedAccount()
+                  "
                 >
                   販売アカウント変更
                 </button>

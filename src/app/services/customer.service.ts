@@ -31,7 +31,7 @@ export class CustomerService {
     private fns: AngularFireFunctions
   ) {}
 
-  getBalance(): Promise<any> {
+  getBalance(): Promise<Stripe.Balance> {
     const callable = this.fns.httpsCallable('getStripeAccountBalance');
     return callable({}).toPromise();
   }

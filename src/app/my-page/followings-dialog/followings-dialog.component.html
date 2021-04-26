@@ -3,7 +3,10 @@
 <mat-divider></mat-divider>
 
 <mat-dialog-content>
-  <div class="following" *ngFor="let following of data.followings">
+  <div
+    class="following"
+    *ngFor="let following of targetUserFollowings$ | async"
+  >
     <a
       class="following__avatar"
       routerLink="/{{ following?.uid }}"
@@ -19,8 +22,19 @@
       {{ following?.name }}
     </a>
     <span class="spacer"></span>
-    <ng-container *ngIf="myFollowingUids$ | async as myFollowingUids">
-      <button mat-stroked-button class="following__btn">
+    <ng-container
+      *ngIf="myFollowingUids$ | async as myFollowingUids; else follow"
+    >
+      <button
+        *ngIf="following.uid !== data.authUid"
+        mat-stroked-button
+        class="following__btn"
+        (click)="
+          myFollowingUids.includes(following?.uid)
+            ? followService.unFollow(data.authUid, following.uid)
+            : followService.follow(data.authUid, following.uid)
+        "
+      >
         {{
           myFollowingUids.includes(following?.uid)
             ? 'フォロー中'
@@ -28,6 +42,15 @@
         }}
       </button>
     </ng-container>
+    <ng-template #follow>
+      <button
+        mat-stroked-button
+        class="following__btn"
+        (click)="followService.follow(data.authUid, following.uid)"
+      >
+        フォローする
+      </button>
+    </ng-template>
   </div>
 </mat-dialog-content>
 

@@ -1,13 +1,16 @@
 import * as functions from 'firebase-functions';
 import { stripe } from './client';
 import Stripe from 'stripe';
+import { ConnectedAccount } from '../interfaces/connected-account';
+import * as admin from 'firebase-admin';
+const db = admin.firestore();
 
 export const getStripeTransfers = functions
   .region('asia-northeast1')
   .https.onCall(
     async (
       data: {
-        stripeAccount: string;
+        stripeAccount?: string;
         startingAfter?: string;
         endingBefore?: string;
       },
@@ -20,16 +23,17 @@ export const getStripeTransfers = functions
         );
       }
 
-      if (!data?.stripeAccount) {
-        throw new functions.https.HttpsError(
-          'permission-denied',
-          '販売アカウントがありません'
-        );
+      const connectedAccount: ConnectedAccount = (
+        await db.doc(`connectedAccounts/${context.auth.uid}`).get()
+      )?.data() as ConnectedAccount;
+
+      if (!connectedAccount) {
+        return null
       }
 
       const params: Stripe.TransferListParams = {
         limit: 10,
-        destination: data.stripeAccount,
+        destination: connectedAccount.connectedAccountId,
         expand: ['data.destination_payment'],
       };
 
