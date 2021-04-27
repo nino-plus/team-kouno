@@ -6,6 +6,7 @@ import { combineLatest, Observable, of } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 import { Chat, ChatWithUser } from '../interfaces/chat';
 import { User } from '../interfaces/user';
+import { SoundService } from './sound.service';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -15,18 +16,24 @@ export class ChatService {
   constructor(
     private db: AngularFirestore,
     private snackBar: MatSnackBar,
-    private userService: UserService
+    private userService: UserService,
+    private soundService: SoundService
   ) {}
 
   async createChat(eventId: string, uid: string, chat): Promise<void> {
     const chatId = this.db.createId();
-    this.db.doc<Chat>(`events/${eventId}/chats/${chatId}`).set({
-      ...chat,
-      uid,
-      chatId,
-      eventId,
-      createdAt: firebase.firestore.Timestamp.now(),
-    });
+    this.db
+      .doc<Chat>(`events/${eventId}/chats/${chatId}`)
+      .set({
+        ...chat,
+        uid,
+        chatId,
+        eventId,
+        createdAt: firebase.firestore.Timestamp.now(),
+      })
+      .then(() => {
+        this.soundService.sound('sign', 0.3);
+      });
   }
 
   getChatsWithUser(eventId: string): Observable<ChatWithUser[]> {
