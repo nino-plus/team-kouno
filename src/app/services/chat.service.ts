@@ -32,7 +32,7 @@ export class ChatService {
         createdAt: firebase.firestore.Timestamp.now(),
       })
       .then(() => {
-        this.soundService.sound('sign', 0.3);
+        this.soundService.postSound.play();
       });
   }
 
