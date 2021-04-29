@@ -7,7 +7,12 @@
     [class.close]="!messagingService.isShow"
     (click)="navigateMeeting(message.data.roomId)"
   >
-    <img [src]="message.icon" alt="" width="48px" class="notification__image" />
+    <img
+      [src]="message.data.icon"
+      alt=""
+      width="48px"
+      class="notification__image"
+    />
 
     <div class="notification__body">
       <p class="notification__title">{{ message.data.title }}</p>
