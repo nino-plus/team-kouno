@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Follower } from '../interfaces/follower';
 import { Following } from '../interfaces/following';
+import { UnfollowDialogComponent } from '../shared/unfollow-dialog/unfollow-dialog.component';
 import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserFollowService {
-  constructor(private db: AngularFirestore) {}
+  constructor(private db: AngularFirestore, private dialog: MatDialog) {}
 
   follow(uid: string, targetId: string): void {
     this.db.doc<Following>(`users/${uid}/follows/${targetId}`).set({
@@ -29,16 +29,23 @@ export class UserFollowService {
   }
 
   unFollow(uid: string, targetId: string): void {
-    this.db.doc<Following>(`users/${uid}/follows/${targetId}`).delete();
-    this.db.doc<Following>(`users/${targetId}/followers/${uid}`).delete();
+    this.dialog
+      .open(UnfollowDialogComponent, {
+        width: '250px',
+      })
+      .afterClosed()
+      .subscribe((status) => {
+        if (status) {
+          this.db.doc<Following>(`users/${uid}/follows/${targetId}`).delete();
+          this.db.doc<Following>(`users/${targetId}/followers/${uid}`).delete();
+        }
+      });
   }
 
-  async checkFollowing(uid: string, targetId: string): Promise<boolean> {
+  checkFollowing(uid: string, targetId: string): Observable<boolean> {
     return this.db
       .doc(`users/${uid}/follows/${targetId}`)
       .valueChanges()
-      .pipe(take(1))
-      .toPromise()
-      .then((doc) => !!doc);
+      .pipe(map((doc) => !!doc));
   }
 }

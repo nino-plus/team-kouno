@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { User } from 'src/app/interfaces/user';
+import { UserFollowService } from 'src/app/services/user-follow.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -11,24 +12,33 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./followers-dialog.component.scss'],
 })
 export class FollowersDialogComponent implements OnInit {
-  myFollowerUids$: Observable<string[]>;
-  followers$: Observable<User[]> = this.userService.getFollowers(
-    this.data.currentUser.uid
+  targetUserFollowers$: Observable<User[]> = this.userService.getFollowers(
+    this.data.targetUid
   );
+  myFollowingUids$: Observable<string[]> = this.userService
+    .getFollowings(this.data.authUid)
+    .pipe(
+      map((users) => {
+        if (users) {
+          return users.map((user) => user.uid);
+        } else {
+          return null;
+        }
+      })
+    );
 
   constructor(
     private userService: UserService,
+    public followService: UserFollowService,
     @Inject(MAT_DIALOG_DATA)
     public data: {
-      currentUser: User;
-      followers: User[];
+      authUid: string;
+      targetUid: string;
     }
-  ) {
-    this.myFollowerUids$ = this.followers$.pipe(
-      map((users) => {
-        return users.map((user) => user.uid);
-      })
-    );
+  ) {}
+
+  log(id) {
+    console.log(id);
   }
 
   ngOnInit(): void {}

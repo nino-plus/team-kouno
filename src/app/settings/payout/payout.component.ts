@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ConnectedAccountService } from 'src/app/services/connected-account.service';
+import { CustomerService } from 'src/app/services/customer.service';
 import Stripe from 'stripe';
 
 @Component({
@@ -18,8 +19,11 @@ export class PayoutComponent implements OnInit {
   payoutAmount: number;
   loading = true;
 
-  constructor(public connectedAccountService: ConnectedAccountService) {
-    this.connectedAccountService.getBalance().then((balance) => {
+  constructor(private customerService: CustomerService, public connectedAccountService: ConnectedAccountService) {
+    this.customerService.getBalance().then((balance) => {
+      if(!balance) {
+        return this.loading = false;
+      }
       this.balance = balance;
       this.available = balance.available.length
         ? balance.available[0].amount

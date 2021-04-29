@@ -5,6 +5,7 @@ import { take } from 'rxjs/operators';
 import { fade } from 'src/app/animations/animations';
 import { Event } from 'src/app/interfaces/event';
 import { EventService } from 'src/app/services/event.service';
+import { SoundService } from 'src/app/services/sound.service';
 import { EventDetailDialogComponent } from '../event-detail-dialog/event-detail-dialog.component';
 
 @Component({
@@ -23,7 +24,8 @@ export class EventCardComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private router: Router,
-    private eventService: EventService
+    private eventService: EventService,
+    private soundService: SoundService
   ) {}
 
   ngOnInit(): void {}
@@ -53,10 +55,15 @@ export class EventCardComponent implements OnInit {
 
   joinChannel(event: Event, $event): void {
     if (
-      event.startAt < this.eventService.dateNow &&
+      event.startAt.toMillis() <
+        this.eventService.dateNow.toMillis() - 600000 &&
       event.exitAt >= this.eventService.dateNow
     ) {
-      this.router.navigateByUrl(`/event/${event.eventId}/${this.uid}`);
+      this.router
+        .navigateByUrl(`/event/${event.eventId}/${this.uid}`)
+        .then(() => {
+          this.soundService.joinSound.play();
+        });
     } else {
       this.navigateDetail(event, $event);
     }

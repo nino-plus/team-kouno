@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { combineLatest, merge, Observable, of } from 'rxjs';
-import { flatMap, map, mergeMap, switchMap } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { Log, LogWithUser } from '../interfaces/log';
 import { User } from '../interfaces/user';
-import { UserFollowService } from './user-follow.service';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -25,20 +24,22 @@ export class LogService {
     const followings$ = this.userService.getFollowings(uid);
     return followings$.pipe(
       switchMap((followings: User[]) => {
-        const logs$: Observable<Log[][]> = combineLatest(
+        const logs$: Observable<Log[]> = combineLatest(
           followings?.map((follow: User) => this.getLogs(follow.uid))
+        ).pipe(
+          map((logs) => {
+            return [].concat(...logs);
+          })
         );
-        return combineLatest([logs$, of(followings)]);
+        return combineLatest([logs$, followings$]);
       }),
-      mergeMap(([logsArray, users]) => {
-        if (logsArray?.length) {
-          return logsArray.map((logs: Log[]) => {
-            return logs.map((log: Log) => {
-              return {
-                ...log,
-                user: users.find((user: User) => log.uid === user?.uid),
-              };
-            });
+      map(([logs, users]) => {
+        if (logs?.length) {
+          return logs.map((log) => {
+            return {
+              ...log,
+              user: users.find((user: User) => log.uid === user?.uid),
+            };
           });
         } else {
           return [];

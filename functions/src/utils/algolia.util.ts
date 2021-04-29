@@ -98,7 +98,7 @@ export class Algolia {
    * @param id 削除対象のid
    * @param idKey idのキー名(デフォルトは'id')
    */
-  removeRecord(indexName: string, id: string, idKey: string = 'eventId') {
+  removeRecord(indexName: string, id: string, idKey: string = 'objectID') {
     const index = client.initIndex(indexName);
     return index.deleteBy({ filters: `${idKey}:${id}` });
   }

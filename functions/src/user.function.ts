@@ -42,9 +42,21 @@ export const deleteUserAccount = functions
       .collectionGroup(`reserveUids`)
       .where('uid', '==', uid);
     const deleteAllReservedEvents = deleteCollectionByReference(reservedEvents);
+    const deleteFollows = db
+      .collectionGroup(`follows`)
+      .where('followingId', '==', uid);
+    const deleteFollowers = db
+      .collectionGroup(`followers`)
+      .where('followerId', '==', uid);
+    const deleteMyFollows = db.collection(`users/${uid}/follows`);
+    const deleteMyFollowers = db.collection(`users/${uid}/followers`);
     return Promise.all([
       deleteDbUser,
       deleteAllEvents,
       deleteAllReservedEvents,
+      deleteFollows,
+      deleteFollowers,
+      deleteMyFollows,
+      deleteMyFollowers,
     ]);
   });

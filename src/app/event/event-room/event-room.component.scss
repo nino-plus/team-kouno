@@ -202,6 +202,17 @@ app-stream {
         background-color: #333;
       }
     }
+    &--close {
+      color: #eee;
+      position: absolute;
+      top: 40px;
+      left: 24px;
+      z-index: 1000;
+      @include sp {
+        top: 16px;
+        left: 16px;
+      }
+    }
   }
 }
 

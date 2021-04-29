@@ -5,18 +5,25 @@
   <a [routerLink]="log.user.uid">
     <img [src]="log.user.avatarURL" alt="" class="card__avatar" />
   </a>
-  <div class="card__info-wrap" *ngIf="event$ | async as event">
+  <div class="card__info-wrap">
     <p class="card__name" *ngIf="log.type === 'create'">
       {{ log.user.name }}さんが新しいイベントを作りました。
     </p>
-    <p class="card__name" *ngIf="log.type === 'reserve'">
-      {{ log.user.name }}さんが{{ event.name }}に参加予約しました。
-    </p>
+    <ng-container *ngIf="event$ | async as event; else blank">
+      <p class="card__name" *ngIf="log.type === 'reserve'">
+        {{ log.user.name }}さんが{{ event.name }}に参加予約しました。
+      </p>
+    </ng-container>
+    <ng-template #blank>
+      <p class="card__name" *ngIf="log.type === 'reserve'">
+        {{ log.user.name }}さんがイベントに参加予約しました。
+      </p>
+    </ng-template>
     <div class="card__bottom-wrap">
       <p class="card__date">
         {{ log.createdAt.toMillis() | date: 'MM/dd HH:mm' }}
       </p>
-      <div class="card__actions">
+      <div class="card__actions" *ngIf="event$ | async as event">
         <button
           mat-flat-button
           class="card__btn"

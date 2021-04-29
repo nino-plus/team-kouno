@@ -9,6 +9,7 @@ import { User } from 'src/app/interfaces/user';
 import { AgoraService } from 'src/app/services/agora.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { EventService } from 'src/app/services/event.service';
+import { SoundService } from 'src/app/services/sound.service';
 import { UiService } from 'src/app/services/ui.service';
 import { ShareScreenInfoDialogComponent } from 'src/app/shared/share-screen-info-dialog/share-screen-info-dialog.component';
 
@@ -39,6 +40,8 @@ export class EventRoomComponent implements OnInit, OnDestroy {
   videoPublishUserIds: string[];
   videoPublishUserIds$: Observable<string[]>;
 
+  isFullScreen: boolean;
+
   constructor(
     private authService: AuthService,
     private route: ActivatedRoute,
@@ -48,7 +51,8 @@ export class EventRoomComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private bottomSheet: MatBottomSheet,
-    public uiService: UiService
+    public uiService: UiService,
+    private soundService: SoundService
   ) {}
 
   ngOnInit(): void {
@@ -78,6 +82,17 @@ export class EventRoomComponent implements OnInit, OnDestroy {
     );
   }
 
+  goFullscreen(): void {
+    const channel = document.getElementById('channel');
+    channel.requestFullscreen();
+    this.isFullScreen = true;
+  }
+
+  exitFullscreen(): void {
+    document.exitFullscreen();
+    this.isFullScreen = false;
+  }
+
   async leaveChannel(): Promise<void> {
     this.isProcessing = true;
     this.isJoin = false;
@@ -86,6 +101,7 @@ export class EventRoomComponent implements OnInit, OnDestroy {
       .then(() => {
         this.isProcessing = false;
         this.snackBar.open('退室しました');
+        this.soundService.exitSound.play();
       })
       .finally(() => {
         this.router.navigateByUrl('/');
