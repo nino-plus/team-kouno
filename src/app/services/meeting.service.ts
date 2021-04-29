@@ -6,13 +6,18 @@ import { map, switchMap } from 'rxjs/operators';
 import { Invite, InviteWithSender } from '../intefaces/invite';
 import { Room } from '../interfaces/room';
 import { User } from '../interfaces/user';
+import { SoundService } from './sound.service';
 import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MeetingService {
-  constructor(private db: AngularFirestore, private userService: UserService) {}
+  constructor(
+    private db: AngularFirestore,
+    private userService: UserService,
+    private soundService: SoundService
+  ) {}
 
   async createEmptyRoom(uid: string) {
     const id = this.db.createId();
@@ -24,11 +29,16 @@ export class MeetingService {
   }
 
   createInvite(uid: string, roomId: string, senderUid: string) {
-    this.db.doc(`users/${uid}/invite/${roomId}`).set({
-      roomId,
-      senderUid,
-      createdAt: firebase.firestore.Timestamp.now(),
-    });
+    this.db
+      .doc(`users/${uid}/invite/${roomId}`)
+      .set({
+        roomId,
+        senderUid,
+        createdAt: firebase.firestore.Timestamp.now(),
+      })
+      .then(() => {
+        this.soundService.joinSound.play();
+      });
   }
 
   getRoom(roomId: string) {
