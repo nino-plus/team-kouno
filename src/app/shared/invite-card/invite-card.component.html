@@ -32,7 +32,7 @@
   <a
     mat-flat-button
     class="card__btn card__btn--submit"
-    [routerLink]="'/meeting/' + invite.roomId"
+    (click)="navigateMeetingRoom(invite.roomId)"
   >
     参加する
   </a>
