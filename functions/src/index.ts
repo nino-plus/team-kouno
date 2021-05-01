@@ -23,4 +23,3 @@ export * from './stripe/payment-method.function';
 export * from './stripe/product.funtions';
 export * from './stripe/connect.function';
 export * from './stripe/transfer.functoin';
-export * from './sound.function';
