@@ -50,6 +50,11 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'waiting',
+    loadChildren: () =>
+      import('./waiting/waiting.module').then((m) => m.WaitingModule),
+  },
+  {
     path: '404',
     component: NotFoundComponent,
   },
