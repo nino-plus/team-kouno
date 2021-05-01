@@ -3,7 +3,8 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { map, shareReplay, switchMap, take } from 'rxjs/operators';
 import { Event, EventWithOwner } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { AgoraService } from 'src/app/services/agora.service';
@@ -19,6 +20,7 @@ import { ShareScreenInfoDialogComponent } from 'src/app/shared/share-screen-info
   styleUrls: ['./event-room.component.scss'],
 })
 export class EventRoomComponent implements OnInit, OnDestroy {
+  readonly subscription = new Subscription();
   eventId: string;
   user$: Observable<User> = this.authService.user$;
   eventWithOwner$: Observable<EventWithOwner>;
@@ -27,7 +29,7 @@ export class EventRoomComponent implements OnInit, OnDestroy {
 
   players: any;
 
-  isJoin: boolean;
+  isJoin: boolean = true;
   isProcessing: boolean;
   isPublishVideo: boolean;
   isPublishMicrophone: boolean;
@@ -39,6 +41,8 @@ export class EventRoomComponent implements OnInit, OnDestroy {
   event$: Observable<Event>;
   videoPublishUserIds: string[];
   videoPublishUserIds$: Observable<string[]>;
+  participantCount$: Observable<number>;
+  participantCount: number;
 
   isFullScreen: boolean;
 
@@ -50,7 +54,6 @@ export class EventRoomComponent implements OnInit, OnDestroy {
     private router: Router,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private bottomSheet: MatBottomSheet,
     public uiService: UiService,
     private soundService: SoundService
   ) {}
@@ -66,6 +69,7 @@ export class EventRoomComponent implements OnInit, OnDestroy {
     if (this.isJoin) {
       this.agoraService.leaveAgoraChannel(this.eventId);
     }
+    this.subscription.unsubscribe();
   }
 
   streamInit(): void {
@@ -80,6 +84,27 @@ export class EventRoomComponent implements OnInit, OnDestroy {
     this.videoPublishUserIds$ = this.eventService.getVideoPublishUserIds(
       this.eventId
     );
+    if (this.isJoin) {
+      this.participantCount$ = this.eventService.getParticipantCount(
+        this.eventId
+      );
+
+      this.subscription.add(
+        this.participants$.pipe(shareReplay(1)).subscribe((participants) => {
+          this.participantCount$.pipe(shareReplay(1)).subscribe((num) => {
+            this.participantCount = num;
+          });
+          console.log(this.participantCount);
+
+          if (participants.length > this.participantCount) {
+            this.soundService.joinSound.play();
+          }
+          if (participants.length < this.participantCount) {
+            this.soundService.exitSound.play();
+          }
+        })
+      );
+    }
   }
 
   goFullscreen(): void {
