@@ -3,7 +3,6 @@ import { AngularFireFunctions } from '@angular/fire/functions';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
 import { fade } from 'src/app/animations/animations';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
@@ -51,7 +50,7 @@ export class UserCardComponent implements OnInit {
       });
   }
 
-  call(uid: string, currentUser: User, userName: string): void {
+  call(uid: string, userName: string): void {
     this.dialog
       .open(ConfirmDialogComponent, {
         autoFocus: false,
@@ -61,18 +60,11 @@ export class UserCardComponent implements OnInit {
       })
       .afterClosed()
       .subscribe(async (status) => {
+        const roomId = await this.meetingService.createEmptyRoom(
+          this.authService.uid
+        );
         if (status) {
-          const roomId = await this.meetingService.createEmptyRoom(
-            this.authService.uid
-          );
-          this.meetingService.createInvite(uid, roomId, this.authService.uid);
-          const tokens$ = this.messagingService.getTokens(uid);
-          tokens$.pipe(take(1)).subscribe((tokens) => {
-            tokens?.map((token) => this.tokens.push(token?.token));
-            this.sendPushMessage(this.tokens, currentUser, roomId);
-          });
-
-          this.router.navigate(['meeting', roomId]);
+          this.router.navigate(['waiting', roomId, { uid: uid }]);
         }
       });
   }
