@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { take } from 'rxjs/operators';
 import { fade } from 'src/app/animations/animations';
 import { Event } from 'src/app/interfaces/event';
 import { EventService } from 'src/app/services/event.service';
@@ -59,11 +58,7 @@ export class EventCardComponent implements OnInit {
         this.eventService.dateNow.toMillis() - 600000 &&
       event.exitAt >= this.eventService.dateNow
     ) {
-      this.router
-        .navigateByUrl(`/event/${event.eventId}/${this.uid}`)
-        .then(() => {
-          this.soundService.joinSound.play();
-        });
+      this.router.navigateByUrl(`/event/${event.eventId}/${this.uid}`);
     } else {
       this.navigateDetail(event, $event);
     }
