@@ -135,6 +135,11 @@ img {
   &--followers {
     padding: 0 16px 24px;
   }
+  &--waiting {
+    padding: 24px 48px 56px;
+    margin: 48px auto;
+    background: linear-gradient(to right bottom, #212121, #434343);
+  }
 }
 
 .intl {
