@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
-import { combineLatest, Observable, of } from 'rxjs';
+import { combineLatest, Observable, of, Subject } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Invite, InviteWithSender } from '../intefaces/invite';
 import { Room } from '../interfaces/room';
@@ -37,7 +37,7 @@ export class MeetingService {
         createdAt: firebase.firestore.Timestamp.now(),
       })
       .then(() => {
-        this.soundService.joinSound.play();
+        this.soundService.callSound.play();
       });
   }
 
