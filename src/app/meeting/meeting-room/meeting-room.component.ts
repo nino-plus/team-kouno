@@ -7,10 +7,11 @@ import {
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { shareReplay, take, tap } from 'rxjs/operators';
+import { shareReplay, take } from 'rxjs/operators';
 import { Room } from 'src/app/interfaces/room';
 import { AuthService } from 'src/app/services/auth.service';
 import { MeetingService } from 'src/app/services/meeting.service';
+import { SoundService } from 'src/app/services/sound.service';
 
 @Component({
   selector: 'app-meeting-room',
@@ -54,7 +55,8 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
     private authService: AuthService,
     private meetingService: MeetingService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private soundService: SoundService
   ) {}
 
   ngOnInit(): void {
@@ -143,6 +145,7 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
     answerCandidates.onSnapshot((snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === 'added') {
+          this.soundService.callSound.stop();
           let data = change.doc.data();
           this.peerConnection.addIceCandidate(new RTCIceCandidate(data));
         }
@@ -173,6 +176,7 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
       new RTCSessionDescription(offerDescription)
     );
     const answerDescription = await this.peerConnection.createAnswer();
+
     await this.peerConnection.setLocalDescription(answerDescription);
 
     const answer = {
