@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Howl, Howler } from 'howler';
+import { Howl } from 'howler';
 
 @Injectable({
   providedIn: 'root',
@@ -7,14 +7,23 @@ import { Howl, Howler } from 'howler';
 export class SoundService {
   postSound: Howl = new Howl({
     src: ['assets/sounds/pa.mp3'],
+    volume: 0.4,
   });
 
   joinSound: Howl = new Howl({
-    src: ['assets/sounds/poincho.mp3', 'assets/sounds/poincho.wav'],
+    src: ['assets/sounds/poincho.mp3'],
+    volume: 0.4,
   });
 
   exitSound: Howl = new Howl({
     src: ['assets/sounds/pyuun.mp3'],
+    volume: 0.4,
+  });
+
+  callSound: Howl = new Howl({
+    src: ['assets/sounds/iphone.mp3'],
+    volume: 0.4,
+    loop: true,
   });
 
   constructor() {}
