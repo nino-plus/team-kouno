@@ -15,7 +15,7 @@ $eventstand-primary: mat-palette($mat-lime, A700);
 $eventstand-accent: mat-palette($mat-grey, A200, A100, A400);
 $eventstand-warn: mat-palette($mat-red);
 
-$eventstand-theme: mat-light-theme(
+$eventstand-theme: mat-dark-theme(
   (
     color: (
       primary: $eventstand-primary,
@@ -136,9 +136,18 @@ img {
     padding: 0 16px 24px;
   }
   &--waiting {
+    max-width: 640px;
+    min-height: 80vh;
     padding: 24px 48px 56px;
-    margin: 48px auto;
+    margin: 24px auto 0;
     background: linear-gradient(to right bottom, #212121, #434343);
+    color: #fafafa;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border-radius: 8px;
+    @include sp {
+      padding: 16px;
+      margin: 0 auto;
+    }
   }
 }
 
