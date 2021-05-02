@@ -28,13 +28,19 @@ export class MeetingService {
     return id;
   }
 
-  createInvite(uid: string, roomId: string, senderUid: string) {
+  createInvite(
+    uid: string,
+    roomId: string,
+    senderUid: string,
+    message: string
+  ) {
     this.db
       .doc(`users/${uid}/invite/${roomId}`)
       .set({
         roomId,
         senderUid,
         createdAt: firebase.firestore.Timestamp.now(),
+        message,
       })
       .then(() => {
         this.soundService.callSound.play();
