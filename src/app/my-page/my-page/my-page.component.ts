@@ -127,15 +127,7 @@ export class MyPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  async sendPushMessage(
-    tokens: string[],
-    authUser: User,
-    roomId: string
-  ): Promise<void> {
-    this.messagingService.sendPushMessage(tokens, authUser, roomId);
-  }
-
-  call(uid: string, authUser: User, userName: string): void {
+  call(uid: string, userName: string): void {
     this.dialog
       .open(ConfirmDialogComponent, {
         autoFocus: false,
@@ -149,14 +141,7 @@ export class MyPageComponent implements OnInit, OnDestroy {
           const roomId = await this.meetingService.createEmptyRoom(
             this.authService.uid
           );
-          this.meetingService.createInvite(uid, roomId, this.authService.uid);
-          const tokens$ = this.messagingService.getTokens(uid);
-          tokens$.pipe(take(1)).subscribe((tokens) => {
-            tokens?.map((token) => this.tokens.push(token?.token));
-            this.sendPushMessage(this.tokens, authUser, roomId);
-          });
-
-          this.router.navigate(['meeting', roomId]);
+          this.router.navigate(['waiting', roomId, { uid: uid }]);
         }
       });
   }
