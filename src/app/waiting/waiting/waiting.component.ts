@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireFunctions } from '@angular/fire/functions';
-import { ActivatedRoute } from '@angular/router';
+import { FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { fade } from 'src/app/animations/animations';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { MeetingService } from 'src/app/services/meeting.service';
@@ -13,6 +15,7 @@ import { UserService } from 'src/app/services/user.service';
   selector: 'app-waiting',
   templateUrl: './waiting.component.html',
   styleUrls: ['./waiting.component.scss'],
+  animations: [fade],
 })
 export class WaitingComponent implements OnInit {
   tokens: string[] = [];
@@ -20,13 +23,23 @@ export class WaitingComponent implements OnInit {
   uid: string = this.route.snapshot.paramMap.get('uid');
   user$: Observable<User> = this.userService.getUserData(this.uid);
 
+  readonly MESSAGE_MAX_LENGTH = 200;
+  form = this.fb.group({
+    message: [
+      'こんにちは！',
+      [Validators.required, Validators.maxLength(this.MESSAGE_MAX_LENGTH)],
+    ],
+  });
+
   constructor(
     private meetingService: MeetingService,
     private authService: AuthService,
     private messagingService: MessagingService,
     private fns: AngularFireFunctions,
     private route: ActivatedRoute,
-    private userService: UserService
+    private userService: UserService,
+    private fb: FormBuilder,
+    private router: Router
   ) {}
 
   ngOnInit(): void {}
@@ -50,12 +63,21 @@ export class WaitingComponent implements OnInit {
   }
 
   async call(currentUser: User): Promise<void> {
+    const formData = this.form.value;
+    const message = formData.message;
     const roomId = this.route.snapshot.paramMap.get('roomId');
-    this.meetingService.createInvite(this.uid, roomId, this.authService.uid);
+    this.meetingService.createInvite(
+      this.uid,
+      roomId,
+      this.authService.uid,
+      message
+    );
     const tokens$ = this.messagingService.getTokens(this.uid);
     tokens$.pipe(take(1)).subscribe((tokens) => {
       tokens?.map((token) => this.tokens.push(token?.token));
       this.sendPushMessage(this.tokens, currentUser, roomId);
     });
+
+    this.router.navigate(['meeting', roomId]);
   }
 }
