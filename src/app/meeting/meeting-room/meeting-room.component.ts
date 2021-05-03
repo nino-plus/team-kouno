@@ -226,6 +226,7 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
     await roomRef.delete();
 
     this.closeVideoCall();
+    this.soundService.callSound.stop();
     this.snackBar.open('通話を終了しました');
   }
 
