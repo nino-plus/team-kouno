@@ -30,12 +30,12 @@ export class InviteDialogComponent implements OnInit {
     this.soundService.callSound.stop();
     const id = this.db.createId();
     const senderUid = this.data.lastInvite.senderUid;
-    console.log(firebase.firestore.Timestamp.now());
-    console.log(this.data.user.uid);
 
     this.db.doc(`users/${senderUid}/rejects/${id}`).set({
       createdAt: firebase.firestore.Timestamp.now(),
       uid: this.data.user.uid,
+      avatarURL: this.data.user.avatarURL,
+      name: this.data.user.name,
     });
   }
 
