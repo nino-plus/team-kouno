@@ -87,26 +87,28 @@ export class AppComponent {
         });
     });
 
-    this.user$
-      .pipe(take(1))
-      .toPromise()
-      .then((user: User) => {
-        this.meetingService
-          .getInvites(user.uid)
-          .pipe(skip(1), shareReplay(1))
-          .subscribe((invites) => {
-            const lastInvite = invites.shift();
+    // this.user$
+    //   .pipe(take(1))
+    //   .toPromise()
+    //   .then((user: User) => {
+    //     console.log(user);
 
-            if (lastInvite.createdAt.toMillis() >= this.dateNow.toMillis()) {
-              this.soundService.callSound.play();
-              console.log(lastInvite);
+    //     this.meetingService
+    //       .getInvites(user.uid)
+    //       .pipe(skip(1), shareReplay(1))
+    //       .subscribe((invites) => {
+    //         const lastInvite = invites.shift();
 
-              this.dialog.open(InviteDialogComponent, {
-                data: { lastInvite },
-              });
-            }
-          });
-      });
+    //         if (lastInvite.createdAt.toMillis() >= this.dateNow.toMillis()) {
+    //           this.soundService.callSound.play();
+    //           console.log(lastInvite);
+
+    //           this.dialog.open(InviteDialogComponent, {
+    //             data: { lastInvite, user },
+    //           });
+    //         }
+    //       });
+    //   });
   }
 
   close(): void {
