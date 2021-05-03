@@ -46,6 +46,8 @@ import { AutoOpenLoginMenuComponent } from './auto-open-login-menu/auto-open-log
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { QuillModule } from 'ngx-quill';
 import { InviteDialogComponent } from './invite-dialog/invite-dialog.component';
+import { MainShellComponent } from './main-shell/main-shell.component';
+import { RejectDialogComponent } from './reject-dialog/reject-dialog.component';
 
 registerLocaleData(localeJa);
 
@@ -57,6 +59,8 @@ registerLocaleData(localeJa);
     NotFoundComponent,
     AutoOpenLoginMenuComponent,
     InviteDialogComponent,
+    MainShellComponent,
+    RejectDialogComponent,
   ],
   imports: [
     BrowserModule,
