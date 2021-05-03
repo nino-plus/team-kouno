@@ -1,18 +1,11 @@
 import { Component } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { shareReplay, skip, take } from 'rxjs/operators';
-import { InviteWithSender } from './intefaces/invite';
-import { User } from './interfaces/user';
-import { InviteDialogComponent } from './invite-dialog/invite-dialog.component';
 import { AuthService } from './services/auth.service';
-import { MeetingService } from './services/meeting.service';
 import { MessagingService } from './services/messaging.service';
-import { SoundService } from './services/sound.service';
 
 @Component({
   selector: 'app-root',
@@ -46,18 +39,12 @@ export class AppComponent {
     lastChangedAt: firebase.database.ServerValue.TIMESTAMP,
   };
 
-  invites$: Observable<InviteWithSender[]>;
-  dateNow: firebase.firestore.Timestamp = firebase.firestore.Timestamp.now();
-
   constructor(
     private db: AngularFirestore,
     private authService: AuthService,
     private rdb: AngularFireDatabase,
     public messagingService: MessagingService,
-    private router: Router,
-    private meetingService: MeetingService,
-    private soundService: SoundService,
-    private dialog: MatDialog
+    private router: Router
   ) {
     this.user$.subscribe((user) => {
       if (!user) {
@@ -86,29 +73,6 @@ export class AppComponent {
             .set(this.isOnlineForFirestore, { merge: true });
         });
     });
-
-    // this.user$
-    //   .pipe(take(1))
-    //   .toPromise()
-    //   .then((user: User) => {
-    //     console.log(user);
-
-    //     this.meetingService
-    //       .getInvites(user.uid)
-    //       .pipe(skip(1), shareReplay(1))
-    //       .subscribe((invites) => {
-    //         const lastInvite = invites.shift();
-
-    //         if (lastInvite.createdAt.toMillis() >= this.dateNow.toMillis()) {
-    //           this.soundService.callSound.play();
-    //           console.log(lastInvite);
-
-    //           this.dialog.open(InviteDialogComponent, {
-    //             data: { lastInvite, user },
-    //           });
-    //         }
-    //       });
-    //   });
   }
 
   close(): void {
