@@ -1,26 +1,37 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   AngularFirestore,
   DocumentReference,
   DocumentSnapshot,
 } from '@angular/fire/firestore';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { shareReplay, take } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
+import { shareReplay, skip, take } from 'rxjs/operators';
+import { Reject } from 'src/app/interfaces/reject';
 import { Room } from 'src/app/interfaces/room';
 import { AuthService } from 'src/app/services/auth.service';
 import { MeetingService } from 'src/app/services/meeting.service';
 import { SoundService } from 'src/app/services/sound.service';
+import firebase from 'firebase/app';
+import { RejectDialogComponent } from 'src/app/reject-dialog/reject-dialog.component';
 
 @Component({
   selector: 'app-meeting-room',
   templateUrl: './meeting-room.component.html',
   styleUrls: ['./meeting-room.component.scss'],
 })
-export class MeetingRoomComponent implements OnInit, AfterViewInit {
+export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('webcamVideo') webcamVideo: HTMLVideoElement;
   @ViewChild('remoteVideo') remoteVideo: HTMLVideoElement;
+  private subscription = new Subscription();
 
   readonly servers: RTCConfiguration = {
     iceServers: [
@@ -49,6 +60,9 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
   room$: Observable<Room> = this.meetingService.getRoom(this.roomId);
   room: Room;
 
+  rejects$: Observable<Reject[]>;
+  dateNow: firebase.firestore.Timestamp = firebase.firestore.Timestamp.now();
+
   constructor(
     private db: AngularFirestore,
     private route: ActivatedRoute,
@@ -56,7 +70,8 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
     private meetingService: MeetingService,
     private router: Router,
     private snackBar: MatSnackBar,
-    private soundService: SoundService
+    private soundService: SoundService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -73,7 +88,25 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
           }, 500);
         }
       });
+
+      this.rejects$ = this.meetingService.getRejects(room.ownerId);
+      this.subscription.add(
+        this.rejects$.pipe(skip(1), shareReplay(1)).subscribe((rejects) => {
+          const lastReject = rejects.shift();
+
+          if (lastReject.createdAt.toMillis() >= this.dateNow.toMillis()) {
+            this.soundService.callSound.stop();
+            this.dialog.open(RejectDialogComponent, {
+              data: { lastReject },
+            });
+          }
+        })
+      );
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   async snapshotRoom(): Promise<Room> {
