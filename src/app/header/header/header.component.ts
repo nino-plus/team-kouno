@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import { UiService } from 'src/app/services/ui.service';
 
 @Component({
   selector: 'app-header',
@@ -9,7 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class HeaderComponent implements OnInit {
   snsList = ['google', 'twitter', 'facebook', 'github'];
 
-  constructor(public authService: AuthService) {}
+  constructor(public authService: AuthService, public uiService: UiService) {}
 
   ngOnInit(): void {}
 }

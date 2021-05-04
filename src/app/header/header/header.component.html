@@ -1,4 +1,8 @@
-<header class="header">
+<header
+  class="header"
+  [class.scrolled-header]="uiService.scrollHieght > 56"
+  [class.scrolled-hero]="uiService.scrollHieght > 400"
+>
   <h1 class="header__logo">
     <a routerLink="/" class="header__logo-link"
       ><img src="./assets/images/favicon.svg" alt="" />EventStand</a

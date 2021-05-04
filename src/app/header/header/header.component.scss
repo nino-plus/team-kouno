@@ -26,7 +26,13 @@
   align-items: center;
   min-height: 56px;
   box-sizing: border-box;
-  background-color: white;
+  background-color: transparent;
+  &.scrolled-header {
+    background: rgba(#000, 0.6);
+  }
+  &.scrolled-hero {
+    background: rgba(#000, 1);
+  }
   @include sp {
     height: 56px;
     padding: 8px;
@@ -43,7 +49,7 @@
   }
   &__logo-link {
     display: flex;
-    color: #606060;
+    color: #fff;
     align-items: center;
   }
   &__btns {
@@ -62,6 +68,7 @@
     color: $font-logo;
     margin: auto 16px auto 0;
     transition: ease-in-out 0.16s;
+    background: transparent;
     @include sp {
       margin: auto 0;
     }

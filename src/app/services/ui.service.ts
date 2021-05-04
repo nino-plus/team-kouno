@@ -7,6 +7,7 @@ export class UiService {
   dialogType: string;
   loading: boolean;
   isOpen = false;
+  scrollHieght: number;
 
   constructor() {}
 
