@@ -39,10 +39,12 @@ body {
 
 body {
   margin: 0;
-  padding-top: 56px;
   font-family: 'Avenir', 'Helvetica Neue', 'Helvetica', 'Arial', 'Hiragino Sans',
     'ヒラギノ角ゴシック', YuGothic, 'Yu Gothic', 'メイリオ', Meiryo,
     'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
+  background: linear-gradient(to right bottom, #121212, #303030);
+  color: #fafafa;
+  padding-top: 64px;
 }
 
 a {
@@ -410,7 +412,7 @@ img {
 }
 
 .mat-drawer {
-  background: #fff;
+  background: #181818;
   @include sp {
     background: transparent;
     width: 100vw;
@@ -424,7 +426,7 @@ img {
 }
 
 .mat-drawer-container {
-  background: #fff;
+  background: linear-gradient(to right bottom, #212121, #303030);
 }
 
 .home-tab-group {
