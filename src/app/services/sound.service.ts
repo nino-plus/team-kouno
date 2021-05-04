@@ -26,6 +26,21 @@ export class SoundService {
     loop: true,
   });
 
+  openSound: Howl = new Howl({
+    src: ['assets/sounds/open.mp3'],
+    volume: 0.4,
+  });
+
+  decisionSound: Howl = new Howl({
+    src: ['assets/sounds/kettei.mp3'],
+    volume: 0.4,
+  });
+
+  hoverSound: Howl = new Howl({
+    src: ['assets/sounds/ka.mp3'],
+    volume: 0.4,
+  });
+
   constructor() {}
 
   // sound(type, sec): void {
