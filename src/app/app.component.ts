@@ -1,4 +1,10 @@
-import { Component } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  ViewChild,
+} from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
@@ -6,6 +12,7 @@ import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { MessagingService } from './services/messaging.service';
+import { UiService } from './services/ui.service';
 
 @Component({
   selector: 'app-root',
@@ -44,7 +51,8 @@ export class AppComponent {
     private authService: AuthService,
     private rdb: AngularFireDatabase,
     public messagingService: MessagingService,
-    private router: Router
+    private router: Router,
+    private uiService: UiService
   ) {
     this.user$.subscribe((user) => {
       if (!user) {
@@ -82,5 +90,10 @@ export class AppComponent {
   navigateMeeting(roomId: string): void {
     this.router.navigateByUrl('meeting/' + roomId);
     this.close();
+  }
+
+  @HostListener('window:scroll', [])
+  onScroll() {
+    this.uiService.scrollHieght = window.pageYOffset;
   }
 }
