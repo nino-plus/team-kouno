@@ -53,14 +53,14 @@
   }
   &__follow-button {
     height: 36px;
-    color: white;
+    color: $color-font;
     background-color: #1bcbe0;
   }
   &__following-button {
     height: 36px;
     width: 102px;
     padding: 0;
-    color: black;
+    color: $color-font;
     border: solid 1px gray;
     box-sizing: border-box;
   }
