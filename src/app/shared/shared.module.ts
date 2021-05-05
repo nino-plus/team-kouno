@@ -12,15 +12,11 @@ import { ShareScreenInfoDialogComponent } from './share-screen-info-dialog/share
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { UnfollowDialogComponent } from './unfollow-dialog/unfollow-dialog.component';
 import { RouterModule } from '@angular/router';
-import { UserListComponent } from './user-list/user-list.component';
-import { UserCardComponent } from './user-card/user-card.component';
 import { RegisterCardComponent } from './register-card/register-card.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
-import { InviteCardComponent } from './invite-card/invite-card.component';
-import { LogCardComponent } from './log-card/log-card.component';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCardModule } from '@angular/material/card';
@@ -38,12 +34,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     ShareScreenInfoDialogComponent,
     DeleteDialogComponent,
     UnfollowDialogComponent,
-    UserListComponent,
-    UserCardComponent,
     RegisterCardComponent,
     ConfirmDialogComponent,
-    InviteCardComponent,
-    LogCardComponent,
     UserStoreComponent,
     StripeIntervalPipe,
   ],
@@ -72,7 +64,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     InfoDialogComponent,
     DeleteDialogComponent,
     UnfollowDialogComponent,
-    UserListComponent,
     RegisterCardComponent,
     UserStoreComponent,
     StripeIntervalPipe,
