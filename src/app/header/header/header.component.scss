@@ -51,6 +51,7 @@
       width: 16px;
     }
     @include sp {
+      display: inline-block;
       font-size: 14px;
     }
   }
