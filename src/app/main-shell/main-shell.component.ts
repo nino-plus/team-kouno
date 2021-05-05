@@ -9,11 +9,17 @@ import firebase from 'firebase/app';
 import { MatDialog } from '@angular/material/dialog';
 import { InviteDialogComponent } from '../invite-dialog/invite-dialog.component';
 import { shareReplay, skip, switchMap } from 'rxjs/operators';
+import { UiService } from '../services/ui.service';
+import {
+  easeSlideForContent,
+  easeSlideForSideNav,
+} from '../animations/animations';
 
 @Component({
   selector: 'app-main-shell',
   templateUrl: './main-shell.component.html',
   styleUrls: ['./main-shell.component.scss'],
+  animations: [easeSlideForSideNav, easeSlideForContent],
 })
 export class MainShellComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
@@ -27,7 +33,8 @@ export class MainShellComponent implements OnInit, OnDestroy {
     private meetingService: MeetingService,
     private soundService: SoundService,
     private dialog: MatDialog,
-    private authService: AuthService
+    private authService: AuthService,
+    public uiService: UiService
   ) {}
 
   ngOnInit(): void {

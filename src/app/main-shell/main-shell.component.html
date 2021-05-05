@@ -1,1 +1,24 @@
-<router-outlet></router-outlet>
+<mat-sidenav-container [hasBackdrop]="false" autosize>
+  <mat-sidenav
+    mode="side"
+    fixedInViewport
+    class="sidenav"
+    opened
+    [class.open]="uiService.sidenavIsOpen"
+    [class.close]="!uiService.sidenavIsOpen"
+    [@easeSlideForSideNav]="uiService.sidenavIsOpen ? 'open' : 'close'"
+  >
+    <div class="mini-nav" *ngIf="!uiService.sidenavIsOpen">
+      <app-mini-nav> </app-mini-nav>
+    </div>
+    <div class="main-nav">
+      <app-main-nav *ngIf="uiService.sidenavIsOpen"></app-main-nav>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content
+    [@easeSlideForContent]="uiService.sidenavIsOpen ? 'open' : 'close'"
+  >
+    <app-header></app-header>
+    <router-outlet> </router-outlet> </mat-sidenav-content
+></mat-sidenav-container>
