@@ -52,6 +52,7 @@ import { MainNavComponent } from './main-nav/main-nav.component';
 import { MiniNavComponent } from './mini-nav/mini-nav.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
+import { BottomNavComponent } from './bottom-nav/bottom-nav.component';
 
 registerLocaleData(localeJa);
 
@@ -67,6 +68,7 @@ registerLocaleData(localeJa);
     RejectDialogComponent,
     MainNavComponent,
     MiniNavComponent,
+    BottomNavComponent,
   ],
   imports: [
     BrowserModule,
