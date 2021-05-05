@@ -14,9 +14,10 @@
       <div class="menu__parent">
         <a
           mat-list-item
-          routerLink=""
+          routerLink="/"
           class="menu__children"
-          [routerLinkActive]="['is-active']"
+          routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: true }"
         >
           <mat-icon class="menu__icon">home</mat-icon>
           ホーム</a
@@ -48,6 +49,7 @@
       <div class="menu__parent">
         <a
           mat-list-item
+          routerLink="/users"
           class="menu__children"
           [routerLinkActive]="['is-active']"
         >
@@ -56,20 +58,12 @@
         >
         <a
           mat-list-item
-          routerLink="/search"
+          routerLink="/search-person"
           class="menu__children"
           [routerLinkActive]="['is-active']"
         >
           <mat-icon class="menu__icon">search</mat-icon>
           人を探す</a
-        >
-        <a
-          mat-list-item
-          class="menu__children"
-          [routerLinkActive]="['is-active']"
-        >
-          <mat-icon class="menu__icon">add</mat-icon>
-          チームに参加する</a
         >
       </div>
     </mat-nav-list>

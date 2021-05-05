@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { UiService } from '../services/ui.service';
 
@@ -8,7 +9,11 @@ import { UiService } from '../services/ui.service';
   styleUrls: ['./main-nav.component.scss'],
 })
 export class MainNavComponent implements OnInit {
-  constructor(public authService: AuthService, private uiService: UiService) {}
+  constructor(
+    public authService: AuthService,
+    private uiService: UiService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {}
 
