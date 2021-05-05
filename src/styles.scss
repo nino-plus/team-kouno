@@ -104,36 +104,39 @@ img {
     padding: 64px 48px;
     max-width: 960px;
     @include sp {
-      padding: 0 16px;
+      padding: 56px 16px;
     }
   }
   &--calendar {
     padding: 88px 48px;
     @include sp {
-      padding: 16px;
+      padding: 56px 16px;
     }
   }
   &--intl {
     padding: 64px 48px;
     @include sp {
-      padding: 16px;
+      padding: 56px 16px;
     }
   }
   &--search {
     padding-top: 64px;
+    @include sp {
+      padding: 56px;
+    }
   }
   &--result {
     padding: 64px 4%;
     max-width: 1600px;
     @include sp {
       max-width: 100%;
-      padding: 16px 4%;
+      padding: 56px 4%;
     }
   }
   &--event-detail {
     padding: 0 4% 120px;
     @include sp {
-      padding: 0 0 48px;
+      padding: 56px 0 48px;
     }
   }
   &--followers {
@@ -149,7 +152,7 @@ img {
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     border-radius: 8px;
     @include sp {
-      padding: 16px;
+      padding: 56px 16px;
       margin: 0 auto;
     }
   }
