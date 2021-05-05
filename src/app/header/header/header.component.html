@@ -3,12 +3,6 @@
   [class.scrolled-header]="uiService.scrollHieght > 56"
   [class.scrolled-hero]="uiService.scrollHieght > 400"
 >
-  <h1 class="header__logo">
-    <a routerLink="/" class="header__logo-link"
-      ><img src="./assets/images/favicon.svg" alt="" />EventStand</a
-    >
-  </h1>
-
   <app-search-box></app-search-box>
 
   <ng-container *ngIf="authService.user$ | async as user; else default">
@@ -16,14 +10,7 @@
       <button mat-icon-button class="header__search" routerLink="/search">
         <mat-icon>search</mat-icon>
       </button>
-      <button
-        mat-flat-button
-        class="header__event-button"
-        routerLink="/editor/create"
-      >
-        <mat-icon class="header__create">add</mat-icon>
-        <span>イベントをつくる</span>
-      </button>
+
       <button
         mat-mini-fab
         [matMenuTriggerFor]="userMenu"
