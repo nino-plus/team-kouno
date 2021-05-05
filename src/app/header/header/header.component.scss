@@ -33,6 +33,9 @@
   &.scrolled-hero {
     background: rgba(#000, 1);
   }
+  &.mini-nav {
+    left: 72px;
+  }
   @include sp {
     height: 56px;
     padding: 8px;
