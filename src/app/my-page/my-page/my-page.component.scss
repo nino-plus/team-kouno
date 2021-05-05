@@ -2,12 +2,13 @@
 @import 'mixins';
 
 .my-page {
+  min-height: 100vh;
   &__header {
     display: grid;
     grid-template-columns: 240px 1fr;
     gap: 24px;
     align-items: center;
-    padding: 24px;
+    padding: 64px 24px;
     @include sp {
       grid-template-columns: 144px 1fr;
       padding: 16px;
