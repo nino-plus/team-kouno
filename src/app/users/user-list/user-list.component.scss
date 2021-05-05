@@ -1,0 +1,42 @@
+@import 'custom-style';
+@import 'mixins';
+
+.user-list {
+  padding-top: 64px;
+  background: linear-gradient(to right bottom, #121212, #303030);
+  min-height: 100vh;
+  &__heading {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.card-wrap {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 16px 0 40px;
+  @include sp {
+    grid-template-columns: 1fr;
+    margin: 16px;
+  }
+  &--logs {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.card {
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 8px;
+  transition: ease 0.5s;
+  background: #181818;
+  &:hover {
+    background: linear-gradient(to right bottom, #212121, #303030);
+  }
+}
+
+.active {
+  color: $color-font-main;
+}

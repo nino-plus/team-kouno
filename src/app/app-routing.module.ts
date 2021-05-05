@@ -62,6 +62,11 @@ const routes: Routes = [
           import('./waiting/waiting.module').then((m) => m.WaitingModule),
       },
       {
+        path: 'users',
+        loadChildren: () =>
+          import('./users/users.module').then((m) => m.UsersModule),
+      },
+      {
         path: '404',
         component: NotFoundComponent,
       },
