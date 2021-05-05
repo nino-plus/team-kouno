@@ -38,6 +38,7 @@
   }
   &.sp {
     left: 0;
+    background: #000;
   }
   @include sp {
     height: 56px;
@@ -48,7 +49,7 @@
     display: none;
     img {
       margin-right: 4px;
-      width: 16px;
+      width: 120px;
     }
     @include sp {
       display: inline-block;
