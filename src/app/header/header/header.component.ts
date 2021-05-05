@@ -9,6 +9,7 @@ import { UiService } from 'src/app/services/ui.service';
 })
 export class HeaderComponent implements OnInit {
   snsList = ['google', 'twitter', 'facebook', 'github'];
+  isLargeScreen: boolean = this.uiService.isLargeScreen();
 
   constructor(public authService: AuthService, public uiService: UiService) {}
 

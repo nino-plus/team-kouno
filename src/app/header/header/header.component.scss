@@ -36,18 +36,22 @@
   &.mini-nav {
     left: 72px;
   }
+  &.sp {
+    left: 0;
+  }
   @include sp {
     height: 56px;
     padding: 8px;
   }
   &__logo {
     font-family: $font-logo;
+    display: none;
     img {
       margin-right: 4px;
       width: 16px;
     }
     @include sp {
-      font-size: 12px;
+      font-size: 14px;
     }
   }
   &__logo-link {
