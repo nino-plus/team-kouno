@@ -48,6 +48,10 @@ import { QuillModule } from 'ngx-quill';
 import { InviteDialogComponent } from './invite-dialog/invite-dialog.component';
 import { MainShellComponent } from './main-shell/main-shell.component';
 import { RejectDialogComponent } from './reject-dialog/reject-dialog.component';
+import { MainNavComponent } from './main-nav/main-nav.component';
+import { MiniNavComponent } from './mini-nav/mini-nav.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
 
 registerLocaleData(localeJa);
 
@@ -61,6 +65,8 @@ registerLocaleData(localeJa);
     InviteDialogComponent,
     MainShellComponent,
     RejectDialogComponent,
+    MainNavComponent,
+    MiniNavComponent,
   ],
   imports: [
     BrowserModule,
@@ -109,6 +115,8 @@ registerLocaleData(localeJa);
         'emoji-shortname': true,
       },
     }),
+    MatSidenavModule,
+    MatListModule,
   ],
   providers: [
     { provide: REGION, useValue: 'asia-northeast1' },

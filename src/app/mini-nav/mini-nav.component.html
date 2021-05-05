@@ -1,0 +1,63 @@
+<div class="mini-menu">
+  <a class="mini-menu__logo" routerLink="/">
+    <img src="./assets/images/favicon.svg" alt="" />
+  </a>
+  <a
+    mat-list-item
+    routerLink="/search"
+    class="mini-menu__children"
+    [routerLinkActive]="['is-active']"
+  >
+    <mat-icon
+      class="mini-menu__icon"
+      matTooltip="イベントをさがす"
+      matTooltipPosition="after"
+      >search</mat-icon
+    ></a
+  >
+  <a
+    mat-list-item
+    routerLink="/editor"
+    class="mini-menu__children"
+    [routerLinkActive]="['is-active']"
+  >
+    <mat-icon
+      class="mini-menu__icon"
+      matTooltip="イベントをつくる"
+      matTooltipPosition="after"
+      >add</mat-icon
+    >
+  </a>
+  <a
+    mat-list-item
+    routerLink="/users"
+    class="mini-menu__children"
+    [routerLinkActive]="['is-active']"
+  >
+    <mat-icon
+      class="mini-menu__icon"
+      matTooltip="ユーザー"
+      matTooltipPosition="after"
+      >group</mat-icon
+    >
+  </a>
+  <a
+    mat-list-item
+    routerLink="/search"
+    class="mini-menu__children"
+    [routerLinkActive]="['is-active']"
+  >
+    <mat-icon
+      class="mini-menu__icon"
+      matTooltip="人をさがす"
+      matTooltipPosition="after"
+      >person_search</mat-icon
+    >
+  </a>
+
+  <span class="spacer"></span>
+
+  <button mat-mini-fab class="mini-menu__btn" (click)="toggleNav()">
+    <mat-icon>navigate_next</mat-icon>
+  </button>
+</div>
