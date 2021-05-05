@@ -8,6 +8,7 @@ export class UiService {
   loading: boolean;
   isOpen = false;
   scrollHieght: number;
+  sidenavIsOpen = true;
 
   constructor() {}
 
