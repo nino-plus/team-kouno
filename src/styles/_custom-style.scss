@@ -13,11 +13,7 @@ $color-accent: linear-gradient(
   rgba(#feb71f, 1),
   rgba(#ed9309, 1)
 );
-$color-base: linear-gradient(
-  to right bottom,
-  rgba(#fff, 0.038),
-  rgba(#eee, 0.038)
-);
+$color-base: linear-gradient(to right bottom, #303030, #181818);
 
 $color-font: #fafafa;
 $color-font-main: #1ac4da;
