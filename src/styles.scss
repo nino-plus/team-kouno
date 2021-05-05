@@ -44,7 +44,6 @@ body {
     'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
   background: linear-gradient(to right bottom, #121212, #303030);
   color: #fafafa;
-  padding-top: 64px;
 }
 
 a {
@@ -96,13 +95,13 @@ img {
 }
 
 .container {
-  max-width: 1200px;
   padding: 0 48px;
   margin: 0 auto;
   @include sp {
     padding: 0;
   }
   &--event-form {
+    padding: 56px 48px;
     max-width: 960px;
     @include sp {
       padding: 0 16px;
