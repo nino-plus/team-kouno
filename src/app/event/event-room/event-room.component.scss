@@ -8,6 +8,7 @@
   margin-top: 16px;
   position: relative;
   color: $color-font;
+  padding-top: 64px;
   @include sp {
     margin-top: 0;
   }
@@ -30,7 +31,7 @@
   width: 100%;
   height: calc(100vh - 64px - 52px - 68px);
   padding: 8px 16px 0;
-  background: linear-gradient(to right bottom, #212121, #303030);
+  background: #000;
   @include sp {
     padding: 0;
     height: calc(100vh - 56px - 81px);
@@ -304,6 +305,6 @@ app-stream {
   pointer-events: none;
 }
 
-.drawer {
-  background: #181818;
+.mat-drawer {
+  background: none;
 }
