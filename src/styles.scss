@@ -101,26 +101,29 @@ img {
     padding: 0;
   }
   &--event-form {
-    padding: 56px 48px;
+    padding: 64px 48px;
     max-width: 960px;
     @include sp {
       padding: 0 16px;
     }
   }
   &--calendar {
-    padding: 48px;
+    padding: 88px 48px;
     @include sp {
       padding: 16px;
     }
   }
   &--intl {
-    padding: 48px;
+    padding: 64px 48px;
     @include sp {
       padding: 16px;
     }
   }
+  &--search {
+    padding-top: 64px;
+  }
   &--result {
-    padding: 48px 4%;
+    padding: 64px 4%;
     max-width: 1600px;
     @include sp {
       max-width: 100%;
@@ -128,7 +131,7 @@ img {
     }
   }
   &--event-detail {
-    padding: 24px 4% 120px;
+    padding: 0 4% 120px;
     @include sp {
       padding: 0 0 48px;
     }
@@ -139,7 +142,7 @@ img {
   &--waiting {
     max-width: 640px;
     min-height: 80vh;
-    padding: 24px 48px 56px;
+    padding: 64px 48px 56px;
     margin: 24px auto 0;
     background: linear-gradient(to right bottom, #212121, #434343);
     color: #fafafa;
@@ -210,6 +213,36 @@ img {
     align-items: center;
     gap: 8px;
   }
+}
+
+.cal-month-view,
+.cal-week-view,
+.cal-day-view {
+  background: linear-gradient(to right bottom, #121212, #303030);
+  .cal-cell-row {
+    &:hover {
+      background: #303030;
+    }
+  }
+  .cal-cell-top {
+    &:hover {
+      background: #424242;
+    }
+  }
+  .cal-header .cal-cell {
+    &:hover {
+      background: #424242;
+    }
+  }
+}
+
+.cal-weekend .cal-day-number {
+  color: crimson !important;
+  opacity: 0.8;
+}
+
+.cal-week-view .cal-hour-odd {
+  background-color: #303030;
 }
 
 .cal-month-view .cal-day-badge {
@@ -383,7 +416,7 @@ img {
   }
   .ql-editor {
     padding: 12px 40px 12px 8px;
-    background: #fff;
+    background: #fafafa;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     @include sp {
       border-radius: 40px;
@@ -411,7 +444,6 @@ img {
 }
 
 .mat-drawer {
-  background: #181818;
   @include sp {
     background: transparent;
     width: 100vw;
@@ -425,7 +457,11 @@ img {
 }
 
 .mat-drawer-container {
-  background: linear-gradient(to right bottom, #212121, #303030);
+  background: linear-gradient(to right bottom, #121212, #303030);
+}
+
+.mat-sidenav-content {
+  background: linear-gradient(to right bottom, #121212, #303030);
 }
 
 .home-tab-group {
