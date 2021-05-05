@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { InviteWithSender } from '../intefaces/invite';
 import { User } from '../interfaces/user';
@@ -14,6 +20,8 @@ import {
   easeSlideForContent,
   easeSlideForSideNav,
 } from '../animations/animations';
+import { MatSidenav } from '@angular/material/sidenav';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-main-shell',
@@ -21,7 +29,7 @@ import {
   styleUrls: ['./main-shell.component.scss'],
   animations: [easeSlideForSideNav, easeSlideForContent],
 })
-export class MainShellComponent implements OnInit, OnDestroy {
+export class MainShellComponent implements OnInit, OnDestroy, AfterViewInit {
   private subscription = new Subscription();
   user$: Observable<User> = this.authService.user$;
   user: User;
@@ -29,12 +37,16 @@ export class MainShellComponent implements OnInit, OnDestroy {
   invites$: Observable<InviteWithSender[]>;
   dateNow: firebase.firestore.Timestamp = firebase.firestore.Timestamp.now();
 
+  @ViewChild(MatSidenav)
+  sidenav!: MatSidenav;
+
   constructor(
     private meetingService: MeetingService,
     private soundService: SoundService,
     private dialog: MatDialog,
     private authService: AuthService,
-    public uiService: UiService
+    public uiService: UiService,
+    private observer: BreakpointObserver
   ) {}
 
   ngOnInit(): void {
@@ -65,5 +77,19 @@ export class MainShellComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  }
+
+  ngAfterViewInit(): void {
+    this.observer.observe(['(max-width: 700px)']).subscribe((res) => {
+      setTimeout(() => {
+        if (res.matches) {
+          this.sidenav.mode = 'over';
+          this.sidenav.close();
+        } else {
+          this.sidenav.mode = 'side';
+          this.sidenav.open();
+        }
+      });
+    });
   }
 }
