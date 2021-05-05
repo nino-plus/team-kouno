@@ -1,11 +1,6 @@
 <div class="container">
   <div class="settings">
     <ng-container *ngIf="user$ | async as user">
-      <div class="settings__header">
-        <img [src]="user.avatarURL" alt="" class="settings__avatar" />
-        <p class="settings__name">{{ user.name }}</p>
-      </div>
-
       <div class="settings__main">
         <aside>
           <mat-nav-list>
