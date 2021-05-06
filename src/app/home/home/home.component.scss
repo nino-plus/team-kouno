@@ -3,8 +3,11 @@
 
 .main-wrap {
   min-height: 100vh;
-  padding: 56px 0 120px;
+  padding: 0 0 120px;
   background: linear-gradient(to right bottom, #121212, #303030);
+  @include sp {
+    padding: 56px 0 120px;
+  }
 }
 
 .event-grid {
