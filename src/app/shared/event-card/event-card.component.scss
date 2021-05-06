@@ -4,7 +4,7 @@
 .card {
   &__content {
     border-radius: 10px;
-    height: 344px;
+    height: 18vw;
     overflow: hidden;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 8px;
     background: #181818;
@@ -15,17 +15,27 @@
       box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
         rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
       background: linear-gradient(to right bottom, #212121, #303030);
+      & .card__btn {
+        visibility: visible;
+        transform: translateY(0);
+        box-shadow: rgba(0, 0, 0, 0.2) 0px 60px 40px -7px;
+        opacity: 1;
+        z-index: 2;
+      }
+    }
+    @include sp {
+      height: 320px;
     }
     @include sp-s {
-      height: 300px;
+      height: 280px;
     }
   }
   &__header {
     position: relative;
   }
   &__participants {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     background: $color-accent;
     position: absolute;
@@ -36,8 +46,8 @@
       background: $color-sub;
     }
     @include sp-s {
-      width: 64px;
-      height: 64px;
+      width: 40px;
+      height: 40px;
     }
   }
   &__participants-count-wrap {
@@ -47,7 +57,7 @@
     transform: translate(-50%, -50%);
   }
   &__participants-count {
-    font-size: 24px;
+    font-size: 16px;
     font-weight: 600;
     color: #fff;
     &--s {
@@ -78,18 +88,20 @@
   &__btn {
     width: 40px;
     height: 40px;
-    margin-left: 8px;
     border-radius: 50%;
-    border: 1px solid #ddd;
     background: #fff;
     cursor: pointer;
-    transition: ease 0.3s;
-    mat-icon {
-      display: grid;
-      place-items: center;
-    }
+    position: absolute;
+    bottom: 0;
+    right: 8px;
+    visibility: hidden;
+    transition: ease-in-out 0.3s;
+    transform: translateY(8px);
+    opacity: 0;
+    display: grid;
+    place-items: center;
     &:hover {
-      border: 1px solid #424242;
+      transform: scale(1.1);
     }
   }
   &__date-wrap {
@@ -111,7 +123,7 @@
   &__date {
     font-size: 24px;
     font-weight: 600;
-    padding: 16px 16px 8px 16px;
+    padding: 0 16px 8px 16px;
     display: grid;
     place-items: center;
     @include sp-s {
@@ -136,8 +148,8 @@
     background: $color-sub;
     color: #fff;
     padding: 4px 8px;
-    font-size: 14px;
-    margin-left: 8px;
+    font-size: 12px;
+    margin: 0 0 8px 8px;
     border-radius: 14px;
     @include sp-s {
       font-size: 12px;
