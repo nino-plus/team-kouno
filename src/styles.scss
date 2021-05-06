@@ -136,7 +136,7 @@ img {
   &--event-detail {
     padding: 0 4% 120px;
     @include sp {
-      padding: 56px 0 48px;
+      padding: 56px 16px 48px;
     }
   }
   &--followers {

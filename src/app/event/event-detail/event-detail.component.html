@@ -1,29 +1,11 @@
 <ng-container *ngIf="event$ | async as event">
-  <div class="container container--event-detail">
-    <div class="event">
-      <div class="event__header">
-        <img [src]="event.thumbnailURL" alt="" class="event__img" />
-        <p class="event__reserve">
-          現在
-          {{ event.reserveUserCount ? event.reserveUserCount : 0 }}
-          人が参加予定 ❤️
-        </p>
-      </div>
-
-      <div class="event__body">
-        <div class="event__date-wrap">
-          <div class="event__date">
-            <p class="event__startAt">
-              {{ event.startAt.toDate() | date: 'M/d(E) HH:mm' }}
-            </p>
-            <p>〜</p>
-            <p class="event__exitAt">
-              {{ event.exitAt.toDate() | date: 'M/d(E) HH:mm' || '' }}
-            </p>
-          </div>
-        </div>
-
-        <div class="event__detail">
+  <div class="event">
+    <div
+      class="event__header"
+      [style.background-image]="'url(' + event.thumbnailURL + ')'"
+    >
+      <div class="container container--event-detail">
+        <div class="event__flex-wrap">
           <div class="event__flex">
             <p class="event__category">{{ event.category }}</p>
             <span class="event__spacer"></span>
@@ -42,9 +24,26 @@
           </div>
           <p class="event__name">{{ event.name }}</p>
 
-          <mat-divider></mat-divider>
+          <div class="event__date-wrap">
+            <div class="event__date">
+              <p class="event__startAt">
+                {{ event.startAt.toDate() | date: 'M/d(E) HH:mm' }}
+              </p>
+              <p>〜</p>
+              <p class="event__exitAt">
+                {{ event.exitAt.toDate() | date: 'M/d(E) HH:mm' || '' }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <div class="container container--event-detail">
+      <div class="event__body">
+        <div class="event__detail">
           <p class="event__info-heading">参加予定の人</p>
+          <mat-divider></mat-divider>
           <div class="user">
             <ul
               *ngIf="reservedUsers$ | async as users; else zero"
@@ -65,9 +64,8 @@
             </ng-template>
           </div>
 
-          <mat-divider></mat-divider>
-
           <p class="event__info-heading">イベント詳細</p>
+          <mat-divider></mat-divider>
           <div class="info">
             <p class="info__description">{{ event.description }}</p>
 
