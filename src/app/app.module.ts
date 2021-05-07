@@ -53,6 +53,7 @@ import { MiniNavComponent } from './mini-nav/mini-nav.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { BottomNavComponent } from './bottom-nav/bottom-nav.component';
+import { EventShellComponent } from './event-shell/event-shell.component';
 
 registerLocaleData(localeJa);
 
@@ -69,6 +70,7 @@ registerLocaleData(localeJa);
     MainNavComponent,
     MiniNavComponent,
     BottomNavComponent,
+    EventShellComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { EventShellComponent } from './event-shell/event-shell.component';
 import { MainShellComponent } from './main-shell/main-shell.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
@@ -15,7 +16,6 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        pathMatch: 'full',
         loadChildren: () =>
           import('./home/home.module').then((m) => m.HomeModule),
       },
@@ -28,11 +28,6 @@ const routes: Routes = [
         path: 'settings',
         loadChildren: () =>
           import('./settings/settings.module').then((m) => m.SettingsModule),
-      },
-      {
-        path: 'event',
-        loadChildren: () =>
-          import('./event/event.module').then((m) => m.EventModule),
       },
       {
         path: 'intl',
@@ -74,6 +69,17 @@ const routes: Routes = [
         path: ':uid',
         loadChildren: () =>
           import('./my-page/my-page.module').then((m) => m.MyPageModule),
+      },
+    ],
+  },
+  {
+    path: 'event',
+    component: EventShellComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./event/event.module').then((m) => m.EventModule),
       },
     ],
   },
