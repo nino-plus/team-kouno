@@ -61,7 +61,11 @@ export class EventCardComponent implements OnInit {
           this.eventService.dateNow.toMillis() - 600000 &&
         event.exitAt >= this.eventService.dateNow
       ) {
-        this.router.navigateByUrl(`/event/${event.eventId}/${this.uid}`);
+        this.router
+          .navigateByUrl(`/event/${event.eventId}/${this.uid}`)
+          .then(
+            () => (this.uiService.sidenavIsOpen = !this.uiService.sidenavIsOpen)
+          );
       } else {
         this.navigateDetail(event, $event);
       }
