@@ -21,16 +21,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
-import { EventDetailComponent } from './event-detail/event-detail.component';
 import { QuillModule } from 'ngx-quill';
 
 @NgModule({
-  declarations: [
-    EventComponent,
-    EventRoomComponent,
-    ChatComponent,
-    EventDetailComponent,
-  ],
+  declarations: [EventComponent, EventRoomComponent, ChatComponent],
   imports: [
     CommonModule,
     EventRoutingModule,
