@@ -1,0 +1,166 @@
+<ng-container *ngIf="event$ | async as event">
+  <div class="event">
+    <div
+      class="event__header"
+      [style.background-image]="'url(' + event.thumbnailURL + ')'"
+    >
+      <div class="container container--event-detail">
+        <div class="event__flex-wrap">
+          <div class="event__flex">
+            <p class="event__category">{{ event.category }}</p>
+            <span class="event__spacer"></span>
+            <ng-container *ngIf="user$ | async as user">
+              <ng-container *ngIf="event.ownerId === user.uid">
+                <button
+                  mat-stroked-button
+                  type="button"
+                  (click)="navigateEditor(event)"
+                  class="event__edit"
+                >
+                  イベントを編集
+                </button>
+              </ng-container>
+            </ng-container>
+          </div>
+          <p class="event__name">{{ event.name }}</p>
+
+          <div class="event__date-wrap">
+            <div class="event__date">
+              <p class="event__startAt">
+                {{ event.startAt.toDate() | date: 'M/d(E) HH:mm' }}
+              </p>
+              <p>〜</p>
+              <p class="event__exitAt">
+                {{ event.exitAt.toDate() | date: 'M/d(E) HH:mm' || '' }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container--event-detail">
+      <div class="event__body">
+        <div class="event__detail">
+          <p class="event__info-heading">参加予定の人</p>
+          <mat-divider></mat-divider>
+          <div class="user">
+            <ul
+              *ngIf="reservedUsers$ | async as users; else zero"
+              class="user__list-wrap"
+            >
+              <li *ngFor="let user of users" class="user__list">
+                <img
+                  [src]="user.avatarURL"
+                  alt=""
+                  [matTooltip]="user?.name"
+                  class="user__avatar"
+                  (click)="navigateMyPage(user.uid)"
+                />
+              </li>
+            </ul>
+            <ng-template #zero>
+              <p>まだいません...</p>
+            </ng-template>
+          </div>
+
+          <p class="event__info-heading">イベント詳細</p>
+          <mat-divider></mat-divider>
+          <div class="info">
+            <p class="info__description">{{ event.description }}</p>
+
+            <p class="info__heading">主催者</p>
+            <div class="info__owner-wrap" *ngIf="owner$ | async as owner">
+              <img
+                class="info__owner-avatar"
+                [src]="owner.avatarURL"
+                alt=""
+                (click)="navigateMyPage(owner.uid)"
+              />
+              <p class="info__owner-name">{{ owner.name }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button routerLink="/" mat-button type="button" class="actions__back">
+        戻る
+      </button>
+      <ng-container [ngSwitch]="type">
+        <ng-container *ngSwitchDefault>
+          <ng-container *ngIf="user$ | async as user; else default">
+            <ng-container *ngIf="reservedUids$ | async as uids">
+              <ng-container *ngIf="!uids.includes(user.uid); else cancel">
+                <button
+                  mat-raised-button
+                  class="actions__submit"
+                  (click)="reserveEvent(event, user.uid)"
+                  mat-dialog-close
+                >
+                  イベントを予約
+                </button>
+                <p class="actions__info">
+                  予約すると自分のカレンダーに表示されるようになります❤️
+                </p>
+              </ng-container>
+              <ng-template #cancel>
+                <button
+                  mat-raised-button
+                  class="actions__submit"
+                  (click)="cancelReserve(event, user.uid)"
+                  mat-dialog-close
+                >
+                  予約をキャンセル
+                </button>
+              </ng-template>
+            </ng-container>
+            <ng-container *ngIf="event.startAt < eventService.dateNow">
+              <button
+                mat-raised-button
+                class="actions__submit"
+                (click)="joinChannel(event, user.uid)"
+                mat-dialog-close
+              >
+                イベントに参加
+              </button>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+
+        <ng-template #default>
+          <button
+            mat-raised-button
+            class="actions__submit"
+            (click)="openInfoDialog()"
+            [class.disable]
+          >
+            イベントを予約
+          </button>
+          <p class="actions__info">
+            予約すると自分のカレンダーに表示されるようになります❤️
+          </p>
+          <button
+            mat-raised-button
+            class="actions__submit"
+            (click)="openInfoDialog()"
+            [class.disable]
+          >
+            イベントに参加
+          </button>
+        </ng-template>
+        <ng-container *ngSwitchCase="'owner'">
+          <button
+            mat-raised-button
+            class="actions__submit"
+            (click)="openDeleteDialog(event.eventId)"
+            mat-dialog-close
+          >
+            イベントを削除
+          </button>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>
