@@ -46,6 +46,10 @@ export class UserListComponent implements OnInit, OnDestroy {
       this.invites$ = this.meetingService.getInvites(this.uid);
     });
 
+    if (this.invites$ === undefined) {
+      return;
+    }
+
     this.subscription.add(
       this.invites$.pipe(skip(1), shareReplay(1)).subscribe((invites) => {
         const lastInvite = invites.shift();
