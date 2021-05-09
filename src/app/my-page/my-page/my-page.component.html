@@ -43,7 +43,9 @@
           <p
             class="my-page__flex-item"
             [class.my-page__flex-item--active]="targetUser.followerCount"
-            (click)="targetUser.followerCount ? openFollowersDialog(authUser.uid) : ''"
+            (click)="
+              targetUser.followerCount ? openFollowersDialog(authUser.uid) : ''
+            "
           >
             フォロワー <span>{{ targetUser.followerCount }}人</span>
           </p>
@@ -57,7 +59,11 @@
           <p
             class="my-page__flex-item"
             [class.my-page__flex-item--active]="targetUser.followingCount"
-            (click)="targetUser.followingCount ? openFollowingsDialog(authUser.uid): ''"
+            (click)="
+              targetUser.followingCount
+                ? openFollowingsDialog(authUser.uid)
+                : ''
+            "
           >
             フォロー中 <span>{{ targetUser.followingCount }}人</span>
           </p>
@@ -78,7 +84,7 @@
               [
                 targetUser.ticketPrice
                   ? openTicketDialog(authUser.uid, targetUser)
-                  : call(targetUser.uid, authUser, targetUser.name)
+                  : call(targetUser.uid, targetUser.name)
               ]
             "
             [disabled]="

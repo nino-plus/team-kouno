@@ -2,7 +2,7 @@
   <ng-container *ngIf="log.user.state === 'online'">
     <span @fade class="card__active-ring"></span>
   </ng-container>
-  <a [routerLink]="log.user.uid">
+  <a [routerLink]="'/' + log.user.uid">
     <img [src]="log.user.avatarURL" alt="" class="card__avatar" />
   </a>
   <div class="card__info-wrap">

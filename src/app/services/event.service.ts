@@ -302,4 +302,15 @@ export class EventService {
       )
       .valueChanges();
   }
+
+  getParticipantCount(eventId: string): Observable<number> {
+    return this.db
+      .doc<Event>(`events/${eventId}`)
+      .valueChanges()
+      .pipe(
+        map((event) => {
+          return event.participantCount;
+        })
+      );
+  }
 }

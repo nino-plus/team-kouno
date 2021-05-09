@@ -15,7 +15,7 @@ $eventstand-primary: mat-palette($mat-lime, A700);
 $eventstand-accent: mat-palette($mat-grey, A200, A100, A400);
 $eventstand-warn: mat-palette($mat-red);
 
-$eventstand-theme: mat-light-theme(
+$eventstand-theme: mat-dark-theme(
   (
     color: (
       primary: $eventstand-primary,
@@ -39,10 +39,11 @@ body {
 
 body {
   margin: 0;
-  padding-top: 56px;
   font-family: 'Avenir', 'Helvetica Neue', 'Helvetica', 'Arial', 'Hiragino Sans',
     'ヒラギノ角ゴシック', YuGothic, 'Yu Gothic', 'メイリオ', Meiryo,
     'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
+  background: linear-gradient(to right bottom, #121212, #303030);
+  color: #fafafa;
 }
 
 a {
@@ -94,46 +95,66 @@ img {
 }
 
 .container {
-  max-width: 1200px;
   padding: 0 48px;
   margin: 0 auto;
   @include sp {
     padding: 0;
   }
   &--event-form {
+    padding: 64px 48px;
     max-width: 960px;
     @include sp {
-      padding: 0 16px;
+      padding: 56px 16px;
     }
   }
   &--calendar {
-    padding: 48px;
+    padding: 88px 48px;
     @include sp {
-      padding: 16px;
+      padding: 56px 16px;
     }
   }
   &--intl {
-    padding: 48px;
+    padding: 64px 48px;
     @include sp {
-      padding: 16px;
+      padding: 56px 16px;
+    }
+  }
+  &--search {
+    padding-top: 64px;
+    @include sp {
+      padding: 56px;
     }
   }
   &--result {
-    padding: 48px 4%;
+    padding: 64px 4%;
     max-width: 1600px;
     @include sp {
       max-width: 100%;
-      padding: 16px 4%;
+      padding: 56px 4%;
     }
   }
   &--event-detail {
-    padding: 24px 4% 120px;
+    padding: 0 4% 120px;
     @include sp {
-      padding: 0 0 48px;
+      padding: 56px 16px 48px;
     }
   }
   &--followers {
     padding: 0 16px 24px;
+  }
+  &--waiting {
+    max-width: 640px;
+    min-height: 80vh;
+    padding: 64px 48px 56px;
+    margin: 80px auto 0;
+    background: linear-gradient(to right bottom, #212121, #434343);
+    color: #fafafa;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border-radius: 8px;
+    @include sp {
+      padding: 56px 16px;
+      margin: 56px auto;
+    }
   }
 }
 
@@ -195,6 +216,36 @@ img {
     align-items: center;
     gap: 8px;
   }
+}
+
+.cal-month-view,
+.cal-week-view,
+.cal-day-view {
+  background: linear-gradient(to right bottom, #121212, #303030);
+  .cal-cell-row {
+    &:hover {
+      background: #303030;
+    }
+  }
+  .cal-cell-top {
+    &:hover {
+      background: #424242;
+    }
+  }
+  .cal-header .cal-cell {
+    &:hover {
+      background: #424242;
+    }
+  }
+}
+
+.cal-weekend .cal-day-number {
+  color: crimson !important;
+  opacity: 0.8;
+}
+
+.cal-week-view .cal-hour-odd {
+  background-color: #303030;
 }
 
 .cal-month-view .cal-day-badge {
@@ -362,14 +413,15 @@ img {
 }
 
 .chat-form {
+  background: #000;
+  color: #fff;
   @include sp {
-    background: #000;
     padding: 8px 0;
   }
   .ql-editor {
     padding: 12px 40px 12px 8px;
-    background: #fff;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    background: #000;
+    border-bottom: 1px solid #fafafa;
     @include sp {
       border-radius: 40px;
       position: relative;
@@ -386,7 +438,7 @@ img {
       color: #fff;
     }
     border: none;
-    background: #fff;
+    background: #000;
   }
   .ql-toolbar.ql-snow .ql-formats {
     @include sp {
@@ -396,7 +448,6 @@ img {
 }
 
 .mat-drawer {
-  background: #fff;
   @include sp {
     background: transparent;
     width: 100vw;
@@ -410,7 +461,11 @@ img {
 }
 
 .mat-drawer-container {
-  background: #fff;
+  background: linear-gradient(to right bottom, #121212, #303030);
+}
+
+.mat-sidenav-content {
+  background: linear-gradient(to right bottom, #121212, #303030);
 }
 
 .home-tab-group {

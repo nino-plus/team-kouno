@@ -22,7 +22,7 @@ export class NotificationsComponent implements OnInit {
 
   ngOnInit(): void {
     this.user$.subscribe((user) => {
-      this.tokens$ = this.messagingService.getTokens(user.uid);
+      this.tokens$ = this.messagingService.getTokens(user?.uid);
     });
   }
 

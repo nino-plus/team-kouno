@@ -8,7 +8,7 @@
       </h1>
 
       <h2 class="hero__title">
-        {{ event.description }}
+        {{ event.startAt.toDate() | date: 'M/dd HH:mm 〜' }}
       </h2>
 
       <div class="hero__data">

@@ -2,8 +2,8 @@
 @import 'mixins';
 
 .chat {
-  height: calc(100vh - 64px - 52px - 68px - 96px);
-  padding: 8px 16px;
+  height: calc(799px - 80px);
+  padding: 8px 16px 0 16px;
   overflow-y: scroll;
   color: $color-font;
   position: relative;
@@ -43,7 +43,6 @@
   position: relative;
   display: flex;
   flex-flow: column;
-  padding: 8px 16px 0;
   @include sp {
     display: none;
     padding: 8px 16px;
@@ -59,8 +58,8 @@
     opacity: 0.8;
     cursor: pointer;
     position: absolute;
-    bottom: 52px;
-    right: 24px;
+    bottom: 44px;
+    right: 16px;
     z-index: 1000;
     display: grid;
     place-items: center;

@@ -1,0 +1,82 @@
+<div class="nav-wrapper">
+  <div class="head">
+    <h1 class="head__logo">
+      <a routerLink="/" class="head__logo-link"
+        ><img src="./assets/images/logo.png" alt="EventStand"
+      /></a>
+    </h1>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="menu">
+    <mat-nav-list>
+      <div class="menu__parent">
+        <a
+          mat-list-item
+          routerLink="/"
+          class="menu__children"
+          routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <mat-icon class="menu__icon">home</mat-icon>
+          ホーム</a
+        >
+        <a
+          mat-list-item
+          routerLink="/search"
+          class="menu__children"
+          [routerLinkActive]="['is-active']"
+        >
+          <mat-icon class="menu__icon">search</mat-icon>
+          イベントをさがす</a
+        >
+        <a
+          mat-list-item
+          routerLink="/editor"
+          class="menu__children"
+          [routerLinkActive]="['is-active']"
+        >
+          <mat-icon class="menu__icon">add</mat-icon>
+          イベントをつくる</a
+        >
+      </div>
+    </mat-nav-list>
+
+    <mat-divider></mat-divider>
+
+    <mat-nav-list>
+      <div class="menu__parent">
+        <a
+          mat-list-item
+          routerLink="/users"
+          class="menu__children"
+          [routerLinkActive]="['is-active']"
+        >
+          <mat-icon class="menu__icon">group</mat-icon>
+          メンバー</a
+        >
+        <a
+          mat-list-item
+          routerLink="/search-person"
+          class="menu__children"
+          [routerLinkActive]="['is-active']"
+        >
+          <mat-icon class="menu__icon">search</mat-icon>
+          人を探す</a
+        >
+      </div>
+    </mat-nav-list>
+
+    <mat-divider></mat-divider>
+  </div>
+
+  <span class="spacer"></span>
+
+  <div class="toggle">
+    <span class="spacer"></span>
+    <button mat-mini-fab class="toggle__btn" (click)="toggleNav()">
+      <mat-icon>navigate_before</mat-icon>
+    </button>
+  </div>
+</div>

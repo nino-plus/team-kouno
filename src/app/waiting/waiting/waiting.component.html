@@ -1,0 +1,71 @@
+<div class="container container--waiting">
+  <div *ngIf="user$ | async as user" class="room">
+    <h2 class="room__title">WAITING ROOM</h2>
+    <div class="room__head">
+      <ng-container *ngIf="user.state == 'online'">
+        <span @fade class="room__active-ring"></span>
+      </ng-container>
+      <img [src]="user.avatarURL" alt="" class="room__avatar" />
+      <div class="room__info-wrap">
+        <p class="room__name">{{ user.name }}</p>
+        <p class="room__info">
+          フォロワー{{ user.followerCount ? user.followerCount : 0 }}人
+        </p>
+        <p class="room__info room__info--state" *ngIf="user.state == 'online'">
+          オンライン
+        </p>
+        <p class="room__info" *ngIf="user.state == 'offline'">
+          最終ログイン{{ user.lastChangedAt.toDate() | date: 'M/d HH:mm' }}
+        </p>
+      </div>
+    </div>
+    <p class="room__description">
+      {{ user.description ? user.description : '自己紹介はまだありません。' }}
+    </p>
+
+    <form class="form-grid" [formGroup]="form">
+      <p class="form-grid__label">
+        メッセージ
+        <span class="form-grid__label-info"
+          >（招待の通知と一緒に送られるコメント）</span
+        >
+      </p>
+      <mat-form-field class="form-grid__field" appearance="outline">
+        <textarea
+          matInput
+          autocomplete="off"
+          formControlName="message"
+          [maxlength]="MESSAGE_MAX_LENGTH"
+          required
+          placeholder="こんにちは"
+          matTextareaAutosize
+          [matAutosizeMinRows]="4"
+        >
+        </textarea>
+        <mat-hint align="end"
+          >{{ form.get('message').value.length }} /
+          {{ MESSAGE_MAX_LENGTH }}</mat-hint
+        >
+        <mat-error *ngIf="form.get('message').hasError('maxlength')"
+          >最大{{ MESSAGE_MAX_LENGTH }}文字です。</mat-error
+        >
+        <mat-error *ngIf="form.get('message').hasError('required')">
+          必須入力です。
+        </mat-error>
+      </mat-form-field>
+    </form>
+
+    <div class="actions">
+      <button mat-flat-button routerLink="/">キャンセル</button>
+
+      <button
+        *ngIf="currentUser$ | async as currentUser"
+        mat-flat-button
+        class="actions__btn"
+        (click)="call(currentUser)"
+      >
+        話しかける
+      </button>
+    </div>
+  </div>
+</div>

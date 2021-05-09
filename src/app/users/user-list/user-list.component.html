@@ -1,0 +1,100 @@
+<div class="user-list">
+  <div class="container">
+    <div *ngIf="logs$ | async as logs" class="card-wrap card-wrap--logs">
+      <app-log-card
+        class="card"
+        *ngFor="let log of logs | slice: 0:8"
+        [log]="log"
+      ></app-log-card>
+    </div>
+
+    <div class="user-list__heading">
+      <button
+        mat-button
+        (click)="changeListSource('online')"
+        [class.active]="listSource === 'online'"
+      >
+        オンライン
+      </button>
+      <button
+        mat-button
+        (click)="changeListSource('all')"
+        [class.active]="listSource === 'all'"
+      >
+        すべて
+      </button>
+      <button
+        mat-button
+        (click)="changeListSource('follow')"
+        [class.active]="listSource === 'follow'"
+      >
+        フォロー
+      </button>
+      <button
+        mat-button
+        (click)="changeListSource('feed')"
+        [class.active]="listSource === 'feed'"
+      >
+        フィード
+      </button>
+      <button
+        mat-button
+        (click)="changeListSource('invite')"
+        [class.active]="listSource === 'invite'"
+      >
+        招待
+      </button>
+    </div>
+
+    <ng-container [ngSwitch]="listSource">
+      <ng-container *ngSwitchCase="'all'">
+        <div *ngIf="allUsers$ | async as users" class="card-wrap">
+          <app-user-card
+            class="card"
+            *ngFor="let user of users"
+            [user]="user"
+          ></app-user-card>
+        </div>
+      </ng-container>
+      <ng-container *ngSwitchCase="'online'">
+        <div *ngIf="onlineUsers$ | async as users" class="card-wrap">
+          <app-user-card
+            class="card"
+            *ngFor="let user of users"
+            [user]="user"
+          ></app-user-card>
+        </div>
+      </ng-container>
+      <ng-container *ngSwitchCase="'follow'">
+        <div *ngIf="followings$ | async as users" class="card-wrap">
+          <app-user-card
+            class="card"
+            *ngFor="let user of users"
+            [user]="user"
+          ></app-user-card>
+        </div>
+      </ng-container>
+      <ng-container *ngSwitchCase="'feed'">
+        <div *ngIf="logs$ | async as logs" class="card-wrap card-wrap--logs">
+          <app-log-card
+            class="card"
+            *ngFor="let log of logs"
+            [log]="log"
+          ></app-log-card>
+        </div>
+      </ng-container>
+      <ng-container *ngSwitchCase="'invite'">
+        <div class="card-wrap">
+          <ng-container *ngIf="invites$ | async as invites; else empty">
+            <app-invite-card
+              *ngFor="let invite of invites"
+              class="card"
+              [invite]="invite"
+            ></app-invite-card>
+          </ng-container>
+          <ng-template #empty>招待はありません</ng-template>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>
