@@ -2,52 +2,49 @@
 @import 'mixins';
 
 .card {
-  &__content {
-    border-radius: 10px;
-    height: 18vw;
-    overflow: hidden;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 8px;
-    background: #181818;
-    cursor: pointer;
-    transition: ease 0.3s;
-    &:hover {
-      transition-duration: 0.3s;
+  display: flex;
+  flex-flow: column;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 8px;
+  background: #181818;
+  cursor: pointer;
+  transition: ease 0.3s;
+  @include sp {
+    border-radius: initial;
+  }
+  &:hover {
+    transition-duration: 0.3s;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
+      rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+    background: linear-gradient(to right bottom, #212121, #303030);
+    & .card__btn {
+      visibility: visible;
+      transform: translateY(0);
       box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
         rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
-      background: linear-gradient(to right bottom, #212121, #303030);
-      & .card__btn {
-        visibility: visible;
-        transform: translateY(0);
-        box-shadow: rgba(0, 0, 0, 0.2) 0px 60px 40px -7px;
-        opacity: 1;
-        z-index: 2;
-      }
-    }
-    @include sp {
-      height: 320px;
-    }
-    @include sp-s {
-      height: 280px;
+      opacity: 1;
+      z-index: 2;
     }
   }
+
   &__header {
     position: relative;
   }
   &__participants {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
+    display: flex;
+    align-items: center;
     background: $color-accent;
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    z-index: 2;
-    &--reserve {
-      background: $color-sub;
-    }
+    color: #fff;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 14px;
+    height: 26px;
     @include sp-s {
-      width: 40px;
-      height: 40px;
+      font-size: 12px;
+    }
+    &--reserve {
+      background: rgba(#303030, 0.8);
     }
   }
   &__participants-count-wrap {
@@ -55,6 +52,15 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+  }
+  &__participants-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    margin-right: 4px;
+    @include sp {
+      font-size: 12px;
+    }
   }
   &__participants-count {
     font-size: 16px;
@@ -78,9 +84,8 @@
   &__body {
     color: $color-font;
     padding: 8px;
-    height: 100%;
     display: grid;
-    grid-template-columns: 80px 4px 1fr;
+    grid-template-columns: 1fr;
   }
   &__actions {
     margin-left: auto;
@@ -89,10 +94,11 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: #fff;
+    background: $color-base;
+    color: $color-font;
     cursor: pointer;
     position: absolute;
-    bottom: 0;
+    bottom: -8px;
     right: 8px;
     visibility: hidden;
     transition: ease-in-out 0.3s;
@@ -104,64 +110,67 @@
       transform: scale(1.1);
     }
   }
+  &__info-wrap {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+  }
   &__date-wrap {
-    margin: 8px 0;
-  }
-  &__pipe {
-    width: 2px;
-    height: 120px;
-    background: rgba(#000, 0.16);
-  }
-  &__body-inner {
-    padding: 0 8px;
-    overflow: hidden;
+    display: flex;
+    align-items: center;
+    background: $color-sub;
+    color: #fff;
+    padding: 4px 8px;
+    font-size: 12px;
+    margin-right: 8px;
+    border-radius: 14px;
+    @include sp-s {
+      font-size: 12px;
+    }
   }
   &__body-flex {
     display: flex;
     align-items: center;
   }
   &__date {
-    font-size: 24px;
+    font-size: 16px;
     font-weight: 600;
-    padding: 0 16px 8px 16px;
-    display: grid;
-    place-items: center;
-    @include sp-s {
-      font-size: 18px;
+    margin-right: 4px;
+    line-height: 1;
+    @include tablet {
+      font-size: 16px;
     }
   }
   &__day {
-    align-items: center;
-    display: grid;
-    place-items: center;
-  }
-  &__startAt {
-    align-items: center;
-    display: grid;
-    place-items: center;
-  }
-  &__detail {
-    margin-left: 8px;
+    margin-right: 4px;
   }
   &__category {
     display: inline-block;
     background: $color-sub;
-    color: #fff;
+    color: #fafafa;
     padding: 4px 8px;
     font-size: 12px;
     margin: 0 0 8px 8px;
     border-radius: 14px;
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 2;
     @include sp-s {
       font-size: 12px;
     }
   }
   &__name {
+    height: 48px;
     color: $color-font;
-    font-weight: 600;
+    font-weight: 500;
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
+    -webkit-line-clamp: 2;
     margin-bottom: 2px;
     @include sp-s {
       font-size: 14px;
@@ -172,6 +181,6 @@
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
   }
 }
