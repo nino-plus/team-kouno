@@ -12,4 +12,5 @@ export interface User {
   lastChangedAt?: firebase.default.firestore.Timestamp;
   state?: 'online' | 'offline' | 'away';
   ticketPrice?: number;
+  joinChannelId?: string;
 }

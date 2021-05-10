@@ -22,5 +22,7 @@ export const leaveFromSession = functions
       );
     }
 
+    await db.doc(`users/${currentUserId}`).update({ joinChannelId: '' });
+
     await db.doc(`events/${eventId}/participants/${currentUserId}`).delete();
   });
