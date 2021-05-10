@@ -54,6 +54,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { BottomNavComponent } from './bottom-nav/bottom-nav.component';
 import { EventShellComponent } from './event-shell/event-shell.component';
+import { MatRippleModule } from '@angular/material/core';
 
 registerLocaleData(localeJa);
 
@@ -121,6 +122,7 @@ registerLocaleData(localeJa);
     }),
     MatSidenavModule,
     MatListModule,
+    MatRippleModule,
   ],
   providers: [
     { provide: REGION, useValue: 'asia-northeast1' },
