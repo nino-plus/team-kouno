@@ -1,82 +1,130 @@
+<div class="selector">
+  <button
+    class="event-room-btn event-room-btn--chat-l"
+    matRipple
+    [class.active]="uiService.selector === 'chat'"
+    (click)="uiService.selector = 'chat'"
+  >
+    <mat-icon class="event-room-btn__icon">chat</mat-icon>チャット
+  </button>
+  <button
+    class="event-room-btn event-room-btn--chat-r"
+    matRipple
+    [class.active]="uiService.selector === 'participant'"
+    (click)="uiService.selector = 'participant'"
+  >
+    <mat-icon class="event-room-btn__icon">group</mat-icon>参加者
+  </button>
+</div>
+
 <div class="chat">
   <ng-container *ngIf="chats$ | async as chats">
-    <div
-      class="chat__content"
-      *ngFor="let chat of chats | slice: 0:[last] - 1; last as last"
-    >
-      <div class="chat__item">
-        <figure
-          class="chat__avatar"
-          [style.background-image]="'url(' + chat.user?.avatarURL + ')'"
-        ></figure>
-        <div class="chat__body">
-          <p class="chat__body">
+    <ng-container *ngIf="uiService.selector === 'chat'">
+      <div
+        class="chat__content"
+        *ngFor="let chat of chats | slice: 0:[last] - 1; last as last"
+      >
+        <div class="chat__item">
+          <div class="chat__header">
+            <figure
+              class="chat__avatar"
+              [style.background-image]="'url(' + chat.user?.avatarURL + ')'"
+            ></figure>
+
             <span class="chat__name">
               {{ chat.user?.name }}
             </span>
-            <quill-view-html [content]="chat.chatBody" theme="snow">
-            </quill-view-html>
-          </p>
-          <p class="chat__date">
-            {{ chat.createdAt.toDate() | date: 'M/d HH:mm' }}
-          </p>
-        </div>
-        <div>
-          <button
-            mat-icon-button
-            [mat-menu-trigger-for]="chatEditor"
-            type="button"
-          >
-            <mat-icon>more_vert</mat-icon>
-          </button>
-          <mat-menu #chatEditor="matMenu">
-            <button
-              mat-menu-item
-              type="button"
-              (click)="deleteChat(chat.chatId)"
-            >
-              <mat-icon>delete</mat-icon>
-              削除
-            </button>
-          </mat-menu>
+            <p class="chat__date">
+              {{ chat.createdAt.toDate() | date: 'M/d HH:mm' }}
+            </p>
+
+            <span class="spacer"></span>
+
+            <div>
+              <button
+                mat-icon-button
+                [mat-menu-trigger-for]="chatEditor"
+                type="button"
+                *ngIf="chat.uid === uid"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #chatEditor="matMenu">
+                <button
+                  mat-menu-item
+                  type="button"
+                  (click)="deleteChat(chat.chatId)"
+                >
+                  <mat-icon>delete</mat-icon>
+                  削除
+                </button>
+              </mat-menu>
+            </div>
+          </div>
+          <div class="chat__body">
+            <quill-view-html [content]="chat.chatBody"></quill-view-html>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="chat__item" *ngFor="let chat of chats | slice: -1" #target>
-      <figure
-        class="chat__avatar"
-        [style.background-image]="'url(' + chat.user?.avatarURL + ')'"
-      ></figure>
-      <div class="chat__body">
-        <p class="chat__body">
+      <div class="chat__item" *ngFor="let chat of chats | slice: -1" #target>
+        <div class="chat__header">
+          <figure
+            class="chat__avatar"
+            [style.background-image]="'url(' + chat.user?.avatarURL + ')'"
+          ></figure>
+
           <span class="chat__name">
             {{ chat.user?.name }}
           </span>
-          <quill-view-html [content]="chat.chatBody" theme="snow">
-          </quill-view-html>
-        </p>
-        <p class="chat__date">
-          {{ chat.createdAt.toDate() | date: 'M/d HH:mm' }}
-        </p>
+          <p class="chat__date">
+            {{ chat.createdAt.toDate() | date: 'M/d HH:mm' }}
+          </p>
+
+          <span class="spacer"></span>
+
+          <div>
+            <button
+              mat-icon-button
+              [mat-menu-trigger-for]="chatEditor"
+              type="button"
+              *ngIf="chat.uid === uid"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #chatEditor="matMenu">
+              <button
+                mat-menu-item
+                type="button"
+                (click)="deleteChat(chat.chatId)"
+              >
+                <mat-icon>delete</mat-icon>
+                削除
+              </button>
+            </mat-menu>
+          </div>
+        </div>
+        <div class="chat__body">
+          <quill-view-html [content]="chat.chatBody"></quill-view-html>
+        </div>
       </div>
-      <div>
-        <button
-          mat-icon-button
-          [mat-menu-trigger-for]="chatEditor"
-          type="button"
-        >
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #chatEditor="matMenu">
-          <button mat-menu-item type="button" (click)="deleteChat(chat.chatId)">
-            <mat-icon>delete</mat-icon>
-            削除
-          </button>
-        </mat-menu>
-      </div>
-    </div>
+    </ng-container>
   </ng-container>
+
+  <div *ngIf="uiService.selector === 'participant'" class="participants-wrap">
+    <div
+      class="participants"
+      *ngIf="event.eventId === event.user.joinChannelId"
+    >
+      <img class="participants__photo" [src]="event.user.avatarURL" alt="" />
+      <p class="participants__name">{{ event.user.name }}</p>
+      <div class="participants__host">HOST</div>
+    </div>
+    <div class="participants" *ngFor="let participant of participants">
+      <img class="participants__photo" [src]="participant.avatarURL" alt="" />
+      <p class="participants__name">{{ participant.name }}</p>
+    </div>
+  </div>
 </div>
 
 <div class="chat-form chat-form--sp">
@@ -94,8 +142,11 @@
       </span>
     </div>
   </quill-editor>
-  <button class="chat-form__submit chat-form__submit--sp">
-    <mat-icon (click)="createChat()">send</mat-icon>
+  <button
+    class="event-room-btn event-room-btn--main event-room-btn--submit"
+    (click)="createChat()"
+  >
+    送信
   </button>
 </div>
 
@@ -104,7 +155,6 @@
     [formControl]="form"
     [styles]="{ height: '40px' }"
     [placeholder]="'コメントを入力'"
-    customToolbarPosition="bottom"
   >
     <div quill-editor-toolbar>
       <span class="ql-formats">
@@ -114,15 +164,14 @@
         <button class="ql-link" [title]="'リンク'"></button>
       </span>
       <span class="ql-formats">
-        <button class="ql-image" [title]="'画像'"></button>
-      </span>
-      <span class="ql-formats">
         <button class="ql-video" [title]="'YouTube'"></button>
       </span>
     </div>
-    <button></button>
   </quill-editor>
+  <button
+    class="event-room-btn event-room-btn--main event-room-btn--submit"
+    (click)="createChat()"
+  >
+    送信
+  </button>
 </div>
-<button class="chat-form__submit">
-  <mat-icon (click)="createChat()">send</mat-icon>
-</button>

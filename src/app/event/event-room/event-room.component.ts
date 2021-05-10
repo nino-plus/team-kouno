@@ -1,10 +1,9 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { map, shareReplay, switchMap, take } from 'rxjs/operators';
+import { shareReplay } from 'rxjs/operators';
 import { Event, EventWithOwner } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { AgoraService } from 'src/app/services/agora.service';
@@ -38,6 +37,7 @@ export class EventRoomComponent implements OnInit, OnDestroy {
 
   isShareScreen$: Observable<boolean>;
   participants$: Observable<User[]>;
+  participants: User[];
   event$: Observable<Event>;
   videoPublishUserIds: string[];
   videoPublishUserIds$: Observable<string[]>;
@@ -91,6 +91,7 @@ export class EventRoomComponent implements OnInit, OnDestroy {
 
       this.subscription.add(
         this.participants$.pipe(shareReplay(1)).subscribe((participants) => {
+          this.participants = participants;
           this.participantCount$.pipe(shareReplay(1)).subscribe((num) => {
             this.participantCount = num;
           });

@@ -8,6 +8,7 @@ import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from '../interfaces/user';
 import { EventService } from './event.service';
+import { UiService } from './ui.service';
 
 @Injectable({
   providedIn: 'root',
@@ -32,7 +33,8 @@ export class AgoraService {
     private router: Router,
     private snackBar: MatSnackBar,
     private db: AngularFirestore,
-    private eventService: EventService
+    private eventService: EventService,
+    private uiService: UiService
   ) {}
 
   async joinAgoraChannel(
@@ -100,6 +102,7 @@ export class AgoraService {
     await this.unpublishAgora();
     await client.leave();
     await this.leaveFromSession(eventId);
+    this.uiService.sidenavIsOpen = true;
   }
 
   async publishMicrophone(): Promise<void> {

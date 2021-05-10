@@ -15,6 +15,9 @@ import 'quill-emoji/dist/quill-emoji.js';
 import { UiService } from 'src/app/services/ui.service';
 import { shareReplay, skip } from 'rxjs/operators';
 import { SoundService } from 'src/app/services/sound.service';
+import firebase from 'firebase/app';
+import { User } from 'src/app/interfaces/user';
+import { Event, EventWithOwner } from 'src/app/interfaces/event';
 
 @Component({
   selector: 'app-chat',
@@ -24,15 +27,16 @@ import { SoundService } from 'src/app/services/sound.service';
 export class ChatComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
   @Input() eventId: string;
+  @Input() uid: string;
+  @Input() participants: User[];
+  @Input() event: EventWithOwner;
   @ViewChild('target') target: ElementRef;
-  uid = this.authService.uid;
   form = new FormControl();
   chats$: Observable<ChatWithUser[]>;
 
   constructor(
     private chatService: ChatService,
-    private authService: AuthService,
-    private uiService: UiService,
+    public uiService: UiService,
     private soundService: SoundService
   ) {}
 
@@ -43,8 +47,14 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.subscription.add(
         this.chats$.pipe(skip(1), shareReplay(1)).subscribe((chats) => {
           const lastChat = chats.slice(-1)[0];
+          const now = firebase.firestore.Timestamp.now().toMillis() - 10000;
+          console.log(now);
+          console.log(lastChat.createdAt.toMillis());
 
-          if (this.eventId == lastChat.eventId) {
+          if (
+            this.eventId == lastChat.eventId &&
+            lastChat.createdAt.toMillis() >= now
+          ) {
             this.soundService.postSound.play();
           }
 
