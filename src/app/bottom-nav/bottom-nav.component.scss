@@ -1,0 +1,39 @@
+@import 'mixins';
+@import 'custom-style';
+
+.bottom-actions {
+  display: none;
+  transition: background-color 0.4s, color 0.4s;
+  padding: 4px 0;
+  @include sp {
+    position: fixed;
+    z-index: 1000;
+    bottom: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background-color: #000;
+    & p {
+      margin: 0;
+      font-size: 12px;
+      color: #fff;
+    }
+    button {
+      outline: none;
+      border: none;
+      border-radius: 0;
+      background-color: #000;
+      line-height: 1.5;
+      font-weight: 500;
+      overflow: hidden;
+      .material-icons {
+        font-size: 20px;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.bottom-actions-disabled {
+  display: none;
+}

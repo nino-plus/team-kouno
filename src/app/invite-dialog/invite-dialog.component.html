@@ -1,0 +1,27 @@
+<mat-dialog-content>
+  <p class="invite__title">
+    {{ data.lastInvite.sender.name }}からミーティングに招待されています
+  </p>
+  <p class="invite__avatar-wrap">
+    <img
+      [src]="data.lastInvite.sender.avatarURL"
+      alt=""
+      class="invite__avatar"
+    />
+  </p>
+  <div class="invite__msg">
+    <p class="invite__text">{{ data.lastInvite.message }}</p>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button matDialogClose (click)="stopCall()">拒否</button>
+  <button
+    mat-button
+    class="invite__btn"
+    [matDialogClose]="true"
+    (click)="navigateMeetingRoom()"
+  >
+    参加
+  </button>
+</mat-dialog-actions>

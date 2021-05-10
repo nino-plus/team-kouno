@@ -8,6 +8,7 @@
   margin-top: 16px;
   position: relative;
   color: $color-font;
+  padding-top: 64px;
   @include sp {
     margin-top: 0;
   }
@@ -30,6 +31,7 @@
   width: 100%;
   height: calc(100vh - 64px - 52px - 68px);
   padding: 8px 16px 0;
+  background: #000;
   @include sp {
     padding: 0;
     height: calc(100vh - 56px - 81px);
@@ -121,7 +123,7 @@ app-stream {
     border-radius: 50%;
     background: linear-gradient(to right, rgba(#fff, 0.038), rgba(#eee, 0.038));
     box-shadow: rgba(0, 0, 0, 0.28) 0px 4px 16px;
-    color: #333;
+    color: $color-font;
     transition: all 0.5s 0.1s ease;
     display: flex;
     justify-content: center;
@@ -229,11 +231,11 @@ app-stream {
   }
   &--1-player {
     grid-template-columns: 1fr;
-    height: 80vh;
+    height: 72vh;
   }
   &--2-player {
     grid-template-columns: 1fr 1fr;
-    height: 80vh;
+    height: 72vh;
   }
   &--more-player {
     grid-template-columns: 1fr 1fr;
@@ -298,4 +300,8 @@ app-stream {
   transition: all 600ms;
   z-index: -1;
   pointer-events: none;
+}
+
+.mat-drawer {
+  background: none;
 }

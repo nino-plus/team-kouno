@@ -1,0 +1,28 @@
+@import 'custom-style';
+
+.invite {
+  &__title {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  &__avatar-wrap {
+    width: 100%;
+    text-align: center;
+  }
+  &__avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+    margin: 0 auto 24px;
+  }
+  &__msg {
+    width: 100%;
+    border: 1px solid #fafafa;
+    border-radius: 8px;
+    padding: 16px 24px;
+    margin-bottom: 24px;
+  }
+  &__btn {
+    background: $color-main;
+  }
+}

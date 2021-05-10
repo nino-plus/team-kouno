@@ -18,6 +18,7 @@ import { Customer } from 'src/app/interfaces/customer';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { MessagingService } from 'src/app/services/messaging.service';
 import { UserStoreComponent } from 'src/app/shared/user-store/user-store.component';
+import { SoundService } from 'src/app/services/sound.service';
 
 @Component({
   selector: 'app-my-page',
@@ -75,7 +76,8 @@ export class MyPageComponent implements OnInit, OnDestroy {
     private router: Router,
     private customerService: CustomerService,
     private meetingService: MeetingService,
-    private messagingService: MessagingService
+    private messagingService: MessagingService,
+    private soundService: SoundService
   ) {}
 
   ngOnInit(): void {
@@ -89,14 +91,17 @@ export class MyPageComponent implements OnInit, OnDestroy {
   }
 
   follow(authUid: string): void {
+    this.soundService.decisionSound.play();
     this.followService.follow(authUid, this.targetUid);
   }
 
   unFollow(authUid: string): void {
+    this.soundService.decisionSound.play();
     this.followService.unFollow(authUid, this.targetUid);
   }
 
   openFollowersDialog(uid: string): void {
+    this.soundService.openSound.play();
     this.dialog.open(FollowersDialogComponent, {
       width: '400px',
       autoFocus: false,
@@ -108,6 +113,7 @@ export class MyPageComponent implements OnInit, OnDestroy {
   }
 
   openFollowingsDialog(uid: string): void {
+    this.soundService.openSound.play();
     this.dialog.open(FollowingsDialogComponent, {
       width: '400px',
       autoFocus: false,
@@ -119,6 +125,7 @@ export class MyPageComponent implements OnInit, OnDestroy {
   }
 
   openTicketDialog(authUid: string, targetUser: User): void {
+    this.soundService.openSound.play();
     this.dialog.open(UserStoreComponent, {
       data: {
         authUid,
@@ -127,15 +134,7 @@ export class MyPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  async sendPushMessage(
-    tokens: string[],
-    authUser: User,
-    roomId: string
-  ): Promise<void> {
-    this.messagingService.sendPushMessage(tokens, authUser, roomId);
-  }
-
-  call(uid: string, authUser: User, userName: string): void {
+  call(uid: string, userName: string): void {
     this.dialog
       .open(ConfirmDialogComponent, {
         autoFocus: false,
@@ -149,14 +148,7 @@ export class MyPageComponent implements OnInit, OnDestroy {
           const roomId = await this.meetingService.createEmptyRoom(
             this.authService.uid
           );
-          this.meetingService.createInvite(uid, roomId, this.authService.uid);
-          const tokens$ = this.messagingService.getTokens(uid);
-          tokens$.pipe(take(1)).subscribe((tokens) => {
-            tokens?.map((token) => this.tokens.push(token?.token));
-            this.sendPushMessage(this.tokens, authUser, roomId);
-          });
-
-          this.router.navigate(['meeting', roomId]);
+          this.router.navigate(['waiting', roomId, { uid: uid }]);
         }
       });
   }

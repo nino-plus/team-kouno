@@ -27,6 +27,15 @@
         </div>
       </div>
     </ng-template>
+    <div class="card__actions" align="end">
+      <button
+        class="card__btn"
+        (click)="navigateDetail(event, $event)"
+        matTooltip="詳しく見る"
+      >
+        <mat-icon>expand_more</mat-icon>
+      </button>
+    </div>
   </div>
 
   <div class="card__body">
@@ -62,23 +71,6 @@
         <p class="card__category">
           {{ event.category }}
         </p>
-        <div class="card__actions" align="end">
-          <button
-            *ngIf="event.ownerId !== uid"
-            class="card__btn"
-            (click)="openDetailDialog(event, $event)"
-            matTooltip="予約する"
-          >
-            <mat-icon>touch_app</mat-icon>
-          </button>
-          <button
-            class="card__btn"
-            (click)="navigateDetail(event, $event)"
-            matTooltip="詳しく見る"
-          >
-            <mat-icon>expand_more</mat-icon>
-          </button>
-        </div>
       </div>
 
       <div class="card__detail">

@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { take } from 'rxjs/operators';
 import { fade } from 'src/app/animations/animations';
 import { Event } from 'src/app/interfaces/event';
 import { EventService } from 'src/app/services/event.service';
 import { SoundService } from 'src/app/services/sound.service';
+import { UiService } from 'src/app/services/ui.service';
 import { EventDetailDialogComponent } from '../event-detail-dialog/event-detail-dialog.component';
 
 @Component({
@@ -25,7 +25,8 @@ export class EventCardComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private eventService: EventService,
-    private soundService: SoundService
+    private soundService: SoundService,
+    private uiService: UiService
   ) {}
 
   ngOnInit(): void {}
@@ -54,16 +55,16 @@ export class EventCardComponent implements OnInit {
   }
 
   joinChannel(event: Event, $event): void {
-    if (
-      event.startAt.toMillis() <
-        this.eventService.dateNow.toMillis() - 600000 &&
-      event.exitAt >= this.eventService.dateNow
-    ) {
-      this.router
-        .navigateByUrl(`/event/${event.eventId}/${this.uid}`)
-        .then(() => {
-          this.soundService.joinSound.play();
-        });
+    if (this.uiService.isLargeScreen()) {
+      if (
+        event.startAt.toMillis() <
+          this.eventService.dateNow.toMillis() - 600000 &&
+        event.exitAt >= this.eventService.dateNow
+      ) {
+        this.router.navigateByUrl(`/event/${event.eventId}/${this.uid}`);
+      } else {
+        this.navigateDetail(event, $event);
+      }
     } else {
       this.navigateDetail(event, $event);
     }

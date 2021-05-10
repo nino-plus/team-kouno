@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase/app';
-import { combineLatest, Observable, of } from 'rxjs';
+import { combineLatest, Observable, of, Subject } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Invite, InviteWithSender } from '../intefaces/invite';
+import { Reject } from '../interfaces/reject';
 import { Room } from '../interfaces/room';
 import { User } from '../interfaces/user';
 import { SoundService } from './sound.service';
@@ -36,16 +37,22 @@ export class MeetingService {
     return id;
   }
 
-  createInvite(uid: string, roomId: string, senderUid: string) {
+  createInvite(
+    uid: string,
+    roomId: string,
+    senderUid: string,
+    message: string
+  ) {
     this.db
       .doc(`users/${uid}/invite/${roomId}`)
       .set({
         roomId,
         senderUid,
         createdAt: firebase.firestore.Timestamp.now(),
+        message,
       })
       .then(() => {
-        this.soundService.joinSound.play();
+        this.soundService.callSound.play();
       });
   }
 
@@ -84,5 +91,13 @@ export class MeetingService {
           });
         })
       );
+  }
+
+  getRejects(uid: string): Observable<Reject[]> {
+    return this.db
+      .collection<Reject>(`users/${uid}/rejects`, (ref) =>
+        ref.orderBy('createdAt', 'desc')
+      )
+      .valueChanges();
   }
 }

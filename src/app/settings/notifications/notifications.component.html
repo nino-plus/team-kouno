@@ -1,11 +1,11 @@
-<div class="notifications">
+<div class="notifications" *ngIf="user$ | async as user">
   <h3 class="settings__heading">通知設定</h3>
 
   <mat-divider></mat-divider>
 
   <h4 class="settings__heading">プッシュ通知設定</h4>
-  <div *ngIf="user$ | async as user" class="settings__btn-wrap">
-    <p class="settings__sub">■ 1on1のリクエストされた時</p>
+  <div class="settings__btn-wrap">
+    <p class="settings__sub">■ 1on1のリクエスト</p>
 
     <span class="spacer"></span>
     <ng-container *ngIf="tokens$ | async as tokens">
@@ -27,5 +27,18 @@
         </button>
       </ng-template>
     </ng-container>
+  </div>
+
+  <div *ngIf="user$ | async as user" class="settings__btn-wrap">
+    <p class="settings__sub">■ 新しいデバイスの追加</p>
+
+    <span class="spacer"></span>
+    <button
+      mat-stroked-button
+      class="settings__btn"
+      (click)="requestPermission(user.uid)"
+    >
+      通知を許可する
+    </button>
   </div>
 </div>

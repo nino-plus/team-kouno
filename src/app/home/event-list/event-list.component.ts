@@ -44,12 +44,21 @@ export class EventListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getPopularEvents();
+    console.log(this.eventService.dateNow.toMillis());
+    console.log(this.popularEventLists);
+    this.eventLists$.subscribe((events) => {
+      console.log(events);
+    });
   }
 
   getPopularEvents() {
-    this.popularIndex.search('').then((result) => {
-      this.popularEventLists.push(...(result.hits.slice(0, 6) as any[]));
-    });
+    this.popularIndex
+      .search('', {
+        filters: `exitAt > ${this.eventService.dateNow.toMillis()}`,
+      })
+      .then((result) => {
+        this.popularEventLists.push(...(result.hits.slice(0, 6) as any[]));
+      });
   }
 
   changeListSource(category: string): void {

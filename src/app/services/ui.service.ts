@@ -6,7 +6,9 @@ import { Injectable } from '@angular/core';
 export class UiService {
   dialogType: string;
   loading: boolean;
-  isOpen = true;
+  isOpen = false;
+  scrollHieght: number;
+  sidenavIsOpen = true;
 
   constructor() {}
 

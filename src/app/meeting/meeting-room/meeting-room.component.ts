@@ -11,13 +11,18 @@ import {
   DocumentReference,
   DocumentSnapshot,
 } from '@angular/fire/firestore';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { shareReplay, take, tap } from 'rxjs/operators';
+import { shareReplay, skip, take } from 'rxjs/operators';
+import { Reject } from 'src/app/interfaces/reject';
 import { Room } from 'src/app/interfaces/room';
 import { AuthService } from 'src/app/services/auth.service';
 import { MeetingService } from 'src/app/services/meeting.service';
+import { SoundService } from 'src/app/services/sound.service';
+import firebase from 'firebase/app';
+import { RejectDialogComponent } from 'src/app/reject-dialog/reject-dialog.component';
 
 @Component({
   selector: 'app-meeting-room',
@@ -29,7 +34,7 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('remoteVideo') remoteVideo: ElementRef<HTMLVideoElement>;
   localVideo: HTMLElement;
 
-  readonly subscription = new Subscription();
+  private subscription = new Subscription();
 
   readonly servers: RTCConfiguration = {
     iceServers: [
@@ -70,6 +75,8 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
     videoPublish: boolean;
     voicePublish: boolean;
   };
+  rejects$: Observable<Reject[]>;
+  dateNow: firebase.firestore.Timestamp = firebase.firestore.Timestamp.now();
 
   constructor(
     private db: AngularFirestore,
@@ -77,7 +84,9 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
     private authService: AuthService,
     private meetingService: MeetingService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private soundService: SoundService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -173,6 +182,20 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
           };
         }, 2000);
       });
+
+      this.rejects$ = this.meetingService.getRejects(room.ownerId);
+      this.subscription.add(
+        this.rejects$.pipe(skip(1), shareReplay(1)).subscribe((rejects) => {
+          const lastReject = rejects.shift();
+
+          if (lastReject.createdAt.toMillis() >= this.dateNow.toMillis()) {
+            this.soundService.callSound.stop();
+            this.dialog.open(RejectDialogComponent, {
+              data: { lastReject },
+            });
+          }
+        })
+      );
     });
   }
 
@@ -243,6 +266,7 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
       snapshot.docChanges().forEach((change) => {
         if (change.type === 'added') {
           this.checkToMediaStatus();
+          this.soundService.callSound.stop();
           let data = change.doc.data();
           this.peerConnection.addIceCandidate(new RTCIceCandidate(data));
         }
@@ -273,6 +297,7 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
       new RTCSessionDescription(offerDescription)
     );
     const answerDescription = await this.peerConnection.createAnswer();
+
     await this.peerConnection.setLocalDescription(answerDescription);
 
     const answer = {
@@ -324,6 +349,7 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
     await roomRef.delete();
 
     this.closeVideoCall();
+    this.soundService.callSound.stop();
     this.snackBar.open('通話を終了しました');
   }
 

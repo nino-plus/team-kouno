@@ -1,0 +1,12 @@
+<mat-dialog-content>
+  <p class="reject__title">
+    {{ data.lastReject.name }}は今参加できないようです
+  </p>
+  <p class="reject__avatar-wrap">
+    <img [src]="data.lastReject.avatarURL" alt="" class="reject__avatar" />
+  </p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button matDialogClose>閉じる</button>
+</mat-dialog-actions>

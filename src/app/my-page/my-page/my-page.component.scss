@@ -2,12 +2,13 @@
 @import 'mixins';
 
 .my-page {
+  min-height: 100vh;
   &__header {
     display: grid;
     grid-template-columns: 240px 1fr;
     gap: 24px;
     align-items: center;
-    padding: 24px;
+    padding: 64px 24px;
     @include sp {
       grid-template-columns: 144px 1fr;
       padding: 16px;
@@ -53,14 +54,14 @@
   }
   &__follow-button {
     height: 36px;
-    color: white;
+    color: $color-font;
     background-color: #1bcbe0;
   }
   &__following-button {
     height: 36px;
     width: 102px;
     padding: 0;
-    color: black;
+    color: $color-font;
     border: solid 1px gray;
     box-sizing: border-box;
   }
@@ -149,11 +150,11 @@
 
 .event-grid {
   display: grid;
-  gap: 24px;
-  margin-top: 16px;
-  padding: 24px 16px 32px;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 24px 0 40px;
   @include sp {
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: 1fr;
+    margin: 16px;
   }
 }

@@ -1,0 +1,106 @@
+@import 'custom-style';
+@import 'mixins';
+
+.room {
+  &__title {
+    text-align: center;
+    margin: 24px 0 48px;
+    font-weight: 600;
+    letter-spacing: 0.5em;
+  }
+  &__head {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  &__active-ring {
+    background: $color-main;
+    height: 102px;
+    width: 102px;
+    border-radius: 8px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 1;
+    animation: rotation 3s infinite linear;
+  }
+  &__avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+    z-index: 2;
+  }
+  &__name {
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  &__info {
+    font-size: 14px;
+    margin-bottom: 8px;
+    &--state {
+      color: #1bcbe0;
+    }
+  }
+  &__description {
+    font-size: 14px;
+    opacity: 0.8;
+    margin-bottom: 24px;
+    line-height: 1.7;
+    min-height: 46px;
+  }
+}
+
+.form-grid {
+  margin-bottom: 48px;
+  &__label {
+    margin-bottom: 8px;
+  }
+  &__label-info {
+    opacity: 0.8;
+  }
+  &__field {
+    width: 100%;
+  }
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  width: 100%;
+  &__btn {
+    background: rgba(#1bcbe0, 0.8);
+    color: #fff;
+    &:hover {
+      background: $color-accent;
+    }
+  }
+}
+
+@keyframes rotation {
+  0% {
+    box-shadow: 0 0 10px #1bcbe0, 0 0 10px #1bcbe0 inset;
+  }
+
+  20% {
+    box-shadow: 0 0 15px #1bcbe0, 0 0 15px #1bcbe0 inset;
+  }
+
+  40% {
+    box-shadow: 0 0 12px #1bcbe0, 0 0 12px #1bcbe0 inset;
+  }
+
+  60% {
+    box-shadow: 0 0 16px #1bcbe0, 0 0 16px #1bcbe0 inset;
+  }
+
+  80% {
+    box-shadow: 0 0 20px #1bcbe0, 0 0 20px #1bcbe0 inset;
+  }
+
+  100% {
+    box-shadow: 0 0 10px #1bcbe0, 0 0 10px #1bcbe0 inset;
+  }
+}

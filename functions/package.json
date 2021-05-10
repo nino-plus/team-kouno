@@ -14,7 +14,6 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@types/howler": "^2.2.2",
     "agora-access-token": "^2.0.4",
     "algoliasearch": "^4.8.5",
     "crypto-random-string": "^3.3.1",

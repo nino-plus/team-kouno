@@ -1,0 +1,88 @@
+@import 'custom-style';
+@import 'mixins';
+
+.nav-wrapper {
+  width: 256px;
+  height: 100vh;
+  padding-right: 16px;
+  background: #000;
+  display: flex;
+  flex-flow: column;
+}
+
+.head {
+  padding: 8px 24px;
+  height: 64px;
+  &__logo {
+    font-family: $font-logo;
+    img {
+      width: 200px;
+    }
+    @include sp {
+      font-size: 12px;
+    }
+  }
+  &__logo-link {
+    display: flex;
+    align-items: center;
+    color: #fff;
+  }
+}
+
+mat-divider {
+  margin-bottom: 16px;
+}
+
+.menu {
+  &__parent {
+    display: flex;
+    flex-flow: column;
+    margin-bottom: 8px;
+    cursor: pointer;
+    border-radius: 0 4px 4px 0;
+  }
+  &__children {
+    font-size: 14px;
+    transition: ease-out 0.3s;
+    padding-left: 8px;
+    cursor: pointer;
+    &:hover {
+      color: #fff;
+    }
+    .menu__icon {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+    }
+  }
+  &__icon {
+    margin-right: 8px;
+  }
+  mat-divider {
+    margin: 16px 0;
+  }
+}
+
+.mat-list-item {
+  width: 100%;
+  border-radius: 0 4px 4px 0;
+  &:hover {
+    background: $color-base;
+  }
+}
+
+.is-active {
+  background: $color-base;
+  color: #fff;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  padding-bottom: 24px;
+  &__btn {
+    background: $color-base;
+    color: #fff;
+  }
+}
