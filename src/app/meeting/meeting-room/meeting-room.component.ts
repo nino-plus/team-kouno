@@ -154,11 +154,13 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
   roomInit() {
     this.snapshotRoom().then((room) => {
       this.publishWebcam().then(() => {
-        if (this.isOwner) {
-          setTimeout(() => {
+        setTimeout(() => {
+          if (this.isOwner) {
             this.createRoom();
-          }, 500);
-        }
+          } else {
+            this.answer();
+          }
+        }, 500);
       });
 
       this.rejects$ = this.meetingService.getRejects(room.ownerId);
