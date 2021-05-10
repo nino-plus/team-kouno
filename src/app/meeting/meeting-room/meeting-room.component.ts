@@ -91,7 +91,6 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.registerPeerConnectionListeners();
-    // this.checkToMediaStatus();
   }
 
   ngAfterViewInit(): void {
@@ -101,15 +100,6 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
-
-  onMouseMove = (event) => {
-    const x = event.clientX;
-    const y = event.clientY;
-    const width = this.localVideo.offsetWidth;
-    const height = this.localVideo.offsetHeight;
-    this.localVideo.style.top = y - height / 2 + 'px';
-    this.localVideo.style.left = x - width / 2 + 'px';
-  };
 
   async snapshotRoom(): Promise<Room> {
     const room = await this.room$.pipe(take(1)).toPromise();
@@ -123,7 +113,6 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
         this.subscription.add(
           this.room$.subscribe((room) => {
             if (this.localStream) {
-              console.log(room.ownerStatus.videoPublish);
               this.localStream.getVideoTracks()[0].enabled =
                 room.ownerStatus.videoPublish;
               this.localStream.getAudioTracks()[0].enabled =
@@ -142,7 +131,6 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
       } else {
         this.subscription.add(
           this.room$.subscribe((room) => {
-            console.log(room.guestStatus.videoPublish);
             if (this.remoteStream) {
               this.remoteStream.getVideoTracks()[0].enabled =
                 room.ownerStatus.videoPublish;
@@ -171,16 +159,6 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
             this.createRoom();
           }, 500);
         }
-        setTimeout(() => {
-          this.localVideo = document.getElementById('local-video');
-          console.log(this.localVideo);
-          this.localVideo.onmousedown = (event) => {
-            document.addEventListener('mousemove', this.onMouseMove);
-          };
-          this.localVideo.onmouseup = () => {
-            document.removeEventListener('mousemove', this.onMouseMove);
-          };
-        }, 2000);
       });
 
       this.rejects$ = this.meetingService.getRejects(room.ownerId);
@@ -217,9 +195,6 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
         this.remoteStream.addTrack(track);
       });
     };
-
-    // this.webcamVideo.srcObject = this.localStream;
-    // this.remoteVideo.srcObject = this.remoteStream;
 
     this.isPublishWebcam = true;
     this.isPublishVideo = true;
@@ -419,7 +394,6 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async publishVideo() {
-    console.log('run');
     if (this.isOwner) {
       await this.db.doc(`rooms/${this.roomId}`).set(
         {
@@ -439,15 +413,6 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
         { merge: true }
       );
     }
-
-    // const senderList = this.peerConnection.getSenders();
-
-    // senderList.forEach((sender) => {
-    //   sender.track.enabled = true;
-    // });
-
-    // this.webcamVideo.srcObject = this.localStream;
-    // this.remoteVideo.srcObject = this.remoteStream;
 
     this.isPublishVideo = true;
     this.myStatus.videoPublish = true;
@@ -474,14 +439,6 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
         { merge: true }
       );
     }
-    // const senderList = this.peerConnection.getSenders();
-
-    // senderList.forEach((sender) => {
-    //   sender.track.enabled = false;
-    // });
-
-    // this.webcamVideo.srcObject = this.localStream;
-    // this.remoteVideo.srcObject = this.remoteStream;
 
     this.isPublishVideo = false;
     this.myStatus.videoPublish = false;
