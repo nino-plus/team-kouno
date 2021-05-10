@@ -112,13 +112,7 @@ app-stream {
 }
 
 .actions {
-  // position: fixed;
-  // bottom: 0;
-  // left: 50%;
-  // transform: translateY(17%) translateX(-50%);
-  // -webkit-transform: translateY(17%) translateX(-50%);
-  /* width: 100%; */
-  padding: 8px;
+  padding: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -131,12 +125,15 @@ app-stream {
     box-shadow: rgba(0, 0, 0, 0.28) 0px 4px 16px;
     color: $color-font;
     transition: all 0.5s 0.1s ease;
-    display: grid;
-    place-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: relative;
     cursor: pointer;
     z-index: 0;
-    margin: 0 16px;
+    & + & {
+      margin-left: 16px;
+    }
     @include sp {
       width: 40px;
       height: 40px;

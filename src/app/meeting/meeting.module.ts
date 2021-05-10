@@ -8,6 +8,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [MeetingRoomComponent],
@@ -20,6 +22,8 @@ import { MatButtonModule } from '@angular/material/button';
     FormsModule,
     MatIconModule,
     MatButtonModule,
+    MatTooltipModule,
+    MatProgressSpinnerModule,
   ],
 })
 export class MeetingModule {}
