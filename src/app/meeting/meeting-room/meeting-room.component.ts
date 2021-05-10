@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -12,7 +13,7 @@ import {
 } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { shareReplay, take, tap } from 'rxjs/operators';
 import { Room } from 'src/app/interfaces/room';
 import { AuthService } from 'src/app/services/auth.service';
@@ -23,10 +24,12 @@ import { MeetingService } from 'src/app/services/meeting.service';
   templateUrl: './meeting-room.component.html',
   styleUrls: ['./meeting-room.component.scss'],
 })
-export class MeetingRoomComponent implements OnInit, AfterViewInit {
+export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('webcamVideo') webcamVideo: ElementRef<HTMLVideoElement>;
   @ViewChild('remoteVideo') remoteVideo: ElementRef<HTMLVideoElement>;
   localVideo: HTMLElement;
+
+  readonly subscription = new Subscription();
 
   readonly servers: RTCConfiguration = {
     iceServers: [
@@ -58,6 +61,16 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
   room$: Observable<Room> = this.meetingService.getRoom(this.roomId);
   room: Room;
 
+  myStatus: {
+    videoPublish: boolean;
+    voicePublish: boolean;
+  } = { videoPublish: true, voicePublish: true };
+
+  remoteStatus: {
+    videoPublish: boolean;
+    voicePublish: boolean;
+  };
+
   constructor(
     private db: AngularFirestore,
     private route: ActivatedRoute,
@@ -69,29 +82,15 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.registerPeerConnectionListeners();
+    // this.checkToMediaStatus();
   }
 
   ngAfterViewInit(): void {
-    this.snapshotRoom().then((room) => {
-      this.isOwner = this.authService.uid === room?.ownerId;
-      this.publishWebcam().then(() => {
-        if (this.isOwner) {
-          setTimeout(() => {
-            this.createRoom();
-          }, 500);
-        }
-      });
-    });
-    setTimeout(() => {
-      this.localVideo = document.getElementById('local-video');
-      console.log(this.localVideo);
-      this.localVideo.onmousedown = (event) => {
-        document.addEventListener('mousemove', this.onMouseMove);
-      };
-      this.localVideo.onmouseup = () => {
-        document.removeEventListener('mousemove', this.onMouseMove);
-      };
-    }, 2000);
+    this.roomInit();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   onMouseMove = (event) => {
@@ -105,7 +104,76 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
 
   async snapshotRoom(): Promise<Room> {
     const room = await this.room$.pipe(take(1)).toPromise();
+    this.isOwner = this.authService.uid === room?.ownerId;
     return room;
+  }
+
+  checkToMediaStatus() {
+    this.snapshotRoom().then((room) => {
+      if (this.isOwner) {
+        this.subscription.add(
+          this.room$.subscribe((room) => {
+            if (this.localStream) {
+              console.log(room.ownerStatus.videoPublish);
+              this.localStream.getVideoTracks()[0].enabled =
+                room.ownerStatus.videoPublish;
+              this.localStream.getAudioTracks()[0].enabled =
+                room.ownerStatus.voicePublish;
+            }
+            if (this.remoteStream) {
+              this.remoteStream.getVideoTracks()[0].enabled =
+                room.guestStatus.videoPublish;
+              this.remoteStream.getAudioTracks()[0].enabled =
+                room.guestStatus.voicePublish;
+            }
+            (this.myStatus = room.ownerStatus),
+              (this.remoteStatus = room.guestStatus);
+          })
+        );
+      } else {
+        this.subscription.add(
+          this.room$.subscribe((room) => {
+            console.log(room.guestStatus.videoPublish);
+            if (this.remoteStream) {
+              this.remoteStream.getVideoTracks()[0].enabled =
+                room.ownerStatus.videoPublish;
+              this.remoteStream.getAudioTracks()[0].enabled =
+                room.ownerStatus.voicePublish;
+            }
+            if (this.localStream) {
+              this.localStream.getVideoTracks()[0].enabled =
+                room.guestStatus.videoPublish;
+              this.localStream.getAudioTracks()[0].enabled =
+                room.guestStatus.voicePublish;
+            }
+            (this.myStatus = room.guestStatus),
+              (this.remoteStatus = room.ownerStatus);
+          })
+        );
+      }
+    });
+  }
+
+  roomInit() {
+    this.snapshotRoom().then((room) => {
+      this.publishWebcam().then(() => {
+        if (this.isOwner) {
+          setTimeout(() => {
+            this.createRoom();
+          }, 500);
+        }
+        setTimeout(() => {
+          this.localVideo = document.getElementById('local-video');
+          console.log(this.localVideo);
+          this.localVideo.onmousedown = (event) => {
+            document.addEventListener('mousemove', this.onMouseMove);
+          };
+          this.localVideo.onmouseup = () => {
+            document.removeEventListener('mousemove', this.onMouseMove);
+          };
+        }, 2000);
+      });
+    });
   }
 
   async publishWebcam() {
@@ -174,6 +242,7 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
     answerCandidates.onSnapshot((snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === 'added') {
+          this.checkToMediaStatus();
           let data = change.doc.data();
           this.peerConnection.addIceCandidate(new RTCIceCandidate(data));
         }
@@ -216,6 +285,7 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
     offerCandidates.onSnapshot((snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === 'added') {
+          this.checkToMediaStatus();
           let data = change.doc.data();
           this.peerConnection.addIceCandidate(new RTCIceCandidate(data));
         }
@@ -323,43 +393,118 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit {
   }
 
   async publishVideo() {
-    const senderList = this.peerConnection.getSenders();
+    console.log('run');
+    if (this.isOwner) {
+      await this.db.doc(`rooms/${this.roomId}`).set(
+        {
+          ownerStatus: {
+            videoPublish: true,
+          },
+        },
+        { merge: true }
+      );
+    } else {
+      await this.db.doc(`rooms/${this.roomId}`).set(
+        {
+          guestStatus: {
+            videoPublish: true,
+          },
+        },
+        { merge: true }
+      );
+    }
 
-    senderList.forEach((sender) => {
-      sender.track.enabled = true;
-    });
+    // const senderList = this.peerConnection.getSenders();
+
+    // senderList.forEach((sender) => {
+    //   sender.track.enabled = true;
+    // });
 
     // this.webcamVideo.srcObject = this.localStream;
     // this.remoteVideo.srcObject = this.remoteStream;
 
     this.isPublishVideo = true;
+    this.myStatus.videoPublish = true;
   }
 
   async unPublishVideo() {
-    this.localStream = await navigator.mediaDevices.getUserMedia({
-      video: false,
-      audio: this.isPublishMicrophone,
-    });
-    // this.remoteStream = new MediaStream();
+    console.log('run2');
+    if (this.isOwner) {
+      await this.db.doc(`rooms/${this.roomId}`).set(
+        {
+          ownerStatus: {
+            videoPublish: false,
+          },
+        },
+        { merge: true }
+      );
+    } else {
+      await this.db.doc(`rooms/${this.roomId}`).set(
+        {
+          guestStatus: {
+            videoPublish: false,
+          },
+        },
+        { merge: true }
+      );
+    }
+    // const senderList = this.peerConnection.getSenders();
 
-    // // Push tracks from local stream to peer connection
-    // await this.localStream.getTracks().forEach((track) => {
-    //   this.peerConnection.removeTrack(track)
+    // senderList.forEach((sender) => {
+    //   sender.track.enabled = false;
     // });
-
-    const senderList = this.peerConnection.getSenders();
-
-    senderList.forEach((sender) => {
-      sender.track.enabled = false;
-    });
 
     // this.webcamVideo.srcObject = this.localStream;
     // this.remoteVideo.srcObject = this.remoteStream;
 
     this.isPublishVideo = false;
+    this.myStatus.videoPublish = false;
   }
 
-  publishAudio() {}
+  async publishAudio() {
+    if (this.isOwner) {
+      await this.db.doc(`rooms/${this.roomId}`).set(
+        {
+          ownerStatus: {
+            voicePublish: true,
+          },
+        },
+        { merge: true }
+      );
+    } else {
+      await this.db.doc(`rooms/${this.roomId}`).set(
+        {
+          guestStatus: {
+            voicePublish: true,
+          },
+        },
+        { merge: true }
+      );
+    }
 
-  unPublishAudio() {}
+    this.myStatus.voicePublish = true;
+  }
+
+  async unPublishAudio() {
+    if (this.isOwner) {
+      await this.db.doc(`rooms/${this.roomId}`).set(
+        {
+          ownerStatus: {
+            voicePublish: false,
+          },
+        },
+        { merge: true }
+      );
+    } else {
+      await this.db.doc(`rooms/${this.roomId}`).set(
+        {
+          guestStatus: {
+            voicePublish: false,
+          },
+        },
+        { merge: true }
+      );
+    }
+    this.myStatus.voicePublish = false;
+  }
 }

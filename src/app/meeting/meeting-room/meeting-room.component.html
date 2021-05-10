@@ -1,115 +1,116 @@
 <div class="container">
-  <div class="videos">
-    <span>
-      <video
-        class="local-video"
-        *ngIf="localStream; else sublocal"
-        autoplay
-        playsinline
-        [muted]="isLocalMute"
-        #webcamVideo
-        [srcObject]="localStream"
-        id="local-video"
-      ></video>
-      <ng-template #sublocal>
-        <video src=""></video>
-      </ng-template>
-      <ng-template #volumeOn>
-        <button mat-icon-button (click)="isLocalMute = false">
-          <mat-icon>volume_up</mat-icon>
+  <ng-container *ngIf="room$ | async as room; else processing">
+    <div class="videos">
+      <span>
+        <video
+          class="local-video"
+          *ngIf="localStream; else sublocal"
+          autoplay
+          playsinline
+          [muted]="true"
+          #webcamVideo
+          [srcObject]="localStream"
+          id="local-video"
+        ></video>
+        <ng-template #sublocal>
+          <video src=""></video>
+        </ng-template>
+      </span>
+      <span>
+        <video
+          class="remote-video"
+          *ngIf="remoteStream; else subremote"
+          autoplay
+          playsinline
+          #remoteVideo
+          [srcObject]="remoteStream"
+        ></video>
+        <ng-template #subremote>
+          <video src=""></video>
+        </ng-template>
+      </span>
+    </div>
+
+    <button
+      *ngIf="!isOwner"
+      mat-button
+      id="answerButton"
+      [disabled]="!isPublishWebcam"
+      (click)="answer()"
+    >
+      通信開始
+    </button>
+
+    <div class="actions">
+      <ng-template #video>
+        <button
+          matTooltip="カメラをオン"
+          class="actions__btn actions__btn--active"
+          (click)="publishVideo()"
+        >
+          <mat-icon class="actions__icon">videocam_off</mat-icon>
         </button>
       </ng-template>
-    </span>
-    <span>
-      <video
-        class="remote-video"
-        *ngIf="remoteStream; else subremote"
-        autoplay
-        playsinline
-        [muted]="isRemoteMute"
-        #remoteVideo
-        [srcObject]="remoteStream"
-      ></video>
-      <ng-template #subremote>
-        <video src=""></video>
-      </ng-template>
-    </span>
-  </div>
 
-  <button
-    *ngIf="!isOwner"
-    mat-button
-    id="answerButton"
-    [disabled]="!isPublishWebcam"
-    (click)="answer()"
-  >
-    通信開始
-  </button>
-
-  <div class="actions">
-    <ng-template #video>
       <button
-        matTooltip="カメラをオン"
+        *ngIf="myStatus?.videoPublish; else video"
+        matTooltip="カメラをオフ"
         class="actions__btn"
-        (click)="publishVideo()"
+        (click)="unPublishVideo()"
       >
         <mat-icon class="actions__icon">videocam</mat-icon>
       </button>
-    </ng-template>
 
-    <button
-      *ngIf="isPublishVideo; else video"
-      matTooltip="カメラをオフ"
-      class="actions__btn actions__btn--active"
-      (click)="unPublishVideo()"
-    >
-      <mat-icon class="actions__icon">videocam_off</mat-icon>
-    </button>
+      <ng-template #microphone>
+        <button
+          matTooltip="ボイスをオン"
+          class="actions__btn actions__btn--active"
+          (click)="publishAudio()"
+        >
+          <mat-icon class="actions__icon">volume_off</mat-icon>
+        </button>
+      </ng-template>
 
-    <ng-template #microphone>
       <button
-        matTooltip="ボイスをオン"
+        *ngIf="myStatus?.voicePublish; else microphone"
+        matTooltip="ミュート"
         class="actions__btn"
-        (click)="publishAudio()"
+        (click)="unPublishAudio()"
       >
         <mat-icon class="actions__icon">volume_up</mat-icon>
       </button>
-    </ng-template>
 
-    <button
-      *ngIf="isPublishMicrophone; else microphone"
-      matTooltip="ミュート"
-      class="actions__btn actions__btn--active"
-      (click)="unPublishAudio()"
-    >
-      <mat-icon class="actions__icon">volume_off</mat-icon>
-    </button>
+      <ng-template #speaker>
+        <button
+          matTooltip="スピーカーをオン"
+          class="actions__btn"
+          (click)="isRemoteMute = false"
+        >
+          <mat-icon class="actions__icon">headset</mat-icon>
+        </button>
+      </ng-template>
 
-    <ng-template #speaker>
       <button
-        matTooltip="スピーカーをオン"
-        class="actions__btn"
-        (click)="isRemoteMute = false"
+        *ngIf="!isRemoteMute; else speaker"
+        matTooltip="スピーカーをオフ"
+        class="actions__btn actions__btn--active"
+        (click)="isRemoteMute = true"
       >
-        <mat-icon class="actions__icon">headset</mat-icon>
+        <mat-icon class="actions__icon">headset_off</mat-icon>
       </button>
-    </ng-template>
 
-    <button
-      *ngIf="!isRemoteMute; else speaker"
-      matTooltip="スピーカーをオフ"
-      class="actions__btn actions__btn--active"
-      (click)="isRemoteMute = true"
-    >
-      <mat-icon class="actions__icon">headset_off</mat-icon>
-    </button>
-
-    <button
-      matTooltip="退室"
-      class="actions__btn actions__btn--exit"
-      (click)="Hangup()"
-    >
-      <mat-icon class="actions__icon">exit_to_app</mat-icon>
-    </button>
-  </div>
+      <button
+        matTooltip="退室"
+        class="actions__btn actions__btn--exit"
+        (click)="Hangup()"
+      >
+        <mat-icon class="actions__icon">exit_to_app</mat-icon>
+      </button>
+    </div>
+  </ng-container>
+  <ng-template #processing>
+    <div class="spinner-wrapper">
+      <mat-spinner [diameter]="56"></mat-spinner>
+    </div>
+  </ng-template>
 </div>

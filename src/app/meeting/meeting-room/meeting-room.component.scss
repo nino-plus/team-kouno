@@ -28,6 +28,9 @@
   &:active {
     cursor: grabbing;
   }
+  &--invisible {
+    opacity: 0;
+  }
 }
 
 .remote-video {
@@ -36,6 +39,9 @@
   background: #2c3e50;
   transform: scalex(-1);
   border-radius: 4px;
+  &--invisible {
+    opacity: 0;
+  }
 }
 
 button {
