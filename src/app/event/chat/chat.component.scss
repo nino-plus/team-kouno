@@ -9,7 +9,7 @@
   position: relative;
   @include sp {
     width: 100vw;
-    height: calc(100vh - 56px - 21px - 48px - 68px);
+    height: calc(100vh - 50px - 56px - 56px);
   }
   &__heading {
     color: $color-font;
@@ -51,6 +51,9 @@
   align-items: center;
   justify-content: center;
   padding: 16px;
+  @include sp {
+    padding: 8px;
+  }
 }
 
 .chat-form {

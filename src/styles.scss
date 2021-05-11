@@ -435,7 +435,6 @@ img {
     padding: 8px 16px;
     width: 248px;
     @include sp {
-      width: 344px;
       border-radius: 40px;
       position: relative;
       display: flex;
@@ -468,16 +467,6 @@ img {
     padding: 4px;
   }
 }
-
-// .ql-snow .ql-tooltip.ql-flip {
-//   width: 240px;
-//   transform: translateY(-10px);
-//   display: grid;
-//   grid-gap: 4px;
-//   left: 0 !important;
-//   top: -120px !important;
-//   border-radius: 8px;
-// }
 
 .ql-snow .ql-tooltip {
   width: 248px;
@@ -516,16 +505,16 @@ img {
   content: '';
 }
 
+@include sp {
+  quill-editor {
+    display: flex;
+  }
+}
+
 .mat-drawer {
   @include sp {
     background: transparent;
     width: 100vw;
-  }
-}
-
-@include sp {
-  quill-editor {
-    display: flex;
   }
 }
 
@@ -535,6 +524,19 @@ img {
 
 .mat-sidenav-content {
   background: linear-gradient(to right bottom, #121212, #303030);
+}
+
+.mat-drawer-backdrop.mat-drawer-shown {
+  height: calc(100vh - 56px);
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.mat-drawer {
+  background: initial;
+  @include sp {
+    z-index: 0;
+    height: calc(100vh - 56px);
+  }
 }
 
 .home-tab-group {

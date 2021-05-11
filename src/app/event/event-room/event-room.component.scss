@@ -30,7 +30,7 @@
   padding: 0 16px;
   @include sp {
     padding: 0;
-    height: calc(100vh - 56px - 81px);
+    border-radius: 0;
   }
 }
 
@@ -50,6 +50,8 @@ app-stream {
   border-radius: 12px;
   @include sp {
     padding: 0;
+    height: calc(100vh - 50px - 56px);
+    border-radius: 0;
   }
   &__title {
     position: absolute;
@@ -258,8 +260,4 @@ app-stream {
   transition: all 600ms;
   z-index: -1;
   pointer-events: none;
-}
-
-.mat-drawer {
-  background: none;
 }
