@@ -25,6 +25,14 @@ export class MeetingService {
     await this.db.doc(`rooms/${id}`).set({
       roomId: id,
       ownerId: uid,
+      ownerStatus: {
+        videoPublish: true,
+        voicePublish: true,
+      },
+      guestStatus: {
+        videoPublish: true,
+        voicePublish: true,
+      },
     });
     return id;
   }

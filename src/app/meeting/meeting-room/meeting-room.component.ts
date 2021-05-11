@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   Component,
+  ElementRef,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -29,8 +30,10 @@ import { RejectDialogComponent } from 'src/app/reject-dialog/reject-dialog.compo
   styleUrls: ['./meeting-room.component.scss'],
 })
 export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('webcamVideo') webcamVideo: HTMLVideoElement;
-  @ViewChild('remoteVideo') remoteVideo: HTMLVideoElement;
+  @ViewChild('webcamVideo') webcamVideo: ElementRef<HTMLVideoElement>;
+  @ViewChild('remoteVideo') remoteVideo: ElementRef<HTMLVideoElement>;
+  localVideo: HTMLElement;
+
   private subscription = new Subscription();
 
   readonly servers: RTCConfiguration = {
@@ -56,10 +59,22 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
   isRemoteMute: boolean;
   isOwner: boolean;
 
+  isPublishVideo: boolean;
+  isPublishMicrophone: boolean;
+
   readonly roomId = this.route.snapshot.paramMap.get('roomId');
   room$: Observable<Room> = this.meetingService.getRoom(this.roomId);
   room: Room;
 
+  myStatus: {
+    videoPublish: boolean;
+    voicePublish: boolean;
+  } = { videoPublish: true, voicePublish: true };
+
+  remoteStatus: {
+    videoPublish: boolean;
+    voicePublish: boolean;
+  };
   rejects$: Observable<Reject[]>;
   dateNow: firebase.firestore.Timestamp = firebase.firestore.Timestamp.now();
 
@@ -79,14 +94,73 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+    this.roomInit();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  async snapshotRoom(): Promise<Room> {
+    const room = await this.room$.pipe(take(1)).toPromise();
+    this.isOwner = this.authService.uid === room?.ownerId;
+    return room;
+  }
+
+  checkToMediaStatus() {
     this.snapshotRoom().then((room) => {
-      this.isOwner = this.authService.uid === room?.ownerId;
+      if (this.isOwner) {
+        this.subscription.add(
+          this.room$.subscribe((room) => {
+            if (this.localStream) {
+              this.localStream.getVideoTracks()[0].enabled =
+                room.ownerStatus.videoPublish;
+              this.localStream.getAudioTracks()[0].enabled =
+                room.ownerStatus.voicePublish;
+            }
+            if (this.remoteStream) {
+              this.remoteStream.getVideoTracks()[0].enabled =
+                room.guestStatus.videoPublish;
+              this.remoteStream.getAudioTracks()[0].enabled =
+                room.guestStatus.voicePublish;
+            }
+            (this.myStatus = room.ownerStatus),
+              (this.remoteStatus = room.guestStatus);
+          })
+        );
+      } else {
+        this.subscription.add(
+          this.room$.subscribe((room) => {
+            if (this.remoteStream) {
+              this.remoteStream.getVideoTracks()[0].enabled =
+                room.ownerStatus.videoPublish;
+              this.remoteStream.getAudioTracks()[0].enabled =
+                room.ownerStatus.voicePublish;
+            }
+            if (this.localStream) {
+              this.localStream.getVideoTracks()[0].enabled =
+                room.guestStatus.videoPublish;
+              this.localStream.getAudioTracks()[0].enabled =
+                room.guestStatus.voicePublish;
+            }
+            (this.myStatus = room.guestStatus),
+              (this.remoteStatus = room.ownerStatus);
+          })
+        );
+      }
+    });
+  }
+
+  roomInit() {
+    this.snapshotRoom().then((room) => {
       this.publishWebcam().then(() => {
-        if (this.isOwner) {
-          setTimeout(() => {
+        setTimeout(() => {
+          if (this.isOwner) {
             this.createRoom();
-          }, 500);
-        }
+          } else {
+            this.answer();
+          }
+        }, 500);
       });
 
       this.rejects$ = this.meetingService.getRejects(room.ownerId);
@@ -103,15 +177,6 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
         })
       );
     });
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
-
-  async snapshotRoom(): Promise<Room> {
-    const room = await this.room$.pipe(take(1)).toPromise();
-    return room;
   }
 
   async publishWebcam() {
@@ -133,10 +198,9 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     };
 
-    // this.webcamVideo.srcObject = this.localStream;
-    // this.remoteVideo.srcObject = this.remoteStream;
-
     this.isPublishWebcam = true;
+    this.isPublishVideo = true;
+    this.isPublishMicrophone = true;
   }
 
   async createRoom() {
@@ -178,6 +242,7 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
     answerCandidates.onSnapshot((snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === 'added') {
+          this.checkToMediaStatus();
           this.soundService.callSound.stop();
           let data = change.doc.data();
           this.peerConnection.addIceCandidate(new RTCIceCandidate(data));
@@ -222,12 +287,14 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
     offerCandidates.onSnapshot((snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === 'added') {
+          this.checkToMediaStatus();
           let data = change.doc.data();
           this.peerConnection.addIceCandidate(new RTCIceCandidate(data));
         }
       });
     });
 
+    this.isCreateRoom = true;
     this.detectClosed();
   }
 
@@ -326,5 +393,103 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
         );
       }
     };
+  }
+
+  async publishVideo() {
+    if (this.isOwner) {
+      await this.db.doc(`rooms/${this.roomId}`).set(
+        {
+          ownerStatus: {
+            videoPublish: true,
+          },
+        },
+        { merge: true }
+      );
+    } else {
+      await this.db.doc(`rooms/${this.roomId}`).set(
+        {
+          guestStatus: {
+            videoPublish: true,
+          },
+        },
+        { merge: true }
+      );
+    }
+
+    this.isPublishVideo = true;
+    this.myStatus.videoPublish = true;
+  }
+
+  async unPublishVideo() {
+    console.log('run2');
+    if (this.isOwner) {
+      await this.db.doc(`rooms/${this.roomId}`).set(
+        {
+          ownerStatus: {
+            videoPublish: false,
+          },
+        },
+        { merge: true }
+      );
+    } else {
+      await this.db.doc(`rooms/${this.roomId}`).set(
+        {
+          guestStatus: {
+            videoPublish: false,
+          },
+        },
+        { merge: true }
+      );
+    }
+
+    this.isPublishVideo = false;
+    this.myStatus.videoPublish = false;
+  }
+
+  async publishAudio() {
+    if (this.isOwner) {
+      await this.db.doc(`rooms/${this.roomId}`).set(
+        {
+          ownerStatus: {
+            voicePublish: true,
+          },
+        },
+        { merge: true }
+      );
+    } else {
+      await this.db.doc(`rooms/${this.roomId}`).set(
+        {
+          guestStatus: {
+            voicePublish: true,
+          },
+        },
+        { merge: true }
+      );
+    }
+
+    this.myStatus.voicePublish = true;
+  }
+
+  async unPublishAudio() {
+    if (this.isOwner) {
+      await this.db.doc(`rooms/${this.roomId}`).set(
+        {
+          ownerStatus: {
+            voicePublish: false,
+          },
+        },
+        { merge: true }
+      );
+    } else {
+      await this.db.doc(`rooms/${this.roomId}`).set(
+        {
+          guestStatus: {
+            voicePublish: false,
+          },
+        },
+        { merge: true }
+      );
+    }
+    this.myStatus.voicePublish = false;
   }
 }
