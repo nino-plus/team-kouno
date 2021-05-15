@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AngularFireFunctions } from '@angular/fire/functions';
-import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { fade } from 'src/app/animations/animations';
@@ -8,7 +7,6 @@ import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { MeetingService } from 'src/app/services/meeting.service';
 import { MessagingService } from 'src/app/services/messaging.service';
-import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-user-card',
@@ -17,7 +15,7 @@ import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-di
   animations: [fade],
 })
 export class UserCardComponent implements OnInit {
-  @Input() user: User;
+  @Input() targetUser: User;
   tokens: string[] = [];
   currentUser$: Observable<User> = this.authService.user$;
 
@@ -27,7 +25,6 @@ export class UserCardComponent implements OnInit {
     private meetingService: MeetingService,
     private authService: AuthService,
     private router: Router,
-    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {}
@@ -50,22 +47,8 @@ export class UserCardComponent implements OnInit {
       });
   }
 
-  call(uid: string, userName: string): void {
-    this.dialog
-      .open(ConfirmDialogComponent, {
-        autoFocus: false,
-        data: {
-          text: `${userName}さんに話しかけますか？`,
-        },
-      })
-      .afterClosed()
-      .subscribe(async (status) => {
-        const roomId = await this.meetingService.createEmptyRoom(
-          this.authService.uid
-        );
-        if (status) {
-          this.router.navigate(['waiting', roomId, { uid: uid }]);
-        }
-      });
+  async enterWaitingRoom(targetUid: string): Promise<void> {
+    const roomId = await this.meetingService.createEmptyRoom(this.authService.uid);
+    this.router.navigate(['waiting', roomId, { targetUid: targetUid }]);
   }
 }

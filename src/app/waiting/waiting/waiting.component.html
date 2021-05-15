@@ -1,26 +1,37 @@
-<div class="container container--waiting">
-  <div *ngIf="user$ | async as user" class="room">
+<div *ngIf="user$ | async as user" class="container container--waiting">
+  <div *ngIf="targetUser$ | async as targetUser" class="room">
     <h2 class="room__title">WAITING ROOM</h2>
     <div class="room__head">
-      <ng-container *ngIf="user.state == 'online'">
+      <ng-container *ngIf="targetUser.state == 'online'">
         <span @fade class="room__active-ring"></span>
       </ng-container>
-      <img [src]="user.avatarURL" alt="" class="room__avatar" />
+      <img [src]="targetUser.avatarURL" alt="" class="room__avatar" />
       <div class="room__info-wrap">
-        <p class="room__name">{{ user.name }}</p>
+        <p class="room__name">{{ targetUser.name }}</p>
         <p class="room__info">
-          フォロワー{{ user.followerCount ? user.followerCount : 0 }}人
+          フォロワー{{
+            targetUser.followerCount ? targetUser.followerCount : 0
+          }}人
         </p>
-        <p class="room__info room__info--state" *ngIf="user.state == 'online'">
+        <p
+          class="room__info room__info--state"
+          *ngIf="targetUser.state == 'online'"
+        >
           オンライン
         </p>
-        <p class="room__info" *ngIf="user.state == 'offline'">
-          最終ログイン{{ user.lastChangedAt.toDate() | date: 'M/d HH:mm' }}
+        <p class="room__info" *ngIf="targetUser.state == 'offline'">
+          最終ログイン{{
+            targetUser.lastChangedAt.toDate() | date: 'M/d HH:mm'
+          }}
         </p>
       </div>
     </div>
     <p class="room__description">
-      {{ user.description ? user.description : '自己紹介はまだありません。' }}
+      {{
+        targetUser.description
+          ? targetUser.description
+          : '自己紹介はまだありません。'
+      }}
     </p>
 
     <form class="form-grid" [formGroup]="form">
@@ -55,17 +66,52 @@
       </mat-form-field>
     </form>
 
-    <div class="actions">
-      <button mat-flat-button routerLink="/">キャンセル</button>
+    <ng-contaner *ngIf="loading; else action">
+      <div class="spinner">
+        <mat-spinner diameter="30"></mat-spinner>
+        支払い処理中です
+      </div>
+    </ng-contaner>
+    <ng-template #action>
+      <div class="actions">
+        <button mat-flat-button routerLink="/">キャンセル</button>
 
-      <button
-        *ngIf="currentUser$ | async as currentUser"
-        mat-flat-button
-        class="actions__btn"
-        (click)="call(currentUser)"
-      >
-        話しかける
-      </button>
-    </div>
+        <ng-container *ngIf="targetUser.uid !== user.uid">
+          <button
+            class="actions__btn"
+            mat-flat-button
+            (click)="
+              [
+                targetUser.ticketPrice
+                  ? openTicketDialog(user, targetUser)
+                  : call(targetUser.uid, targetUser.name)
+              ]
+            "
+            [disabled]="
+              targetUser.ticketPrice &&
+              !(customer$ | async)?.defaultPaymentMethod &&
+                !(customer$ | async)?.paymentMethods
+            "
+          >
+            話しかける<mat-icon *ngIf="targetUser.ticketPrice">sell</mat-icon>
+          </button>
+          <p
+            *ngIf="
+              targetUser.ticketPrice &&
+              !(customer$ | async)?.defaultPaymentMethod &&
+                !(customer$ | async)?.paymentMethods
+            "
+            class="actions__hint"
+          >
+            話しかけるにはチケットが必要です。お支払いカードを設定してください。<br />
+            <span
+              ><a class="actions__hint--link" routerLink="/settings/payment"
+                >設定はこちら</a
+              ></span
+            >
+          </p>
+        </ng-container>
+      </div>
+    </ng-template>
   </div>
 </div>
