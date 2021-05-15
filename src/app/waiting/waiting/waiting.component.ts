@@ -52,8 +52,6 @@ export class WaitingComponent implements OnInit {
     ],
   });
 
-  loading = true;
-
   constructor(
     public uiService: UiService,
     private authService: AuthService,
