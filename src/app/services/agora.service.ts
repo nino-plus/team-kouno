@@ -45,7 +45,7 @@ export class AgoraService {
     await callable({ eventId })
       .toPromise()
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         this.router.navigate(['/']);
       });
     if (!uid) {
@@ -60,7 +60,7 @@ export class AgoraService {
         this.remoteUserIds.push(user.uid);
         this.remoteUserIds$ = of(this.remoteUserIds);
       }
-      console.log(this.remoteUserIds);
+
       const screenOwnerUid = await this.eventService.getScreenOwnerId(eventId);
       const remoteUserId = user.uid;
 
@@ -78,6 +78,13 @@ export class AgoraService {
 
     client.on('user-unpublished', async (user, mediaType) => {
       await client.unsubscribe(user, mediaType);
+    });
+
+    client.enableAudioVolumeIndicator();
+    client.on('volume-indicator', (result) => {
+      result.forEach((volume, index) => {
+        console.log(`${index} UID ${volume.uid} Level ${volume.level}`);
+      });
     });
 
     return client.join(this.agoraAppId, eventId, token.token, uid);
