@@ -43,6 +43,7 @@ export class EditorComponent implements OnInit {
     category: ['', [Validators.required]],
     startAt: ['', [Validators.required]],
     exitAt: [''],
+    isFreetalk: [false, [Validators.required]],
   });
 
   categoryGroup = [
@@ -69,7 +70,7 @@ export class EditorComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.authService.user$.pipe(take(1)).subscribe((user: User) => {
       this.uid = user.uid;
     });
@@ -83,7 +84,6 @@ export class EditorComponent implements OnInit {
           name: event.name,
           description: event.description,
           category: event.category,
-          ownerId: event.ownerId,
           startAt: event.startAt.toDate(),
           exitAt: event.exitAt.toDate(),
         });
@@ -109,6 +109,7 @@ export class EditorComponent implements OnInit {
       startAt: formData.startAt,
       exitAt: formData.exitAt,
       createdAt: firebase.firestore.Timestamp.now(),
+      isFreetalk: formData.isFreetalk,
     };
 
     if (!this.event) {
