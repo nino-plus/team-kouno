@@ -5,15 +5,16 @@ import { Router } from '@angular/router';
 import firebase from 'firebase/app';
 import { Observable, of } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
+import { User } from '../interfaces/user';
 import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  afUser$: Observable<any> = this.afAuth.user;
+  afUser$: Observable<firebase.User> = this.afAuth.user;
   uid: string;
-  user$ = this.afAuth.authState.pipe(
+  user$: Observable<User> = this.afAuth.authState.pipe(
     switchMap((afUser) => {
       if (afUser) {
         this.uid = afUser.uid;

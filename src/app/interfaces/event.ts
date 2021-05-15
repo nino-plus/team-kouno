@@ -13,11 +13,14 @@ export interface Event {
   category: string;
   participantCount?: number;
   participants?: User[];
+  audienceUserIds?: string[];
+  hostUserIds?: string[];
   reserveUserCount?: number;
   isShareScreen?: boolean;
   screenOwnerUid?: string;
   videoPublishUsers?: User[];
   isSpecial?: boolean;
+  isFreetalk?: boolean;
 }
 
 export interface EventWithOwner extends Event {
