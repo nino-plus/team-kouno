@@ -9,10 +9,18 @@ import { Product } from '../interfaces/product';
 export class ProductService {
   constructor(private db: AngularFirestore) {}
 
-  getActiveProducts(userId: string): Observable<Product[]> {
+  getOneOnOneProducts(userId: string): Observable<Product[]> {
     return this.db
       .collection<Product>(`products`, (ref) =>
-        ref.where('userId', '==', userId).where('active', '==', true)
+        ref.where('userId', '==', userId).where('eventId', '==', null).where('active', '==', true)
+      )
+      .valueChanges();
+  }
+
+  getEventProducts(eventId: string): Observable<Product[]> {
+    return this.db
+      .collection<Product>(`products`, (ref) =>
+        ref.where('eventId', '==', eventId).where('active', '==', true)
       )
       .valueChanges();
   }

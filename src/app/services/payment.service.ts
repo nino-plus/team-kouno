@@ -109,8 +109,9 @@ export class PaymentService {
     return callable({}).toPromise();
   }
 
-  createStripeProductAndPrice(price: number): Promise<Stripe.Price[]> {
+  createStripeProductAndPrice(price: number, eventId?: string): Promise<Stripe.Price[]> {
     const data = {
+      eventId: eventId,
       name: 'チケット',
       amount: price,
     };

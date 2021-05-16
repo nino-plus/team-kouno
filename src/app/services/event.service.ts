@@ -32,7 +32,7 @@ export class EventService {
     event: Omit<Event, 'eventId' | 'thumbnailURL' | 'updatedAt'>,
     thumbnailURL: string,
     uid: string
-  ): Promise<void> {
+  ) {
     const id = this.db.createId();
     const image = await this.setThumbnailToStorage(id, thumbnailURL);
     await this.db
@@ -53,6 +53,7 @@ export class EventService {
       createdAt: firebase.firestore.Timestamp.now(),
       type: 'create',
     });
+    return id;
   }
 
   async setThumbnailToStorage(eventId: string, file: string): Promise<string> {
