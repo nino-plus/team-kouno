@@ -37,7 +37,7 @@ export class WaitingComponent implements OnInit {
   targetUid: string = this.route.snapshot.paramMap.get('targetUid');
   targetUser$: Observable<User> = this.userService.getUserData(this.targetUid);
   customer$: Observable<Customer>;
-  products$: Observable<Product[]> = this.productService.getActiveProducts(
+  products$: Observable<Product[]> = this.productService.getOneOnOneProducts(
     this.targetUid
   );
   connectedAccountId$: Observable<string> = this.connectedAccountService
@@ -71,10 +71,7 @@ export class WaitingComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    setTimeout(() => {
-      this.customer$.subscribe((d) => console.log(d));
-    }, 1000);
-    this.targetUser$.subscribe((d) => console.log(d.ticketPrice));
+    this.targetUser$.subscribe((d) => console.log(d.ticketPrice > 0));
   }
 
   async sendPushMessage(

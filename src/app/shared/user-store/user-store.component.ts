@@ -14,7 +14,7 @@ import { UiService } from 'src/app/services/ui.service';
   styleUrls: ['./user-store.component.scss'],
 })
 export class UserStoreComponent implements OnInit {
-  products$: Observable<Product[]> = this.productService.getActiveProducts(
+  products$: Observable<Product[]> = this.productService.getOneOnOneProducts(
     this.data.targetUser.uid
   );
   connectedAccountId$: Observable<string> = this.connectedAccountService
