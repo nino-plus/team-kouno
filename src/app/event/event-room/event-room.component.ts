@@ -1,9 +1,7 @@
 import {
-  AfterViewChecked,
   AfterViewInit,
   Component,
   ElementRef,
-  HostListener,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -14,8 +12,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
 import { Event, EventWithOwner } from 'src/app/interfaces/event';
-import { Room } from 'src/app/interfaces/room';
-import { RoomChild } from 'src/app/interfaces/room-child';
 import { User } from 'src/app/interfaces/user';
 import { AgoraService } from 'src/app/services/agora.service';
 import { AuthService } from 'src/app/services/auth.service';
