@@ -55,7 +55,7 @@ export class MainShellComponent implements OnInit, OnDestroy, AfterViewInit {
         .pipe(
           switchMap((user) => {
             this.user = user;
-            return this.meetingService.getInvites(user.uid);
+            return this.meetingService.getInvites(user?.uid);
           }),
           skip(1),
           shareReplay(1)
