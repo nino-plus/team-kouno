@@ -1,10 +1,21 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
 import { Event, EventWithOwner } from 'src/app/interfaces/event';
+import { Room } from 'src/app/interfaces/room';
+import { RoomChild } from 'src/app/interfaces/room-child';
 import { User } from 'src/app/interfaces/user';
 import { AgoraService } from 'src/app/services/agora.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -18,7 +29,8 @@ import { ShareScreenInfoDialogComponent } from 'src/app/shared/share-screen-info
   templateUrl: './event-room.component.html',
   styleUrls: ['./event-room.component.scss'],
 })
-export class EventRoomComponent implements OnInit, OnDestroy {
+export class EventRoomComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('target') target: ElementRef;
   readonly subscription = new Subscription();
   eventId: string;
   user$: Observable<User> = this.authService.user$;
@@ -44,6 +56,10 @@ export class EventRoomComponent implements OnInit, OnDestroy {
   participantCount$: Observable<number>;
   participantCount: number;
 
+  roomChildren: User[][];
+  scrollWidth: number = 0;
+  leftPosition: number = 0;
+
   isFullScreen: boolean;
 
   constructor(
@@ -65,9 +81,17 @@ export class EventRoomComponent implements OnInit, OnDestroy {
     this.streamInit();
   }
 
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.uiService.scrollWidth = this.target.nativeElement.offsetWidth;
+    }, 3000);
+    console.log(this.scrollWidth);
+  }
+
   ngOnDestroy(): void {
     if (this.isJoin) {
       this.agoraService.leaveAgoraChannel(this.eventId);
+      console.log('log');
     }
     this.subscription.unsubscribe();
   }
@@ -90,12 +114,14 @@ export class EventRoomComponent implements OnInit, OnDestroy {
       );
 
       this.subscription.add(
-        this.participants$.pipe(shareReplay(1)).subscribe((participants) => {
+        this.participants$.subscribe((participants) => {
           this.participants = participants;
+          this.roomChildren = this.sliceParticipants(this.participants);
+          console.log(this.roomChildren);
+
           this.participantCount$.pipe(shareReplay(1)).subscribe((num) => {
             this.participantCount = num;
           });
-          console.log(this.participantCount);
 
           if (participants.length > this.participantCount) {
             this.soundService.joinSound.play();
@@ -108,8 +134,33 @@ export class EventRoomComponent implements OnInit, OnDestroy {
     }
   }
 
+  sliceParticipants([...participants]: User[]): User[][] {
+    return participants.reduce(
+      (acc, value, index) =>
+        index % 20 ? acc : [...acc, participants.slice(index, index + 20)],
+      []
+    );
+  }
+
+  scrollRight(): void {
+    this.target.nativeElement.scroll({
+      left: (this.target.nativeElement.scrollLeft +=
+        this.uiService.scrollWidth + 24),
+      behavior: 'smooth',
+    });
+    console.log(this.scrollWidth);
+    this.leftPosition = this.target.nativeElement.scrollLeft;
+  }
+
+  scrollLeft(): void {
+    this.target.nativeElement.scrollLeft -= this.uiService.scrollWidth + 24;
+    console.log(this.scrollWidth);
+    this.leftPosition = this.target.nativeElement.scrollLeft;
+  }
+
   goFullscreen(): void {
     const channel = document.getElementById('channel');
+    this.uiService.scrollWidth = window.innerWidth;
     channel.requestFullscreen();
     this.isFullScreen = true;
   }
@@ -203,21 +254,21 @@ export class EventRoomComponent implements OnInit, OnDestroy {
     });
   }
 
-  @HostListener('window:unload', ['$event'])
-  unloadHandler($event: any): void {
-    if (this.isJoin) {
-      $event.preventDefault();
-      $event.returnValue = false;
-      this.agoraService.leaveAgoraChannel(this.eventId);
-    }
-  }
+  // @HostListener('window:unload', ['$event'])
+  // unloadHandler($event: any): void {
+  //   if (this.isJoin) {
+  //     $event.preventDefault();
+  //     $event.returnValue = false;
+  //     this.agoraService.leaveAgoraChannel(this.eventId);
+  //   }
+  // }
 
-  @HostListener('window:beforeunload', ['$event'])
-  beforeUnloadHandler($event: any): void {
-    if (this.isJoin) {
-      $event.preventDefault();
-      $event.returnValue = false;
-      this.agoraService.leaveAgoraChannel(this.eventId);
-    }
-  }
+  // @HostListener('window:beforeunload', ['$event'])
+  // beforeUnloadHandler($event: any): void {
+  //   if (this.isJoin) {
+  //     $event.preventDefault();
+  //     $event.returnValue = false;
+  //     this.agoraService.leaveAgoraChannel(this.eventId);
+  //   }
+  // }
 }

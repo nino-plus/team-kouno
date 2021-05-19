@@ -42,12 +42,26 @@ app-stream {
   border-left: none;
 }
 
+.channel-wrap {
+  display: flex;
+  align-items: center;
+  overflow-x: hidden;
+  white-space: nowrap;
+  scroll-behavior: smooth;
+}
+
 .channel {
-  width: 100%;
+  &.mainNav {
+    min-width: calc(100vw - 256px - 32px);
+  }
+  &.miniNav {
+    min-width: calc(100vw - 74px - 32px);
+  }
   height: calc(100vh - 74px - 68px);
   padding: 24px;
   background: #000;
   border-radius: 12px;
+  margin-right: 16px;
   @include sp {
     padding: 0;
     height: calc(100vh - 50px - 56px);
@@ -74,6 +88,20 @@ app-stream {
     display: grid;
     place-items: center;
     grid-template-columns: auto;
+  }
+  &__prev {
+    position: absolute;
+    top: 50%;
+    left: -12px;
+    transform: translateY(-50%);
+    z-index: 100;
+  }
+  &__next {
+    position: absolute;
+    top: 50%;
+    right: -12px;
+    transform: translateY(-50%);
+    z-index: 100;
   }
 }
 
@@ -200,9 +228,9 @@ app-stream {
     grid-template-columns: 1fr 1fr;
     height: 70vh;
   }
-  &--more-player {
-    grid-template-columns: 1fr 1fr;
-    grid-auto-rows: 400px;
+  &--20-player {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-rows: repeat(auto-fit, minmax(64px, 1fr));
   }
 }
 
@@ -222,6 +250,7 @@ app-stream {
 }
 
 .participants {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -231,14 +260,20 @@ app-stream {
     border-radius: 0;
   }
   &__photo {
-    width: 160px;
-    height: 160px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
   }
+  &__info {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.38);
+    border-radius: 4px;
+    padding: 4px 8px;
+  }
   &__name {
-    font-size: 14px;
-    margin-left: 16px;
-    color: #fafafa;
+    font-size: 10px;
   }
 }
 

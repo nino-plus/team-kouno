@@ -20,8 +20,18 @@
       </button>
     </div>
 
-    <ng-container *ngIf="event$ | async as event">
-      <div class="channel" id="channel">
+    <div
+      *ngIf="event$ | async as event"
+      class="channel-wrap"
+      #target
+      id="channel"
+    >
+      <div
+        class="channel"
+        *ngFor="let roomChild of roomChildren; index as i"
+        [class.mainNav]="uiService.sidenavIsOpen"
+        [class.miniNav]="!uiService.sidenavIsOpen"
+      >
         <button
           *ngIf="isFullScreen"
           matTooltip="戻る"
@@ -30,40 +40,67 @@
         >
           <mat-icon class="actions__icon">close_fullscreen</mat-icon>
         </button>
-        <ng-container *ngIf="participants$ | async as participants">
-          <div
-            id="local-player"
-            class="player"
-            [class.player--1-player]="participants.length === 1 || !isPcScreen"
-            [class.player--2-player]="
-              participants.length > 1 && participants.length < 3 && isPcScreen
-            "
-            [class.player--more-player]="participants.length > 2 && isPcScreen"
-            [class.invisible]="isProcessing || event.isShareScreen"
-          >
-            <ng-container *ngFor="let user of participants">
-              <ng-container *ngIf="videoPublishUserIds$ | async as ids">
-                <div
-                  *ngIf="!ids.includes(user.uid)"
-                  class="participants"
+
+        <div
+          id="local-player"
+          class="player"
+          [class.player--1-player]="
+            participants.length === 1 || participants.length === 20 * i + 1
+          "
+          [class.player--2-player]="
+            (participants.length > 1 && participants.length < 3) ||
+            participants.length === 20 * i + 2
+          "
+          [class.player--20-player]="
+            (participants.length > 3 && isPcScreen) || i > 1
+          "
+          [class.invisible]="isProcessing || event.isShareScreen"
+        >
+          <ng-container *ngFor="let user of roomChild">
+            <ng-container *ngIf="videoPublishUserIds$ | async as ids">
+              <div
+                *ngIf="!ids.includes(user.uid)"
+                class="participants"
+                [class.invisible]="isProcessing"
+              >
+                <img
+                  class="participants__photo"
                   [class.invisible]="isProcessing"
-                >
-                  <img
-                    class="participants__photo"
-                    [class.invisible]="isProcessing"
-                    [src]="user.avatarURL"
-                    alt=""
-                  />
+                  [src]="user.avatarURL"
+                  alt=""
+                />
+                <div class="participants__info">
+                  <p class="participants__name">{{ user.name }}</p>
                 </div>
-              </ng-container>
+              </div>
             </ng-container>
-          </div>
-          <div
-            id="share-screen"
-            class="screen"
-            [class.invisible]="isProcessing || !event.isShareScreen"
-          ></div>
-        </ng-container>
+          </ng-container>
+        </div>
+        <div
+          id="share-screen"
+          class="screen"
+          [class.invisible]="isProcessing || !event.isShareScreen"
+        ></div>
+
+        <button
+          mat-button
+          class="channel__prev"
+          *ngIf="participants.length > 20 && leftPosition > 120"
+          (click)="scrollLeft()"
+        >
+          <mat-icon class="channel__icon">chevron_left</mat-icon>
+          <mat-icon class="channel__icon">group</mat-icon>
+        </button>
+
+        <button
+          mat-button
+          class="channel__next"
+          *ngIf="participants.length > 20"
+          (click)="scrollRight()"
+        >
+          <mat-icon class="channel__icon">group</mat-icon>
+          <mat-icon class="channel__icon">navigate_next</mat-icon>
+        </button>
 
         <ng-container *ngIf="isProcessing">
           <div class="lodading-wrap">
@@ -71,7 +108,7 @@
           </div>
         </ng-container>
       </div>
-    </ng-container>
+    </div>
 
     <div class="actions">
       <ng-template #video>
