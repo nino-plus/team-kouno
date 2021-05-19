@@ -421,7 +421,6 @@ export class MeetingRoomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async unPublishVideo() {
-    console.log('run2');
     if (this.isOwner) {
       await this.db.doc(`rooms/${this.roomId}`).set(
         {

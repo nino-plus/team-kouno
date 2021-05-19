@@ -81,13 +81,11 @@ export class EventRoomComponent implements OnInit, OnDestroy, AfterViewInit {
     setTimeout(() => {
       this.uiService.scrollWidth = this.target.nativeElement.offsetWidth;
     }, 3000);
-    console.log(this.scrollWidth);
   }
 
   ngOnDestroy(): void {
     if (this.isJoin) {
       this.agoraService.leaveAgoraChannel(this.eventId);
-      console.log('log');
     }
     this.subscription.unsubscribe();
   }
@@ -113,7 +111,6 @@ export class EventRoomComponent implements OnInit, OnDestroy, AfterViewInit {
         this.participants$.subscribe((participants) => {
           this.participants = participants;
           this.roomChildren = this.sliceParticipants(this.participants);
-          console.log(this.roomChildren);
 
           this.participantCount$.pipe(shareReplay(1)).subscribe((num) => {
             this.participantCount = num;
@@ -140,16 +137,12 @@ export class EventRoomComponent implements OnInit, OnDestroy, AfterViewInit {
 
   scrollRight(): void {
     this.target.nativeElement.scrollLeft += this.uiService.scrollWidth + 24;
-
-    console.log(this.scrollWidth);
     this.leftPosition = this.target.nativeElement.scrollLeft +=
       this.uiService.scrollWidth + 24;
-    console.log(this.isFullScreen);
   }
 
   scrollLeft(): void {
     this.target.nativeElement.scrollLeft -= this.uiService.scrollWidth + 24;
-    console.log(this.scrollWidth);
     this.leftPosition = this.target.nativeElement.scrollLeft -=
       this.uiService.scrollWidth + 24;
   }
@@ -159,7 +152,6 @@ export class EventRoomComponent implements OnInit, OnDestroy, AfterViewInit {
     this.uiService.scrollWidth = window.innerWidth;
     channel.requestFullscreen();
     this.isFullScreen = true;
-    console.log(this.isFullScreen);
   }
 
   exitFullscreen(): void {

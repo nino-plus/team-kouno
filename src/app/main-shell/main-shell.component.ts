@@ -65,7 +65,6 @@ export class MainShellComponent implements OnInit, OnDestroy, AfterViewInit {
 
           if (lastInvite.createdAt.toMillis() >= this.dateNow.toMillis()) {
             this.soundService.callSound.play();
-            console.log(lastInvite);
 
             this.dialog.open(InviteDialogComponent, {
               data: { lastInvite, user: this.user },

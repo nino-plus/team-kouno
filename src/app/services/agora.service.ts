@@ -62,7 +62,6 @@ export class AgoraService {
         this.remoteUserIds.push(user.uid);
         this.remoteUserIds$ = of(this.remoteUserIds);
       }
-      console.log(this.remoteUserIds);
       const screenOwnerUid = await this.eventService.getScreenOwnerId(eventId);
       const remoteUserId = user.uid;
 
@@ -216,7 +215,6 @@ export class AgoraService {
     await callable({ eventId })
       .toPromise()
       .catch((error) => {
-        console.log(eventId);
         console.log(error);
         this.router.navigate(['/']);
       });

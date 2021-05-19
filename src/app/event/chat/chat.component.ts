@@ -48,8 +48,6 @@ export class ChatComponent implements OnInit, OnDestroy {
         this.chats$.pipe(skip(1), shareReplay(1)).subscribe((chats) => {
           const lastChat = chats.slice(-1)[0];
           const now = firebase.firestore.Timestamp.now().toMillis() - 10000;
-          console.log(now);
-          console.log(lastChat.createdAt.toMillis());
 
           if (
             this.eventId == lastChat.eventId &&

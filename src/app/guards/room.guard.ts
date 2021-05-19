@@ -15,8 +15,6 @@ export class RoomGuard implements CanDeactivate<EventRoomComponent> {
     } else {
       this.agoraService.leaveAgoraChannel(component.eventId);
     }
-    console.log(component.eventId);
-
     return false;
   }
 }
