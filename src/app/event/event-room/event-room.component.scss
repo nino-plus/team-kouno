@@ -48,14 +48,23 @@ app-stream {
   overflow-x: hidden;
   white-space: nowrap;
   scroll-behavior: smooth;
+  &.fullscreen {
+    overflow-x: auto;
+  }
 }
 
 .channel {
   &.mainNav {
     min-width: calc(100vw - 256px - 32px);
+    @include sp {
+      min-width: 100vw;
+    }
   }
   &.miniNav {
     min-width: calc(100vw - 74px - 32px);
+    @include sp {
+      min-width: 100vw;
+    }
   }
   height: calc(100vh - 74px - 68px);
   padding: 24px;
@@ -95,6 +104,9 @@ app-stream {
     left: -12px;
     transform: translateY(-50%);
     z-index: 100;
+    &.fullscreen {
+      position: fixed;
+    }
   }
   &__next {
     position: absolute;
@@ -102,6 +114,9 @@ app-stream {
     right: -12px;
     transform: translateY(-50%);
     z-index: 100;
+    &.fullscreen {
+      position: fixed;
+    }
   }
 }
 
@@ -208,6 +223,9 @@ app-stream {
         top: 16px;
         left: 16px;
       }
+      &.fullscreen {
+        position: fixed;
+      }
     }
   }
 }
@@ -223,14 +241,24 @@ app-stream {
   &--1-player {
     grid-template-columns: 1fr;
     height: 70vh;
+    @include sp {
+      height: 100vh;
+    }
   }
   &--2-player {
     grid-template-columns: 1fr 1fr;
     height: 70vh;
+    @include sp {
+      grid-template-columns: 1fr;
+      height: 50vh;
+    }
   }
   &--20-player {
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     grid-template-rows: repeat(auto-fit, minmax(64px, 1fr));
+    @include sp {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 }
 

@@ -139,19 +139,19 @@ export class EventRoomComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   scrollRight(): void {
-    this.target.nativeElement.scroll({
-      left: (this.target.nativeElement.scrollLeft +=
-        this.uiService.scrollWidth + 24),
-      behavior: 'smooth',
-    });
+    this.target.nativeElement.scrollLeft += this.uiService.scrollWidth + 24;
+
     console.log(this.scrollWidth);
-    this.leftPosition = this.target.nativeElement.scrollLeft;
+    this.leftPosition = this.target.nativeElement.scrollLeft +=
+      this.uiService.scrollWidth + 24;
+    console.log(this.isFullScreen);
   }
 
   scrollLeft(): void {
     this.target.nativeElement.scrollLeft -= this.uiService.scrollWidth + 24;
     console.log(this.scrollWidth);
-    this.leftPosition = this.target.nativeElement.scrollLeft;
+    this.leftPosition = this.target.nativeElement.scrollLeft -=
+      this.uiService.scrollWidth + 24;
   }
 
   goFullscreen(): void {
@@ -159,6 +159,7 @@ export class EventRoomComponent implements OnInit, OnDestroy, AfterViewInit {
     this.uiService.scrollWidth = window.innerWidth;
     channel.requestFullscreen();
     this.isFullScreen = true;
+    console.log(this.isFullScreen);
   }
 
   exitFullscreen(): void {

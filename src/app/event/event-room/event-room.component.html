@@ -25,7 +25,29 @@
       class="channel-wrap"
       #target
       id="channel"
+      [class.fullscreen]="isFullScreen"
     >
+      <button
+        mat-button
+        class="channel__prev"
+        *ngIf="participants.length > 20 && leftPosition > 0"
+        (click)="scrollLeft()"
+        [class.fullscreen]="isFullScreen"
+      >
+        <mat-icon class="channel__icon">chevron_left</mat-icon>
+        <mat-icon class="channel__icon">group</mat-icon>
+      </button>
+
+      <button
+        mat-button
+        class="channel__next"
+        *ngIf="participants.length > 20"
+        (click)="scrollRight()"
+        [class.fullscreen]="isFullScreen"
+      >
+        <mat-icon class="channel__icon">group</mat-icon>
+        <mat-icon class="channel__icon">navigate_next</mat-icon>
+      </button>
       <div
         class="channel"
         *ngFor="let roomChild of roomChildren; index as i"
@@ -37,6 +59,7 @@
           matTooltip="戻る"
           class="actions__btn actions__btn--close"
           (click)="exitFullscreen()"
+          [class.fullscreen]="isFullScreen"
         >
           <mat-icon class="actions__icon">close_fullscreen</mat-icon>
         </button>
@@ -51,9 +74,7 @@
             (participants.length > 1 && participants.length < 3) ||
             participants.length === 20 * i + 2
           "
-          [class.player--20-player]="
-            (participants.length > 3 && isPcScreen) || i > 1
-          "
+          [class.player--20-player]="participants.length > 3 || i > 1"
           [class.invisible]="isProcessing || event.isShareScreen"
         >
           <ng-container *ngFor="let user of roomChild">
@@ -81,26 +102,6 @@
           class="screen"
           [class.invisible]="isProcessing || !event.isShareScreen"
         ></div>
-
-        <button
-          mat-button
-          class="channel__prev"
-          *ngIf="participants.length > 20 && leftPosition > 120"
-          (click)="scrollLeft()"
-        >
-          <mat-icon class="channel__icon">chevron_left</mat-icon>
-          <mat-icon class="channel__icon">group</mat-icon>
-        </button>
-
-        <button
-          mat-button
-          class="channel__next"
-          *ngIf="participants.length > 20"
-          (click)="scrollRight()"
-        >
-          <mat-icon class="channel__icon">group</mat-icon>
-          <mat-icon class="channel__icon">navigate_next</mat-icon>
-        </button>
 
         <ng-container *ngIf="isProcessing">
           <div class="lodading-wrap">
