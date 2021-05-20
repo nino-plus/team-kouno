@@ -10,11 +10,10 @@ import { AgoraService } from '../services/agora.service';
 export class RoomGuard implements CanDeactivate<EventRoomComponent> {
   constructor(private agoraService: AgoraService) {}
   canDeactivate(component: EventRoomComponent): Observable<boolean> | boolean {
-    if (!component.isJoin) {
-      return true;
-    } else {
-      this.agoraService.leaveAgoraChannel(component.eventId);
+    if (component.isJoin) {
+      const msg = 'イベントから退出してよろしいですか？';
+      return confirm(msg);
     }
-    return false;
+    return true;
   }
 }
