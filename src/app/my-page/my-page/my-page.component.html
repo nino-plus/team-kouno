@@ -5,17 +5,17 @@
         <img [src]="targetUser.avatarURL" alt="" />
       </div>
 
-      <div class="my-page__body" *ngIf="authUser$ | async as authUser">
+      <div class="my-page__body" *ngIf="user$ | async as user">
         <div class="my-page__name-box">
           <p class="my-page__name">
             {{ targetUser.name }}
           </p>
-          <ng-container *ngIf="targetUid !== authUser.uid; else edit">
+          <ng-container *ngIf="targetUid !== user.uid; else edit">
             <button
               mat-button
               *ngIf="!(isFollowing | async)"
               class="my-page__follow-button"
-              (click)="follow(authUser.uid)"
+              (click)="follow(user.uid)"
             >
               フォローする
             </button>
@@ -23,14 +23,14 @@
               mat-button
               *ngIf="isFollowing | async"
               class="my-page__following-button"
-              (click)="unFollow(authUser.uid)"
+              (click)="unFollow(user.uid)"
             >
               フォロー中
             </button>
           </ng-container>
           <ng-template #edit>
             <div class="my-page__edit">
-              <ng-container *ngIf="targetUid === authUser.uid">
+              <ng-container *ngIf="targetUid === user.uid">
                 <a routerLink="/settings/profile" mat-stroked-button
                   >プロフィールを編集</a
                 >
@@ -44,7 +44,7 @@
             class="my-page__flex-item"
             [class.my-page__flex-item--active]="targetUser.followerCount"
             (click)="
-              targetUser.followerCount ? openFollowersDialog(authUser.uid) : ''
+              targetUser.followerCount ? openFollowersDialog(user.uid) : ''
             "
           >
             フォロワー <span>{{ targetUser.followerCount }}人</span>
@@ -61,7 +61,7 @@
             [class.my-page__flex-item--active]="targetUser.followingCount"
             (click)="
               targetUser.followingCount
-                ? openFollowingsDialog(authUser.uid)
+                ? openFollowingsDialog(user.uid)
                 : ''
             "
           >
@@ -76,41 +76,6 @@
         </div>
 
         <p class="my-page__description">{{ targetUser.description }}</p>
-        <div *ngIf="targetUser.uid !== authUser.uid" class="my-page__call">
-          <button
-            class="my-page__call-btn"
-            mat-flat-button
-            (click)="
-              [
-                targetUser.ticketPrice
-                  ? openTicketDialog(authUser.uid, targetUser)
-                  : call(targetUser.uid, targetUser.name)
-              ]
-            "
-            [disabled]="
-              !(customer$ | async)?.defaultPaymentMethod &&
-              !(customer$ | async)?.paymentMethods
-            "
-          >
-            話しかける<mat-icon *ngIf="targetUser.ticketPrice">sell</mat-icon>
-          </button>
-          <p
-            *ngIf="
-              !(customer$ | async)?.defaultPaymentMethod &&
-              !(customer$ | async)?.paymentMethods
-            "
-            class="my-page__call-hint"
-          >
-            話しかけるにはチケットが必要です。お支払いカードを設定してください。
-            <span
-              ><a
-                class="my-page__call-hint--link"
-                routerLink="/settings/payment"
-                >設定はこちら</a
-              ></span
-            >
-          </p>
-        </div>
       </div>
     </div>
     <p class="my-page__sp-description">{{ targetUser.description }}</p>

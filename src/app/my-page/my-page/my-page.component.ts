@@ -3,21 +3,17 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import firebase from 'firebase/app';
 import { Observable, Subscription } from 'rxjs';
-import { take, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { EventService } from 'src/app/services/event.service';
-import { MeetingService } from 'src/app/services/meeting.service';
 import { UserFollowService } from 'src/app/services/user-follow.service';
 import { UserService } from 'src/app/services/user.service';
 import { FollowersDialogComponent } from '../followers-dialog/followers-dialog.component';
 import { FollowingsDialogComponent } from '../followings-dialog/followings-dialog.component';
 import { CustomerService } from 'src/app/services/customer.service';
 import { Customer } from 'src/app/interfaces/customer';
-import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
-import { MessagingService } from 'src/app/services/messaging.service';
-import { UserStoreComponent } from 'src/app/shared/user-store/user-store.component';
 import { SoundService } from 'src/app/services/sound.service';
 
 @Component({
@@ -30,7 +26,7 @@ export class MyPageComponent implements OnInit, OnDestroy {
   dateNow: firebase.firestore.Timestamp = firebase.firestore.Timestamp.now();
   targetUid: string = this.route.snapshot.params.uid;
   targetUser$: Observable<User> = this.userService.getUserData(this.targetUid);
-  authUser$: Observable<User> = this.authService.user$.pipe(
+  user$: Observable<User> = this.authService.user$.pipe(
     tap((user) => {
       if (user) {
         this.isFollowing = this.followService.checkFollowing(
@@ -75,8 +71,6 @@ export class MyPageComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private router: Router,
     private customerService: CustomerService,
-    private meetingService: MeetingService,
-    private messagingService: MessagingService,
     private soundService: SoundService
   ) {}
 
@@ -122,35 +116,6 @@ export class MyPageComponent implements OnInit, OnDestroy {
         targetUid: this.targetUid,
       },
     });
-  }
-
-  openTicketDialog(authUid: string, targetUser: User): void {
-    this.soundService.openSound.play();
-    this.dialog.open(UserStoreComponent, {
-      data: {
-        authUid,
-        targetUser: targetUser,
-      },
-    });
-  }
-
-  call(uid: string, userName: string): void {
-    this.dialog
-      .open(ConfirmDialogComponent, {
-        autoFocus: false,
-        data: {
-          text: `${userName}さんに話しかけますか？`,
-        },
-      })
-      .afterClosed()
-      .subscribe(async (status) => {
-        if (status) {
-          const roomId = await this.meetingService.createEmptyRoom(
-            this.authService.uid
-          );
-          this.router.navigate(['waiting', roomId, { uid: uid }]);
-        }
-      });
   }
 
   ngOnDestroy(): void {
