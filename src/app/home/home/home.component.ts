@@ -37,7 +37,7 @@ SwiperCore.use([
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit, AfterViewInit, AfterContentInit {
+export class HomeComponent implements OnInit, AfterViewInit {
   user$: Observable<User> = this.authService.user$;
   events$: Observable<Event[]> = this.eventService.getFutureEvents();
   spEvents$: Observable<Event[]> = this.eventService.getSpecialEvents();
@@ -49,11 +49,11 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentInit {
     effect: 'fade',
     loop: true,
     loopAdditionalSlides: 8,
+    loopedSlides: 8,
+    slidesPerView: 8,
     autoplay: {
       delay: 6000,
     },
-    watchSlidesVisibility: true,
-    watchSlidesProgress: true,
     navigation: true,
     pagination: {
       clickable: true,
@@ -65,15 +65,14 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentInit {
   };
 
   thumbsConfig: SwiperOptions = {
-    slidesPerView: 7,
+    slidesPerView: 8,
     loop: true,
     loopAdditionalSlides: 8,
     loopPreventsSlide: true,
+    loopedSlides: 8,
     autoplay: {
       delay: 6000,
     },
-    watchSlidesVisibility: true,
-    watchSlidesProgress: true,
     centeredSlides: true,
     slideToClickedSlide: true,
     navigation: {
@@ -91,8 +90,6 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentInit {
   ) {}
 
   ngOnInit(): void {}
-
-  ngAfterContentInit() {}
 
   ngAfterViewInit(): void {
     this.galleryTop.swiperRef.controller.control = this.galleryThumbs.swiperRef;

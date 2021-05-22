@@ -326,6 +326,9 @@ img {
 .gallery-thumbs .swiper-slide {
   opacity: 0.3;
   padding: 4px;
+  &:hover {
+    opacity: 1;
+  }
 }
 
 .gallery-thumbs .swiper-slide-active {
