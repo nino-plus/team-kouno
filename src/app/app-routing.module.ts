@@ -1,17 +1,27 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { EventShellComponent } from './event-shell/event-shell.component';
+import { MaintenanceGuard } from './guards/maintenance.guard';
 import { MainShellComponent } from './main-shell/main-shell.component';
+import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [
   {
     path: 'welcome',
+    canActivate: [MaintenanceGuard],
+    canLoad: [MaintenanceGuard],
     loadChildren: () =>
       import('./welcome/welcome.module').then((m) => m.WelcomeModule),
   },
   {
+    path: 'maintenance',
+    component: MaintenanceComponent,
+  },
+  {
     path: '',
+    canActivate: [MaintenanceGuard],
+    canLoad: [MaintenanceGuard],
     component: MainShellComponent,
     children: [
       {
@@ -74,6 +84,8 @@ const routes: Routes = [
   },
   {
     path: 'event',
+    canActivate: [MaintenanceGuard],
+    canLoad: [MaintenanceGuard],
     component: EventShellComponent,
     children: [
       {
