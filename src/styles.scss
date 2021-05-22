@@ -44,6 +44,7 @@ body {
     'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
   background: linear-gradient(to right bottom, #121212, #303030);
   color: #fafafa;
+  word-break: break-all;
 }
 
 a {
@@ -85,13 +86,8 @@ img {
 }
 
 .agora_video_player {
-  min-height: 300px !important;
-  // position: unset !important;
-  // margin: 0 auto !important;
-  // height: 400px !important;
-  // width: 400px !important;
-  // display: block;
-  // border-radius: 300px;
+  width: 100%;
+  border-radius: 8px;
 }
 
 .container {
@@ -155,6 +151,9 @@ img {
       padding: 56px 16px;
       margin: 56px auto;
     }
+  }
+  &--meeting {
+    padding: 64px 48px 56px;
   }
 }
 
@@ -267,10 +266,13 @@ img {
   font-size: 14px;
 }
 
-.event-detail-dialog {
-  .mat-dialog-container {
-    padding: 0;
-  }
+.mat-dialog-container {
+  padding: 0;
+  background: linear-gradient(
+    to right bottom,
+    rgba(#121212, 0.8),
+    rgba(#303030, 0.8)
+  );
 }
 
 .mat-tab-header-pagination-disabled .mat-tab-header-pagination-chevron {
@@ -295,7 +297,7 @@ img {
 .gallery-top {
   position: relative;
   @include sp {
-    margin-bottom: 16px;
+    margin-bottom: 24px;
   }
 }
 
@@ -305,31 +307,34 @@ img {
   @include sp {
     display: none;
   }
-  &::before {
-    content: '';
-    width: 0;
-    height: 0;
-    display: block;
-    border: 20px solid transparent;
-    border-left: 20px solid #1bcbe0;
-    position: absolute;
-    top: -40px;
-    left: 50%;
-    transform: rotate(-90deg) translateY(-50%);
-    z-index: 50;
-    overflow: visible !important;
-  }
+  // &::before {
+  //   content: '';
+  //   width: 0;
+  //   height: 0;
+  //   display: block;
+  //   border: 20px solid transparent;
+  //   border-left: 20px solid #1bcbe0;
+  //   position: absolute;
+  //   top: -40px;
+  //   left: 50%;
+  //   transform: rotate(-90deg) translateY(-50%);
+  //   z-index: 100;
+  //   overflow: visible !important;
+  // }
 }
 
 .gallery-thumbs .swiper-slide {
-  opacity: 0.4;
+  opacity: 0.3;
   padding: 4px;
+  &:hover {
+    opacity: 1;
+  }
 }
 
 .gallery-thumbs .swiper-slide-active {
   opacity: 1;
-  border: 3px solid #1bcbe0;
   position: relative;
+  border: 3px solid #1bcbe0;
 }
 
 .pagination {
@@ -361,18 +366,13 @@ img {
   position: absolute;
   top: 4px;
   z-index: 100;
-  background: linear-gradient(
-    to right bottom,
-    rgba(#000, 0.16),
-    rgba(#000, 0.38)
-  );
   height: calc(100% - 10px);
   &__icon {
     width: 24px;
     height: 24px;
     display: inline-block;
     border: solid #fff;
-    border-width: 3px 0 0 3px;
+    border-width: 2px 0 0 2px;
     transform: rotate(135deg) translateY(50%);
     position: absolute;
     top: 50%;
@@ -408,24 +408,38 @@ img {
   }
 }
 // quill config
-.ql-editor {
-  padding: 0;
+
+.chat {
+  width: 280px;
+  .ql-editor {
+    padding: 8px;
+    background: #121212;
+    border-radius: 0 8px 8px 8px;
+    line-height: 1;
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    display: inline-block;
+  }
 }
 
 .chat-form {
-  background: #000;
-  color: #fff;
-  @include sp {
-    padding: 8px 0;
-  }
   .ql-editor {
-    padding: 12px 40px 12px 8px;
-    background: #000;
-    border-bottom: 1px solid #fafafa;
+    transition: ease-out 0.3s;
+    border: 1px solid #424242;
+    border-radius: 8px;
+    padding: 8px 16px;
+    width: 248px;
     @include sp {
       border-radius: 40px;
       position: relative;
       display: flex;
+    }
+    &.ql-blank {
+      width: 248px;
+    }
+    &:hover {
+      border: 1px solid #fafafa;
     }
   }
   .ql-container.ql-snow {
@@ -434,16 +448,62 @@ img {
   .ql-toolbar.ql-snow {
     @include sp {
       display: flex;
-      background: #000;
       color: #fff;
     }
     border: none;
-    background: #000;
   }
   .ql-toolbar.ql-snow .ql-formats {
     @include sp {
       margin-right: 0;
     }
+  }
+  .ql-editor.ql-blank::before {
+    color: #444;
+    font-style: normal;
+    padding: 4px;
+  }
+}
+
+.ql-snow .ql-tooltip {
+  width: 248px;
+  background: linear-gradient(to right bottom, #303030, #121212);
+  border: none;
+  box-shadow: 0px 0px 5px #ddd;
+  color: #444;
+  padding: 5px 12px;
+  white-space: nowrap;
+  left: 0 !important;
+  top: -100px !important;
+  border-radius: 8px;
+  flex-flow: column;
+}
+
+.ql-snow .ql-tooltip.ql-editing a.ql-action::after {
+  border: 1px solid #444;
+  padding: 4px 8px;
+  color: #fff;
+  content: '保存';
+  border-radius: 8px;
+}
+
+.ql-snow .ql-tooltip a.ql-action::after {
+  border-right: 1px solid #ccc;
+  content: 'Edit';
+  margin-left: 8px;
+  margin-top: 8px;
+}
+
+.ql-snow .ql-tooltip[data-mode='link']::before {
+  content: '';
+}
+
+.ql-snow .ql-tooltip[data-mode='video']::before {
+  content: '';
+}
+
+@include sp {
+  quill-editor {
+    display: flex;
   }
 }
 
@@ -451,12 +511,6 @@ img {
   @include sp {
     background: transparent;
     width: 100vw;
-  }
-}
-
-@include sp {
-  quill-editor {
-    display: flex;
   }
 }
 
@@ -468,6 +522,19 @@ img {
   background: linear-gradient(to right bottom, #121212, #303030);
 }
 
+.mat-drawer-backdrop.mat-drawer-shown {
+  height: calc(100vh - 56px);
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.mat-drawer {
+  background: initial;
+  @include sp {
+    z-index: 0;
+    height: calc(100vh - 56px);
+  }
+}
+
 .home-tab-group {
   .mat-tab-label .mat-tab-label-content {
     font-size: 20px;
@@ -475,4 +542,55 @@ img {
       font-size: 16px;
     }
   }
+}
+
+.event-room-btn {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  margin-left: 16px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background: linear-gradient(to right bottom, #303030, #121212);
+  color: #fafafa;
+  cursor: pointer;
+  @include sp {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+  &:hover {
+    opacity: 0.8;
+  }
+  &.active {
+    background: $color-main;
+    color: #444;
+  }
+  &--main {
+    color: #1bcbe0;
+  }
+  &--submit {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+  }
+  &--chat-l {
+    margin-left: 0;
+    border-radius: 8px 0 0 8px;
+  }
+  &--chat-r {
+    margin-left: 0;
+    border-radius: 0 8px 8px 0;
+  }
+  &__icon {
+    font-size: 16px;
+    line-height: 24px;
+    &--mr {
+      margin-right: 4px;
+    }
+  }
+}
+
+svg:not(:root) {
+  overflow: visible !important;
 }

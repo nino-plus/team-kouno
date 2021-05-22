@@ -43,12 +43,11 @@
   }
   &__grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 280px));
     gap: 16px;
     margin-bottom: 40px;
     @include sp {
       grid-template-columns: 1fr;
-      margin: 16px;
     }
   }
 }

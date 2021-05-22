@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { User } from 'src/app/interfaces/user';
 import { UserFollowService } from 'src/app/services/user-follow.service';
 import { UserService } from 'src/app/services/user.service';
@@ -36,10 +36,6 @@ export class FollowersDialogComponent implements OnInit {
       targetUid: string;
     }
   ) {}
-
-  log(id) {
-    console.log(id);
-  }
 
   ngOnInit(): void {}
 }

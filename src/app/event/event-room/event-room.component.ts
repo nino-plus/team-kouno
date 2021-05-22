@@ -1,10 +1,16 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { map, shareReplay, switchMap, take } from 'rxjs/operators';
+import { shareReplay } from 'rxjs/operators';
 import { Event, EventWithOwner } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { AgoraService } from 'src/app/services/agora.service';
@@ -19,7 +25,8 @@ import { ShareScreenInfoDialogComponent } from 'src/app/shared/share-screen-info
   templateUrl: './event-room.component.html',
   styleUrls: ['./event-room.component.scss'],
 })
-export class EventRoomComponent implements OnInit, OnDestroy {
+export class EventRoomComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('target') target: ElementRef;
   readonly subscription = new Subscription();
   eventId: string;
   user$: Observable<User> = this.authService.user$;
@@ -38,11 +45,16 @@ export class EventRoomComponent implements OnInit, OnDestroy {
 
   isShareScreen$: Observable<boolean>;
   participants$: Observable<User[]>;
+  participants: User[];
   event$: Observable<Event>;
   videoPublishUserIds: string[];
   videoPublishUserIds$: Observable<string[]>;
   participantCount$: Observable<number>;
   participantCount: number;
+
+  roomChildren: User[][];
+  scrollWidth: number = 0;
+  leftPosition: number = 0;
 
   isFullScreen: boolean;
 
@@ -63,6 +75,12 @@ export class EventRoomComponent implements OnInit, OnDestroy {
     this.uid = this.route.snapshot.params.uid;
     this.eventWithOwner$ = this.eventService.getEventWithOwner(this.eventId);
     this.streamInit();
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.uiService.scrollWidth = this.target.nativeElement.offsetWidth;
+    }, 3000);
   }
 
   ngOnDestroy(): void {
@@ -90,11 +108,13 @@ export class EventRoomComponent implements OnInit, OnDestroy {
       );
 
       this.subscription.add(
-        this.participants$.pipe(shareReplay(1)).subscribe((participants) => {
+        this.participants$.subscribe((participants) => {
+          this.participants = participants;
+          this.roomChildren = this.sliceParticipants(this.participants);
+
           this.participantCount$.pipe(shareReplay(1)).subscribe((num) => {
             this.participantCount = num;
           });
-          console.log(this.participantCount);
 
           if (participants.length > this.participantCount) {
             this.soundService.joinSound.play();
@@ -107,8 +127,29 @@ export class EventRoomComponent implements OnInit, OnDestroy {
     }
   }
 
+  sliceParticipants([...participants]: User[]): User[][] {
+    return participants.reduce(
+      (acc, value, index) =>
+        index % 20 ? acc : [...acc, participants.slice(index, index + 20)],
+      []
+    );
+  }
+
+  scrollRight(): void {
+    this.target.nativeElement.scrollLeft += this.uiService.scrollWidth + 24;
+    this.leftPosition = this.target.nativeElement.scrollLeft +=
+      this.uiService.scrollWidth + 24;
+  }
+
+  scrollLeft(): void {
+    this.target.nativeElement.scrollLeft -= this.uiService.scrollWidth + 24;
+    this.leftPosition = this.target.nativeElement.scrollLeft -=
+      this.uiService.scrollWidth + 24;
+  }
+
   goFullscreen(): void {
     const channel = document.getElementById('channel');
+    this.uiService.scrollWidth = window.innerWidth;
     channel.requestFullscreen();
     this.isFullScreen = true;
   }
@@ -202,21 +243,21 @@ export class EventRoomComponent implements OnInit, OnDestroy {
     });
   }
 
-  @HostListener('window:unload', ['$event'])
-  unloadHandler($event: any): void {
-    if (this.isJoin) {
-      $event.preventDefault();
-      $event.returnValue = false;
-      this.agoraService.leaveAgoraChannel(this.eventId);
-    }
-  }
+  // @HostListener('window:unload', ['$event'])
+  // unloadHandler($event: any): void {
+  //   if (this.isJoin) {
+  //     $event.preventDefault();
+  //     $event.returnValue = false;
+  //     this.agoraService.leaveAgoraChannel(this.eventId);
+  //   }
+  // }
 
-  @HostListener('window:beforeunload', ['$event'])
-  beforeUnloadHandler($event: any): void {
-    if (this.isJoin) {
-      $event.preventDefault();
-      $event.returnValue = false;
-      this.agoraService.leaveAgoraChannel(this.eventId);
-    }
-  }
+  // @HostListener('window:beforeunload', ['$event'])
+  // beforeUnloadHandler($event: any): void {
+  //   if (this.isJoin) {
+  //     $event.preventDefault();
+  //     $event.returnValue = false;
+  //     this.agoraService.leaveAgoraChannel(this.eventId);
+  //   }
+  // }
 }

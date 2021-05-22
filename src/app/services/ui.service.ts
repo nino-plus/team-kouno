@@ -8,7 +8,9 @@ export class UiService {
   loading: boolean;
   isOpen = false;
   scrollHieght: number;
+  scrollWidth: number;
   sidenavIsOpen = true;
+  selector: 'chat' | 'participant' | null = 'chat';
 
   constructor() {}
 

@@ -55,7 +55,7 @@ export class MainShellComponent implements OnInit, OnDestroy, AfterViewInit {
         .pipe(
           switchMap((user) => {
             this.user = user;
-            return this.meetingService.getInvites(user.uid);
+            return this.meetingService.getInvites(user?.uid);
           }),
           skip(1),
           shareReplay(1)
@@ -65,7 +65,6 @@ export class MainShellComponent implements OnInit, OnDestroy, AfterViewInit {
 
           if (lastInvite.createdAt.toMillis() >= this.dateNow.toMillis()) {
             this.soundService.callSound.play();
-            console.log(lastInvite);
 
             this.dialog.open(InviteDialogComponent, {
               data: { lastInvite, user: this.user },
