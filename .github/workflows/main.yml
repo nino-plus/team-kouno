@@ -11,8 +11,6 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
-      - name: copy index
-        run: mkdir functions/lib && cp dist/eventstand/index.html functions/lib
       - name: Install Dependencies
         run: npm install && cd functions && npm install && cd ../
       - name: Build
@@ -34,6 +32,8 @@ jobs:
         with:
           name: dist
           path: dist
+      - name: copy index
+        run: mkdir functions/lib && cp dist/eventstand/index.html functions/lib
       - name: Install Dependencies
         run: cd functions && npm install
       - name: Deploy to Firebase
