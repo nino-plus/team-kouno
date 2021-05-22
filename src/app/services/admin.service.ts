@@ -7,8 +7,6 @@ import { map, shareReplay } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AdminService {
-  constructor(private db: AngularFirestore) {}
-
   isMaintenanceMode$: Observable<boolean> = this.db
     .doc(`system/maintenance`)
     .valueChanges()
@@ -16,4 +14,6 @@ export class AdminService {
       map((data: any) => data?.status),
       shareReplay(1)
     );
+
+  constructor(private db: AngularFirestore) {}
 }
