@@ -31,6 +31,10 @@
       ],
       "rewrites": [
         {
+          "source": "/article/**",
+          "function": "render"
+        },
+        {
           "source": "**",
           "destination": "/index.html"
         }
