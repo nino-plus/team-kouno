@@ -98,7 +98,6 @@ export class EditorComponent implements OnInit {
   async submit(): Promise<void> {
     this.isProcessing = true;
     const formData = this.form.value;
-    console.log(formData);
     const eventData = {
       name: formData.name,
       description: formData.description,

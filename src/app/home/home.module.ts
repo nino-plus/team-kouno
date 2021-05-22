@@ -21,6 +21,7 @@ import { HomeComponent } from './home/home.component';
 import { SpecialComponent } from './special/special.component';
 import { SwiperModule } from 'swiper/angular';
 import { EventListComponent } from './event-list/event-list.component';
+import { EventDetailComponent } from './event-detail/event-detail.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { EventListComponent } from './event-list/event-list.component';
     FooterComponent,
     SpecialComponent,
     EventListComponent,
+    EventDetailComponent,
   ],
   imports: [
     CommonModule,

@@ -26,7 +26,6 @@ export class SearchBoxComponent implements OnInit {
     this.searchControl.setValue(value, {
       emitEvent: false,
     });
-    console.log(value);
   }
 
   routeSearch(searchQuery: string): void {

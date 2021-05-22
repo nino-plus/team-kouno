@@ -2,31 +2,34 @@
 @import 'mixins';
 
 .chat {
-  height: calc(799px - 80px);
-  padding: 8px 16px 0 16px;
+  height: calc(100vh - 74px - 112px);
+  padding: 16px;
   overflow-y: scroll;
   color: $color-font;
   position: relative;
-  width: 344px;
   @include sp {
     width: 100vw;
-    height: calc(100vh - 56px - 21px - 48px - 68px);
+    height: calc(100vh - 50px - 56px - 56px);
   }
   &__heading {
     color: $color-font;
     text-align: center;
   }
   &__item {
-    padding: 8px 8px;
-    display: grid;
-    gap: 8px;
-    grid-template-columns: 24px 1fr 32px;
+    padding: 8px 0;
+    margin-bottom: 8px;
   }
   &__avatar {
     width: 24px;
     height: 24px;
     border-radius: 50%;
     background: center/cover rgba(0, 0, 0, 0.5);
+    margin-right: 8px;
+  }
+  &__header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
   }
   &__date {
     font-size: 11px;
@@ -36,13 +39,30 @@
     line-height: 1;
     margin-right: 8px;
   }
+  &__body {
+    margin-left: 24px;
+    word-break: break-all;
+    word-wrap: break-word;
+  }
+}
+
+.selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  @include sp {
+    padding: 8px;
+  }
 }
 
 .chat-form {
-  width: 100%;
+  padding: 16px;
   position: relative;
   display: flex;
-  flex-flow: column;
+  align-items: baseline;
+  justify-content: space-between;
+  color: #fff;
   @include sp {
     display: none;
     padding: 8px 16px;
@@ -85,6 +105,46 @@
     @include sp {
       display: block;
     }
+  }
+  .quill-toolbar-wrap {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.participants-wrap {
+  height: calc(100vh - 74px - 112px);
+  padding: 16px;
+  overflow-y: scroll;
+  color: $color-font;
+  position: relative;
+  @include sp {
+    width: 100vw;
+    height: calc(100vh - 56px - 21px - 48px - 68px);
+  }
+}
+
+.participants {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  position: relative;
+  &__photo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  &__name {
+    font-size: 14px;
+    margin-left: 16px;
+  }
+  &__host {
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid #fac905;
+    color: #fac905;
+    background: #fbca042e;
   }
 }
 

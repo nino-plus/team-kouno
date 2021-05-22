@@ -17,15 +17,12 @@
 
 .card-wrap {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 16px;
   margin: 16px 0 40px;
   @include sp {
     grid-template-columns: 1fr;
     margin: 16px;
-  }
-  &--logs {
-    grid-template-columns: repeat(4, 1fr);
   }
 }
 
@@ -37,6 +34,17 @@
   background: #181818;
   &:hover {
     background: linear-gradient(to right bottom, #212121, #303030);
+  }
+  &--log-pc {
+    @include sp {
+      display: none;
+    }
+  }
+  &--log-sp {
+    display: none;
+    @include sp {
+      display: block;
+    }
   }
 }
 

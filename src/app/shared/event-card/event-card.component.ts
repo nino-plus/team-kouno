@@ -55,18 +55,25 @@ export class EventCardComponent implements OnInit {
   }
 
   joinChannel(event: Event, $event): void {
-    if (this.uiService.isLargeScreen()) {
-      if (
-        event.startAt.toMillis() <
-          this.eventService.dateNow.toMillis() - 600000 &&
-        event.exitAt >= this.eventService.dateNow
-      ) {
-        this.router.navigateByUrl(`/event/${event.eventId}/${this.uid}`);
-      } else {
-        this.navigateDetail(event, $event);
-      }
-    } else {
+    if (this.dbType === 'algolia') {
       this.navigateDetail(event, $event);
+    } else {
+      if (this.uiService.isLargeScreen()) {
+        if (
+          event.startAt.toMillis() <
+            this.eventService.dateNow.toMillis() - 600000 &&
+          event.exitAt >= this.eventService.dateNow
+        ) {
+          this.router
+            .navigateByUrl(`/event/${event.eventId}/${this.uid}`)
+            .then(
+              () =>
+                (this.uiService.sidenavIsOpen = !this.uiService.sidenavIsOpen)
+            );
+        } else {
+          this.navigateDetail(event, $event);
+        }
+      }
     }
   }
 }

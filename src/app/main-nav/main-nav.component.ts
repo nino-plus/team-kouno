@@ -18,6 +18,12 @@ export class MainNavComponent implements OnInit {
   ngOnInit(): void {}
 
   toggleNav(): void {
+    if (this.uiService.sidenavIsOpen) {
+      this.uiService.scrollWidth += 186;
+    }
+    if (!this.uiService.sidenavIsOpen) {
+      this.uiService.scrollWidth -= 186;
+    }
     this.uiService.sidenavIsOpen = !this.uiService.sidenavIsOpen;
   }
 }
