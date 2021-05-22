@@ -315,7 +315,7 @@ img {
   //   border: 20px solid transparent;
   //   border-left: 20px solid #1bcbe0;
   //   position: absolute;
-  //   top: -30px;
+  //   top: -40px;
   //   left: 50%;
   //   transform: rotate(-90deg) translateY(-50%);
   //   z-index: 100;
@@ -334,6 +334,7 @@ img {
 .gallery-thumbs .swiper-slide-active {
   opacity: 1;
   position: relative;
+  border: 3px solid #1bcbe0;
 }
 
 .pagination {
