@@ -67,7 +67,6 @@ export class ProfileComponent implements OnInit {
 
   onCroppedImage(image: string): void {
     this.newImageFile = image;
-    console.log(this.newImageFile);
   }
 
   async updateUser(): Promise<void> {

@@ -1,8 +1,12 @@
-<div class="card__wrap">
+<div
+  class="card__wrap"
+  *ngIf="event$ | async as event"
+  (click)="navigateEvent(event.eventId)"
+>
   <ng-container *ngIf="log.user.state === 'online'">
     <span @fade class="card__active-ring"></span>
   </ng-container>
-  <a [routerLink]="'/' + log.user.uid">
+  <a (click)="navigateProfile($event)" class="card__avatar-wrap">
     <img [src]="log.user.avatarURL" alt="" class="card__avatar" />
   </a>
   <div class="card__info-wrap">
@@ -23,15 +27,6 @@
       <p class="card__date">
         {{ log.createdAt.toMillis() | date: 'MM/dd HH:mm' }}
       </p>
-      <div class="card__actions" *ngIf="event$ | async as event">
-        <button
-          mat-flat-button
-          class="card__btn"
-          [routerLink]="'event/' + event.eventId"
-        >
-          イベント
-        </button>
-      </div>
     </div>
   </div>
 </div>

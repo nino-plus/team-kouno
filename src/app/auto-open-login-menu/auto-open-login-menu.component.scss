@@ -4,16 +4,19 @@
 .app-nav-item {
   cursor: pointer;
   font-weight: 500;
-  color: $color-font;
+  color: rgba(#000, 0.8);
   line-height: 36px;
   border: solid 2px $color-font;
   border-radius: 4px;
-  background-color: white;
+  background-color: #fafafa;
   padding: 0 16px;
   transition: ease-in-out 0.16s;
   &:hover {
-    color: #fff;
+    color: #fafafa;
     border: solid 2px #1bcbe0;
     background: $color-main;
+  }
+  .mat-menu-content {
+    background: #fafafa;
   }
 }

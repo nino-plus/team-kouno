@@ -11,7 +11,7 @@ export class SoundService {
   });
 
   joinSound: Howl = new Howl({
-    src: ['assets/sounds/poincho.mp3'],
+    src: ['assets/sounds/pipipin.mp3'],
     volume: 0.4,
   });
 
