@@ -97,6 +97,7 @@ export class EventService {
           .where('exitAt', '>=', this.dateNow)
           .where('category', '==', category)
           .orderBy('exitAt', 'desc')
+          .limit(12)
       )
       .valueChanges();
   }
@@ -107,7 +108,7 @@ export class EventService {
         ref
           .where('islive', '==', true)
           .orderBy('participantCount', 'desc')
-          .limit(6)
+          .limit(12)
       )
       .valueChanges()
       .pipe(
