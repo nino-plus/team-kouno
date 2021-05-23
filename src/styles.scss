@@ -307,20 +307,6 @@ img {
   @include sp {
     display: none;
   }
-  // &::before {
-  //   content: '';
-  //   width: 0;
-  //   height: 0;
-  //   display: block;
-  //   border: 20px solid transparent;
-  //   border-left: 20px solid #1bcbe0;
-  //   position: absolute;
-  //   top: -40px;
-  //   left: 50%;
-  //   transform: rotate(-90deg) translateY(-50%);
-  //   z-index: 100;
-  //   overflow: visible !important;
-  // }
 }
 
 .gallery-thumbs .swiper-slide {
@@ -335,6 +321,12 @@ img {
   opacity: 1;
   position: relative;
   border: 3px solid #1bcbe0;
+}
+
+.event-list {
+  .swiper-wrapper {
+    margin-bottom: 16px;
+  }
 }
 
 .pagination {
@@ -398,6 +390,18 @@ img {
   }
   &--prev {
     left: 0;
+  }
+}
+
+.swiper-nav {
+  display: flex;
+  align-items: center;
+  &__btn {
+    margin-right: 8px;
+    cursor: pointer;
+    &:hover {
+      color: #1bcbe0;
+    }
   }
 }
 

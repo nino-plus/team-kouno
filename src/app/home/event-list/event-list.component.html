@@ -5,52 +5,98 @@
       *ngIf="eventLists.length > 0"
     >
       <p class="event-list__text">オンライブ</p>
+      <span class="spacer"></span>
+
+      <div
+        class="swiper-nav"
+        *ngIf="eventLists.length > onliveConfig.slidesPerView"
+      >
+        <div class="swiper-nav__btn swiper-nav__btn--liv-prev">
+          <mat-icon>chevron_left</mat-icon>
+        </div>
+        <div class="swiper-nav__btn swiper-nav__btn--liv-next">
+          <mat-icon>chevron_right</mat-icon>
+        </div>
+      </div>
     </div>
 
-    <div class="event-list__grid">
-      <app-event-card
-        *ngFor="let event of eventLists"
-        [event]="event"
-        [uid]="user.uid"
-      ></app-event-card>
-    </div>
+    <swiper [config]="onliveConfig">
+      <ng-template swiperSlide *ngFor="let event of eventLists">
+        <app-event-card [event]="event" [uid]="user.uid"></app-event-card>
+      </ng-template>
+    </swiper>
   </ng-container>
 
-  <div class="event-list__heading">
-    <p class="event-list__text">カテゴリー</p>
-  </div>
+  <ng-container *ngIf="eventLists$ | async as eventLists">
+    <div class="event-list__heading">
+      <p class="event-list__text">カテゴリー</p>
+      <span class="spacer"></span>
 
-  <div class="event-list__list">
-    <button
-      mat-button
-      *ngFor="let category of categoryData"
-      (click)="changeListSource(category)"
-      class="event-list__item"
-      [class.active]="listSource === category"
-    >
-      #{{ category }}
-    </button>
-  </div>
+      <div
+        class="swiper-nav"
+        *ngIf="eventLists.length > categoryConfig.slidesPerView"
+      >
+        <div class="swiper-nav__btn swiper-nav__btn--cat-prev">
+          <mat-icon>chevron_left</mat-icon>
+        </div>
+        <div class="swiper-nav__btn swiper-nav__btn--cat-next">
+          <mat-icon>chevron_right</mat-icon>
+        </div>
+      </div>
+    </div>
 
-  <div class="event-list__grid" *ngIf="eventLists$ | async as eventLists">
-    <app-event-card
-      *ngFor="let event of eventLists"
-      [event]="event"
-      [uid]="user.uid"
-    ></app-event-card>
-  </div>
+    <div class="event-list__list">
+      <button
+        mat-button
+        *ngFor="let category of categoryData"
+        (click)="changeListSource(category)"
+        class="event-list__item"
+        [class.active]="listSource === category"
+      >
+        #{{ category }}
+      </button>
+    </div>
 
-  <div class="event-list__heading event-list__heading--margin">
-    <p class="event-list__text">人気</p>
-  </div>
+    <swiper [config]="categoryConfig">
+      <ng-template swiperSlide *ngFor="let event of eventLists">
+        <app-event-card [event]="event" [uid]="user.uid"></app-event-card>
+      </ng-template>
+    </swiper>
+  </ng-container>
 
-  <div class="event-list__grid" *ngIf="popularEventLists as eventLists">
-    <app-event-card
-      *ngFor="let event of eventLists"
-      [event]="event"
-      [uid]="user.uid"
-      [dbType]="'algolia'"
-      [type]="'search'"
-    ></app-event-card>
-  </div>
+  <ng-container *ngIf="popularEventLists as eventLists">
+    <div class="event-list__heading event-list__heading--margin">
+      <p class="event-list__text">人気</p>
+      <span class="spacer"></span>
+
+      <div
+        class="swiper-nav"
+        *ngIf="eventLists.length > popularConfig.slidesPerView"
+      >
+        <div
+          class="swiper-nav__btn swiper-nav__btn--pop-prev"
+          (click)="slidePrev()"
+        >
+          <mat-icon>chevron_left</mat-icon>
+        </div>
+        <div
+          class="swiper-nav__btn swiper-nav__btn--pop-next"
+          (click)="slideNext()"
+        >
+          <mat-icon>chevron_right</mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <swiper [config]="popularConfig" #popSlides>
+      <ng-template swiperSlide *ngFor="let event of eventLists">
+        <app-event-card
+          [event]="event"
+          [uid]="user.uid"
+          [dbType]="'algolia'"
+          [type]="'search'"
+        ></app-event-card>
+      </ng-template>
+    </swiper>
+  </ng-container>
 </div>
