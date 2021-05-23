@@ -52,7 +52,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     loopedSlides: 8,
     slidesPerView: 8,
     autoplay: {
-      delay: 6000,
+      delay: 9000,
     },
     navigation: true,
     pagination: {
@@ -71,7 +71,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     loopPreventsSlide: true,
     loopedSlides: 8,
     autoplay: {
-      delay: 6000,
+      delay: 9000,
     },
     centeredSlides: true,
     slideToClickedSlide: true,
@@ -92,8 +92,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
-    this.galleryTop.swiperRef.controller.control = this.galleryThumbs.swiperRef;
-    this.galleryThumbs.swiperRef.controller.control = this.galleryTop.swiperRef;
+    setTimeout(() => {
+      this.galleryTop.swiperRef.controller.control = this.galleryThumbs.swiperRef;
+      this.galleryThumbs.swiperRef.controller.control = this.galleryTop.swiperRef;
+    }, 3000);
   }
 
   joinChannel(eventId: string, uid: string): void {
