@@ -132,6 +132,7 @@ export class EditorComponent implements OnInit {
       exitAt: formData.exitAt,
       createdAt: firebase.firestore.Timestamp.now(),
       price: formData.ticketPrice,
+      // headcountLimit: formData.headcountLimit,  人数制限導入用
     };
 
     if (this.form.controls.ticketPrice.dirty) {
@@ -173,7 +174,8 @@ export class EditorComponent implements OnInit {
           .then(() => this.deleteOldProducts())
           .catch((error) => {
             this.snackbar.open('チケット料金の設定に失敗しました');
-          }).finally(() => (this.isProcessing = false));
+          })
+          .finally(() => (this.isProcessing = false));
       }
     } else {
       if (this.form.controls.ticketPrice.dirty) {
@@ -206,7 +208,7 @@ export class EditorComponent implements OnInit {
 
   getEventProducts(): void {
     this.productService
-      .getEventProducts(this.authService.uid)
+      .getEventProduct(this.eventId)
       .pipe(take(1))
       .toPromise()
       .then((products) => {

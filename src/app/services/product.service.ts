@@ -12,12 +12,15 @@ export class ProductService {
   getOneOnOneProducts(userId: string): Observable<Product[]> {
     return this.db
       .collection<Product>(`products`, (ref) =>
-        ref.where('userId', '==', userId).where('eventId', '==', null).where('active', '==', true)
+        ref
+          .where('userId', '==', userId)
+          .where('eventId', '==', null)
+          .where('active', '==', true)
       )
       .valueChanges();
   }
 
-  getEventProducts(eventId: string): Observable<Product[]> {
+  getEventProduct(eventId: string): Observable<Product[]> {
     return this.db
       .collection<Product>(`products`, (ref) =>
         ref.where('eventId', '==', eventId).where('active', '==', true)

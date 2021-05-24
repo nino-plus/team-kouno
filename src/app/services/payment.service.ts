@@ -8,22 +8,17 @@ import {
   StripeCardElement,
 } from '@stripe/stripe-js';
 import Stripe from 'stripe';
-import { ConnectedAccountService } from './connected-account.service';
 import { Product } from '../interfaces/product';
 import { UiService } from './ui.service';
-import { MatDialog } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PaymentService {
-
   constructor(
     private fns: AngularFireFunctions,
     private snackBar: MatSnackBar,
-    private connectedAccountService: ConnectedAccountService,
-    private uiService: UiService,
-    private dialog: MatDialog
+    private uiService: UiService
   ) {}
 
   async getStripeClient(): Promise<StripeClient> {
@@ -71,24 +66,29 @@ export class PaymentService {
     return callable({}).toPromise();
   }
 
-  async charge(product: Product, connectedAccountId: string): Promise<void> {
+  async charge(
+    product: Product,
+    connectedAccountId: string,
+    eventData?: {
+      eventId: string;
+    }
+  ): Promise<boolean> {
     const callable = this.fns.httpsCallable('payStripeProduct');
     this.uiService.loading = true;
 
     return callable({
       priceId: product.priceId,
       connectedAccountId,
+      eventData,
     })
       .toPromise()
-      .then(() => {})
       .catch((error) => {
         console.error(error?.message);
         this.snackBar.open('お支払いが完了できませんでした');
       })
       .finally(() => {
         this.uiService.loading = false;
-        this.dialog.closeAll();
-
+        return true;
       });
   }
 
@@ -109,7 +109,10 @@ export class PaymentService {
     return callable({}).toPromise();
   }
 
-  createStripeProductAndPrice(price: number, eventId?: string): Promise<Stripe.Price[]> {
+  createStripeProductAndPrice(
+    price: number,
+    eventId?: string
+  ): Promise<Stripe.Price[]> {
     const data = {
       eventId: eventId,
       name: 'チケット',

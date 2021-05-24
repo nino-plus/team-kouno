@@ -25,6 +25,7 @@ import { UserStoreComponent } from './user-store/user-store.component';
 import { MatSelectModule } from '@angular/material/select';
 import { StripeIntervalPipe } from '../pipes/stripe-interval.pipe';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { EventStoreComponent } from './event-store/event-store.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     ConfirmDialogComponent,
     UserStoreComponent,
     StripeIntervalPipe,
+    EventStoreComponent,
   ],
   imports: [
     CommonModule,
@@ -67,6 +69,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     RegisterCardComponent,
     UserStoreComponent,
     StripeIntervalPipe,
+    EventStoreComponent,
   ],
 })
 export class SharedModule {}

@@ -27,7 +27,6 @@ export class UserStoreComponent implements OnInit {
     public uiService: UiService,
     @Inject(MAT_DIALOG_DATA)
     public data: {
-      uid: string;
       targetUser: User;
     }
   ) {}

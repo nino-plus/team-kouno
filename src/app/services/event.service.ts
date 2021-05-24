@@ -7,7 +7,7 @@ import { combineLatest, Observable, of } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ReserveUid } from '../interfaces/reserve-uid';
-import { switchMap, map, take, filter } from 'rxjs/operators';
+import { switchMap, map, take, filter, tap, shareReplay } from 'rxjs/operators';
 import { User } from '../interfaces/user';
 import { UserService } from './user.service';
 import { AngularFireFunctions } from '@angular/fire/functions';
@@ -32,7 +32,7 @@ export class EventService {
     event: Omit<Event, 'eventId' | 'thumbnailURL' | 'updatedAt'>,
     thumbnailURL: string,
     uid: string
-  ) {
+  ): Promise<string> {
     const id = this.db.createId();
     const image = await this.setThumbnailToStorage(id, thumbnailURL);
     await this.db
@@ -312,6 +312,16 @@ export class EventService {
         map((event) => {
           return event.participantCount;
         })
+      );
+  }
+
+  checkPaidUser(eventId: string, uid: string) {
+    return this.db
+      .doc(`events/${eventId}/paidUsers/${uid}`)
+      .valueChanges()
+      .pipe(
+        map((data?: { uid: string }) => !!data?.uid),
+        shareReplay(1)
       );
   }
 }

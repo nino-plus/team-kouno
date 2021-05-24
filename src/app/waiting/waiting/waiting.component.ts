@@ -70,9 +70,7 @@ export class WaitingComponent implements OnInit {
     private paymentService: PaymentService
   ) {}
 
-  ngOnInit(): void {
-    this.targetUser$.subscribe((d) => console.log(d.ticketPrice > 0));
-  }
+  ngOnInit(): void {}
 
   async sendPushMessage(
     tokens: string[],
@@ -97,7 +95,6 @@ export class WaitingComponent implements OnInit {
     this.dialog
       .open(UserStoreComponent, {
         data: {
-          uid: user.uid,
           targetUser: targetUser,
         },
         width: '300px',
@@ -106,7 +103,7 @@ export class WaitingComponent implements OnInit {
       .subscribe(async (status) => {
         if (status) {
           const ticket = status[0];
-          const connectedAccountId = status[1]
+          const connectedAccountId = status[1];
           await this.paymentService
             .charge(ticket, connectedAccountId)
             .then(() => this.call(user));

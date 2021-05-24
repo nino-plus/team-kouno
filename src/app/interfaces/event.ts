@@ -18,6 +18,8 @@ export interface Event {
   screenOwnerUid?: string;
   videoPublishUsers?: User[];
   isSpecial?: boolean;
+  price?: number;
+  headcountLimit?: number;
 }
 
 export interface EventWithOwner extends Event {
