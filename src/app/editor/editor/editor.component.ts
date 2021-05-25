@@ -63,7 +63,7 @@ export class EditorComponent implements OnInit {
     exitAt: [''],
     ticketPrice: [
       '',
-      [Validators.pattern(/\d+/), Validators.min(100), Validators.max(1000000)],
+      [Validators.pattern(/\d+/), Validators.min(0), Validators.max(1000000)],
     ],
   });
 
