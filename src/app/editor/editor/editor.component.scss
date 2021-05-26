@@ -1,6 +1,10 @@
 @import 'mixins';
 @import 'custom-style';
 
+mat-form-field {
+  min-width: 100px;
+}
+
 .heading {
   margin: 24px 0;
   @include sp {
@@ -52,6 +56,24 @@
   }
   &__icon {
     color: #1bcbe0;
+  }
+  &__ticket-wrap {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: auto 160px;
+    align-items: center;
+  }
+  &__ticket-account-btn {
+    height: 50px;
+    margin-bottom: 12px;
+  }
+  &__ticket {
+    cursor: pointer;
+    color: #1bcbe0;
+    text-decoration: underline;
+    &:hover {
+      text-decoration: none;
+    }
   }
 }
 

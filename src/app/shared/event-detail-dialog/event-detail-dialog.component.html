@@ -67,14 +67,16 @@
           </ng-template>
         </ng-container>
         <ng-container *ngIf="data.event.startAt < eventService.dateNow">
-          <button
-            mat-raised-button
-            class="actions__submit"
-            (click)="joinChannel(data.event.eventId, data.uid)"
-            mat-dialog-close
-          >
-            イベントに参加
-          </button>
+          <ng-container *ngIf="!data.event.price || (paidUser$ | async)">
+            <button
+              mat-raised-button
+              class="actions__submit"
+              (click)="joinChannel(data.event.eventId, data.uid)"
+              mat-dialog-close
+            >
+              イベントに参加
+            </button>
+          </ng-container>
         </ng-container>
       </ng-container>
       <ng-template #default>

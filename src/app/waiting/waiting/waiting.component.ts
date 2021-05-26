@@ -37,7 +37,7 @@ export class WaitingComponent implements OnInit {
   targetUid: string = this.route.snapshot.paramMap.get('targetUid');
   targetUser$: Observable<User> = this.userService.getUserData(this.targetUid);
   customer$: Observable<Customer>;
-  products$: Observable<Product[]> = this.productService.getActiveProducts(
+  products$: Observable<Product[]> = this.productService.getOneOnOneProducts(
     this.targetUid
   );
   connectedAccountId$: Observable<string> = this.connectedAccountService
@@ -70,12 +70,7 @@ export class WaitingComponent implements OnInit {
     private paymentService: PaymentService
   ) {}
 
-  ngOnInit(): void {
-    setTimeout(() => {
-      this.customer$.subscribe((d) => console.log(d));
-    }, 1000);
-    this.targetUser$.subscribe((d) => console.log(d.ticketPrice));
-  }
+  ngOnInit(): void {}
 
   async sendPushMessage(
     tokens: string[],
@@ -100,7 +95,6 @@ export class WaitingComponent implements OnInit {
     this.dialog
       .open(UserStoreComponent, {
         data: {
-          uid: user.uid,
           targetUser: targetUser,
         },
         width: '300px',
@@ -109,7 +103,7 @@ export class WaitingComponent implements OnInit {
       .subscribe(async (status) => {
         if (status) {
           const ticket = status[0];
-          const connectedAccountId = status[1]
+          const connectedAccountId = status[1];
           await this.paymentService
             .charge(ticket, connectedAccountId)
             .then(() => this.call(user));

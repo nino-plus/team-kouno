@@ -1,0 +1,33 @@
+<div class="close">
+  <button
+    class="close__button"
+    [disabled]="uiService.loading"
+    mat-mini-fab
+    mat-dialog-close
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<ng-container *ngFor="let product of products$ | async">
+  <div class="product">
+    <h3 class="product__heading">{{ data.event.name }}</h3>
+    <p class="product__price">入室料金：　¥{{ product.price }}</p>
+    <ng-contaner *ngIf="uiService.loading; else action">
+      <div class="product__spinner">
+        <mat-spinner diameter="30"></mat-spinner>
+        支払い処理中です
+      </div>
+    </ng-contaner>
+    <ng-template #action>
+      <button
+        *ngIf="connectedAccountId$ | async as connectedAccountId"
+        class="product__charge"
+        mat-flat-button
+        (click)="pay(product, connectedAccountId)"
+      >
+        支払いをして入室
+      </button>
+    </ng-template>
+  </div>
+</ng-container>
