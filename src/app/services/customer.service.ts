@@ -1,7 +1,7 @@
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { switchMap, shareReplay } from 'rxjs/operators';
+import { switchMap, shareReplay, take } from 'rxjs/operators';
 import { Customer } from '@interfaces/customer';
 import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
@@ -46,6 +46,9 @@ export class CustomerService {
   }
 
   getCustomer(userId: string): Observable<Customer> {
-    return this.db.doc<Customer>(`customers/${userId}`).valueChanges();
+    return this.db
+      .doc<Customer>(`customers/${userId}`)
+      .valueChanges()
+      .pipe(shareReplay(1));
   }
 }

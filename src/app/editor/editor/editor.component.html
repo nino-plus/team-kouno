@@ -1,11 +1,11 @@
-<div class="container container--event-form">
+<div *ngIf="user$ | async as user" class="container container--event-form">
   <div class="heading">
     <h2 class="heading__text">イベント{{ event ? '編集' : '作成' }}</h2>
   </div>
 
   <mat-divider></mat-divider>
 
-  <form [formGroup]="form" (ngSubmit)="submit()" class="form-group">
+  <form [formGroup]="form" (ngSubmit)="submit(user.uid)" class="form-group">
     <div class="form-grid">
       <p class="form-grid__label">イベント名</p>
       <mat-form-field class="form-field" appearance="outline">
@@ -141,6 +141,50 @@
           <p>ファイルサイズ：3MB以内</p>
         </div>
       </div>
+    </div>
+
+    <div class="form-grid">
+      <p class="form-grid__label">参加料金設定</p>
+      <ng-container
+      *ngIf="connectedAccountId$ | async; else createAccount"
+    >
+      <div class="form-grid__ticket-wrap">
+        <mat-form-field appearance="outline">
+          <mat-label>金額</mat-label>
+          <input
+            type="number"
+            formControlName="ticketPrice"
+            step="100"
+            matInput
+            autocomplete="off"
+            placeholder="1000"
+          />
+          <span matSuffix>円</span>
+        </mat-form-field>
+        <button
+          type="button"
+          class="form-grid__ticket-account-btn"
+          color="basic"
+          mat-stroked-button
+          (click)="
+            connectedAccountService.createStripeConnectedAccount()
+          "
+        >
+          販売アカウント変更
+        </button>
+      </div>
+    </ng-container>
+    <ng-template #createAccount>
+      <p>
+        チケット料金の設定をするには、販売アカウントを作成してください。<a
+          class="form-grid__ticket"
+          (click)="
+            connectedAccountService.createStripeConnectedAccount()
+          "
+          >販売アカウント作成</a
+        >
+      </p>
+    </ng-template>
     </div>
 
     <div class="actions">

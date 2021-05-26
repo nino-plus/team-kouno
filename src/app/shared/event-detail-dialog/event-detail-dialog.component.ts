@@ -1,10 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { Customer } from '@interfaces/customer';
 import { Observable } from 'rxjs';
 import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
+import { CustomerService } from 'src/app/services/customer.service';
 import { EventService } from 'src/app/services/event.service';
 import { UiService } from 'src/app/services/ui.service';
 import { UserService } from 'src/app/services/user.service';
@@ -24,24 +25,36 @@ export class EventDetailDialogComponent implements OnInit {
     this.data.event.eventId
   );
   owner$: Observable<User>;
+  customer$: Observable<Customer>;
+  paidUser$: Observable<boolean>;
 
   constructor(
     private router: Router,
     public eventService: EventService,
     private dialog: MatDialog,
     private userService: UserService,
+    private customerService: CustomerService,
     public uiService: UiService,
-    private snackBer: MatSnackBar,
     @Inject(MAT_DIALOG_DATA)
     public data: {
       event: Event;
       uid?: string;
       type?: string | undefined;
     }
-  ) {}
+  ) {
+    this.customer$ = this.customerService.getCustomer(data.uid);
+    this.paidUser$ = this.eventService.checkPaidUser(
+      data.event.eventId,
+      data.uid
+    );
+  }
 
   ngOnInit(): void {
+    console.log(this.data.event.price);
     this.owner$ = this.userService.getUserData(this.data.event.ownerId);
+  }
+  log(d) {
+    console.log(d);
   }
 
   reserveEvent(event: Event): void {
@@ -53,6 +66,7 @@ export class EventDetailDialogComponent implements OnInit {
   }
 
   joinChannel(eventId: string, uid: string): void {
+    console.log(this.data.event.price);
     if (this.data.event.startAt < this.eventService.dateNow) {
       this.router.navigateByUrl(`/event/${eventId}/${uid}`);
     }
@@ -71,8 +85,7 @@ export class EventDetailDialogComponent implements OnInit {
       .afterClosed()
       .subscribe((status) => {
         if (status) {
-          this.eventService
-            .deleteEvent(eventId);
+          this.eventService.deleteEvent(eventId);
         }
       });
   }
@@ -85,5 +98,4 @@ export class EventDetailDialogComponent implements OnInit {
   openInfoDialog(): void {
     this.dialog.open(InfoDialogComponent);
   }
-
 }

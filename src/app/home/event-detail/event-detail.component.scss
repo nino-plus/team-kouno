@@ -170,6 +170,10 @@
       background: #eee;
       color: $color-font;
     }
+    mat-icon {
+      font-size: 20px;
+      margin-left: 8px;
+    }
   }
   &__info {
     text-align: center;

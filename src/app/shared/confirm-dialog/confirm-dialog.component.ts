@@ -7,10 +7,12 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./confirm-dialog.component.scss'],
 })
 export class ConfirmDialogComponent implements OnInit {
+  buttonText = this.data.buttonText ? this.data.buttonText : 'はい';
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public data: {
       text: string;
+      buttonText?: string;
     }
   ) {}
 

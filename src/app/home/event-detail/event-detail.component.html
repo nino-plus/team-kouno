@@ -117,14 +117,40 @@
               </ng-template>
             </ng-container>
             <ng-container *ngIf="event.startAt < eventService.dateNow">
-              <button
-                mat-raised-button
-                class="actions__submit"
-                (click)="joinChannel(event, user.uid)"
-                mat-dialog-close
+              <ng-container *ngIf="!event.price || (paidUser$ | async)">
+                <button
+                  mat-raised-button
+                  class="actions__submit"
+                  (click)="joinChannel(event, user.uid)"
+                  mat-dialog-close
+                >
+                  イベントに参加
+                </button>
+              </ng-container>
+              <ng-container
+                *ngIf="
+                  !(paidUser$ | async) &&
+                  (event.headcountLimit >= event.reserveUserCount ||
+                    event.headcountLimit >= event.participantCount)
+                "
+                >人数制限を超えました</ng-container
               >
-                イベントに参加
-              </button>
+              <ng-container *ngIf="event.price">
+                <ng-container *ngIf="customer$ | async as cutomer">
+                  <button
+                    mat-raised-button
+                    class="actions__submit"
+                    (click)="
+                      customer?.defaultPaymentMethod
+                        ? openPaymentDialog(event, user.uid)
+                        : openSettingCard()
+                    "
+                    mat-dialog-close
+                  >
+                    イベントに参加<mat-icon>sell</mat-icon>
+                  </button>
+                </ng-container>
+              </ng-container>
             </ng-container>
           </ng-container>
         </ng-container>

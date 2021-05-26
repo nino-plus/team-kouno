@@ -27,7 +27,7 @@ export class ProfileComponent implements OnInit {
     description: ['', [Validators.maxLength(this.descriptionMaxLength)]],
     ticketPrice: [
       '',
-      [Validators.pattern(/\d+/), Validators.min(100), Validators.max(1000000)],
+      [Validators.pattern(/\d+/), Validators.min(0), Validators.max(1000000)],
     ],
   });
 
@@ -37,11 +37,11 @@ export class ProfileComponent implements OnInit {
   isProcessing: boolean;
 
   constructor(
+    public connectedAccountService: ConnectedAccountService,
     private fb: FormBuilder,
     private authService: AuthService,
     private userService: UserService,
     private snackBar: MatSnackBar,
-    public connectedAccountService: ConnectedAccountService,
     private paymentService: PaymentService,
     private productService: ProductService
   ) {}
@@ -72,7 +72,7 @@ export class ProfileComponent implements OnInit {
   async updateUser(): Promise<void> {
     this.isProcessing = true;
     if (this.form.controls.ticketPrice.dirty) {
-      this.getActiveProducts();
+      this.getOneOnOneProducts();
 
       await this.paymentService
         .createStripeProductAndPrice(this.form.controls.ticketPrice.value)
@@ -111,9 +111,9 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  getActiveProducts(): void {
+  getOneOnOneProducts(): void {
     this.productService
-      .getActiveProducts(this.authService.uid)
+      .getOneOnOneProducts(this.authService.uid)
       .pipe(take(1))
       .toPromise()
       .then((products) => {
