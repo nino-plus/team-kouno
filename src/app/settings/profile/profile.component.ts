@@ -54,7 +54,7 @@ export class ProfileComponent implements OnInit {
         ...user,
       });
       this.connectedAccountId$ = this.connectedAccountService
-        .getConnectedAccount(user.uid)
+        .getConnectedAccount(user?.uid)
         .pipe(
           map((account) => {
             if (account) {

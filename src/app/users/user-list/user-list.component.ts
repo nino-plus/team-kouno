@@ -40,7 +40,7 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.user$.pipe(shareReplay(1)).subscribe((user) => {
-      this.uid = user.uid;
+      this.uid = user?.uid;
       this.logs$ = this.logService.getLogsWithUser(this.uid);
 
       this.invites$ = this.meetingService.getInvites(this.uid);
