@@ -44,3 +44,44 @@ export const updateAlgoliaEvent = functions
       data,
     });
   });
+
+export const createAlgoliaUser = functions
+  .region('asia-northeast1')
+  .firestore.document('users/{uid}')
+  .onCreate((snap) => {
+    const data = snap.data();
+    functions.logger.info(data);
+    return algolia.saveRecord({
+      indexName: 'users',
+      idKey: data.uid,
+      data,
+    });
+  });
+
+export const deleteAlgoliaUser = functions
+  .region('asia-northeast1')
+  .firestore.document('users/{uid}')
+  .onDelete((snap) => {
+    const data = snap.data();
+    functions.logger.info(data);
+    if (data) {
+      return algolia.removeRecord('users', data.uid);
+    } else {
+      return;
+    }
+  });
+
+export const updateAlgoliaUser = functions
+  .region('asia-northeast1')
+  .firestore.document('users/{uid}')
+  .onUpdate((change) => {
+    const data = change.after.data();
+    functions.logger.info(data);
+
+    return algolia.saveRecord({
+      indexName: 'users',
+      isUpdate: true,
+      idKey: data.uid,
+      data,
+    });
+  });
