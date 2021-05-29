@@ -1,13 +1,17 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { switchMap, take } from 'rxjs/operators';
+import { map, switchMap, take, tap } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
+import { ConnectedAccountService } from 'src/app/services/connected-account.service';
 import { EventService } from 'src/app/services/event.service';
+import { PaymentService } from 'src/app/services/payment.service';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-editor',
@@ -21,7 +25,19 @@ export class EditorComponent implements OnInit {
   oldImageUrl = '';
   imageFile: string;
   isProcessing: boolean;
-  uid: string;
+  user$: Observable<User> = this.authService.user$.pipe(
+    tap((user) => {
+      this.connectedAccountId$ = this.connectedAccountService
+        .getConnectedAccount(user.uid)
+        .pipe(
+          map((account) => {
+            if (account) {
+              return account.connectedAccountId;
+            }
+          })
+        );
+    })
+  );
   eventId: string;
   event: Event;
   event$: Observable<Event> = this.route.paramMap.pipe(
@@ -30,6 +46,8 @@ export class EditorComponent implements OnInit {
       return this.eventService.getEvent(this.eventId);
     })
   );
+  connectedAccountId$: Observable<string>;
+  activeProducts = [];
 
   form = this.fb.group({
     name: [
@@ -43,6 +61,10 @@ export class EditorComponent implements OnInit {
     category: ['', [Validators.required]],
     startAt: ['', [Validators.required]],
     exitAt: [''],
+    ticketPrice: [
+      '',
+      [Validators.pattern(/\d+/), Validators.min(0), Validators.max(1000000)],
+    ],
   });
 
   categoryGroup = [
@@ -63,16 +85,17 @@ export class EditorComponent implements OnInit {
   ];
 
   constructor(
+    public connectedAccountService: ConnectedAccountService,
     private fb: FormBuilder,
     private authService: AuthService,
     private eventService: EventService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private paymentService: PaymentService,
+    private productService: ProductService,
+    private snackbar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    this.authService.user$.pipe(take(1)).subscribe((user: User) => {
-      this.uid = user.uid;
-    });
     this.event$.subscribe((event) => {
       this.event = event;
 
@@ -95,34 +118,81 @@ export class EditorComponent implements OnInit {
     this.imageFile = image;
   }
 
-  async submit(): Promise<void> {
+  async submit(uid: string): Promise<void> {
     this.isProcessing = true;
     const formData = this.form.value;
-    console.log(formData);
     const eventData = {
       name: formData.name,
       description: formData.description,
       category: formData.category,
-      ownerId: this.uid,
+      ownerId: uid,
       participantCount: this.event ? this.event.participantCount : 0,
       reserveUserCount: this.event ? this.event.reserveUserCount : 0,
       startAt: formData.startAt,
       exitAt: formData.exitAt,
       createdAt: firebase.firestore.Timestamp.now(),
+      price: formData.ticketPrice,
+      // headcountLimit: formData.headcountLimit,  人数制限導入用
     };
 
+    if (this.form.controls.ticketPrice.dirty) {
+      this.getEventProducts();
+
+      await this.paymentService
+        .createStripeProductAndPrice(
+          this.form.controls.ticketPrice.value,
+          this.eventId
+        )
+        .then(() => this.deleteOldProducts())
+        .catch((error) => {
+          this.snackbar.open('チケット料金の設定に失敗しました');
+          throw new Error(error.message);
+        });
+    }
+
     if (!this.event) {
+      let newEventId = '';
       if (this.imageFile !== undefined) {
         await this.eventService
-          .createEvent(eventData, this.imageFile, this.uid)
-          .finally(() => (this.isProcessing = false));
+          .createEvent(eventData, this.imageFile, uid)
+          .then((eventId) => (newEventId = eventId));
       } else {
         const defaultImage = 'assets/images/default-image.jpg';
         await this.eventService
-          .createEvent(eventData, defaultImage, this.uid)
+          .createEvent(eventData, defaultImage, uid)
+          .then((eventId) => (newEventId = eventId));
+      }
+
+      if (this.form.controls.ticketPrice.dirty) {
+        this.getEventProducts();
+
+        await this.paymentService
+          .createStripeProductAndPrice(
+            this.form.controls.ticketPrice.value,
+            newEventId
+          )
+          .then(() => this.deleteOldProducts())
+          .catch((error) => {
+            this.snackbar.open('チケット料金の設定に失敗しました');
+          })
           .finally(() => (this.isProcessing = false));
       }
     } else {
+      if (this.form.controls.ticketPrice.dirty) {
+        this.getEventProducts();
+
+        await this.paymentService
+          .createStripeProductAndPrice(
+            this.form.controls.ticketPrice.value,
+            this.eventId
+          )
+          .then(() => this.deleteOldProducts())
+          .catch((error) => {
+            this.snackbar.open('チケット料金の設定に失敗しました');
+            throw new Error(error.message);
+          });
+      }
+
       if (this.imageFile !== undefined) {
         await this.eventService
           .updateEvent(this.eventId, eventData, this.imageFile)
@@ -132,6 +202,24 @@ export class EditorComponent implements OnInit {
         await this.eventService
           .updateEvent(this.eventId, eventData, defaultImage)
           .finally(() => (this.isProcessing = false));
+      }
+    }
+  }
+
+  getEventProducts(): void {
+    this.productService
+      .getEventProduct(this.eventId)
+      .pipe(take(1))
+      .toPromise()
+      .then((products) => {
+        products.forEach((product) => this.activeProducts.push(product));
+      });
+  }
+
+  deleteOldProducts(): void {
+    if (this.activeProducts.length) {
+      for (const product of this.activeProducts) {
+        this.paymentService.deleteStripePrice(product);
       }
     }
   }

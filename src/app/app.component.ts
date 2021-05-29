@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
 import { AuthService } from './services/auth.service';
 import { MessagingService } from './services/messaging.service';
 import { UiService } from './services/ui.service';
@@ -48,7 +49,7 @@ export class AppComponent {
     private router: Router,
     private uiService: UiService
   ) {
-    this.user$.subscribe((user) => {
+    this.user$.pipe(shareReplay(1)).subscribe((user) => {
       if (!user) {
         return;
       }

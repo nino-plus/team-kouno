@@ -1,21 +1,31 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { EventShellComponent } from './event-shell/event-shell.component';
+import { MaintenanceGuard } from './guards/maintenance.guard';
 import { MainShellComponent } from './main-shell/main-shell.component';
+import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [
   {
     path: 'welcome',
+    canActivate: [MaintenanceGuard],
+    canLoad: [MaintenanceGuard],
     loadChildren: () =>
       import('./welcome/welcome.module').then((m) => m.WelcomeModule),
   },
   {
+    path: 'maintenance',
+    component: MaintenanceComponent,
+  },
+  {
     path: '',
+    canActivate: [MaintenanceGuard],
+    canLoad: [MaintenanceGuard],
     component: MainShellComponent,
     children: [
       {
         path: '',
-        pathMatch: 'full',
         loadChildren: () =>
           import('./home/home.module').then((m) => m.HomeModule),
       },
@@ -28,11 +38,6 @@ const routes: Routes = [
         path: 'settings',
         loadChildren: () =>
           import('./settings/settings.module').then((m) => m.SettingsModule),
-      },
-      {
-        path: 'event',
-        loadChildren: () =>
-          import('./event/event.module').then((m) => m.EventModule),
       },
       {
         path: 'intl',
@@ -74,6 +79,19 @@ const routes: Routes = [
         path: ':uid',
         loadChildren: () =>
           import('./my-page/my-page.module').then((m) => m.MyPageModule),
+      },
+    ],
+  },
+  {
+    path: 'event',
+    canActivate: [MaintenanceGuard],
+    canLoad: [MaintenanceGuard],
+    component: EventShellComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./event/event.module').then((m) => m.EventModule),
       },
     ],
   },

@@ -10,6 +10,7 @@ export const createStripeProductAndPrice = functions
   .https.onCall(
     async (
       data: {
+        eventId?: string;
         name: string;
         amount: number;
       },
@@ -56,6 +57,7 @@ export const createStripeProductAndPrice = functions
           price: data.amount,
           priceId: createdPricesRef.id,
           active: true,
+          eventId: data.eventId,
         })
         .then(() => {
           return db

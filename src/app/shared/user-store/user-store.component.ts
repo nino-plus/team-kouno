@@ -14,7 +14,7 @@ import { UiService } from 'src/app/services/ui.service';
   styleUrls: ['./user-store.component.scss'],
 })
 export class UserStoreComponent implements OnInit {
-  products$: Observable<Product[]> = this.productService.getActiveProducts(
+  products$: Observable<Product[]> = this.productService.getOneOnOneProducts(
     this.data.targetUser.uid
   );
   connectedAccountId$: Observable<string> = this.connectedAccountService
@@ -27,7 +27,6 @@ export class UserStoreComponent implements OnInit {
     public uiService: UiService,
     @Inject(MAT_DIALOG_DATA)
     public data: {
-      uid: string;
       targetUser: User;
     }
   ) {}

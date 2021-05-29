@@ -1,54 +1,107 @@
 <ng-container *ngIf="eventWithOwner$ | async as event">
-  <div class="header">
-    <p class="header__title">{{ event.name }}</p>
-    <p class="header__count">{{ event.participantCount }}人視聴中</p>
-  </div>
-
   <mat-drawer-container class="drawer-container" autosize>
-    <ng-container *ngIf="event$ | async as event">
-      <div class="channel" id="channel">
+    <div class="header">
+      <p class="header__title">{{ event.name }}</p>
+      <button
+        class="event-room-btn"
+        (click)="
+          uiService.isOpen = !uiService.isOpen;
+          uiService.selector = 'participant'
+        "
+      >
+        <mat-icon class="event-room-btn__icon event-room-btn__icon--mr"
+          >group</mat-icon
+        >{{ event.participantCount }}
+      </button>
+      <span class="spacer"></span>
+      <button class="event-room-btn event-room-btn--main">
+        <mat-icon class="event-room-btn__icon">add</mat-icon>
+        招待
+      </button>
+    </div>
+
+    <div
+      *ngIf="event$ | async as event"
+      class="channel-wrap"
+      #target
+      id="channel"
+      [class.fullscreen]="isFullScreen"
+    >
+      <button
+        mat-button
+        class="channel__prev"
+        *ngIf="participants.length > 20 && leftPosition > 0"
+        (click)="scrollLeft()"
+        [class.fullscreen]="isFullScreen"
+      >
+        <mat-icon class="channel__icon">chevron_left</mat-icon>
+        <mat-icon class="channel__icon">group</mat-icon>
+      </button>
+
+      <button
+        mat-button
+        class="channel__next"
+        *ngIf="participants.length > 20"
+        (click)="scrollRight()"
+        [class.fullscreen]="isFullScreen"
+      >
+        <mat-icon class="channel__icon">group</mat-icon>
+        <mat-icon class="channel__icon">navigate_next</mat-icon>
+      </button>
+      <div
+        class="channel"
+        *ngFor="let roomChild of roomChildren; index as i"
+        [class.mainNav]="uiService.sidenavIsOpen"
+        [class.miniNav]="!uiService.sidenavIsOpen"
+      >
         <button
           *ngIf="isFullScreen"
           matTooltip="戻る"
           class="actions__btn actions__btn--close"
           (click)="exitFullscreen()"
+          [class.fullscreen]="isFullScreen"
         >
           <mat-icon class="actions__icon">close_fullscreen</mat-icon>
         </button>
-        <ng-container *ngIf="participants$ | async as participants">
-          <div
-            id="local-player"
-            class="player"
-            [class.player--1-player]="participants.length === 1 || !isPcScreen"
-            [class.player--2-player]="
-              participants.length > 1 && participants.length < 3 && isPcScreen
-            "
-            [class.player--more-player]="participants.length > 2 && isPcScreen"
-            [class.invisible]="isProcessing || event.isShareScreen"
-          >
-            <ng-container *ngFor="let user of participants">
-              <ng-container *ngIf="videoPublishUserIds$ | async as ids">
-                <div
-                  *ngIf="!ids.includes(user.uid)"
-                  class="participants"
+
+        <div
+          id="local-player"
+          class="player"
+          [class.player--1-player]="
+            participants.length === 1 || participants.length === 20 * i + 1
+          "
+          [class.player--2-player]="
+            (participants.length > 1 && participants.length < 3) ||
+            participants.length === 20 * i + 2
+          "
+          [class.player--20-player]="participants.length > 3 || i > 1"
+          [class.invisible]="isProcessing || event.isShareScreen"
+        >
+          <ng-container *ngFor="let user of roomChild">
+            <ng-container *ngIf="videoPublishUserIds$ | async as ids">
+              <div
+                *ngIf="!ids.includes(user.uid)"
+                class="participants"
+                [class.invisible]="isProcessing"
+              >
+                <img
+                  class="participants__photo"
                   [class.invisible]="isProcessing"
-                >
-                  <img
-                    class="participants__photo"
-                    [class.invisible]="isProcessing"
-                    [src]="user.avatarURL"
-                    alt=""
-                  />
+                  [src]="user.avatarURL"
+                  alt=""
+                />
+                <div class="participants__info">
+                  <p class="participants__name">{{ user.name }}</p>
                 </div>
-              </ng-container>
+              </div>
             </ng-container>
-          </div>
-          <div
-            id="share-screen"
-            class="screen"
-            [class.invisible]="isProcessing || !event.isShareScreen"
-          ></div>
-        </ng-container>
+          </ng-container>
+        </div>
+        <div
+          id="share-screen"
+          class="screen"
+          [class.invisible]="isProcessing || !event.isShareScreen"
+        ></div>
 
         <ng-container *ngIf="isProcessing">
           <div class="lodading-wrap">
@@ -56,104 +109,110 @@
           </div>
         </ng-container>
       </div>
-    </ng-container>
+    </div>
+
+    <div class="actions">
+      <ng-template #video>
+        <button
+          matTooltip="カメラをオン"
+          class="actions__btn"
+          (click)="publishVideo()"
+          [disabled]="event.isShareScreen"
+          [class.actions__btn--disabled]="event.isShareScreen"
+        >
+          <mat-icon class="actions__icon">videocam</mat-icon>
+        </button>
+      </ng-template>
+
+      <button
+        *ngIf="isPublishVideo; else video"
+        matTooltip="カメラをオフ"
+        class="actions__btn actions__btn--active"
+        (click)="unPublishVideo()"
+      >
+        <mat-icon class="actions__icon">videocam_off</mat-icon>
+      </button>
+
+      <ng-template #microphone>
+        <button
+          matTooltip="ボイスをオン"
+          class="actions__btn"
+          (click)="publishAudio()"
+        >
+          <mat-icon class="actions__icon">volume_up</mat-icon>
+        </button>
+      </ng-template>
+
+      <button
+        *ngIf="isPublishMicrophone; else microphone"
+        matTooltip="ミュート"
+        class="actions__btn actions__btn--active"
+        (click)="unPublishAudio()"
+      >
+        <mat-icon class="actions__icon">volume_off</mat-icon>
+      </button>
+
+      <ng-template #screen>
+        <button
+          matTooltip="画面共有"
+          class="actions__btn"
+          (click)="publishScreen()"
+          [disabled]="event.isShareScreen"
+          [class.actions__btn--disabled]="event.isShareScreen"
+        >
+          <mat-icon class="actions__icon">desktop_windows</mat-icon>
+        </button>
+      </ng-template>
+
+      <button
+        *ngIf="isPublishScreen; else screen"
+        matTooltip="画面共有を停止"
+        class="actions__btn actions__btn--active"
+        (click)="unPublishScreen()"
+      >
+        <mat-icon class="actions__icon">desktop_access_disabled</mat-icon>
+      </button>
+
+      <button
+        matTooltip="コメント"
+        class="actions__btn"
+        [class.actions__btn--active]="uiService.isOpen"
+        (click)="
+          uiService.isOpen = !uiService.isOpen; uiService.selector = 'chat'
+        "
+      >
+        <mat-icon class="actions__icon">comment</mat-icon>
+      </button>
+
+      <button
+        matTooltip="退室"
+        class="actions__btn actions__btn--exit"
+        (click)="leaveChannel()"
+      >
+        <mat-icon class="actions__icon">exit_to_app</mat-icon>
+      </button>
+      <button
+        matTooltip="全画面表示"
+        class="actions__btn"
+        (click)="goFullscreen()"
+      >
+        <mat-icon class="actions__icon">fullscreen</mat-icon>
+      </button>
+    </div>
 
     <mat-drawer
-      class="drawer"
       #drawer
       position="end"
       [mode]="isPcScreen ? 'side' : 'over'"
       [autoFocus]="false"
       [opened]="uiService.isOpen"
     >
-      <app-chat [eventId]="eventId"></app-chat>
+      <app-chat
+        [eventId]="eventId"
+        [uid]="uid"
+        [participants]="participants"
+        [event]="event"
+      ></app-chat>
     </mat-drawer>
   </mat-drawer-container>
-
-  <div class="actions">
-    <ng-template #video>
-      <button
-        matTooltip="カメラをオン"
-        class="actions__btn"
-        (click)="publishVideo()"
-        [disabled]="event.isShareScreen"
-        [class.actions__btn--disabled]="event.isShareScreen"
-      >
-        <mat-icon class="actions__icon">videocam</mat-icon>
-      </button>
-    </ng-template>
-
-    <button
-      *ngIf="isPublishVideo; else video"
-      matTooltip="カメラをオフ"
-      class="actions__btn actions__btn--active"
-      (click)="unPublishVideo()"
-    >
-      <mat-icon class="actions__icon">videocam_off</mat-icon>
-    </button>
-
-    <ng-template #microphone>
-      <button
-        matTooltip="ボイスをオン"
-        class="actions__btn"
-        (click)="publishAudio()"
-      >
-        <mat-icon class="actions__icon">volume_up</mat-icon>
-      </button>
-    </ng-template>
-
-    <button
-      *ngIf="isPublishMicrophone; else microphone"
-      matTooltip="ミュート"
-      class="actions__btn actions__btn--active"
-      (click)="unPublishAudio()"
-    >
-      <mat-icon class="actions__icon">volume_off</mat-icon>
-    </button>
-
-    <ng-template #screen>
-      <button
-        matTooltip="画面共有"
-        class="actions__btn"
-        (click)="publishScreen()"
-        [disabled]="event.isShareScreen"
-        [class.actions__btn--disabled]="event.isShareScreen"
-      >
-        <mat-icon class="actions__icon">desktop_windows</mat-icon>
-      </button>
-    </ng-template>
-
-    <button
-      *ngIf="isPublishScreen; else screen"
-      matTooltip="画面共有を停止"
-      class="actions__btn actions__btn--active"
-      (click)="unPublishScreen()"
-    >
-      <mat-icon class="actions__icon">desktop_access_disabled</mat-icon>
-    </button>
-
-    <button
-      matTooltip="コメント"
-      class="actions__btn"
-      [class.actions__btn--active]="uiService.isOpen"
-      (click)="uiService.isOpen = !uiService.isOpen"
-    >
-      <mat-icon class="actions__icon">comment</mat-icon>
-    </button>
-
-    <button
-      matTooltip="退室"
-      class="actions__btn actions__btn--exit"
-      (click)="leaveChannel()"
-    >
-      <mat-icon class="actions__icon">exit_to_app</mat-icon>
-    </button>
-    <button
-      matTooltip="全画面表示"
-      class="actions__btn"
-      (click)="goFullscreen()"
-    >
-      <mat-icon class="actions__icon">fullscreen</mat-icon>
-    </button>
-  </div>
 </ng-container>

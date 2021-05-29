@@ -3,38 +3,34 @@
 
 .header {
   display: flex;
-  align-items: baseline;
-  margin-left: 24px;
-  margin-top: 16px;
+  align-items: center;
+  padding: 16px 24px;
   position: relative;
   color: $color-font;
-  padding-top: 64px;
   @include sp {
     margin-top: 0;
+    padding: 8px 16px;
   }
   &__title {
     font-size: 24px;
+    text-shadow: 0 0 6px rgb(202 228 225 / 92%), 0 0 30px rgb(202 228 225 / 34%),
+      0 0 12px rgb(30 132 242 / 52%), 0 0 21px rgb(27 203 224 / 92%),
+      0 0 30px rgb(27 203 224 / 78%);
     @include sp {
       font-size: 14px;
-    }
-  }
-  &__count {
-    font-size: 12px;
-    margin-left: 8px;
-    @include sp {
-      font-size: 10px;
     }
   }
 }
 
 .drawer-container {
   width: 100%;
-  height: calc(100vh - 64px - 52px - 68px);
-  padding: 8px 16px 0;
-  background: #000;
+  height: 100vh;
+  background: linear-gradient(to right bottom, #121212, #303030);
+  border-radius: 8px;
+  padding: 0 16px;
   @include sp {
     padding: 0;
-    height: calc(100vh - 56px - 81px);
+    border-radius: 0;
   }
 }
 
@@ -42,50 +38,43 @@ app-stream {
   width: 100%;
 }
 
-.room-title {
-  display: flex;
-  margin-left: 24px;
-  color: $color-font;
-  align-items: center;
-  &__label {
-    align-items: center;
-    margin-right: 8px;
-    color: white;
-    font-size: 12px;
-    border-radius: 14px;
-    padding: 6px 12px 4px;
-    background: $color-sub;
-    letter-spacing: 1.2px;
-  }
-  &__name {
-    font-size: 18px;
-  }
-  &__chat-button {
-    position: absolute;
-    color: white;
-    right: 100px;
-    font-size: 12px;
-    border-radius: 14px;
-    padding: 6px 12px 6px;
-    background: $color-main;
-  }
-}
-
 .mat-drawer-side.mat-drawer-end {
   border-left: none;
 }
 
-@import 'custom-style';
+.channel-wrap {
+  display: flex;
+  align-items: center;
+  overflow-x: hidden;
+  white-space: nowrap;
+  scroll-behavior: smooth;
+  &.fullscreen {
+    overflow-x: auto;
+  }
+}
 
 .channel {
-  min-height: 100%;
+  &.mainNav {
+    min-width: calc(100vw - 256px - 32px);
+    @include sp {
+      min-width: 100vw;
+    }
+  }
+  &.miniNav {
+    min-width: calc(100vw - 74px - 32px);
+    @include sp {
+      min-width: 100vw;
+    }
+  }
+  height: calc(100vh - 74px - 68px);
+  padding: 24px;
   background: #000;
-  // background: #1a1f23;
-  position: relative;
-  padding: 32px;
-  z-index: 1;
+  border-radius: 12px;
+  margin-right: 16px;
   @include sp {
     padding: 0;
+    height: calc(100vh - 50px - 56px);
+    border-radius: 0;
   }
   &__title {
     position: absolute;
@@ -108,6 +97,26 @@ app-stream {
     display: grid;
     place-items: center;
     grid-template-columns: auto;
+  }
+  &__prev {
+    position: absolute;
+    top: 50%;
+    left: -12px;
+    transform: translateY(-50%);
+    z-index: 100;
+    &.fullscreen {
+      position: fixed;
+    }
+  }
+  &__next {
+    position: absolute;
+    top: 50%;
+    right: -12px;
+    transform: translateY(-50%);
+    z-index: 100;
+    &.fullscreen {
+      position: fixed;
+    }
   }
 }
 
@@ -214,32 +223,42 @@ app-stream {
         top: 16px;
         left: 16px;
       }
+      &.fullscreen {
+        position: fixed;
+      }
     }
   }
-}
-
-.all-players {
-  display: flex;
 }
 
 .player {
   min-height: 100%;
   display: grid;
   gap: 32px;
+  border-radius: 8px;
   @include sp {
     gap: 0px;
   }
   &--1-player {
     grid-template-columns: 1fr;
-    height: 72vh;
+    height: 70vh;
+    @include sp {
+      height: 100vh;
+    }
   }
   &--2-player {
     grid-template-columns: 1fr 1fr;
-    height: 72vh;
+    height: 70vh;
+    @include sp {
+      grid-template-columns: 1fr;
+      height: 50vh;
+    }
   }
-  &--more-player {
-    grid-template-columns: 1fr 1fr;
-    grid-auto-rows: 400px;
+  &--20-player {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-rows: repeat(auto-fit, minmax(64px, 1fr));
+    @include sp {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 }
 
@@ -259,6 +278,7 @@ app-stream {
 }
 
 .participants {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -268,14 +288,20 @@ app-stream {
     border-radius: 0;
   }
   &__photo {
-    width: 160px;
-    height: 160px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
   }
+  &__info {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.38);
+    border-radius: 4px;
+    padding: 4px 8px;
+  }
   &__name {
-    font-size: 14px;
-    margin-left: 16px;
-    color: #fafafa;
+    font-size: 10px;
   }
 }
 
@@ -300,8 +326,4 @@ app-stream {
   transition: all 600ms;
   z-index: -1;
   pointer-events: none;
-}
-
-.mat-drawer {
-  background: none;
 }

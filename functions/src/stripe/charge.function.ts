@@ -12,6 +12,9 @@ export const payStripeProduct = functions
       data: {
         priceId: string;
         connectedAccountId?: string;
+        eventData: {
+          eventId: string;
+        };
       },
       context
     ) => {
@@ -49,7 +52,13 @@ export const payStripeProduct = functions
         const invoice = await stripe.invoices.create(params);
 
         // 請求書に対する支払いを行う
-        return stripe.invoices.pay(invoice.id);
+        return stripe.invoices.pay(invoice.id).then(async () => {
+          if (context.auth && data.eventData) {
+            const eventId = data.eventData.eventId;
+            const uid = context.auth.uid;
+            await db.doc(`events/${eventId}/paidUsers/${uid}`).set({ uid });
+          }
+        });
       } catch (error) {
         throw new functions.https.HttpsError('unauthenticated', error.code);
       }

@@ -82,13 +82,13 @@
             mat-flat-button
             (click)="
               [
-                targetUser.ticketPrice
+                (targetUser.ticketPrice > 0)
                   ? openTicketDialog(user, targetUser)
                   : call(targetUser.uid, targetUser.name)
               ]
             "
             [disabled]="
-              targetUser.ticketPrice &&
+              (targetUser.ticketPrice > 0) &&
               !(customer$ | async)?.defaultPaymentMethod &&
                 !(customer$ | async)?.paymentMethods
             "

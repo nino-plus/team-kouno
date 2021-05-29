@@ -1,6 +1,8 @@
-<mat-dialog-content>{{ data.text }}</mat-dialog-content>
+<mat-dialog-content class="text">{{ data.text }}</mat-dialog-content>
 
 <mat-dialog-actions align="end">
   <button mat-button matDialogClose>キャンセル</button>
-  <button mat-button class="submit-button" [matDialogClose]="true">はい</button>
+  <button mat-button class="submit-button" [matDialogClose]="true">
+    {{ buttonText }}
+  </button>
 </mat-dialog-actions>

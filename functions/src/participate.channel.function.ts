@@ -40,6 +40,15 @@ export const participateChannel = functions
 
     const token = generateToken(eventId, currentUserId);
 
+    await db.doc(`users/${currentUserId}`).set(
+      {
+        joinChannelId: eventId,
+      },
+      {
+        merge: true,
+      }
+    );
+
     return { eventId, token, userId: currentUserId };
   });
 

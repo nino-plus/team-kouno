@@ -53,6 +53,9 @@ import { MiniNavComponent } from './mini-nav/mini-nav.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { BottomNavComponent } from './bottom-nav/bottom-nav.component';
+import { EventShellComponent } from './event-shell/event-shell.component';
+import { MatRippleModule } from '@angular/material/core';
+import { MaintenanceComponent } from './maintenance/maintenance.component';
 
 registerLocaleData(localeJa);
 
@@ -69,6 +72,8 @@ registerLocaleData(localeJa);
     MainNavComponent,
     MiniNavComponent,
     BottomNavComponent,
+    EventShellComponent,
+    MaintenanceComponent,
   ],
   imports: [
     BrowserModule,
@@ -119,6 +124,7 @@ registerLocaleData(localeJa);
     }),
     MatSidenavModule,
     MatListModule,
+    MatRippleModule,
   ],
   providers: [
     { provide: REGION, useValue: 'asia-northeast1' },
