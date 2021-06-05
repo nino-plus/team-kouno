@@ -1,0 +1,47 @@
+<header
+  class="header"
+  [class.scrolled-header]="uiService.scrollHieght > 56"
+  [class.scrolled-hero]="uiService.scrollHieght > 400"
+  [class.mini-nav]="!uiService.sidenavIsOpen"
+  [class.sp]="!isLargeScreen"
+>
+  <h1 class="header__logo">
+    <a routerLink="/" class="header__logo-link"
+      ><img src="./assets/images/logo.png" alt="EventStand"
+    /></a>
+  </h1>
+  <app-search-box></app-search-box>
+
+  <ng-container *ngIf="authService.user$ | async as user">
+    <div class="header__btns">
+      <button mat-icon-button class="header__search" routerLink="/search">
+        <mat-icon>search</mat-icon>
+      </button>
+
+      <button
+        mat-mini-fab
+        [matMenuTriggerFor]="userMenu"
+        [style.background-image]="'url(' + user?.avatarURL + ')'"
+        class="header__icon"
+      ></button>
+    </div>
+    <mat-menu #userMenu="matMenu" class="header__menu">
+      <a mat-menu-item [routerLink]="user.uid">
+        <mat-icon>account_box</mat-icon>
+        <span>マイページ</span>
+      </a>
+      <a mat-menu-item routerLink="/calendar">
+        <mat-icon>event</mat-icon>
+        <span>カレンダー</span>
+      </a>
+      <a mat-menu-item routerLink="/settings/profile">
+        <mat-icon>settings</mat-icon>
+        <span>設定</span>
+      </a>
+      <button mat-menu-item (click)="authService.logout()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>ログアウト</span>
+      </button>
+    </mat-menu>
+  </ng-container>
+</header>
