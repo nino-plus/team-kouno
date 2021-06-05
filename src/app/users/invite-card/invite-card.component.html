@@ -1,25 +1,25 @@
 <div class="card__head">
-  <ng-container *ngIf="invite.sender.state == 'online'">
+  <ng-container *ngIf="invite.sender?.state == 'online'">
     <span @fade class="card__active-ring"></span>
   </ng-container>
-  <img [src]="invite.sender.avatarURL" alt="" class="card__avatar" />
+  <img [src]="invite.sender?.avatarURL" alt="" class="card__avatar" />
   <div class="card__info-wrap">
     <p class="card__name">
-      {{ invite.sender.name }}さんからミーティングの招待が届いています({{
+      {{ invite.sender?.name }}さんからミーティングの招待が届いています({{
         invite.createdAt.toMillis() | date: 'yyyy/MM/dd HH:mm'
       }})
     </p>
     <p class="card__info">
       フォロワー{{
-        invite.sender.followerCount ? invite.sender.followerCount : 0
+        invite.sender?.followerCount ? invite.sender?.followerCount : 0
       }}人
     </p>
   </div>
 </div>
 <p class="card__description">
   {{
-    invite.sender.description
-      ? invite.sender.description
+    invite.sender?.description
+      ? invite.sender?.description
       : '自己紹介はまだありません。'
   }}
 </p>
@@ -28,7 +28,7 @@
   <button
     mat-flat-button
     class="card__btn"
-    [routerLink]="'/' + invite.sender.uid"
+    [routerLink]="'/' + invite.sender?.uid"
   >
     プロフィール
   </button>
