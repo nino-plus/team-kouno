@@ -45,19 +45,6 @@ export const updateAlgoliaEvent = functions
     });
   });
 
-export const createAlgoliaUser = functions
-  .region('asia-northeast1')
-  .firestore.document('users/{uid}')
-  .onCreate((snap) => {
-    const data = snap.data();
-    functions.logger.info(data);
-    return algolia.saveRecord({
-      indexName: 'users',
-      idKey: data.uid,
-      data,
-    });
-  });
-
 export const deleteAlgoliaUser = functions
   .region('asia-northeast1')
   .firestore.document('users/{uid}')
@@ -76,12 +63,20 @@ export const updateAlgoliaUser = functions
   .firestore.document('users/{uid}')
   .onUpdate((change) => {
     const data = change.after.data();
+    const beforeData = change.before.data();
     functions.logger.info(data);
 
-    return algolia.saveRecord({
-      indexName: 'users',
-      isUpdate: true,
-      idKey: data.uid,
-      data,
-    });
+    if (
+      !beforeData.lastChangedAt ||
+      beforeData.lastChangedAt === data.lastChangedAt
+    ) {
+      return algolia.saveRecord({
+        indexName: 'users',
+        isUpdate: true,
+        idKey: 'uid',
+        data,
+      });
+    } else {
+      return null;
+    }
   });
