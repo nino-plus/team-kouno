@@ -10,7 +10,7 @@ import firebase from 'firebase/app';
 import { User } from 'src/app/interfaces/user';
 import { InviteWithSender } from 'src/app/intefaces/invite';
 import { LogWithUser } from 'src/app/interfaces/log';
-import { shareReplay, skip } from 'rxjs/operators';
+import { shareReplay, skip, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-list',
@@ -22,21 +22,31 @@ export class UserListComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
   dateNow: firebase.firestore.Timestamp = firebase.firestore.Timestamp.now();
 
-  allUsers$: Observable<User[]> = this.userService.getPublicUsers();
-  onlineUsers$: Observable<User[]> = this.userService.getOnlinePublicUsers();
+  allUsers: User[] = [];
+  onlineUsers: User[] = [];
   followings$: Observable<User[]>;
   user$: Observable<User> = this.authService.user$;
   uid: string;
   listSource: string = 'online';
   invites$: Observable<InviteWithSender[]>;
   logs$: Observable<LogWithUser[]>;
+
+  isLoadingForAllUsers: boolean = true;
+  isCompleteForAllUsers: boolean;
+  isLoadingForOnlineUsers: boolean = true;
+  isCompleteForOnlineUsers: boolean;
+  lastDoc: any;
+
   constructor(
     private authService: AuthService,
     private userService: UserService,
     private meetingService: MeetingService,
     private logService: LogService,
     private soundService: SoundService
-  ) {}
+  ) {
+    this.getAllUsers();
+    this.getOnlineUsers();
+  }
 
   ngOnInit(): void {
     this.user$.pipe(shareReplay(1)).subscribe((user) => {
@@ -62,6 +72,56 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  }
+
+  getAllUsers() {
+    this.isLoadingForAllUsers = true;
+    if (this.isCompleteForAllUsers) {
+      this.isLoadingForAllUsers = false;
+      return;
+    }
+    this.userService
+      .getPublicUsers(this.lastDoc)
+      .pipe(take(1))
+      .subscribe(({ userDatas, lastDoc }) => {
+        if (userDatas) {
+          if (!userDatas.length) {
+            this.isCompleteForAllUsers = true;
+            this.isLoadingForAllUsers = false;
+            return;
+          }
+          this.lastDoc = lastDoc;
+          userDatas.map((doc) => this.allUsers.push(doc));
+        } else {
+          this.isCompleteForAllUsers = true;
+          this.isLoadingForAllUsers = false;
+        }
+      });
+  }
+
+  getOnlineUsers() {
+    this.isLoadingForOnlineUsers = true;
+    if (this.isCompleteForOnlineUsers) {
+      this.isLoadingForOnlineUsers = false;
+      return;
+    }
+    this.userService
+      .getOnlinePublicUsers(this.lastDoc)
+      .pipe(shareReplay(1))
+      .subscribe(({ userDatas, lastDoc }) => {
+        if (userDatas) {
+          if (!userDatas.length) {
+            this.isCompleteForOnlineUsers = true;
+            this.isLoadingForOnlineUsers = false;
+            return;
+          }
+          this.lastDoc = lastDoc;
+          userDatas.map((doc) => this.onlineUsers.push(doc));
+        } else {
+          this.isCompleteForOnlineUsers = true;
+          this.isLoadingForOnlineUsers = false;
+        }
+      });
   }
 
   changeListSource(type: string): void {

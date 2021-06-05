@@ -1,14 +1,19 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+  QueryDocumentSnapshot,
+} from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { combineLatest, Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { map, mergeMap, switchMap } from 'rxjs/operators';
 import { Follower } from '../interfaces/follower';
 import { Following } from '../interfaces/following';
 import { User } from '../interfaces/user';
+import firestore from 'firebase/app';
 
 @Injectable({
   providedIn: 'root',
@@ -28,22 +33,66 @@ export class UserService {
     return this.db.doc<User>(`users/${uid}`).valueChanges();
   }
 
-  getUsers(): Observable<User[]> {
-    return this.db.collection<User>(`users`).valueChanges();
+  getUsers(
+    query: AngularFirestoreCollection<User>
+  ): Observable<{
+    userDatas: User[];
+    lastDoc: firestore.firestore.QueryDocumentSnapshot<firestore.firestore.DocumentData>;
+  }> {
+    return query.get().pipe(
+      map((snap) => {
+        return {
+          userDatas: snap.docs.map((doc) => doc.data()),
+          lastDoc: snap.docs[snap.docs.length - 1],
+        };
+      })
+    );
   }
 
-  getPublicUsers(): Observable<User[]> {
-    return this.db
-      .collection<User>(`users`, (ref) => ref.where('isPrivate', '==', false))
-      .valueChanges();
+  getPublicUsers(
+    startAt?: QueryDocumentSnapshot<firestore.firestore.DocumentData>
+  ): Observable<{
+    userDatas: User[];
+    lastDoc: firestore.firestore.QueryDocumentSnapshot<firestore.firestore.DocumentData>;
+  }> {
+    const query = this.db.collection<User>(`users`, (ref) => {
+      if (startAt) {
+        return ref
+          .where('isPrivate', '==', false)
+          .orderBy('createdAt', 'desc')
+          .startAfter(startAt)
+          .limit(6);
+      } else {
+        return ref
+          .where('isPrivate', '==', false)
+          .orderBy('createdAt', 'desc')
+          .limit(6);
+      }
+    });
+    return this.getUsers(query);
   }
 
-  getOnlinePublicUsers(): Observable<User[]> {
-    return this.db
-      .collection<User>(`users`, (ref) =>
-        ref.where('isPrivate', '==', false).where('state', '==', 'online')
-      )
-      .valueChanges();
+  getOnlinePublicUsers(
+    startAt?: QueryDocumentSnapshot<firebase.default.firestore.DocumentData>
+  ): Observable<{
+    userDatas: User[];
+    lastDoc: firestore.firestore.QueryDocumentSnapshot<firestore.firestore.DocumentData>;
+  }> {
+    const query = this.db.collection<User>(`users`, (ref) => {
+      if (startAt) {
+        return ref
+          .where('isPrivate', '==', false)
+          .where('state', '==', 'online')
+          .startAfter(startAt)
+          .limit(6);
+      } else {
+        return ref
+          .where('isPrivate', '==', false)
+          .where('state', '==', 'online')
+          .limit(6);
+      }
+    });
+    return this.getUsers(query);
   }
 
   async setImageToStorage(uid: string, file: string): Promise<string> {

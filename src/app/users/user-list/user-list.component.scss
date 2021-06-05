@@ -2,7 +2,7 @@
 @import 'mixins';
 
 .user-list {
-  padding-top: 64px;
+  padding: 64px 0;
   background: linear-gradient(to right bottom, #121212, #303030);
   min-height: 100vh;
   &__heading {
@@ -50,4 +50,11 @@
 
 .active {
   color: $color-font-main;
+}
+
+.loading {
+  width: 100%;
+  mat-progress-spinner {
+    margin: 24px auto;
+  }
 }

@@ -11,7 +11,7 @@
 
 @include mat-core();
 
-$eventstand-primary: mat-palette($mat-lime, A700);
+$eventstand-primary: mat-palette($mat-cyan, A700);
 $eventstand-accent: mat-palette($mat-grey, A200, A100, A400);
 $eventstand-warn: mat-palette($mat-red);
 
@@ -122,7 +122,7 @@ img {
     }
   }
   &--result {
-    padding: 64px 4%;
+    padding: 0 4% 64px;
     max-width: 1600px;
     @include sp {
       max-width: 100%;

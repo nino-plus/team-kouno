@@ -53,21 +53,51 @@
 
     <ng-container [ngSwitch]="listSource">
       <ng-container *ngSwitchCase="'all'">
-        <div *ngIf="allUsers$ | async as users" class="card-wrap">
+        <div *ngIf="allUsers as users; index as i" class="card-wrap">
           <app-user-card
             class="card"
             *ngFor="let user of users"
             [targetUser]="user"
           ></app-user-card>
+          <div
+            infiniteScroll
+            [infiniteScrollDistance]="2"
+            [infiniteScrollThrottle]="50"
+            (scrolled)="getAllUsers()"
+          ></div>
+          <ng-container *ngIf="isLoadingForAllUsers">
+            <div class="loading">
+              <mat-progress-spinner
+                mode="indeterminate"
+                color="primary"
+                [diameter]="40"
+              ></mat-progress-spinner>
+            </div>
+          </ng-container>
         </div>
       </ng-container>
       <ng-container *ngSwitchCase="'online'">
-        <div *ngIf="onlineUsers$ | async as users" class="card-wrap">
+        <div *ngIf="onlineUsers as users" class="card-wrap">
           <app-user-card
             class="card"
             *ngFor="let user of users"
             [targetUser]="user"
           ></app-user-card>
+          <div
+            infiniteScroll
+            [infiniteScrollDistance]="2"
+            [infiniteScrollThrottle]="50"
+            (scrolled)="getOnlineUsers()"
+          ></div>
+          <ng-container *ngIf="isLoadingForOnlineUsers">
+            <div class="loading">
+              <mat-progress-spinner
+                mode="indeterminate"
+                color="primary"
+                [diameter]="40"
+              ></mat-progress-spinner>
+            </div>
+          </ng-container>
         </div>
       </ng-container>
       <ng-container *ngSwitchCase="'follow'">
