@@ -1,12 +1,17 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
+import {
+  easeSlideForContent,
+  easeSlideForSideNav,
+} from '../animations/animations';
 import { UiService } from '../services/ui.service';
 
 @Component({
   selector: 'app-search-shell',
   templateUrl: './search-shell.component.html',
   styleUrls: ['./search-shell.component.scss'],
+  animations: [easeSlideForContent, easeSlideForSideNav],
 })
 export class SearchShellComponent implements OnInit {
   @ViewChild(MatSidenav)
