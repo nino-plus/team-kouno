@@ -294,6 +294,10 @@ img {
 
 // swiper config
 
+.swiper-wrapper {
+  height: initial !important;
+}
+
 .gallery-top {
   position: relative;
   @include sp {
