@@ -16,6 +16,7 @@ import { SwiperComponent } from 'swiper/angular';
 export class EventListComponent implements OnInit {
   @Input() user: User;
   @Input() listType: string;
+  screenWidth: any;
   listSource: string = 'スポーツ';
   categoryData: string[] = [
     'スポーツ',
@@ -40,6 +41,7 @@ export class EventListComponent implements OnInit {
   onliveEventLists$: Observable<Event[]> = this.eventService.getOnliveEvents();
 
   @ViewChild('popSlides') popSlides: SwiperComponent;
+  @ViewChild('categorySlides') categorySlides: SwiperComponent;
 
   onliveConfig: SwiperOptions = {
     initialSlide: 1,
@@ -72,7 +74,6 @@ export class EventListComponent implements OnInit {
     slidesPerView: 5,
     observer: true,
     spaceBetween: 16,
-    slidesPerGroup: 6,
     navigation: {
       nextEl: '.swiper-nav__btn--cat-next',
       prevEl: '.swiper-nav__btn--cat-prev',
@@ -128,6 +129,9 @@ export class EventListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.screenWidth = window.innerWidth;
+    console.log(this.screenWidth);
+
     this.getPopularEvents();
   }
 
@@ -141,17 +145,53 @@ export class EventListComponent implements OnInit {
       });
   }
 
-  slidePrev(): void {
-    for (let i = 0; i < this.popSlides.swiperRef.slides.length / 2; i++) {
+  slidePrev(source: string, screenWidth: number): void {
+    if (source === 'popular' && screenWidth <= 700) {
       this.popSlides.swiperRef.slidePrev();
     }
-    this.popSlides.swiperRef.slidePrev();
-    console.log(this.popSlides.swiperRef.slides.length);
+    if (source === 'category' && screenWidth <= 700) {
+      console.log('check<700');
+
+      this.categorySlides.swiperRef.slidePrev();
+    }
+    if (source === 'popular' && screenWidth > 700) {
+      for (let i = 0; i < this.popSlides.swiperRef.slides.length / 2; i++) {
+        this.popSlides.swiperRef.slidePrev();
+      }
+    }
+    if (source === 'category' && screenWidth > 700) {
+      console.log('check>700');
+
+      for (
+        let i = 0;
+        i < this.categorySlides.swiperRef.slides.length / 2;
+        i++
+      ) {
+        this.categorySlides.swiperRef.slidePrev();
+      }
+    }
   }
 
-  slideNext(): void {
-    for (let i = 0; i < this.popSlides.swiperRef.slides.length / 2; i++) {
+  slideNext(source: string, screenWidth: number): void {
+    if (source === 'popular' && screenWidth < 700) {
       this.popSlides.swiperRef.slideNext();
+    }
+    if (source === 'category' && screenWidth < 700) {
+      this.categorySlides.swiperRef.slideNext();
+    }
+    if (source === 'popular' && screenWidth > 700) {
+      for (let i = 0; i < this.popSlides.swiperRef.slides.length / 2; i++) {
+        this.popSlides.swiperRef.slideNext();
+      }
+    }
+    if (source === 'category' && screenWidth > 700) {
+      for (
+        let i = 0;
+        i < this.categorySlides.swiperRef.slides.length / 2;
+        i++
+      ) {
+        this.categorySlides.swiperRef.slideNext();
+      }
     }
   }
 

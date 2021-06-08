@@ -36,10 +36,16 @@
         class="swiper-nav"
         *ngIf="eventLists.length > categoryConfig.slidesPerView"
       >
-        <div class="swiper-nav__btn swiper-nav__btn--cat-prev">
+        <div
+          class="swiper-nav__btn swiper-nav__btn--cat-prev"
+          (click)="slidePrev('category', screenWidth)"
+        >
           <mat-icon>chevron_left</mat-icon>
         </div>
-        <div class="swiper-nav__btn swiper-nav__btn--cat-next">
+        <div
+          class="swiper-nav__btn swiper-nav__btn--cat-next"
+          (click)="slideNext('category', screenWidth)"
+        >
           <mat-icon>chevron_right</mat-icon>
         </div>
       </div>
@@ -57,7 +63,7 @@
       </button>
     </div>
 
-    <swiper [config]="categoryConfig">
+    <swiper [config]="categoryConfig" #categorySlides>
       <ng-template swiperSlide *ngFor="let event of eventLists">
         <app-event-card [event]="event" [uid]="user.uid"></app-event-card>
       </ng-template>
@@ -75,13 +81,13 @@
       >
         <div
           class="swiper-nav__btn swiper-nav__btn--pop-prev"
-          (click)="slidePrev()"
+          (click)="slidePrev('popular', screenWidth)"
         >
           <mat-icon>chevron_left</mat-icon>
         </div>
         <div
           class="swiper-nav__btn swiper-nav__btn--pop-next"
-          (click)="slideNext()"
+          (click)="slideNext('popular', screenWidth)"
         >
           <mat-icon>chevron_right</mat-icon>
         </div>
