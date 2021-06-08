@@ -11,6 +11,8 @@ import { User } from 'src/app/interfaces/user';
 import { InviteWithSender } from 'src/app/intefaces/invite';
 import { LogWithUser } from 'src/app/interfaces/log';
 import { shareReplay, skip, take } from 'rxjs/operators';
+import firestore from 'firebase/app';
+import { UiService } from 'src/app/services/ui.service';
 
 @Component({
   selector: 'app-user-list',
@@ -24,7 +26,7 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   allUsers: User[] = [];
   onlineUsers: User[] = [];
-  followings$: Observable<User[]>;
+  followings: User[] = [];
   user$: Observable<User> = this.authService.user$;
   uid: string;
   listSource: string = 'online';
@@ -35,18 +37,19 @@ export class UserListComponent implements OnInit, OnDestroy {
   isCompleteForAllUsers: boolean;
   isLoadingForOnlineUsers: boolean = true;
   isCompleteForOnlineUsers: boolean;
-  lastDoc: any;
-
+  isLoadingForFollowings: boolean = true;
+  isCompleteForFollowings: boolean;
+  lastUserDoc: firestore.firestore.QueryDocumentSnapshot<firestore.firestore.DocumentData>;
+  lastOnlineUserDoc: firestore.firestore.QueryDocumentSnapshot<firestore.firestore.DocumentData>;
+  lastFollowingDoc: firestore.firestore.QueryDocumentSnapshot<firestore.firestore.DocumentData>;
   constructor(
     private authService: AuthService,
     private userService: UserService,
     private meetingService: MeetingService,
     private logService: LogService,
-    private soundService: SoundService
-  ) {
-    this.getAllUsers();
-    this.getOnlineUsers();
-  }
+    private soundService: SoundService,
+    public uiService: UiService
+  ) {}
 
   ngOnInit(): void {
     this.user$.pipe(shareReplay(1)).subscribe((user) => {
@@ -68,6 +71,9 @@ export class UserListComponent implements OnInit, OnDestroy {
         }
       })
     );
+
+    this.getAllUsers();
+    this.getOnlineUsers();
   }
 
   ngOnDestroy(): void {
@@ -81,8 +87,7 @@ export class UserListComponent implements OnInit, OnDestroy {
       return;
     }
     this.userService
-      .getPublicUsers(this.lastDoc)
-      .pipe(take(1))
+      .getPublicUsers(this.lastUserDoc)
       .subscribe(({ userDatas, lastDoc }) => {
         if (userDatas) {
           if (!userDatas.length) {
@@ -90,10 +95,8 @@ export class UserListComponent implements OnInit, OnDestroy {
             this.isLoadingForAllUsers = false;
             return;
           }
-          this.lastDoc = lastDoc;
+          this.lastUserDoc = lastDoc;
           userDatas.map((doc) => this.allUsers.push(doc));
-        } else {
-          this.isCompleteForAllUsers = true;
           this.isLoadingForAllUsers = false;
         }
       });
@@ -106,8 +109,8 @@ export class UserListComponent implements OnInit, OnDestroy {
       return;
     }
     this.userService
-      .getOnlinePublicUsers(this.lastDoc)
-      .pipe(shareReplay(1))
+      .getOnlinePublicUsers(this.lastOnlineUserDoc)
+      .pipe(take(1))
       .subscribe(({ userDatas, lastDoc }) => {
         if (userDatas) {
           if (!userDatas.length) {
@@ -115,20 +118,42 @@ export class UserListComponent implements OnInit, OnDestroy {
             this.isLoadingForOnlineUsers = false;
             return;
           }
-          this.lastDoc = lastDoc;
+          this.lastOnlineUserDoc = lastDoc;
           userDatas.map((doc) => this.onlineUsers.push(doc));
-        } else {
-          this.isCompleteForOnlineUsers = true;
           this.isLoadingForOnlineUsers = false;
         }
       });
+  }
+
+  getFollowings() {
+    this.isLoadingForFollowings = true;
+    if (this.isCompleteForFollowings) {
+      this.isLoadingForFollowings = false;
+      return;
+    } else {
+      this.userService
+        .getFollowingsAndLastDoc(this.uid, this.lastFollowingDoc)
+        .pipe(take(1))
+        .subscribe(({ userDatas, lastDoc }) => {
+          if (userDatas) {
+            if (!userDatas.length) {
+              this.isCompleteForFollowings = true;
+              this.isLoadingForFollowings = false;
+              return;
+            }
+            this.lastFollowingDoc = lastDoc;
+            userDatas.map((doc) => this.followings.push(doc));
+            this.isLoadingForFollowings = false;
+          }
+        });
+    }
   }
 
   changeListSource(type: string): void {
     this.listSource = type;
 
     if (type == 'follow') {
-      this.followings$ = this.userService.getFollowings(this.uid);
+      this.getFollowings();
     }
   }
 }

@@ -59,12 +59,6 @@
             *ngFor="let user of users"
             [targetUser]="user"
           ></app-user-card>
-          <div
-            infiniteScroll
-            [infiniteScrollDistance]="2"
-            [infiniteScrollThrottle]="50"
-            (scrolled)="getAllUsers()"
-          ></div>
           <ng-container *ngIf="isLoadingForAllUsers">
             <div class="loading">
               <mat-progress-spinner
@@ -75,6 +69,13 @@
             </div>
           </ng-container>
         </div>
+        <div
+          infiniteScroll
+          [infiniteScrollDistance]="2"
+          [infiniteScrollThrottle]="100"
+          [infiniteScrollContainer]="uiService.scrollWrapperElement"
+          (scrolled)="getAllUsers()"
+        ></div>
       </ng-container>
       <ng-container *ngSwitchCase="'online'">
         <div *ngIf="onlineUsers as users" class="card-wrap">
@@ -87,6 +88,7 @@
             infiniteScroll
             [infiniteScrollDistance]="2"
             [infiniteScrollThrottle]="50"
+            [infiniteScrollContainer]="uiService.scrollWrapperElement"
             (scrolled)="getOnlineUsers()"
           ></div>
           <ng-container *ngIf="isLoadingForOnlineUsers">
@@ -101,12 +103,28 @@
         </div>
       </ng-container>
       <ng-container *ngSwitchCase="'follow'">
-        <div *ngIf="followings$ | async as users" class="card-wrap">
+        <div *ngIf="followings as users" class="card-wrap">
           <app-user-card
             class="card"
             *ngFor="let user of users"
             [targetUser]="user"
           ></app-user-card>
+          <div
+            infiniteScroll
+            [infiniteScrollDistance]="2"
+            [infiniteScrollThrottle]="100"
+            [infiniteScrollContainer]="uiService.scrollWrapperElement"
+            (scrolled)="getFollowings()"
+          ></div>
+          <ng-container *ngIf="isLoadingForFollowings">
+            <div class="loading">
+              <mat-progress-spinner
+                mode="indeterminate"
+                color="primary"
+                [diameter]="40"
+              ></mat-progress-spinner>
+            </div>
+          </ng-container>
         </div>
       </ng-container>
       <ng-container *ngSwitchCase="'feed'">
@@ -116,6 +134,13 @@
             *ngFor="let log of logs"
             [log]="log"
           ></app-log-card>
+          <div
+            infiniteScroll
+            [infiniteScrollDistance]="2"
+            [infiniteScrollThrottle]="100"
+            [infiniteScrollContainer]="uiService.scrollWrapperElement"
+            (scrolled)="getOnlineUsers()"
+          ></div>
         </div>
       </ng-container>
       <ng-container *ngSwitchCase="'invite'">
@@ -126,6 +151,13 @@
               class="card"
               [invite]="invite"
             ></app-invite-card>
+            <div
+              infiniteScroll
+              [infiniteScrollDistance]="2"
+              [infiniteScrollThrottle]="50"
+              [infiniteScrollContainer]="uiService.scrollWrapperElement"
+              (scrolled)="getOnlineUsers()"
+            ></div>
           </ng-container>
           <ng-template #empty>招待はありません</ng-template>
         </div>

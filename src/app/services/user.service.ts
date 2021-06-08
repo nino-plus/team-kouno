@@ -8,12 +8,12 @@ import { AngularFireFunctions } from '@angular/fire/functions';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import firestore from 'firebase/app';
 import { combineLatest, Observable, of } from 'rxjs';
-import { map, mergeMap, switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { Follower } from '../interfaces/follower';
 import { Following } from '../interfaces/following';
 import { User } from '../interfaces/user';
-import firestore from 'firebase/app';
 
 @Injectable({
   providedIn: 'root',
@@ -185,6 +185,45 @@ export class UserService {
           } else {
             return of(null);
           }
+        })
+      );
+  }
+
+  getFollowingsAndLastDoc(
+    uid: string,
+    startAt?: QueryDocumentSnapshot<firestore.firestore.DocumentData>
+  ): Observable<{
+    userDatas: User[];
+    lastDoc: firestore.firestore.QueryDocumentSnapshot<firestore.firestore.DocumentData>;
+  }> {
+    console.log(startAt);
+    let lastDoc: firestore.firestore.QueryDocumentSnapshot<firestore.firestore.DocumentData>;
+    return this.db
+      .collection<Following>(`users/${uid}/follows`, (ref) => {
+        if (startAt) {
+          return ref.orderBy('createdAt', 'desc').startAfter(startAt).limit(3);
+        } else {
+          return ref.orderBy('createdAt', 'desc').limit(3);
+        }
+      })
+      .get()
+      .pipe(
+        map((result) => result.docs),
+        switchMap((users) => {
+          lastDoc = users[users.length - 1];
+          if (users.length) {
+            return combineLatest(
+              users.map((user) => this.getUserData(user.data().followingId))
+            );
+          } else {
+            return of([]);
+          }
+        }),
+        map((snap) => {
+          return {
+            userDatas: [...snap],
+            lastDoc,
+          };
         })
       );
   }
