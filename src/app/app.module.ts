@@ -57,6 +57,8 @@ import { MatRippleModule } from '@angular/material/core';
 import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { SearchShellComponent } from './search-shell/search-shell.component';
 import { SharedModule } from './shared/shared.module';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 registerLocaleData(localeJa);
 
@@ -127,6 +129,8 @@ registerLocaleData(localeJa);
     MatListModule,
     MatRippleModule,
     SharedModule,
+    InfiniteScrollModule,
+    ScrollingModule,
   ],
   providers: [
     { provide: REGION, useValue: 'asia-northeast1' },
