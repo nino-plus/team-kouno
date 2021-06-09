@@ -134,13 +134,6 @@
             *ngFor="let log of logs"
             [log]="log"
           ></app-log-card>
-          <div
-            infiniteScroll
-            [infiniteScrollDistance]="2"
-            [infiniteScrollThrottle]="100"
-            [infiniteScrollContainer]="uiService.scrollWrapperElement"
-            (scrolled)="getOnlineUsers()"
-          ></div>
         </div>
       </ng-container>
       <ng-container *ngSwitchCase="'invite'">
@@ -151,13 +144,6 @@
               class="card"
               [invite]="invite"
             ></app-invite-card>
-            <div
-              infiniteScroll
-              [infiniteScrollDistance]="2"
-              [infiniteScrollThrottle]="50"
-              [infiniteScrollContainer]="uiService.scrollWrapperElement"
-              (scrolled)="getOnlineUsers()"
-            ></div>
           </ng-container>
           <ng-template #empty>招待はありません</ng-template>
         </div>
