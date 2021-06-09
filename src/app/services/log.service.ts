@@ -28,7 +28,13 @@ export class LogService {
           followings?.map((follow: User) => this.getLogs(follow.uid))
         ).pipe(
           map((logs) => {
-            return [].concat(...logs);
+            return [].concat(...logs).sort((a, b) => {
+              if (a.createdAt < b.createdAt) {
+                return 1;
+              } else {
+                return -1;
+              }
+            });
           })
         );
         return combineLatest([logs$, followings$]);
