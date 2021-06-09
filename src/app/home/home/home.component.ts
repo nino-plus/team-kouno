@@ -95,7 +95,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.galleryTop.swiperRef.controller.control = this.galleryThumbs.swiperRef;
       this.galleryThumbs.swiperRef.controller.control = this.galleryTop.swiperRef;
-    }, 3000);
+    });
   }
 
   joinChannel(eventId: string, uid: string): void {

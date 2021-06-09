@@ -18,6 +18,8 @@
 
   <mat-sidenav-content
     [@easeSlideForContent]="uiService.sidenavIsOpen ? 'open' : 'close'"
+    #scrollWrap
+    cdkScrollable
   >
     <app-header></app-header>
     <router-outlet> </router-outlet>
