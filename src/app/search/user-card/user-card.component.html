@@ -1,0 +1,40 @@
+<div class="card__head">
+  <ng-container *ngIf="targetUser.state == 'online'">
+    <span @fade class="card__active-ring"></span>
+  </ng-container>
+  <img [src]="targetUser.avatarURL" alt="" class="card__avatar" />
+  <div class="card__info-wrap">
+    <p class="card__name">{{ targetUser.name }}</p>
+    <p class="card__info">
+      フォロワー{{ targetUser.followerCount ? targetUser.followerCount : 0 }}人
+    </p>
+  </div>
+</div>
+<p class="card__description">
+  {{
+    targetUser.description
+      ? targetUser.description
+      : '自己紹介はまだありません。'
+  }}
+</p>
+
+<div class="card__actions">
+  <button
+    mat-flat-button
+    class="card__btn"
+    [routerLink]="'/' + targetUser.uid"
+    [queryParams]="{ reserve: true }"
+  >
+    プロフィール
+  </button>
+  <ng-container *ngIf="currentUser$ | async as currentUser">
+    <button
+      *ngIf="currentUser.uid !== targetUser.uid"
+      mat-flat-button
+      class="card__btn card__btn--submit"
+      (click)="enterWaitingRoom(targetUser.uid)"
+    >
+      話しかける
+    </button>
+  </ng-container>
+</div>
