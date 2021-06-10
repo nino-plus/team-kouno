@@ -28,6 +28,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { EventStoreComponent } from './event-store/event-store.component';
 import { SearchBoxComponent } from './search-box/search-box.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { UserSearchBoxComponent } from './user-search-box/user-search-box.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     StripeIntervalPipe,
     EventStoreComponent,
     SearchBoxComponent,
+    UserSearchBoxComponent,
   ],
   imports: [
     CommonModule,
@@ -75,6 +77,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     StripeIntervalPipe,
     EventStoreComponent,
     SearchBoxComponent,
+    UserSearchBoxComponent,
   ],
 })
 export class SharedModule {}
