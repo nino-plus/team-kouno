@@ -30,7 +30,7 @@ export class UserSearchComponent implements OnInit {
   }
 
   routeSearch(searchQuery: string): void {
-    this.router.navigate(['/search'], {
+    this.router.navigate(['/search/user'], {
       queryParamsHandling: 'merge',
       queryParams: { searchQuery },
     });
