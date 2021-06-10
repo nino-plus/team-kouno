@@ -1,0 +1,49 @@
+@import 'custom-style';
+@import 'mixins';
+
+.search-box {
+  width: 400px;
+  background: #eee;
+  height: 40px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  place-content: center;
+  place-items: center;
+  border-radius: 24px;
+  z-index: 10000;
+  margin: 4px 0;
+  @include tablet {
+    width: 240px;
+  }
+  @include sp {
+    display: none;
+  }
+  &__form {
+    height: 40px;
+    color: $color-font;
+  }
+  &__input {
+    width: 320px;
+    height: 40px;
+    border: none;
+    outline: none;
+    background: #eee;
+    margin: 8px auto;
+    @include tablet {
+      width: 176px;
+    }
+  }
+  &__submit {
+    color: $color-font;
+    text-align: center;
+    cursor: pointer;
+    @include tablet {
+      text-align: right;
+    }
+    span {
+      display: inline-block;
+      color: #303030;
+    }
+  }
+}
