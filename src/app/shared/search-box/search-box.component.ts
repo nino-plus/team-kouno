@@ -29,7 +29,7 @@ export class SearchBoxComponent implements OnInit {
   }
 
   routeSearch(searchQuery: string): void {
-    this.router.navigate(['/search'], {
+    this.router.navigate(['/search/event'], {
       queryParamsHandling: 'merge',
       queryParams: { searchQuery },
     });
