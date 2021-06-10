@@ -1,0 +1,34 @@
+<div class="container container--result">
+  <div class="result">
+    <ng-container *ngIf="result?.hits.length || users.length">
+      <h2 class="result__hits">全部で {{ result?.nbHits }} 件見つかりました</h2>
+    </ng-container>
+    <div *ngIf="users?.length > 0; else notFound" class="result__grid">
+      <app-user-card
+        @fade
+        *ngFor="let user of users"
+        [targetUser]="user"
+        class="card"
+      ></app-user-card>
+    </div>
+  </div>
+</div>
+
+<div
+  infiniteScroll
+  [infiniteScrollDistance]="1"
+  [infiniteScrollThrottle]="100"
+  (scrolled)="searchUsers()"
+></div>
+
+<ng-template #notFound>
+  <div class="not-found" *ngIf="!uiService.loading">
+    <p class="not-found__text">一致するアイテムがありませんでした🙏</p>
+    <p class="not-found__text">キーワードを変えて試してみましょう。</p>
+    <button routerLink="/" mat-stroked-button type="button">戻る</button>
+  </div>
+</ng-template>
+
+<div *ngIf="uiService.loading" class="loading">
+  <img src="assets/images/loading.svg" alt="" />
+</div>

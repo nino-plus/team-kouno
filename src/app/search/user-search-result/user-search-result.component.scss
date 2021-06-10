@@ -1,0 +1,36 @@
+@import 'mixins';
+
+.result {
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    margin: 16px 0 40px;
+    @include sp {
+      grid-template-columns: 1fr;
+      margin: 16px;
+    }
+  }
+}
+
+.card {
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 8px;
+  transition: ease 0.5s;
+  background: #181818;
+  &:hover {
+    background: linear-gradient(to right bottom, #212121, #303030);
+  }
+  &--log-pc {
+    @include sp {
+      display: none;
+    }
+  }
+  &--log-sp {
+    display: none;
+    @include sp {
+      display: block;
+    }
+  }
+}
