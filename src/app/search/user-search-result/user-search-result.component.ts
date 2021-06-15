@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SearchIndex } from 'functions/node_modules/algoliasearch';
 import { Observable } from 'rxjs';
-import { shareReplay } from 'rxjs/operators';
 import { fade } from 'src/app/animations/animations';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
@@ -26,7 +25,6 @@ export class UserSearchResultComponent implements OnInit {
     hits: any[];
   };
   searchQuery: string;
-  private page = 0;
   private maxPage: number;
   private requestOptions = {
     page: 0,
@@ -45,20 +43,18 @@ export class UserSearchResultComponent implements OnInit {
       this.uid = user.uid;
     });
     this.route.queryParamMap.subscribe((params) => {
-      console.log(params);
-
       this.users = [];
       this.searchQuery = params.get('searchQuery' || '');
-      console.log(this.searchQuery);
-      this.searchUsers();
+      if (this.searchQuery) {
+        this.requestOptions.page = 0;
+        this.searchUsers();
+      }
     });
   }
 
   searchUsers(): void {
     const searchOptions = { ...this.requestOptions };
-    this.uiService.loading = true;
-    if (!this.maxPage || this.maxPage > this.page) {
-      this.requestOptions.page++;
+    if (!this.maxPage || this.maxPage > this.requestOptions.page) {
       this.uiService.loading = true;
       setTimeout(() => {
         this.index
@@ -68,9 +64,9 @@ export class UserSearchResultComponent implements OnInit {
             this.result = result;
             this.users.push(...(result.hits as any[]));
           })
+          .then(() => this.requestOptions.page++)
           .finally(() => (this.uiService.loading = false));
       });
-      console.log(this.users);
     }
   }
 }
