@@ -1,6 +1,6 @@
 <div class="user-list">
   <div class="container">
-    <div *ngIf="logs$ | async as logs" class="card-wrap card-wrap--logs">
+    <div *ngIf="feeds as logs" class="card-wrap card-wrap--logs">
       <app-log-card
         class="card card--log-pc"
         *ngFor="let log of logs | slice: 0:8"
@@ -128,12 +128,28 @@
         </div>
       </ng-container>
       <ng-container *ngSwitchCase="'feed'">
-        <div *ngIf="logs$ | async as logs" class="card-wrap card-wrap--logs">
+        <div *ngIf="feeds as logs" class="card-wrap card-wrap--logs">
           <app-log-card
             class="card"
             *ngFor="let log of logs"
             [log]="log"
           ></app-log-card>
+          <div
+            infiniteScroll
+            [infiniteScrollDistance]="2"
+            [infiniteScrollThrottle]="100"
+            [infiniteScrollContainer]="uiService.scrollWrapperElement"
+            (scrolled)="getFeeds()"
+          ></div>
+          <ng-container *ngIf="isLoadingForFeeds">
+            <div class="loading">
+              <mat-progress-spinner
+                mode="indeterminate"
+                color="primary"
+                [diameter]="40"
+              ></mat-progress-spinner>
+            </div>
+          </ng-container>
         </div>
       </ng-container>
       <ng-container *ngSwitchCase="'invite'">

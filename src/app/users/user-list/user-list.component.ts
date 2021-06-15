@@ -9,7 +9,7 @@ import { UserService } from 'src/app/services/user.service';
 import firebase from 'firebase/app';
 import { User } from 'src/app/interfaces/user';
 import { InviteWithSender } from 'src/app/intefaces/invite';
-import { LogWithUser } from 'src/app/interfaces/log';
+import { Log, LogWithUser } from 'src/app/interfaces/log';
 import { shareReplay, skip, take } from 'rxjs/operators';
 import firestore from 'firebase/app';
 import { UiService } from 'src/app/services/ui.service';
@@ -27,6 +27,7 @@ export class UserListComponent implements OnInit, OnDestroy {
   allUsers: User[] = [];
   onlineUsers: User[] = [];
   followings: User[] = [];
+  feeds: LogWithUser[] = [];
   user$: Observable<User> = this.authService.user$;
   uid: string;
   listSource: string = 'online';
@@ -39,9 +40,12 @@ export class UserListComponent implements OnInit, OnDestroy {
   isCompleteForOnlineUsers: boolean;
   isLoadingForFollowings: boolean = true;
   isCompleteForFollowings: boolean;
+  isLoadingForFeeds: boolean = true;
+  isCompleteForFeeds: boolean;
   lastUserDoc: firestore.firestore.QueryDocumentSnapshot<firestore.firestore.DocumentData>;
   lastOnlineUserDoc: firestore.firestore.QueryDocumentSnapshot<firestore.firestore.DocumentData>;
   lastFollowingDoc: firestore.firestore.QueryDocumentSnapshot<firestore.firestore.DocumentData>;
+  lastFeedsDoc: firestore.firestore.QueryDocumentSnapshot<firestore.firestore.DocumentData>;
   constructor(
     private authService: AuthService,
     private userService: UserService,
@@ -54,8 +58,6 @@ export class UserListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.user$.pipe(shareReplay(1)).subscribe((user) => {
       this.uid = user?.uid;
-      this.logs$ = this.logService.getLogsWithUser(this.uid);
-
       this.invites$ = this.meetingService.getInvites(this.uid);
     });
 
@@ -74,6 +76,7 @@ export class UserListComponent implements OnInit, OnDestroy {
 
     this.getAllUsers();
     this.getOnlineUsers();
+    this.getFeeds();
   }
 
   ngOnDestroy(): void {
@@ -144,6 +147,32 @@ export class UserListComponent implements OnInit, OnDestroy {
             this.lastFollowingDoc = lastDoc;
             userDatas.map((doc) => this.followings.push(doc));
             this.isLoadingForFollowings = false;
+          }
+        });
+    }
+  }
+
+  getFeeds() {
+    this.isLoadingForFeeds = true;
+    if (this.isCompleteForFeeds) {
+      this.isLoadingForFeeds = false;
+      return;
+    } else {
+      this.logService
+        .getFeedsWithUser(this.uid, this.lastFeedsDoc)
+        .pipe(take(1))
+        .subscribe(({ logsData, lastDoc }) => {
+          if (logsData) {
+            if (!logsData.length) {
+              this.isCompleteForFeeds = true;
+              this.isLoadingForFeeds = false;
+              return;
+            }
+            this.lastFeedsDoc = lastDoc;
+            logsData.map((doc) => {
+              this.feeds.push(doc);
+            });
+            this.isLoadingForFeeds = false;
           }
         });
     }
