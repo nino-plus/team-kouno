@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { fade } from 'src/app/animations/animations';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { MeetingService } from 'src/app/services/meeting.service';
@@ -11,6 +12,7 @@ import { MessagingService } from 'src/app/services/messaging.service';
   selector: 'app-user-card',
   templateUrl: './user-card.component.html',
   styleUrls: ['./user-card.component.scss'],
+  animations: [fade],
 })
 export class UserCardComponent implements OnInit {
   @Input() targetUser: User;
