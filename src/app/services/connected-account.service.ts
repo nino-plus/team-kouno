@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ConnectedAccount } from '@interfaces/connected-account';
 import { TransferWithCharge } from '../interfaces/transfer';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +16,7 @@ export class ConnectedAccountService {
   constructor(
     private db: AngularFirestore,
     private fns: AngularFireFunctions
-  ) {
-  }
+  ) {}
 
   async createStripeConnectedAccount(): Promise<void> {
     const callable = this.fns.httpsCallable('getStripeConnectedAccountState');
@@ -32,15 +32,16 @@ export class ConnectedAccountService {
       .then((res) => res.url);
   }
 
-  async getStripeTransfers(): Promise<any>{
+  async getStripeTransfers(): Promise<any> {
     const callable = this.fns.httpsCallable('getStripeTransfers');
     return callable({})
       .toPromise()
       .then((res) => {
-        if(res === null) {
-          return
+        if (res === null) {
+          return;
         }
-        res.data as TransferWithCharge[]});
+        res.data as TransferWithCharge[];
+      });
   }
 
   orderPayout(): Promise<any> {
@@ -51,6 +52,7 @@ export class ConnectedAccountService {
   getConnectedAccount(uid: string): Observable<ConnectedAccount> {
     return this.db
       .doc<ConnectedAccount>(`connectedAccounts/${uid}`)
-      .valueChanges();
+      .valueChanges()
+      .pipe(tap((d) => console.log(d.connectedAccountId)));
   }
 }

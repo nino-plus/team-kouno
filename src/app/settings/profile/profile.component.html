@@ -1,4 +1,4 @@
-<ng-container *ngIf="user$ | async as user">
+<ng-container *ngIf="!isProcessing && user$ | async as user; else view">
   <form [formGroup]="form" (ngSubmit)="updateUser()">
     <div class="settings__profile">
       <div class="settings__info">
@@ -124,19 +124,16 @@
                     autocomplete="off"
                     placeholder="1000"
                   />
-                  <span matSuffix>円</span>
+                  <span class="settings__suffix" matSuffix>円</span>
+                  <mat-hint
+                    (click)="
+                      connectedAccountService.createStripeConnectedAccount()
+                    "
+                    >販売アカウント変更は<span class="settings__ticket"
+                      >こちら</span
+                    ></mat-hint
+                  >
                 </mat-form-field>
-                <button
-                  type="button"
-                  class="settings__ticket-account-btn"
-                  color="basic"
-                  mat-stroked-button
-                  (click)="
-                    connectedAccountService.createStripeConnectedAccount()
-                  "
-                >
-                  販売アカウント変更
-                </button>
               </div>
             </ng-container>
             <ng-template #createAccount>
@@ -188,3 +185,9 @@
     </div>
   </form>
 </ng-container>
+
+<ng-template #view>
+  <div class="processing">
+    <img src="/assets/images/three-dots.svg" alt="" />
+  </div>
+</ng-template>

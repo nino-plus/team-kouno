@@ -31,12 +31,8 @@
     font-size: 24px;
   }
   &__ticket-wrap {
-    display: grid;
-    gap: 8px;
-    grid-template-columns: auto 160px;
-    align-items: center;
-    @include tablet {
-      grid-template-columns: 1fr;
+    mat-form-field {
+      width: 90%;
     }
   }
   &__ticket-account-btn {
@@ -50,6 +46,11 @@
     &:hover {
       text-decoration: none;
     }
+  }
+  &__suffix {
+    position: absolute;
+    right: 0;
+    bottom: 0;
   }
   &__property {
     display: grid;
@@ -108,6 +109,15 @@
         display: none;
       }
     }
+  }
+}
+
+.processing {
+  display: flex;
+  height: 70vh;
+  width: 100%;
+  img {
+    margin: auto;
   }
 }
 

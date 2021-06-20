@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map, take, tap } from 'rxjs/operators';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { ConnectedAccountService } from 'src/app/services/connected-account.service';
@@ -31,7 +31,27 @@ export class ProfileComponent implements OnInit {
     ],
   });
 
-  user$: Observable<User> = this.authService.user$;
+  user$: Observable<User> = this.authService.user$.pipe(
+    tap((user) => {
+      this.user = user;
+      this.oldImageFile = user?.avatarURL;
+      this.form.patchValue({
+        ...user,
+      });
+      // if (this.connectedAccountId$ === undefined) {
+      this.connectedAccountId$ = this.connectedAccountService
+        .getConnectedAccount(user.uid)
+        .pipe(
+          map((account) => {
+            if (account) {
+              return account.connectedAccountId;
+            }
+          })
+        );
+      // }
+    })
+  );
+
   connectedAccountId$: Observable<string>;
   activeProducts = [];
   isProcessing: boolean;
@@ -46,24 +66,7 @@ export class ProfileComponent implements OnInit {
     private productService: ProductService
   ) {}
 
-  ngOnInit(): void {
-    this.user$.subscribe((user) => {
-      this.user = user;
-      this.oldImageFile = user?.avatarURL;
-      this.form.patchValue({
-        ...user,
-      });
-      this.connectedAccountId$ = this.connectedAccountService
-        .getConnectedAccount(user.uid)
-        .pipe(
-          map((account) => {
-            if (account) {
-              return account.connectedAccountId;
-            }
-          })
-        );
-    });
-  }
+  ngOnInit(): void {}
 
   onCroppedImage(image: string): void {
     this.newImageFile = image;
