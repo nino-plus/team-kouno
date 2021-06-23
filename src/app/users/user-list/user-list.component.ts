@@ -76,7 +76,6 @@ export class UserListComponent implements OnInit, OnDestroy {
 
     this.getAllUsers();
     this.getOnlineUsers();
-    this.getFollowings();
     this.getFeeds();
   }
 
@@ -181,5 +180,14 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   changeListSource(type: string): void {
     this.listSource = type;
+    if (this.listSource === 'all') {
+      this.getAllUsers();
+    }
+    if (this.listSource === 'follow') {
+      this.getFollowings();
+    }
+    if (this.listSource === 'feed') {
+      this.getFeeds();
+    }
   }
 }

@@ -73,7 +73,6 @@
           infiniteScroll
           [infiniteScrollDistance]="2"
           [infiniteScrollThrottle]="100"
-          [infiniteScrollContainer]="uiService.scrollWrapperElement"
           (scrolled)="getAllUsers()"
         ></div>
       </ng-container>
@@ -88,7 +87,6 @@
             infiniteScroll
             [infiniteScrollDistance]="2"
             [infiniteScrollThrottle]="50"
-            [infiniteScrollContainer]="uiService.scrollWrapperElement"
             (scrolled)="getOnlineUsers()"
           ></div>
           <ng-container *ngIf="isLoadingForOnlineUsers">
@@ -113,7 +111,6 @@
             infiniteScroll
             [infiniteScrollDistance]="2"
             [infiniteScrollThrottle]="100"
-            [infiniteScrollContainer]="uiService.scrollWrapperElement"
             (scrolled)="getFollowings()"
           ></div>
           <ng-container *ngIf="isLoadingForFollowings">
@@ -138,7 +135,6 @@
             infiniteScroll
             [infiniteScrollDistance]="2"
             [infiniteScrollThrottle]="100"
-            [infiniteScrollContainer]="uiService.scrollWrapperElement"
             (scrolled)="getFeeds()"
           ></div>
           <ng-container *ngIf="isLoadingForFeeds">
