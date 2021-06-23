@@ -3,8 +3,9 @@
 
 .main-wrap {
   min-height: 100vh;
-  padding: 0 0 120px;
+  padding: 64px 0 120px;
   background: linear-gradient(to right bottom, #121212, #303030);
+  position: relative;
   @include sp {
     padding: 56px 0 120px;
   }
@@ -22,6 +23,10 @@
   @include sp-s {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
+}
+
+.gallery-top {
+  margin-bottom: 16px;
 }
 
 .footer {

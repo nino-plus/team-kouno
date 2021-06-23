@@ -1,23 +1,15 @@
 <main class="main-wrap">
-  <swiper class="gallery-top" #galleryTop [config]="topConfig">
+  <swiper class="gallery-top" #tops [config]="topConfig">
     <ng-template swiperSlide *ngFor="let event of spEvents$ | async">
       <app-special [event]="event"></app-special>
     </ng-template>
     <div class="pagination"></div>
   </swiper>
-
-  <div class="gallery-thumbs">
-    <swiper #galleryThumbs [config]="thumbsConfig">
-      <ng-template swiperSlide *ngFor="let event of spEvents$ | async">
-        <img [src]="event.thumbnailURL" alt="" />
-      </ng-template>
-    </swiper>
-    <div class="navigation navigation--prev">
-      <div class="navigation__icon navigation__icon--prev"></div>
-    </div>
-    <div class="navigation navigation--next">
-      <div class="navigation__icon navigation__icon--next"></div>
-    </div>
+  <div class="navigation navigation--prev">
+    <div class="navigation__icon navigation__icon--prev"></div>
+  </div>
+  <div class="navigation navigation--next">
+    <div class="navigation__icon navigation__icon--next"></div>
   </div>
 
   <ng-container *ngIf="user$ | async as user; else guest">
