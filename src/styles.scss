@@ -305,28 +305,6 @@ img {
   }
 }
 
-.gallery-thumbs {
-  position: relative;
-  margin-bottom: 16px;
-  @include sp {
-    display: none;
-  }
-}
-
-.gallery-thumbs .swiper-slide {
-  opacity: 0.3;
-  padding: 4px;
-  &:hover {
-    opacity: 1;
-  }
-}
-
-.gallery-thumbs .swiper-slide-active {
-  opacity: 1;
-  position: relative;
-  border: 3px solid #1bcbe0;
-}
-
 .event-list {
   .swiper-wrapper {
     margin-bottom: 16px;
@@ -359,20 +337,23 @@ img {
 
 .navigation {
   width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(#303030, 0.64);
   position: absolute;
-  top: 4px;
+  top: calc(64px + 128px);
   z-index: 100;
-  height: calc(100% - 10px);
+  cursor: pointer;
   &__icon {
-    width: 24px;
-    height: 24px;
+    width: 14px;
+    height: 14px;
     display: inline-block;
     border: solid #fff;
     border-width: 2px 0 0 2px;
     transform: rotate(135deg) translateY(50%);
     position: absolute;
-    top: 50%;
-    right: 0px;
+    top: 14px;
+    right: 7px;
     cursor: pointer;
     @include sp {
       display: none;
@@ -385,15 +366,15 @@ img {
       border: 1px solid #fff;
     }
     &--prev {
-      right: -10px;
+      right: 0px;
       transform: rotate(-45deg) translateY(-50%);
     }
   }
   &--next {
-    right: 0;
+    right: 8px;
   }
   &--prev {
-    left: 0;
+    left: 8px;
   }
 }
 
@@ -415,6 +396,7 @@ img {
     stroke: #fff;
   }
 }
+
 // quill config
 
 .chat {
