@@ -95,14 +95,5 @@ export class MainShellComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this.uiService.scrollWrapperElement = this.scrollWrap.getElementRef().nativeElement;
-
-    this.scroll.scrolled().subscribe((data: CdkScrollable) => {
-      this.onWindowScroll(data);
-    });
-  }
-
-  onWindowScroll(data: CdkScrollable) {
-    const scrollTop = data.getElementRef().nativeElement.scrollTop;
-    this.uiService.scrollHieght = scrollTop || 0;
   }
 }
