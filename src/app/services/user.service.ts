@@ -196,14 +196,13 @@ export class UserService {
     userDatas: User[];
     lastDoc: firestore.firestore.QueryDocumentSnapshot<firestore.firestore.DocumentData>;
   }> {
-    console.log(startAt);
     let lastDoc: firestore.firestore.QueryDocumentSnapshot<firestore.firestore.DocumentData>;
     return this.db
       .collection<Following>(`users/${uid}/follows`, (ref) => {
         if (startAt) {
-          return ref.orderBy('createdAt', 'desc').startAfter(startAt).limit(3);
+          return ref.orderBy('createdAt', 'desc').startAfter(startAt).limit(6);
         } else {
-          return ref.orderBy('createdAt', 'desc').limit(3);
+          return ref.orderBy('createdAt', 'desc').limit(6);
         }
       })
       .get()
