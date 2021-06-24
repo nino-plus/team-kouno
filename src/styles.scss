@@ -294,14 +294,10 @@ img {
 
 // swiper config
 
-.swiper-wrapper {
-  height: initial !important;
-}
-
 .gallery-top {
   position: relative;
   @include sp {
-    margin-bottom: 24px;
+    margin-bottom: 16px;
   }
 }
 
@@ -312,22 +308,19 @@ img {
 }
 
 .pagination {
-  display: none;
-  position: absolute;
-  bottom: -8px;
-  z-index: 20;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(20%);
+  display: none;
   @include sp {
     display: flex;
   }
   .swiper-pagination-bullet,
   .swiper-pagination-bullet-active {
     width: 16px;
-    height: 8px;
+    height: 3px;
     display: inline-block;
     border-radius: initial;
-    background: rgba(#000, 0.38);
+    background: rgba(#fff, 0.6);
     margin-left: 8px;
   }
   .swiper-pagination-bullet-active {
@@ -344,6 +337,9 @@ img {
   top: calc(64px + 128px);
   z-index: 100;
   cursor: pointer;
+  @include sp {
+    display: none;
+  }
   &__icon {
     width: 14px;
     height: 14px;
