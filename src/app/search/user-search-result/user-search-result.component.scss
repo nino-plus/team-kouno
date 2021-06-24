@@ -34,3 +34,15 @@
     }
   }
 }
+
+.not-found {
+  min-height: calc(100vh - 128px);
+  display: grid;
+  place-items: center;
+  place-content: center;
+  font-size: 14px;
+  opacity: 0.6;
+  &__text:last-of-type {
+    margin-bottom: 24px;
+  }
+}
