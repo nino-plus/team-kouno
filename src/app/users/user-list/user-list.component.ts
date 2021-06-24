@@ -75,6 +75,7 @@ export class UserListComponent implements OnInit, OnDestroy {
     );
 
     this.getOnlineUsers();
+    this.getFeeds();
   }
 
   ngOnDestroy(): void {
