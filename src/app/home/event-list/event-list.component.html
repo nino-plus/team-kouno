@@ -34,7 +34,9 @@
 
       <div
         class="swiper-nav"
-        *ngIf="eventLists.length > categoryConfig.slidesPerView"
+        *ngIf="
+          eventLists.length > categoryConfig.slidesPerView || !isLargeScreen
+        "
       >
         <div
           class="swiper-nav__btn swiper-nav__btn--cat-prev"

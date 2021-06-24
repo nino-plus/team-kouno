@@ -5,6 +5,7 @@ import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { EventService } from 'src/app/services/event.service';
 import { SearchService } from 'src/app/services/search.service';
+import { UiService } from 'src/app/services/ui.service';
 import { SwiperOptions } from 'swiper';
 import { SwiperComponent } from 'swiper/angular';
 
@@ -17,6 +18,7 @@ export class EventListComponent implements OnInit {
   @Input() user: User;
   @Input() listType: string;
   screenWidth: any;
+  isLargeScreen: boolean = this.uiService.isLargeScreen();
   listSource: string = 'スポーツ';
   categoryData: string[] = [
     'スポーツ',
@@ -44,20 +46,20 @@ export class EventListComponent implements OnInit {
   @ViewChild('categorySlides') categorySlides: SwiperComponent;
 
   onliveConfig: SwiperOptions = {
-    initialSlide: 1,
     slidesPerView: 5,
-    observer: true,
     spaceBetween: 16,
     navigation: {
       nextEl: '.swiper-nav__btn--liv-next',
       prevEl: '.swiper-nav__btn--liv-prev',
     },
     breakpoints: {
-      350: {
-        slidesPerView: 1,
+      240: {
+        slidesPerView: 2,
+        spaceBetween: 0,
       },
       720: {
         slidesPerView: 2,
+        spaceBetween: 0,
       },
       960: {
         slidesPerView: 3,
@@ -70,20 +72,22 @@ export class EventListComponent implements OnInit {
       },
     },
   };
+
   categoryConfig: SwiperOptions = {
     slidesPerView: 5,
-    observer: true,
     spaceBetween: 16,
     navigation: {
       nextEl: '.swiper-nav__btn--cat-next',
       prevEl: '.swiper-nav__btn--cat-prev',
     },
     breakpoints: {
-      350: {
-        slidesPerView: 1,
+      240: {
+        slidesPerView: 2,
+        spaceBetween: 0,
       },
       720: {
         slidesPerView: 2,
+        spaceBetween: 0,
       },
       960: {
         slidesPerView: 3,
@@ -96,6 +100,7 @@ export class EventListComponent implements OnInit {
       },
     },
   };
+
   popularConfig: SwiperOptions = {
     slidesPerView: 5,
     spaceBetween: 16,
@@ -104,11 +109,13 @@ export class EventListComponent implements OnInit {
       prevEl: '.swiper-nav__btn--pop-prev',
     },
     breakpoints: {
-      350: {
-        slidesPerView: 1,
+      240: {
+        slidesPerView: 2,
+        spaceBetween: 0,
       },
       720: {
         slidesPerView: 2,
+        spaceBetween: 0,
       },
       960: {
         slidesPerView: 3,
@@ -125,13 +132,12 @@ export class EventListComponent implements OnInit {
 
   constructor(
     private eventService: EventService,
-    private searchService: SearchService
+    private searchService: SearchService,
+    public uiService: UiService
   ) {}
 
   ngOnInit(): void {
     this.screenWidth = window.innerWidth;
-    console.log(this.screenWidth);
-
     this.getPopularEvents();
   }
 
