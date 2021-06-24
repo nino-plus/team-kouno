@@ -10,6 +10,7 @@
   height: 320px;
   border-radius: 8px;
   @include sp {
+    border-radius: 0;
     padding: 14vw 4%;
     height: 256px;
   }
