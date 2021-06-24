@@ -55,12 +55,22 @@ export class HomeComponent implements OnInit {
     pagination: {
       clickable: true,
       el: '.pagination',
-      bulletElement: 'span',
+      type: 'bullets',
     },
     resizeObserver: true,
     roundLengths: true,
     spaceBetween: 24,
     centeredSlides: true,
+    breakpoints: {
+      0: {
+        slidesPerView: 1,
+        spaceBetween: 0,
+      },
+      700: {
+        slidesPerView: 2,
+        spaceBetween: 24,
+      },
+    },
   };
 
   constructor(

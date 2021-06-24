@@ -3,8 +3,10 @@
     <ng-template swiperSlide *ngFor="let event of spEvents$ | async">
       <app-special [event]="event"></app-special>
     </ng-template>
-    <div class="pagination"></div>
   </swiper>
+
+  <div class="pagination"></div>
+
   <div class="navigation navigation--prev">
     <div class="navigation__icon navigation__icon--prev"></div>
   </div>
