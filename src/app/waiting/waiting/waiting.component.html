@@ -68,7 +68,7 @@
 
     <ng-contaner *ngIf="uiService.loading; else action">
       <div class="spinner">
-        <mat-spinner diameter="30"></mat-spinner>
+        <img src="assets/images/three-dots.svg" alt="" width="30px" />
         支払い処理中です
       </div>
     </ng-contaner>
@@ -82,15 +82,15 @@
             mat-flat-button
             (click)="
               [
-                (targetUser.ticketPrice > 0)
+                targetUser.ticketPrice > 0
                   ? openTicketDialog(user, targetUser)
                   : call(targetUser.uid, targetUser.name)
               ]
             "
             [disabled]="
-              (targetUser.ticketPrice > 0) &&
+              targetUser.ticketPrice > 0 &&
               !(customer$ | async)?.defaultPaymentMethod &&
-                !(customer$ | async)?.paymentMethods
+              !(customer$ | async)?.paymentMethods
             "
           >
             話しかける<mat-icon *ngIf="targetUser.ticketPrice">sell</mat-icon>
@@ -99,7 +99,7 @@
             *ngIf="
               targetUser.ticketPrice &&
               !(customer$ | async)?.defaultPaymentMethod &&
-                !(customer$ | async)?.paymentMethods
+              !(customer$ | async)?.paymentMethods
             "
             class="actions__hint"
           >

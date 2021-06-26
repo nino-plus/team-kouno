@@ -15,7 +15,7 @@
     <p class="product__price">入室料金：　¥{{ product.price }}</p>
     <ng-contaner *ngIf="uiService.loading; else action">
       <div class="product__spinner">
-        <mat-spinner diameter="30"></mat-spinner>
+        <img src="assets/images/three-dots.svg" alt="" width="30px" />
         支払い処理中です
       </div>
     </ng-contaner>

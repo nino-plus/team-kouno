@@ -52,7 +52,6 @@ export class ConnectedAccountService {
   getConnectedAccount(uid: string): Observable<ConnectedAccount> {
     return this.db
       .doc<ConnectedAccount>(`connectedAccounts/${uid}`)
-      .valueChanges()
-      .pipe(tap((d) => console.log(d.connectedAccountId)));
+      .valueChanges();
   }
 }
