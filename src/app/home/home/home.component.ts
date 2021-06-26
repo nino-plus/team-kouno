@@ -1,27 +1,20 @@
-import {
-  AfterContentInit,
-  AfterViewInit,
-  Component,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
-import { Event } from 'src/app/interfaces/event';
 import { EventService } from 'src/app/services/event.service';
+import { SwiperComponent } from 'swiper/angular';
 import SwiperCore, {
   Autoplay,
-  Thumbs,
-  Swiper,
+  Controller,
   EffectFade,
   Navigation,
   Pagination,
-  Controller,
   SwiperOptions,
+  Thumbs,
 } from 'swiper/core';
-import { SwiperComponent } from 'swiper/angular';
 
 SwiperCore.use([
   Autoplay,
@@ -37,50 +30,47 @@ SwiperCore.use([
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit, AfterViewInit {
+export class HomeComponent implements OnInit {
   user$: Observable<User> = this.authService.user$;
   events$: Observable<Event[]> = this.eventService.getFutureEvents();
   spEvents$: Observable<Event[]> = this.eventService.getSpecialEvents();
 
-  @ViewChild('galleryTop') galleryTop: SwiperComponent;
-  @ViewChild('galleryThumbs') galleryThumbs: SwiperComponent;
+  @ViewChild('tops', { static: false }) tops: SwiperComponent;
 
   topConfig: SwiperOptions = {
-    effect: 'fade',
     loop: true,
-    loopAdditionalSlides: 8,
+    loopAdditionalSlides: 3,
+    loopPreventsSlide: true,
     loopedSlides: 8,
-    slidesPerView: 8,
+    slidesPerView: 2,
     autoplay: {
       delay: 6000,
+      disableOnInteraction: false,
     },
-    navigation: true,
+    speed: 600,
+    navigation: {
+      nextEl: '.navigation--next',
+      prevEl: '.navigation--prev',
+    },
     pagination: {
       clickable: true,
       el: '.pagination',
-      bulletElement: 'span',
+      type: 'bullets',
     },
-    loopPreventsSlide: true,
-    observer: true,
-  };
-
-  thumbsConfig: SwiperOptions = {
-    slidesPerView: 8,
-    loop: true,
-    loopAdditionalSlides: 8,
-    loopPreventsSlide: true,
-    loopedSlides: 8,
-    autoplay: {
-      delay: 6000,
-    },
+    resizeObserver: true,
+    roundLengths: true,
+    spaceBetween: 24,
     centeredSlides: true,
-    slideToClickedSlide: true,
-    navigation: {
-      nextEl: '.navigation__icon--next',
-      prevEl: '.navigation__icon--prev',
+    breakpoints: {
+      0: {
+        slidesPerView: 1,
+        spaceBetween: 0,
+      },
+      700: {
+        slidesPerView: 2,
+        spaceBetween: 24,
+      },
     },
-    grabCursor: true,
-    observer: true,
   };
 
   constructor(
@@ -90,11 +80,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {}
-
-  ngAfterViewInit(): void {
-    this.galleryTop.swiperRef.controller.control = this.galleryThumbs.swiperRef;
-    this.galleryThumbs.swiperRef.controller.control = this.galleryTop.swiperRef;
-  }
 
   joinChannel(eventId: string, uid: string): void {
     this.router.navigateByUrl(`/event/${eventId}/${uid}`);

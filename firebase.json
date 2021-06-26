@@ -13,11 +13,7 @@
     {
       "target": "eventstand",
       "public": "dist/eventstand",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "headers": [
         {
           "source": "*.[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f].+(css|js)",
@@ -31,7 +27,7 @@
       ],
       "rewrites": [
         {
-          "source": "/article/**",
+          "source": "/event/**",
           "function": "render"
         },
         {

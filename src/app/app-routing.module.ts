@@ -5,6 +5,7 @@ import { MaintenanceGuard } from './guards/maintenance.guard';
 import { MainShellComponent } from './main-shell/main-shell.component';
 import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { SearchShellComponent } from './search-shell/search-shell.component';
 
 const routes: Routes = [
   {
@@ -28,11 +29,6 @@ const routes: Routes = [
         path: '',
         loadChildren: () =>
           import('./home/home.module').then((m) => m.HomeModule),
-      },
-      {
-        path: 'search',
-        loadChildren: () =>
-          import('./search/search.module').then((m) => m.SearchModule),
       },
       {
         path: 'settings',
@@ -92,6 +88,19 @@ const routes: Routes = [
         path: '',
         loadChildren: () =>
           import('./event/event.module').then((m) => m.EventModule),
+      },
+    ],
+  },
+  {
+    path: 'search',
+    canActivate: [MaintenanceGuard],
+    canLoad: [MaintenanceGuard],
+    component: SearchShellComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./search/search.module').then((m) => m.SearchModule),
       },
     ],
   },

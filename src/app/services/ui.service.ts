@@ -12,6 +12,8 @@ export class UiService {
   sidenavIsOpen = true;
   selector: 'chat' | 'participant' | null = 'chat';
 
+  scrollWrapperElement: any;
+
   constructor() {}
 
   isLargeScreen(container?: HTMLElement): boolean {

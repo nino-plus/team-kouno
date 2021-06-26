@@ -71,9 +71,11 @@ export class AppComponent {
             .ref(`/status/${user.uid}`)
             .set(this.isOnlineForDatabase);
 
-          this.firestoreUsersRef
-            .doc(user.uid)
-            .set(this.isOnlineForFirestore, { merge: true });
+          if (user.uid) {
+            this.firestoreUsersRef
+              .doc(user.uid)
+              .set(this.isOnlineForFirestore, { merge: true });
+          }
         });
     });
   }

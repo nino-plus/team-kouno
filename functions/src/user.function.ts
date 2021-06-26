@@ -1,6 +1,9 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import { deleteCollectionByReference } from './utils/firebase.util';
+import { Algolia } from './utils/algolia.util';
+
+const algolia = new Algolia();
 
 const db = admin.firestore();
 
@@ -8,20 +11,28 @@ export const createUser = functions
   .region('asia-northeast1')
   .auth.user()
   .onCreate(async (user: any) => {
-    return db.doc(`users/${user.uid}`).set(
-      {
-        uid: user.uid,
-        name: user.displayName,
-        avatarURL: user.photoURL,
-        email: user.email,
-        createdAt: new Date(),
-        followerCount: 0,
-        followingCount: 0,
-        myEventCount: 0,
-        isPrivate: false,
-      },
-      { merge: true }
-    );
+    const userData = {
+      uid: user.uid,
+      name: user.displayName,
+      avatarURL: user.photoURL,
+      email: user.email,
+      createdAt: new Date(),
+      followerCount: 0,
+      followingCount: 0,
+      myEventCount: 0,
+      isPrivate: false,
+    };
+    return db
+      .doc(`users/${user.uid}`)
+      .set(userData, { merge: true })
+      .then(() => {
+        functions.logger.info(userData, 'algoliaユーザー');
+        return algolia.saveRecord({
+          indexName: 'users',
+          data: userData,
+          idKey: 'uid',
+        });
+      });
   });
 
 export const deleteAfUser = functions

@@ -2,14 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SearchIndex } from 'functions/node_modules/algoliasearch';
-import { SearchService } from '../services/search.service';
+import { SearchService } from 'src/app/services/search.service';
 
 @Component({
-  selector: 'app-search-box',
-  templateUrl: './search-box.component.html',
-  styleUrls: ['./search-box.component.scss'],
+  selector: 'app-user-search',
+  templateUrl: './user-search.component.html',
+  styleUrls: ['./user-search.component.scss'],
 })
-export class SearchBoxComponent implements OnInit {
+export class UserSearchComponent implements OnInit {
+  events: Event[];
   searchControl: FormControl = new FormControl();
   index: SearchIndex;
   searchOptions = [];
@@ -29,7 +30,7 @@ export class SearchBoxComponent implements OnInit {
   }
 
   routeSearch(searchQuery: string): void {
-    this.router.navigate(['/search'], {
+    this.router.navigate(['/search/user'], {
       queryParamsHandling: 'merge',
       queryParams: { searchQuery },
     });

@@ -36,7 +36,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import localeJa from '@angular/common/locales/ja';
 import { registerLocaleData } from '@angular/common';
-import { SearchBoxComponent } from './search-box/search-box.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NotFoundComponent } from './not-found/not-found.component';
@@ -56,6 +55,10 @@ import { BottomNavComponent } from './bottom-nav/bottom-nav.component';
 import { EventShellComponent } from './event-shell/event-shell.component';
 import { MatRippleModule } from '@angular/material/core';
 import { MaintenanceComponent } from './maintenance/maintenance.component';
+import { SearchShellComponent } from './search-shell/search-shell.component';
+import { SharedModule } from './shared/shared.module';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 registerLocaleData(localeJa);
 
@@ -63,7 +66,6 @@ registerLocaleData(localeJa);
   declarations: [
     AppComponent,
     HeaderComponent,
-    SearchBoxComponent,
     NotFoundComponent,
     AutoOpenLoginMenuComponent,
     InviteDialogComponent,
@@ -74,6 +76,7 @@ registerLocaleData(localeJa);
     BottomNavComponent,
     EventShellComponent,
     MaintenanceComponent,
+    SearchShellComponent,
   ],
   imports: [
     BrowserModule,
@@ -125,6 +128,9 @@ registerLocaleData(localeJa);
     MatSidenavModule,
     MatListModule,
     MatRippleModule,
+    SharedModule,
+    InfiniteScrollModule,
+    ScrollingModule,
   ],
   providers: [
     { provide: REGION, useValue: 'asia-northeast1' },

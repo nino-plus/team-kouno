@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { fade } from 'src/app/animations/animations';
@@ -16,7 +17,11 @@ export class LogCardComponent implements OnInit {
   @Input() log: LogWithUser;
   event$: Observable<Event>;
 
-  constructor(private eventService: EventService, private router: Router) {}
+  constructor(
+    private eventService: EventService,
+    private router: Router,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.event$ = this.eventService.getEvent(this.log.logId);
@@ -30,5 +35,9 @@ export class LogCardComponent implements OnInit {
 
   navigateEvent(eventId: string): void {
     this.router.navigateByUrl('/event/' + eventId);
+  }
+
+  openInfo() {
+    this.snackBar.open('このイベントは削除されました');
   }
 }
