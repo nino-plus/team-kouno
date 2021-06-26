@@ -77,10 +77,10 @@ export class EventCardComponent implements OnInit {
             this.join(event, $event);
           } else {
             if (
-              event.headcountLimit >= event.reserveUserCount ||
-              event.headcountLimit >= event.participantCount
+              event.headcountLimit <= event.reserveUserCount ||
+              event.headcountLimit <= event.participantCount
             ) {
-              this.snackbar.open('このイベントには参加できません');
+              this.snackbar.open('このイベントには募集定員一杯です');
             } else {
               if (event.price > 0) {
                 this.chackCustomer(event, $event);

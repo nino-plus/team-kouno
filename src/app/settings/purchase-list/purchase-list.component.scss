@@ -1,4 +1,13 @@
 :host {
   display: block;
   padding: 24px;
+  min-height: 300px;
+}
+.processing {
+  display: flex;
+  height: 70vh;
+  width: 100%;
+  img {
+    margin: auto;
+  }
 }

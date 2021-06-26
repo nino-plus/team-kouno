@@ -61,6 +61,7 @@ export class EditorComponent implements OnInit {
     category: ['', [Validators.required]],
     startAt: ['', [Validators.required]],
     exitAt: [''],
+    headcountLimit: ['', [Validators.required]],
     ticketPrice: [
       '',
       [Validators.pattern(/\d+/), Validators.min(0), Validators.max(1000000)],
@@ -109,6 +110,8 @@ export class EditorComponent implements OnInit {
           ownerId: event.ownerId,
           startAt: event.startAt.toDate(),
           exitAt: event.exitAt.toDate(),
+          ticketPrice: event.price,
+          headcountLimit: event.headcountLimit,
         });
       }
     });
@@ -132,7 +135,7 @@ export class EditorComponent implements OnInit {
       exitAt: formData.exitAt,
       createdAt: firebase.firestore.Timestamp.now(),
       price: formData.ticketPrice,
-      // headcountLimit: formData.headcountLimit,  人数制限導入用
+      headcountLimit: formData.headcountLimit,
     };
 
     if (this.form.controls.ticketPrice.dirty) {
