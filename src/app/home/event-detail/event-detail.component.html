@@ -88,105 +88,111 @@
       <button routerLink="/" mat-button type="button" class="actions__back">
         戻る
       </button>
-      <ng-container [ngSwitch]="type">
-        <ng-container *ngSwitchDefault>
-          <ng-container *ngIf="user$ | async as user; else default">
-            <ng-container *ngIf="reservedUids$ | async as uids">
-              <ng-container *ngIf="!uids.includes(user.uid); else cancel">
-                <button
-                  mat-raised-button
-                  class="actions__submit"
-                  (click)="reserveEvent(event, user.uid)"
-                  mat-dialog-close
-                >
-                  イベントを予約
-                </button>
-                <p class="actions__info">
-                  予約すると自分のカレンダーに表示されるようになります❤️
-                </p>
-              </ng-container>
-              <ng-template #cancel>
-                <button
-                  mat-raised-button
-                  class="actions__submit"
-                  (click)="cancelReserve(event, user.uid)"
-                  mat-dialog-close
-                >
-                  予約をキャンセル
-                </button>
-              </ng-template>
-            </ng-container>
-            <ng-container *ngIf="event.startAt < eventService.dateNow">
-              <ng-container *ngIf="!event.price || (paidUser$ | async)">
-                <button
-                  mat-raised-button
-                  class="actions__submit"
-                  (click)="joinChannel(event, user.uid)"
-                  mat-dialog-close
-                >
-                  イベントに参加
-                </button>
-              </ng-container>
-              <ng-container
-                *ngIf="
-                  !(paidUser$ | async) &&
-                  (event.headcountLimit >= event.reserveUserCount ||
-                    event.headcountLimit >= event.participantCount)
-                "
-                >人数制限を超えました</ng-container
-              >
-              <ng-container *ngIf="event.price">
-                <ng-container *ngIf="customer$ | async as cutomer">
+      <ng-container
+        *ngIf="
+          !(paidUser$ | async) &&
+            (event.headcountLimit <= event.reserveUserCount ||
+              event.headcountLimit <= event.participantCount);
+          else switch
+        "
+        ><button mat-raised-button class="actions__submit disable">
+          このイベントは募集定員一杯です
+        </button></ng-container
+      >
+      <ng-template #switch>
+        <ng-container [ngSwitch]="type">
+          <ng-container *ngSwitchDefault>
+            <ng-container *ngIf="user$ | async as user; else default">
+              <ng-container *ngIf="reservedUids$ | async as uids">
+                <ng-container *ngIf="!uids.includes(user.uid); else cancel">
                   <button
                     mat-raised-button
                     class="actions__submit"
-                    (click)="
-                      customer?.defaultPaymentMethod
-                        ? openPaymentDialog(event, user.uid)
-                        : openSettingCard()
-                    "
+                    (click)="reserveEvent(event, user.uid)"
                     mat-dialog-close
                   >
-                    イベントに参加<mat-icon>sell</mat-icon>
+                    イベントを予約
                   </button>
+                  <p class="actions__info">
+                    予約すると自分のカレンダーに表示されるようになります❤️
+                  </p>
+                </ng-container>
+                <ng-template #cancel>
+                  <button
+                    mat-raised-button
+                    class="actions__submit"
+                    (click)="cancelReserve(event, user.uid)"
+                    mat-dialog-close
+                  >
+                    予約をキャンセル
+                  </button>
+                </ng-template>
+              </ng-container>
+              <ng-container *ngIf="event.startAt < eventService.dateNow">
+                <ng-container *ngIf="!event.price || (paidUser$ | async)">
+                  <button
+                    mat-raised-button
+                    class="actions__submit"
+                    (click)="joinChannel(event, user.uid)"
+                    mat-dialog-close
+                  >
+                    イベントに参加
+                  </button>
+                </ng-container>
+
+                <ng-container *ngIf="event.price">
+                  <ng-container *ngIf="customer$ | async as cutomer">
+                    <button
+                      mat-raised-button
+                      class="actions__submit"
+                      (click)="
+                        customer?.defaultPaymentMethod
+                          ? openPaymentDialog(event, user.uid)
+                          : openSettingCard()
+                      "
+                      mat-dialog-close
+                    >
+                      イベントに参加<mat-icon>sell</mat-icon>
+                    </button>
+                  </ng-container>
                 </ng-container>
               </ng-container>
             </ng-container>
           </ng-container>
-        </ng-container>
 
-        <ng-template #default>
-          <button
-            mat-raised-button
-            class="actions__submit"
-            (click)="openInfoDialog()"
-            [class.disable]
-          >
-            イベントを予約
-          </button>
-          <p class="actions__info">
-            予約すると自分のカレンダーに表示されるようになります❤️
-          </p>
-          <button
-            mat-raised-button
-            class="actions__submit"
-            (click)="openInfoDialog()"
-            [class.disable]
-          >
-            イベントに参加
-          </button>
-        </ng-template>
-        <ng-container *ngSwitchCase="'owner'">
-          <button
-            mat-raised-button
-            class="actions__submit"
-            (click)="openDeleteDialog(event.eventId)"
-            mat-dialog-close
-          >
-            イベントを削除
-          </button>
+          <ng-template #default>
+            <button
+              mat-raised-button
+              class="actions__submit"
+              (click)="openInfoDialog()"
+              [class.disable]
+            >
+              イベントを予約
+            </button>
+            <p class="actions__info">
+              予約すると自分のカレンダーに表示されるようになります❤️
+            </p>
+            <button
+              mat-raised-button
+              class="actions__submit"
+              (click)="openInfoDialog()"
+              [class.disable]
+            >
+              イベントに参加
+            </button>
+          </ng-template>
+          <ng-container *ngSwitchCase="'owner'">
+            <button
+              mat-raised-button
+              class="actions__submit"
+              (click)="openDeleteDialog(event.eventId)"
+              mat-dialog-close
+            >
+              イベントを削除
+            </button>
+          </ng-container>
         </ng-container>
-      </ng-container>
+      </ng-template>
     </div>
   </div>
 </ng-container>
