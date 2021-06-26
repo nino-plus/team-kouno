@@ -16,6 +16,7 @@ import {
   OwlNativeDateTimeModule,
 } from '@danielmoncada/angular-datetime-picker';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { QuillModule } from 'ngx-quill';
 
 @NgModule({
   declarations: [EditorComponent],
@@ -35,6 +36,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     OwlNativeDateTimeModule,
     MatTooltipModule,
     MatDividerModule,
+    QuillModule,
   ],
 })
 export class EditorModule {}

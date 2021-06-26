@@ -45,33 +45,6 @@
     </div>
 
     <div class="form-grid">
-      <p class="form-grid__label">イベント詳細</p>
-      <mat-form-field class="form-field" appearance="outline">
-        <textarea
-          matInput
-          autocomplete="off"
-          formControlName="description"
-          [maxlength]="DESCRIPTION_MAX_LENGTH"
-          required
-          placeholder="イベントの説明文を入力してください"
-          matTextareaAutosize
-          [matAutosizeMinRows]="4"
-        >
-        </textarea>
-        <mat-hint align="end"
-          >{{ form.get('description').value.length }} /
-          {{ DESCRIPTION_MAX_LENGTH }}</mat-hint
-        >
-        <mat-error *ngIf="form.get('description').hasError('maxlength')"
-          >最大{{ DESCRIPTION_MAX_LENGTH }}文字です。</mat-error
-        >
-        <mat-error *ngIf="form.get('description').hasError('required')">
-          必須入力です。
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="form-grid">
       <p class="form-grid__label">開始時間</p>
       <mat-form-field class="form-field" appearance="outline">
         <input
@@ -145,46 +118,49 @@
 
     <div class="form-grid">
       <p class="form-grid__label">参加料金設定</p>
-      <ng-container
-      *ngIf="connectedAccountId$ | async; else createAccount"
-    >
-      <div class="form-grid__ticket-wrap">
-        <mat-form-field appearance="outline">
-          <mat-label>金額</mat-label>
-          <input
-            type="number"
-            formControlName="ticketPrice"
-            step="100"
-            matInput
-            autocomplete="off"
-            placeholder="1000"
-          />
-          <span matSuffix>円</span>
-        </mat-form-field>
-        <button
-          type="button"
-          class="form-grid__ticket-account-btn"
-          color="basic"
-          mat-stroked-button
-          (click)="
-            connectedAccountService.createStripeConnectedAccount()
-          "
-        >
-          販売アカウント変更
-        </button>
-      </div>
-    </ng-container>
-    <ng-template #createAccount>
-      <p>
-        チケット料金の設定をするには、販売アカウントを作成してください。<a
-          class="form-grid__ticket"
-          (click)="
-            connectedAccountService.createStripeConnectedAccount()
-          "
-          >販売アカウント作成</a
-        >
-      </p>
-    </ng-template>
+      <ng-container *ngIf="connectedAccountId$ | async; else createAccount">
+        <div class="form-grid__ticket-wrap">
+          <mat-form-field appearance="outline">
+            <mat-label>金額</mat-label>
+            <input
+              type="number"
+              formControlName="ticketPrice"
+              step="100"
+              matInput
+              autocomplete="off"
+              placeholder="1000"
+            />
+            <span matSuffix>円</span>
+          </mat-form-field>
+          <button
+            type="button"
+            class="form-grid__ticket-account-btn"
+            color="basic"
+            mat-stroked-button
+            (click)="connectedAccountService.createStripeConnectedAccount()"
+          >
+            販売アカウント変更
+          </button>
+        </div>
+      </ng-container>
+      <ng-template #createAccount>
+        <p>
+          チケット料金の設定をするには、販売アカウントを作成してください。<a
+            class="form-grid__ticket"
+            (click)="connectedAccountService.createStripeConnectedAccount()"
+            >販売アカウント作成</a
+          >
+        </p>
+      </ng-template>
+    </div>
+
+    <div class="form-grid">
+      <p class="form-grid__label">イベント詳細</p>
+      <quill-editor
+        formControlName="description"
+        [styles]="{ height: '320px' }"
+        [sanitize]="true"
+      ></quill-editor>
     </div>
 
     <div class="actions">
