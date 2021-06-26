@@ -12,6 +12,7 @@
   transition: ease 0.3s;
   @include sp {
     border-radius: initial;
+    margin-left: 16px;
   }
   &:hover {
     transition-duration: 0.3s;
@@ -40,8 +41,8 @@
     font-size: 12px;
     border-radius: 14px;
     height: 26px;
-    @include sp-s {
-      font-size: 12px;
+    @include sp {
+      font-size: 10px;
     }
     &--reserve {
       background: rgba(#303030, 0.8);
@@ -67,10 +68,10 @@
     font-weight: 600;
     color: #fff;
     &--s {
-      font-size: 10px;
+      font-size: 9px;
     }
-    @include sp-s {
-      font-size: 16px;
+    @include sp {
+      font-size: 12px;
     }
   }
   &__participants-text {
@@ -128,7 +129,7 @@
     margin-right: 8px;
     border-radius: 14px;
     @include sp-s {
-      font-size: 12px;
+      font-size: 10px;
     }
   }
   &__body-flex {
@@ -143,9 +144,17 @@
     @include tablet {
       font-size: 16px;
     }
+    @include sp {
+      margin-right: 2px;
+      font-size: 12px;
+    }
   }
   &__day {
     margin-right: 4px;
+    @include sp {
+      margin-right: 2px;
+      font-size: 12px;
+    }
   }
   &__category {
     display: inline-block;
@@ -172,8 +181,8 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     margin-bottom: 2px;
-    @include sp-s {
-      font-size: 14px;
+    @include sp {
+      font-size: 13px;
     }
   }
   &__info {
@@ -182,5 +191,8 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
+    @include sp {
+      font-size: 12px;
+    }
   }
 }

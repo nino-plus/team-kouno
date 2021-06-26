@@ -26,6 +26,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { StripeIntervalPipe } from '../pipes/stripe-interval.pipe';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { EventStoreComponent } from './event-store/event-store.component';
+import { SearchBoxComponent } from './search-box/search-box.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { UserSearchBoxComponent } from './user-search-box/user-search-box.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +43,8 @@ import { EventStoreComponent } from './event-store/event-store.component';
     UserStoreComponent,
     StripeIntervalPipe,
     EventStoreComponent,
+    SearchBoxComponent,
+    UserSearchBoxComponent,
   ],
   imports: [
     CommonModule,
@@ -59,6 +64,7 @@ import { EventStoreComponent } from './event-store/event-store.component';
     ClipboardModule,
     MatSelectModule,
     MatProgressSpinnerModule,
+    MatAutocompleteModule,
   ],
   exports: [
     EventCardComponent,
@@ -70,6 +76,8 @@ import { EventStoreComponent } from './event-store/event-store.component';
     UserStoreComponent,
     StripeIntervalPipe,
     EventStoreComponent,
+    SearchBoxComponent,
+    UserSearchBoxComponent,
   ],
 })
 export class SharedModule {}

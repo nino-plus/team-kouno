@@ -3,19 +3,29 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { Follower } from '../interfaces/follower';
 import { Following } from '../interfaces/following';
+import { Log } from '../interfaces/log';
 import { UnfollowDialogComponent } from '../shared/unfollow-dialog/unfollow-dialog.component';
-import { UserService } from './user.service';
-
 @Injectable({
   providedIn: 'root',
 })
 export class UserFollowService {
+  logs: firebase.firestore.DocumentData[];
   constructor(private db: AngularFirestore, private dialog: MatDialog) {}
 
-  follow(uid: string, targetId: string): void {
+  async follow(uid: string, targetId: string): Promise<void> {
+    this.db
+      .collection<Log>(`users/${targetId}/logs`)
+      .valueChanges()
+      .pipe(take(1))
+      .subscribe((vals) => {
+        vals.forEach((log) => {
+          this.db.collection(`users/${uid}/feeds`).add(log);
+        });
+      });
+
     this.db.doc<Following>(`users/${uid}/follows/${targetId}`).set({
       uid,
       followingId: targetId,

@@ -1,32 +1,60 @@
-<div
-  class="card__wrap"
-  *ngIf="event$ | async as event"
-  (click)="navigateEvent(event.eventId)"
->
-  <ng-container *ngIf="log.user.state === 'online'">
-    <span @fade class="card__active-ring"></span>
-  </ng-container>
-  <a (click)="navigateProfile($event)" class="card__avatar-wrap">
-    <img [src]="log.user.avatarURL" alt="" class="card__avatar" />
-  </a>
-  <div class="card__info-wrap">
-    <p class="card__name" *ngIf="log.type === 'create'">
-      {{ log.user.name }}さんが新しいイベントを作りました。
-    </p>
-    <ng-container *ngIf="event$ | async as event; else blank">
-      <p class="card__name" *ngIf="log.type === 'reserve'">
-        {{ log.user.name }}さんが{{ event.name }}に参加予約しました。
-      </p>
+<ng-container *ngIf="event$ | async as event; else nothing">
+  <div class="card__wrap" (click)="navigateEvent(event.eventId)">
+    <ng-container *ngIf="log.user?.state === 'online'">
+      <span @fade class="card__active-ring"></span>
     </ng-container>
-    <ng-template #blank>
-      <p class="card__name" *ngIf="log.type === 'reserve'">
-        {{ log.user.name }}さんがイベントに参加予約しました。
+    <a (click)="navigateProfile($event)" class="card__avatar-wrap">
+      <img [src]="log.user?.avatarURL" alt="" class="card__avatar" />
+    </a>
+    <div class="card__info-wrap">
+      <p class="card__name" *ngIf="log.type === 'create'">
+        {{ log.user?.name }}さんが新しいイベントを作りました。
       </p>
-    </ng-template>
-    <div class="card__bottom-wrap">
-      <p class="card__date">
-        {{ log.createdAt.toMillis() | date: 'MM/dd HH:mm' }}
-      </p>
+      <ng-container *ngIf="event$ | async as event; else blank">
+        <p class="card__name" *ngIf="log.type === 'reserve'">
+          {{ log.user?.name }}さんが{{ event.name }}に参加予約しました。
+        </p>
+      </ng-container>
+      <ng-template #blank>
+        <p class="card__name" *ngIf="log.type === 'reserve'">
+          {{ log.user?.name }}さんがイベントに参加予約しました。
+        </p>
+      </ng-template>
+      <div class="card__bottom-wrap">
+        <p class="card__date">
+          {{ log.createdAt.toMillis() | date: 'MM/dd HH:mm' }}
+        </p>
+      </div>
     </div>
   </div>
-</div>
+</ng-container>
+<ng-template #nothing>
+  <div class="card__wrap" (click)="openInfo()">
+    <ng-container *ngIf="log.user?.state === 'online'">
+      <span @fade class="card__active-ring"></span>
+    </ng-container>
+    <a (click)="navigateProfile($event)" class="card__avatar-wrap">
+      <img [src]="log.user?.avatarURL" alt="" class="card__avatar" />
+    </a>
+    <div class="card__info-wrap">
+      <p class="card__name" *ngIf="log.type === 'create'">
+        {{ log.user?.name }}さんが新しいイベントを作りました。
+      </p>
+      <ng-container *ngIf="event$ | async as event; else blank">
+        <p class="card__name" *ngIf="log.type === 'reserve'">
+          {{ log.user?.name }}さんが{{ event.name }}に参加予約しました。
+        </p>
+      </ng-container>
+      <ng-template #blank>
+        <p class="card__name" *ngIf="log.type === 'reserve'">
+          {{ log.user?.name }}さんがイベントに参加予約しました。
+        </p>
+      </ng-template>
+      <div class="card__bottom-wrap">
+        <p class="card__date">
+          {{ log.createdAt?.toMillis() | date: 'MM/dd HH:mm' }}
+        </p>
+      </div>
+    </div>
+  </div>
+</ng-template>

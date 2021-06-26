@@ -14,6 +14,7 @@ export class SearchService {
   index = {
     events: searchClient.initIndex('events'),
     popularEvents: searchClient.initIndex('popular'),
+    users: searchClient.initIndex('users'),
   };
 
   constructor() {}

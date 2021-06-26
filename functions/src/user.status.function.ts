@@ -20,11 +20,16 @@ export const onUserStatusChanged = functions.database
 
     eventStatus.lastChangedAt = new Date(eventStatus.lastChangedAt);
 
-    return userStatusFirestoreRef.set(
-      {
-        state: eventStatus.state,
-        lastChangedAt: eventStatus.lastChangedAt,
-      },
-      { merge: true }
-    );
+    if (userStatusFirestoreRef) {
+      return userStatusFirestoreRef.set(
+        {
+          state: eventStatus.state,
+          lastChangedAt: eventStatus.lastChangedAt,
+          uid: context.params.uid,
+        },
+        { merge: true }
+      );
+    } else {
+      return null;
+    }
   });

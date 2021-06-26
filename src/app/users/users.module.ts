@@ -8,6 +8,8 @@ import { LogCardComponent } from './log-card/log-card.component';
 import { UserCardComponent } from './user-card/user-card.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -16,6 +18,13 @@ import { MatIconModule } from '@angular/material/icon';
     LogCardComponent,
     UserCardComponent,
   ],
-  imports: [CommonModule, UsersRoutingModule, MatButtonModule, MatIconModule],
+  imports: [
+    CommonModule,
+    UsersRoutingModule,
+    MatButtonModule,
+    MatIconModule,
+    InfiniteScrollModule,
+    MatProgressSpinnerModule,
+  ],
 })
 export class UsersModule {}

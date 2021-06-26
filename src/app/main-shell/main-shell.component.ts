@@ -1,3 +1,5 @@
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
 import {
   AfterViewInit,
   Component,
@@ -5,23 +7,22 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { InviteWithSender } from '../intefaces/invite';
-import { User } from '../interfaces/user';
-import { AuthService } from '../services/auth.service';
-import { MeetingService } from '../services/meeting.service';
-import { SoundService } from '../services/sound.service';
-import firebase from 'firebase/app';
 import { MatDialog } from '@angular/material/dialog';
-import { InviteDialogComponent } from '../invite-dialog/invite-dialog.component';
+import { MatSidenav, MatSidenavContent } from '@angular/material/sidenav';
+import firebase from 'firebase/app';
+import { Observable, Subscription } from 'rxjs';
 import { shareReplay, skip, switchMap } from 'rxjs/operators';
-import { UiService } from '../services/ui.service';
 import {
   easeSlideForContent,
   easeSlideForSideNav,
 } from '../animations/animations';
-import { MatSidenav } from '@angular/material/sidenav';
-import { BreakpointObserver } from '@angular/cdk/layout';
+import { InviteWithSender } from '../intefaces/invite';
+import { User } from '../interfaces/user';
+import { InviteDialogComponent } from '../invite-dialog/invite-dialog.component';
+import { AuthService } from '../services/auth.service';
+import { MeetingService } from '../services/meeting.service';
+import { SoundService } from '../services/sound.service';
+import { UiService } from '../services/ui.service';
 
 @Component({
   selector: 'app-main-shell',
@@ -37,8 +38,9 @@ export class MainShellComponent implements OnInit, OnDestroy, AfterViewInit {
   invites$: Observable<InviteWithSender[]>;
   dateNow: firebase.firestore.Timestamp = firebase.firestore.Timestamp.now();
 
-  @ViewChild(MatSidenav)
-  sidenav!: MatSidenav;
+  @ViewChild(MatSidenav) sidenav!: MatSidenav;
+  @ViewChild('scrollWrap') scrollWrap: MatSidenavContent;
+  @ViewChild(CdkScrollable) scrollable: CdkScrollable;
 
   constructor(
     private meetingService: MeetingService,
@@ -46,7 +48,8 @@ export class MainShellComponent implements OnInit, OnDestroy, AfterViewInit {
     private dialog: MatDialog,
     private authService: AuthService,
     public uiService: UiService,
-    private observer: BreakpointObserver
+    private observer: BreakpointObserver,
+    public scroll: ScrollDispatcher
   ) {}
 
   ngOnInit(): void {
@@ -90,5 +93,7 @@ export class MainShellComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       });
     });
+
+    this.uiService.scrollWrapperElement = this.scrollWrap.getElementRef().nativeElement;
   }
 }
