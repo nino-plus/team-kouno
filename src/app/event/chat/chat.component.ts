@@ -1,23 +1,22 @@
 import {
   Component,
-  OnInit,
-  Input,
-  ViewChild,
   ElementRef,
+  Input,
   OnDestroy,
+  OnInit,
+  ViewChild,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
-import { ChatWithUser } from 'src/app/interfaces/chat';
-import { AuthService } from 'src/app/services/auth.service';
-import { ChatService } from 'src/app/services/chat.service';
-import 'quill-emoji/dist/quill-emoji.js';
-import { UiService } from 'src/app/services/ui.service';
-import { shareReplay, skip } from 'rxjs/operators';
-import { SoundService } from 'src/app/services/sound.service';
 import firebase from 'firebase/app';
+import 'quill-emoji/dist/quill-emoji.js';
+import { Observable, Subscription } from 'rxjs';
+import { shareReplay, skip } from 'rxjs/operators';
+import { ChatWithUser } from 'src/app/interfaces/chat';
+import { EventWithOwner } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
-import { Event, EventWithOwner } from 'src/app/interfaces/event';
+import { ChatService } from 'src/app/services/chat.service';
+import { SoundService } from 'src/app/services/sound.service';
+import { UiService } from 'src/app/services/ui.service';
 
 @Component({
   selector: 'app-chat',
@@ -33,6 +32,12 @@ export class ChatComponent implements OnInit, OnDestroy {
   @ViewChild('target') target: ElementRef;
   form = new FormControl();
   chats$: Observable<ChatWithUser[]>;
+
+  modules = {
+    'emoji-shortname': true,
+    'emoji-toolbar': true,
+    toolbar: [['emoji'], ['link', 'video']],
+  };
 
   constructor(
     private chatService: ChatService,

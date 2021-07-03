@@ -67,7 +67,9 @@
           <p class="event__info-heading">イベント詳細</p>
           <mat-divider></mat-divider>
           <div class="info">
-            <p class="info__description">{{ event.description }}</p>
+            <div class="info__description">
+              <quill-view-html [content]="event.description"></quill-view-html>
+            </div>
 
             <p class="info__heading">主催者</p>
             <div class="info__owner-wrap" *ngIf="owner$ | async as owner">
