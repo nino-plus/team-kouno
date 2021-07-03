@@ -117,14 +117,7 @@ registerLocaleData(localeJa);
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000',
     }),
-    QuillModule.forRoot({
-      modules: {
-        toolbar: [['emoji']],
-        'emoji-toolbar': true,
-        'emoji-textarea': false,
-        'emoji-shortname': true,
-      },
-    }),
+    QuillModule.forRoot(),
     MatSidenavModule,
     MatListModule,
     MatRippleModule,
