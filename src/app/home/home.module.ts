@@ -22,6 +22,7 @@ import { SpecialComponent } from './special/special.component';
 import { SwiperModule } from 'swiper/angular';
 import { EventListComponent } from './event-list/event-list.component';
 import { EventDetailComponent } from './event-detail/event-detail.component';
+import { QuillModule } from 'ngx-quill';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { EventDetailComponent } from './event-detail/event-detail.component';
     MatTooltipModule,
     SharedModule,
     SwiperModule,
+    QuillModule,
   ],
 })
 export class HomeModule {}
