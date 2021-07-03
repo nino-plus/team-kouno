@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import firebase from 'firebase/app';
+import { QuillConfig, QuillToolbarConfig } from 'ngx-quill';
 import { Observable } from 'rxjs';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
@@ -12,6 +13,7 @@ import { ConnectedAccountService } from 'src/app/services/connected-account.serv
 import { EventService } from 'src/app/services/event.service';
 import { PaymentService } from 'src/app/services/payment.service';
 import { ProductService } from 'src/app/services/product.service';
+import 'quill-emoji/dist/quill-emoji.js';
 
 @Component({
   selector: 'app-editor',
@@ -19,8 +21,8 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./editor.component.scss'],
 })
 export class EditorComponent implements OnInit {
-  readonly NAME_MAX_LENGTH = 20;
-  readonly DESCRIPTION_MAX_LENGTH = 200;
+  readonly NAME_MAX_LENGTH = 36;
+  readonly DESCRIPTION_MAX_LENGTH = 4000;
   readonly PASS_MIN_LENGTH = 6;
   oldImageUrl = '';
   imageFile: string;
@@ -76,7 +78,7 @@ export class EditorComponent implements OnInit {
     { value: 'プログラミング' },
     { value: 'ゲーム' },
     { value: 'アニメ' },
-    { value: 'アイドルØ' },
+    { value: 'アイドル' },
     { value: '映画' },
     { value: '漫画' },
     { value: '政治経済' },
@@ -84,6 +86,20 @@ export class EditorComponent implements OnInit {
     { value: '地域' },
     { value: 'オールラウンド' },
   ];
+
+  modules = {
+    'emoji-shortname': true,
+    'emoji-toolbar': true,
+    toolbar: [
+      ['emoji'],
+      ['bold', { color: [] }, { background: [] }],
+      [{ header: [1, 2, 3, false] }],
+      ['blockquote', 'code-block'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['link', 'image', 'video'],
+      ['clean'],
+    ],
+  };
 
   constructor(
     public connectedAccountService: ConnectedAccountService,
@@ -115,6 +131,29 @@ export class EditorComponent implements OnInit {
         });
       }
     });
+  }
+
+  onSelectionChanged = (event) => {
+    if (event.oldRange == null) {
+      this.onFocus(event);
+    }
+    if (event.range == null) {
+      this.onBlur(event);
+    }
+  };
+
+  onFocus(event) {
+    event.editor.theme.modules.toolbar.container.style.border =
+      '2px solid #1bcbe0';
+    event.editor.theme.options.container.style.border = '2px solid #1bcbe0';
+    event.editor.theme.options.container.style.borderTop = 0;
+  }
+
+  onBlur(event) {
+    event.editor.theme.modules.toolbar.container.style.border =
+      '1px solid rgba(255, 255, 255, 0.3)';
+    event.editor.theme.options.container.style.border =
+      '1px solid rgba(255, 255, 255, 0.3)';
   }
 
   onCroppedImage(image: string): void {

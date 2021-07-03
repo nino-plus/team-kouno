@@ -395,6 +395,24 @@ img {
 
 // quill config
 
+.content-editor {
+  .ql-container.ql-snow,
+  .ql-toolbar.ql-snow {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    transition: ease-out 0.16s;
+  }
+}
+
+.content-editor:hover .ql-container.ql-snow,
+.content-editor:hover .ql-toolbar.ql-snow {
+  border: 2px solid #fafafa;
+}
+
+.content-editor:hover .ql-container.ql-snow {
+  border-top: 0;
+}
+
 .chat {
   width: 280px;
   .ql-editor {
@@ -493,6 +511,10 @@ img {
   }
 }
 
+//
+
+//drawer-config
+
 .mat-drawer {
   @include sp {
     background: transparent;
@@ -520,6 +542,8 @@ img {
     height: calc(100vh - 56px);
   }
 }
+
+//
 
 .home-tab-group {
   .mat-tab-label .mat-tab-label-content {
