@@ -19,8 +19,9 @@ export class ConnectedAccountService {
   ) {}
 
   async createStripeConnectedAccount(): Promise<void> {
+    const redirectURL = location.href;
     const callable = this.fns.httpsCallable('getStripeConnectedAccountState');
-    const state = await callable({}).toPromise();
+    const state = await callable({ redirectURL: redirectURL }).toPromise();
     const url = 'https://connect.stripe.com/express/oauth/authorize';
     location.href = `${url}?client_id=${environment.stripe.clientId}&state=${state}&suggested_capabilities[]=transfers`;
   }
