@@ -154,17 +154,25 @@ export class EventService {
   async updateEvent(
     eventId: string,
     event: Omit<Event, 'eventId' | 'thumbnailURL' | 'updatedAt'>,
-    thumbnailURL: string
+    thumbnailURL?: string
   ): Promise<void> {
-    const image = await this.setThumbnailToStorage(eventId, thumbnailURL);
+    let eventData: Partial<Event>;
+    if (thumbnailURL) {
+      const image = await this.setThumbnailToStorage(eventId, thumbnailURL);
+      eventData = {
+        ...event,
+        thumbnailURL: image,
+      };
+    } else {
+      eventData = event;
+    }
     await this.db
-      .doc<Event>(`events/${eventId}`)
+      .doc<Partial<Event>>(`events/${eventId}`)
       .set(
         {
           ...event,
           eventId,
           updatedAt: firebase.firestore.Timestamp.now(),
-          thumbnailURL: image,
         },
         {
           merge: true,
