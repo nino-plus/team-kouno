@@ -14,6 +14,7 @@ import { EventService } from 'src/app/services/event.service';
 import { PaymentService } from 'src/app/services/payment.service';
 import { ProductService } from 'src/app/services/product.service';
 import 'quill-emoji/dist/quill-emoji.js';
+import { UiService } from 'src/app/services/ui.service';
 
 @Component({
   selector: 'app-editor',
@@ -103,6 +104,7 @@ export class EditorComponent implements OnInit {
 
   constructor(
     public connectedAccountService: ConnectedAccountService,
+    public uiService: UiService,
     private fb: FormBuilder,
     private authService: AuthService,
     private eventService: EventService,

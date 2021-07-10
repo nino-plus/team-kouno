@@ -80,9 +80,17 @@
     <button
       mat-raised-button
       color="primary"
-      [disabled]="form.invalid || form.pristine || !isComplete || loading"
+      [disabled]="
+        form.invalid || form.pristine || !isComplete || loading || inProgress
+      "
     >
-      保存
+      <img
+        *ngIf="inProgress"
+        class="inProgress-icon"
+        src="assets/images/three-dots.svg"
+        alt=""
+        width="30px"
+      />{{ inProgress ? '更新中です' : '保存' }}
     </button>
   </form>
 </mat-card>

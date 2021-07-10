@@ -148,3 +148,43 @@ export const deleteStripePaymentMethod = functions
       return stripe.paymentMethods.detach(data.id);
     }
   );
+
+export const setStripeDefaultPaymentMethod = functions
+  .region('asia-northeast1')
+  .https.onCall(
+    async (data: { id: string }, context): Promise<void> => {
+      if (!data) {
+        throw new functions.https.HttpsError(
+          'data-loss',
+          'データが存在しません'
+        );
+      }
+
+      if (!context.auth) {
+        throw new functions.https.HttpsError(
+          'permission-denied',
+          '認証エラーが発生しました。'
+        );
+      }
+
+      const customerDoc = db.doc(`customers/${context.auth.uid}`);
+      const customer = (await customerDoc.get()).data() as Customer;
+
+      if (!customer) {
+        throw new functions.https.HttpsError(
+          'permission-denied',
+          'プラットフォームにカスタマーが存在しません。'
+        );
+      }
+
+      await stripe.customers.update(customer.customerId, {
+        invoice_settings: {
+          default_payment_method: data.id,
+        },
+      });
+
+      await customerDoc.update({
+        defaultPaymentMethod: data.id,
+      });
+    }
+  );

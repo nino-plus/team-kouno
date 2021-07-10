@@ -93,7 +93,7 @@ export class RegisterCardComponent implements OnInit {
           }
         })
         .finally(() => {
-          this.loading = false;
+          this.inProgress = false;
           this.cardElement.clear();
         });
     }

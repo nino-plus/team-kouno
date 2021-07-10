@@ -8,6 +8,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ConnectedAccountService } from 'src/app/services/connected-account.service';
 import { PaymentService } from 'src/app/services/payment.service';
 import { ProductService } from 'src/app/services/product.service';
+import { UiService } from 'src/app/services/ui.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -38,7 +39,6 @@ export class ProfileComponent implements OnInit {
       this.form.patchValue({
         ...user,
       });
-      // if (this.connectedAccountId$ === undefined) {
       this.connectedAccountId$ = this.connectedAccountService
         .getConnectedAccount(user?.uid)
         .pipe(
@@ -48,7 +48,6 @@ export class ProfileComponent implements OnInit {
             }
           })
         );
-      // }
     })
   );
 
@@ -58,6 +57,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     public connectedAccountService: ConnectedAccountService,
+    public uiService: UiService,
     private fb: FormBuilder,
     private authService: AuthService,
     private userService: UserService,
