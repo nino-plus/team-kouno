@@ -1,4 +1,4 @@
-<ng-container *ngIf="isProcessing; else view">
+<ng-container *ngIf="isProcessing || uiService.loading; else view">
   <div class="processing">
     <img src="assets/images/three-dots.svg" alt="" /></div
 ></ng-container>

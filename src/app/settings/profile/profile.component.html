@@ -1,4 +1,9 @@
-<ng-container *ngIf="!isProcessing && user$ | async as user; else view">
+<ng-container
+  *ngIf="
+    !uiService.loading && !isProcessing && user$ | async as user;
+    else view
+  "
+>
   <form [formGroup]="form" (ngSubmit)="updateUser()">
     <div class="settings__profile">
       <div class="settings__info">
