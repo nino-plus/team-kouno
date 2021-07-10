@@ -27,6 +27,7 @@ export class EditorComponent implements OnInit {
   oldImageUrl = '';
   imageFile: string;
   isImageError: boolean = true;
+  isImageChanged: boolean;
   isProcessing: boolean;
   user$: Observable<User> = this.authService.user$.pipe(
     tap((user) => {
@@ -161,6 +162,9 @@ export class EditorComponent implements OnInit {
     this.imageFile = image;
     if (!this.event) {
       this.isImageError = false;
+    } else {
+      this.isImageChanged = true;
+      this.form.markAsDirty();
     }
   }
 

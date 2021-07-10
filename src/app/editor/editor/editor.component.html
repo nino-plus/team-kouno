@@ -216,10 +216,11 @@
         </button>
         <button
           [disabled]="
-            form.invalid ||
-            form.pristine ||
-            isProcessing ||
-            (isImageError && !event)
+            (form.invalid ||
+              form.pristine ||
+              isProcessing ||
+              (isImageError && !event)) &&
+            !(event && this.isImageChanged)
           "
           mat-raised-button
           color="primary"
