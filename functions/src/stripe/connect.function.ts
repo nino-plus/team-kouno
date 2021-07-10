@@ -7,7 +7,7 @@ const db = admin.firestore();
 
 export const getStripeConnectedAccountState = functions
   .region('asia-northeast1')
-  .https.onCall(async (data, context) => {
+  .https.onCall(async (data: { redirectURL: string }, context) => {
     if (!context.auth) {
       throw new functions.https.HttpsError(
         'permission-denied',
@@ -23,6 +23,7 @@ export const getStripeConnectedAccountState = functions
       {
         userId: context.auth.uid,
         state,
+        redirectURL: data.redirectURL,
       },
       { merge: true }
     );
@@ -44,6 +45,8 @@ export const createStripeConnectedAccount = functions
     const connectDoc = (
       await db.collection('connectedAccounts').where('state', '==', state).get()
     ).docs[0];
+
+    const redirectURL = connectDoc.data().redirectURL;
 
     // 一致しなければ不正なリダイレクトとして離脱する
     if (!connectDoc.exists) {
@@ -78,7 +81,7 @@ export const createStripeConnectedAccount = functions
       });
 
       // 実際には環境変数を使うなどしてリダイレクト先のホストを本番環境に向ける
-      resp.redirect(`http://localhost:4200`);
+      resp.redirect(redirectURL);
       return;
     } catch (err) {
       if (err.type === 'StripeInvalidGrantError') {
@@ -133,7 +136,7 @@ export const getStripeAccountBalance = functions
       )?.data() as ConnectedAccount;
 
       if (!connectedAccount) {
-        return
+        return;
       }
 
       return stripe.balance.retrieve({
@@ -157,7 +160,7 @@ export const payoutToStripeAccount = functions
     )?.data() as ConnectedAccount;
 
     if (!connectedAccount) {
-      return null
+      return null;
     }
     // 現在の残高を取得
     const balance = await stripe.balance.retrieve({

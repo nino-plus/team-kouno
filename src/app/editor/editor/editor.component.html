@@ -10,6 +10,16 @@
 
     <mat-divider></mat-divider>
 
+    <div class="notice form-grid">
+      <div class="spacer"></div>
+      <div class="notice__content">
+        <span class="notice__mark">※</span>
+        <p class="notice__text">
+          販売アカウントの設定・変更をされる場合はフォーム記入前に行ってください。アカウント設定後、フォーム記入内容はリセットされます。
+        </p>
+      </div>
+    </div>
+
     <form [formGroup]="form" (ngSubmit)="submit(user.uid)" class="form-group">
       <div class="form-grid">
         <p class="form-grid__label">イベント名</p>
