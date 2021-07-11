@@ -1,15 +1,13 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-legal',
   templateUrl: './legal.component.html',
-  styleUrls: ['./legal.component.scss']
+  styleUrls: ['./legal.component.scss'],
 })
 export class LegalComponent implements OnInit {
+  constructor(public location: Location) {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }
