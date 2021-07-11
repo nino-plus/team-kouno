@@ -1,4 +1,4 @@
-<div (click)="joinChannel(event, $event)" class="card" @fade>
+<div (click)="navigateDetail(event, $event)" class="card" @fade>
   <div class="card__header">
     <img [src]="event.thumbnailURL" alt="" class="card__img" />
 
@@ -46,15 +46,13 @@
       </ng-template>
     </div>
 
-    <div class="card__actions" align="end">
-      <button
-        class="card__btn"
-        (click)="navigateDetail(event, $event)"
-        matTooltip="詳しく見る"
-      >
-        <mat-icon>expand_more</mat-icon>
-      </button>
-    </div>
+    <button
+      class="card__btn"
+      (click)="joinChannel(event, $event)"
+      matTooltip="入室する"
+    >
+      <mat-icon>expand_more</mat-icon>
+    </button>
   </div>
 
   <div class="card__body">
