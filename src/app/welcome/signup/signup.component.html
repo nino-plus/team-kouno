@@ -1,0 +1,40 @@
+<div class="container container--signup">
+  <div class="header">
+    <h1 class="header__heading">EventStand</h1>
+    <p class="header__msg">無料で登録し、イベントを楽しみましょう。</p>
+  </div>
+
+  <p *ngIf="!isAgree" class="error">続行するには利用規約の同意が必須です。</p>
+  <div content class="btns">
+    <ng-container *ngFor="let item of snsList">
+      <button
+        class="btns__item"
+        [ngClass]="item"
+        (click)="isChecked ? authService.login(item) : onError()"
+      >
+        {{ item }}で登録
+      </button>
+    </ng-container>
+  </div>
+
+  <div class="info">
+    <div class="info__checkbox">
+      <mat-checkbox
+        value=""
+        color="primary"
+        labelPosition="after"
+        [checked]="isChecked"
+        (change)="onChange()"
+        >EventStandの<a class="info__a" routerLink="/intl/terms">利用規約</a
+        >に同意します。</mat-checkbox
+      >
+    </div>
+
+    <p class="info__privacy">
+      EventStandがお客様の個人情報をどのように収集、利用、共有、保護しているかについての詳細は、
+      <a class="info__a" routerLink="/intl/privacypolicy"
+        >プライバシーポリシー</a
+      >をご覧ください。
+    </p>
+  </div>
+</div>
