@@ -54,6 +54,6 @@
   />
   <div class="block__btns-wrap">
     <a routerLink="signup" class="block__btn">今すぐ登録する</a>
-    <a routerLink="/" class="block__btn">イベントを探す</a>
+    <a (click)="authService.guestLogin()" class="block__btn">イベントを探す</a>
   </div>
 </div>
