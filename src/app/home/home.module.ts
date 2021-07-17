@@ -13,7 +13,6 @@ import {
   CalendarModule,
   CalendarMonthModule,
 } from 'angular-calendar';
-import { FooterComponent } from '../footer/footer.component';
 import { SharedModule } from '../shared/shared.module';
 import { EventCalendarComponent } from './event-calendar/event-calendar.component';
 import { HomeRoutingModule } from './home-routing.module';
@@ -23,12 +22,12 @@ import { SwiperModule } from 'swiper/angular';
 import { EventListComponent } from './event-list/event-list.component';
 import { EventDetailComponent } from './event-detail/event-detail.component';
 import { QuillModule } from 'ngx-quill';
+import { FooterModule } from '../footer/footer.module';
 
 @NgModule({
   declarations: [
     HomeComponent,
     EventCalendarComponent,
-    FooterComponent,
     SpecialComponent,
     EventListComponent,
     EventDetailComponent,
@@ -50,6 +49,7 @@ import { QuillModule } from 'ngx-quill';
     SharedModule,
     SwiperModule,
     QuillModule,
+    FooterModule,
   ],
 })
 export class HomeModule {}
