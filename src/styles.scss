@@ -110,7 +110,8 @@ img {
     }
   }
   &--intl {
-    padding: 64px 48px;
+    max-width: 960px;
+    padding: 120px 48px;
     @include sp {
       padding: 56px 16px;
     }
@@ -157,6 +158,11 @@ img {
   }
   &--signup {
     max-width: 600px;
+  }
+  &--footer {
+    max-width: 960px;
+    padding: 64px 48px;
+    margin: 0 auto;
   }
 }
 
