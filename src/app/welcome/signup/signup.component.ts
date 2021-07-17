@@ -13,13 +13,10 @@ export class SignupComponent implements OnInit {
 
   constructor(public authService: AuthService) {}
 
-  ngOnInit(): void {
-    console.log(this.isChecked);
-  }
+  ngOnInit(): void {}
 
   onChange(): void {
     this.isChecked = !this.isChecked;
-    console.log(this.isChecked);
   }
 
   onError(): void {
