@@ -1,0 +1,36 @@
+@import 'custom-style';
+@import 'mixins';
+
+.footer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  @include sp {
+    grid-template-columns: repeat(3, 1fr);
+    padding: 24px 8px;
+  }
+  &__menu-box:nth-of-type(3) {
+    @include sp {
+      order: 4;
+    }
+  }
+  &__heading {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  &__menu {
+    display: block;
+    font-size: 12px;
+    opacity: 0.8;
+    margin: 0 0 8px 8px;
+    &:hover {
+      color: #1bcbe0;
+    }
+  }
+  &__bottom {
+    padding: 6px;
+    font-style: 12px;
+    text-align: center;
+  }
+}
