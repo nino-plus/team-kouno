@@ -4,33 +4,28 @@
 .top {
   position: relative;
   width: 100%;
-  text-align: center;
-  margin-bottom: 16px;
-  @include sp {
-    margin-bottom: 8px;
-  }
-  &__grid {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    background: center / cover no-repeat url('/assets/images/');
-  }
+  background: center / cover no-repeat;
   &__img {
     width: 100%;
-    height: 266px;
+    height: 640px;
     object-fit: cover;
   }
   &__overlay {
-    width: 100%;
-    top: 90px;
+    top: 240px;
     position: absolute;
     z-index: 1;
+    display: flex;
+    flex-flow: column;
   }
   &__heading {
+    display: inline-block;
     font-size: 70px;
+    font-weight: 700;
     letter-spacing: 0.2rem;
     color: white;
-    text-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
+    background: rgba(#303030, 0.96);
+    padding: 0 24px 0 48px;
+    margin-bottom: 24px;
     @include sp {
       font-size: 28px;
     }
@@ -39,16 +34,80 @@
     }
   }
   &__sub {
+    display: inline-block;
     font-size: 24px;
     letter-spacing: 0.2rem;
     color: white;
-    text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
+    background: rgba(#303030, 0.8);
+    padding: 8px 24px 8px 48px;
+    margin-bottom: 48px;
     @include sp {
       font-size: 16px;
     }
     @include sp-s {
       font-size: 14px;
       letter-spacing: 0.16rem;
+    }
+  }
+  &__btn {
+    width: 240px;
+    padding: 20px 24px;
+    border-radius: 48px;
+    background: $color-accent;
+    font-size: 20px;
+    color: #fafafa;
+    margin-left: 48px;
+    cursor: pointer;
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.3s;
+    text-align: center;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+}
+
+.block {
+  height: 600px;
+  background: #212121;
+  text-align: center;
+  &__btns-wrap {
+    width: 600px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 0 auto;
+    place-items: center;
+  }
+  &__heading {
+    text-align: center;
+    padding: 24px;
+  }
+  &__top {
+    font-size: 48px;
+    font-weight: 800;
+  }
+  &__sub {
+    font-size: 18px;
+  }
+  &__btn {
+    width: 240px;
+    padding: 20px 24px;
+    border-radius: 48px;
+    background: $color-accent;
+    font-size: 20px;
+    color: #fafafa;
+    cursor: pointer;
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.3s;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+  &__img {
+    width: 600px;
+    height: 480px;
+    &--last {
+      width: 200px;
+      height: 160px;
     }
   }
 }
