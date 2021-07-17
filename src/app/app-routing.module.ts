@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { EventShellComponent } from './event-shell/event-shell.component';
+import { AuthGuard } from './guards/auth.guard';
 import { MaintenanceGuard } from './guards/maintenance.guard';
 import { MainShellComponent } from './main-shell/main-shell.component';
 import { MaintenanceComponent } from './maintenance/maintenance.component';
@@ -21,8 +22,8 @@ const routes: Routes = [
   },
   {
     path: '',
-    canActivate: [MaintenanceGuard],
-    canLoad: [MaintenanceGuard],
+    canActivate: [MaintenanceGuard, AuthGuard],
+    canLoad: [MaintenanceGuard, AuthGuard],
     component: MainShellComponent,
     children: [
       {
@@ -80,8 +81,8 @@ const routes: Routes = [
   },
   {
     path: 'event',
-    canActivate: [MaintenanceGuard],
-    canLoad: [MaintenanceGuard],
+    canActivate: [MaintenanceGuard, AuthGuard],
+    canLoad: [MaintenanceGuard, AuthGuard],
     component: EventShellComponent,
     children: [
       {
@@ -93,8 +94,8 @@ const routes: Routes = [
   },
   {
     path: 'search',
-    canActivate: [MaintenanceGuard],
-    canLoad: [MaintenanceGuard],
+    canActivate: [MaintenanceGuard, AuthGuard],
+    canLoad: [MaintenanceGuard, AuthGuard],
     component: SearchShellComponent,
     children: [
       {
