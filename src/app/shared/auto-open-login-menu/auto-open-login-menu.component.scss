@@ -1,0 +1,22 @@
+@import 'custom-style';
+@import 'mixins';
+
+.app-nav-item {
+  cursor: pointer;
+  font-weight: 500;
+  color: rgba(#000, 0.8);
+  line-height: 36px;
+  border: solid 2px $color-font;
+  border-radius: 4px;
+  background-color: #fafafa;
+  padding: 0 16px;
+  transition: ease-in-out 0.16s;
+  &:hover {
+    color: #fafafa;
+    border: solid 2px #1bcbe0;
+    background: $color-main;
+  }
+  .mat-menu-content {
+    background: #fafafa;
+  }
+}

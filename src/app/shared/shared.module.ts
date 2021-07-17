@@ -29,6 +29,7 @@ import { EventStoreComponent } from './event-store/event-store.component';
 import { SearchBoxComponent } from './search-box/search-box.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { UserSearchBoxComponent } from './user-search-box/user-search-box.component';
+import { AutoOpenLoginMenuComponent } from './auto-open-login-menu/auto-open-login-menu.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { UserSearchBoxComponent } from './user-search-box/user-search-box.compon
     EventStoreComponent,
     SearchBoxComponent,
     UserSearchBoxComponent,
+    AutoOpenLoginMenuComponent,
   ],
   imports: [
     CommonModule,
@@ -78,6 +80,7 @@ import { UserSearchBoxComponent } from './user-search-box/user-search-box.compon
     EventStoreComponent,
     SearchBoxComponent,
     UserSearchBoxComponent,
+    AutoOpenLoginMenuComponent,
   ],
 })
 export class SharedModule {}
