@@ -21,6 +21,10 @@ const routes: Routes = [
     component: MaintenanceComponent,
   },
   {
+    path: 'intl',
+    loadChildren: () => import('./intl/intl.module').then((m) => m.IntlModule),
+  },
+  {
     path: '',
     canActivate: [MaintenanceGuard, AuthGuard],
     canLoad: [MaintenanceGuard, AuthGuard],
@@ -35,11 +39,6 @@ const routes: Routes = [
         path: 'settings',
         loadChildren: () =>
           import('./settings/settings.module').then((m) => m.SettingsModule),
-      },
-      {
-        path: 'intl',
-        loadChildren: () =>
-          import('./intl/intl.module').then((m) => m.IntlModule),
       },
       {
         path: 'editor',
