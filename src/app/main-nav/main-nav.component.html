@@ -31,15 +31,28 @@
           <mat-icon class="menu__icon">search</mat-icon>
           イベントを探す</a
         >
-        <a
-          mat-list-item
-          routerLink="/editor"
-          class="menu__children"
-          [routerLinkActive]="['is-active']"
-        >
-          <mat-icon class="menu__icon">add</mat-icon>
-          イベントを作る</a
-        >
+        <ng-container *ngIf="!authService.isGuest$ | async; else isGuest">
+          <a
+            mat-list-item
+            routerLink="/editor"
+            class="menu__children"
+            [routerLinkActive]="['is-active']"
+          >
+            <mat-icon class="menu__icon">add</mat-icon>
+            イベントを作る</a
+          >
+        </ng-container>
+        <ng-template #isGuest>
+          <a
+            mat-list-item
+            routerLink="/welcome/signup"
+            class="menu__children"
+            [routerLinkActive]="['is-active']"
+          >
+            <mat-icon class="menu__icon">add</mat-icon>
+            イベントを作る</a
+          >
+        </ng-template>
       </div>
     </mat-nav-list>
 
