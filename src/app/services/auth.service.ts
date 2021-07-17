@@ -70,6 +70,21 @@ export class AuthService {
       });
   }
 
+  async guestLogin(): Promise<void> {
+    firebase
+      .auth()
+      .signInAnonymously()
+      .then(() => {
+        this.router.navigateByUrl('/');
+      })
+      .finally(() => {
+        this.snackBar.open('ゲストとしてログインしました');
+      })
+      .catch(() => {
+        this.snackBar.open('エラーが発生しました。');
+      });
+  }
+
   async logout(): Promise<void> {
     this.afAuth
       .signOut()
