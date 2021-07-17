@@ -66,6 +66,7 @@
   }
   &__edit {
     font-size: 12px;
+    background-color: $color-font-main;
   }
   &__category {
     font-size: 14px;
@@ -83,6 +84,9 @@
     font-size: 24px;
     font-weight: 500;
     margin-bottom: 16px;
+    &--end {
+      margin-left: 32px;
+    }
     @include sp {
       font-size: 14px;
     }

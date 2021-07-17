@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { ConnectedAccount } from '@interfaces/connected-account';
 import { TransferWithCharge } from '../interfaces/transfer';
 import { tap } from 'rxjs/operators';
+import { UiService } from './ui.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,10 +16,12 @@ export class ConnectedAccountService {
 
   constructor(
     private db: AngularFirestore,
-    private fns: AngularFireFunctions
+    private fns: AngularFireFunctions,
+    private uiService: UiService
   ) {}
 
   async createStripeConnectedAccount(): Promise<void> {
+    this.uiService.loading = true;
     const redirectURL = location.href;
     const callable = this.fns.httpsCallable('getStripeConnectedAccountState');
     const state = await callable({ redirectURL: redirectURL }).toPromise();

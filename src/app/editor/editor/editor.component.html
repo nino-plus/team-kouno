@@ -1,4 +1,4 @@
-<ng-container *ngIf="isProcessing; else view">
+<ng-container *ngIf="isProcessing || uiService.loading; else view">
   <div class="processing">
     <img src="assets/images/three-dots.svg" alt="" /></div
 ></ng-container>
@@ -115,7 +115,7 @@
       </div>
 
       <div class="form-grid">
-        <p class="form-grid__label">サムネイル画像</p>
+        <p class="form-grid__label"><sup>*</sup>サムネイル画像</p>
         <div class="form-grid__cropper">
           <ng-container *ngIf="oldImageUrl; else nothing">
             <deer-crop-trigger
@@ -144,6 +144,13 @@
           <div class="form-grid__hint">
             <mat-icon class="form-grid__icon">done</mat-icon>
             <p>ファイルサイズ：3MB以内</p>
+          </div>
+          <div
+            *ngIf="isImageError && !event"
+            class="form-grid__hint"
+            style="color: red"
+          >
+            サムネイルの設定は必須です
           </div>
         </div>
       </div>
@@ -208,7 +215,13 @@
           戻る
         </button>
         <button
-          [disabled]="form.invalid || form.pristine || isProcessing"
+          [disabled]="
+            (form.invalid ||
+              form.pristine ||
+              isProcessing ||
+              (isImageError && !event)) &&
+            !(event && this.isImageChanged)
+          "
           mat-raised-button
           color="primary"
         >

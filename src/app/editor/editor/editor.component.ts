@@ -14,6 +14,7 @@ import { EventService } from 'src/app/services/event.service';
 import { PaymentService } from 'src/app/services/payment.service';
 import { ProductService } from 'src/app/services/product.service';
 import 'quill-emoji/dist/quill-emoji.js';
+import { UiService } from 'src/app/services/ui.service';
 
 @Component({
   selector: 'app-editor',
@@ -26,6 +27,8 @@ export class EditorComponent implements OnInit {
   readonly PASS_MIN_LENGTH = 6;
   oldImageUrl = '';
   imageFile: string;
+  isImageError: boolean = true;
+  isImageChanged: boolean;
   isProcessing: boolean;
   user$: Observable<User> = this.authService.user$.pipe(
     tap((user) => {
@@ -103,6 +106,7 @@ export class EditorComponent implements OnInit {
 
   constructor(
     public connectedAccountService: ConnectedAccountService,
+    public uiService: UiService,
     private fb: FormBuilder,
     private authService: AuthService,
     private eventService: EventService,
@@ -158,6 +162,12 @@ export class EditorComponent implements OnInit {
 
   onCroppedImage(image: string): void {
     this.imageFile = image;
+    if (!this.event) {
+      this.isImageError = false;
+    } else {
+      this.isImageChanged = true;
+      this.form.markAsDirty();
+    }
   }
 
   async submit(uid: string): Promise<void> {
@@ -194,16 +204,9 @@ export class EditorComponent implements OnInit {
 
     if (!this.event) {
       let newEventId = '';
-      if (this.imageFile !== undefined) {
-        await this.eventService
-          .createEvent(eventData, this.imageFile, uid)
-          .then((eventId) => (newEventId = eventId));
-      } else {
-        const defaultImage = 'assets/images/default-image.jpg';
-        await this.eventService
-          .createEvent(eventData, defaultImage, uid)
-          .then((eventId) => (newEventId = eventId));
-      }
+      await this.eventService
+        .createEvent(eventData, this.imageFile, uid)
+        .then((eventId) => (newEventId = eventId));
 
       if (this.form.controls.ticketPrice.dirty) {
         this.getEventProducts();
@@ -240,9 +243,8 @@ export class EditorComponent implements OnInit {
           .updateEvent(this.eventId, eventData, this.imageFile)
           .finally(() => (this.isProcessing = false));
       } else {
-        const defaultImage = 'assets/images/default-image.jpg';
         await this.eventService
-          .updateEvent(this.eventId, eventData, defaultImage)
+          .updateEvent(this.eventId, eventData)
           .finally(() => (this.isProcessing = false));
       }
     }

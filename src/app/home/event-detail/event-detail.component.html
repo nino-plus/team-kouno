@@ -10,16 +10,15 @@
             <p class="event__category">{{ event.category }}</p>
             <span class="event__spacer"></span>
             <ng-container *ngIf="user$ | async as user">
-              <ng-container *ngIf="event.ownerId === user.uid">
-                <button
-                  mat-stroked-button
-                  type="button"
-                  (click)="navigateEditor(event)"
-                  class="event__edit"
-                >
-                  イベントを編集
-                </button>
-              </ng-container>
+              <button
+                *ngIf="event.ownerId === user.uid"
+                mat-stroked-button
+                type="button"
+                (click)="navigateEditor(event)"
+                class="event__edit"
+              >
+                イベントを編集
+              </button>
             </ng-container>
           </div>
           <p class="event__name">{{ event.name }}</p>
@@ -42,7 +41,25 @@
     <div class="container container--event-detail">
       <div class="event__body">
         <div class="event__detail">
-          <p class="event__info-heading">参加予定の人</p>
+          <p class="event__info-heading">
+            {{ event.price ? '有料: ' + event.price + '円' : null }}
+          </p>
+          <div class="price"></div>
+
+          <p class="event__info-heading">
+            参加者
+            <span class="event__info-heading--end">
+              {{
+                event.headcountLimit
+                  ? ' ' +
+                    event.reserveUserCount +
+                    '/' +
+                    event.headcountLimit +
+                    '人'
+                  : ' ' + event.reserveUserCount + '人'
+              }}
+            </span>
+          </p>
           <mat-divider></mat-divider>
           <div class="user">
             <ul
@@ -105,13 +122,17 @@
         <ng-container [ngSwitch]="type">
           <ng-container *ngSwitchDefault>
             <ng-container *ngIf="user$ | async as user; else default">
-              <ng-container *ngIf="reservedUids$ | async as uids">
+              <ng-container
+                *ngIf="
+                  event.startAt > eventService.dateNow && reservedUids$
+                    | async as uids
+                "
+              >
                 <ng-container *ngIf="!uids.includes(user.uid); else cancel">
                   <button
                     mat-raised-button
                     class="actions__submit"
                     (click)="reserveEvent(event, user.uid)"
-                    mat-dialog-close
                   >
                     イベントを予約
                   </button>
@@ -124,7 +145,6 @@
                     mat-raised-button
                     class="actions__submit"
                     (click)="cancelReserve(event, user.uid)"
-                    mat-dialog-close
                   >
                     予約をキャンセル
                   </button>
@@ -136,7 +156,6 @@
                     mat-raised-button
                     class="actions__submit"
                     (click)="joinChannel(event, user.uid)"
-                    mat-dialog-close
                   >
                     イベントに参加
                   </button>
@@ -152,7 +171,6 @@
                           ? openPaymentDialog(event, user.uid)
                           : openSettingCard()
                       "
-                      mat-dialog-close
                     >
                       イベントに参加<mat-icon>sell</mat-icon>
                     </button>
@@ -188,7 +206,6 @@
               mat-raised-button
               class="actions__submit"
               (click)="openDeleteDialog(event.eventId)"
-              mat-dialog-close
             >
               イベントを削除
             </button>
