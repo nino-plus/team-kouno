@@ -98,40 +98,48 @@
     border-radius: 4px;
     border: solid 2px;
     text-transform: capitalize;
+    background: $color-main;
     @include tablet {
       margin: 8px 0;
     }
     @include pc {
       transition: ease-in-out 0.16s;
     }
-    &.google {
-      background-color: #dd4b39;
+    &--signup {
       &:hover {
-        background-color: #fafafa;
+        background: #fafafa;
+        color: $color-font-main;
+        border-color: $color-font-main;
+      }
+    }
+    &.google {
+      background: #dd4b39;
+      &:hover {
+        background: #fafafa;
         color: #dd4b39;
         border-color: #dd4b39;
       }
     }
     &.twitter {
-      background-color: #1da1f2;
+      background: #1da1f2;
       &:hover {
-        background-color: #fafafa;
+        background: #fafafa;
         color: #1da1f2;
         border-color: #1da1f2;
       }
     }
     &.facebook {
-      background-color: #3b5998;
+      background: #3b5998;
       &:hover {
-        background-color: #fafafa;
+        background: #fafafa;
         color: #3b5998;
         border-color: #3b5998;
       }
     }
     &.github {
-      background-color: #211f1f;
+      background: #211f1f;
       &:hover {
-        background-color: #fafafa;
+        background: #fafafa;
         color: #211f1f;
         border-color: #211f1f;
       }

@@ -41,7 +41,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
-import { AutoOpenLoginMenuComponent } from './auto-open-login-menu/auto-open-login-menu.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { QuillModule } from 'ngx-quill';
 import { InviteDialogComponent } from './invite-dialog/invite-dialog.component';
@@ -67,7 +66,6 @@ registerLocaleData(localeJa);
     AppComponent,
     HeaderComponent,
     NotFoundComponent,
-    AutoOpenLoginMenuComponent,
     InviteDialogComponent,
     MainShellComponent,
     RejectDialogComponent,
