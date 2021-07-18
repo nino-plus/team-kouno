@@ -18,6 +18,8 @@ import { AuthService } from '../services/auth.service';
   providedIn: 'root',
 })
 export class RoomGuard implements CanDeactivate<EventRoomComponent> {
+  uid: string = this.authService.uid;
+
   constructor(
     private eventService: EventService,
     private router: Router,
@@ -38,14 +40,25 @@ export class RoomGuard implements CanDeactivate<EventRoomComponent> {
   ): Observable<boolean> {
     const eventId = next.params.channelId;
     const now = moment();
+    let paidUser: boolean;
+    this.eventService
+      .checkPaidUser(eventId, this.uid)
+      .subscribe((result) => (paidUser = result));
+
     return this.eventService.getEvent(eventId).pipe(
       map((event: Event) => {
+        const paid = event.price > 0;
         const startAt = moment.unix(event.startAt.seconds);
         const exitAt = moment.unix(event.exitAt.seconds);
+        const overCapacity = event.headcountLimit >= event.participantCount;
 
-        if (!now.isBetween(startAt, exitAt)) {
-          // イベント開催期間外の場合
+        if (
+          !now.isBetween(startAt, exitAt) ||
+          (paid && !paidUser) ||
+          overCapacity
+        ) {
           this.agoraServicr.leaveAgoraChannel(eventId);
+          this.router.navigateByUrl('/');
           return false;
         }
         return true;

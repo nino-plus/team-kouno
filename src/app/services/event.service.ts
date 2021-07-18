@@ -324,7 +324,7 @@ export class EventService {
       );
   }
 
-  checkPaidUser(eventId: string, uid: string) {
+  checkPaidUser(eventId: string, uid: string): Observable<boolean> {
     return this.db
       .doc(`events/${eventId}/paidUsers/${uid}`)
       .valueChanges()

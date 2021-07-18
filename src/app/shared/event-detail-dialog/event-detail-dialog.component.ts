@@ -50,11 +50,7 @@ export class EventDetailDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.data.event.price);
     this.owner$ = this.userService.getUserData(this.data.event.ownerId);
-  }
-  log(d) {
-    console.log(d);
   }
 
   reserveEvent(event: Event): void {
