@@ -5,8 +5,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ConnectedAccount } from '@interfaces/connected-account';
 import { TransferWithCharge } from '../interfaces/transfer';
-import { tap } from 'rxjs/operators';
+import { map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { UiService } from './ui.service';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,29 @@ import { UiService } from './ui.service';
 export class ConnectedAccountService {
   accountPortalUrl: string;
 
+  connectedAccount: ConnectedAccount;
+  connectedAccountId$: Observable<string> = this.afAuth.user.pipe(
+    switchMap((user) => {
+      return this.db
+        .doc<ConnectedAccount>(`connectedAccounts/${user.uid}`)
+        .valueChanges();
+    }),
+    tap((account) => (this.connectedAccount = account)),
+    map((account) => account?.connectedAccountId),
+    tap((accountId) => {
+      console.log('run!');
+
+      if (accountId) {
+        this.setAccountLoginLink();
+      } else {
+        this.accountPortalUrl = null;
+      }
+    }),
+    shareReplay(1)
+  );
+
   constructor(
+    private afAuth: AngularFireAuth,
     private db: AngularFirestore,
     private fns: AngularFireFunctions,
     private uiService: UiService

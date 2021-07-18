@@ -9,6 +9,7 @@ const routes: Routes = [
     path: ':channelId/:uid',
     component: EventRoomComponent,
     canDeactivate: [RoomGuard],
+    canActivate: [RoomGuard],
   },
   {
     path: '',
