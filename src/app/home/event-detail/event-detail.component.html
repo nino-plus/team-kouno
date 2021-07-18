@@ -150,7 +150,12 @@
                   </button>
                 </ng-template>
               </ng-container>
-              <ng-container *ngIf="event.startAt < eventService.dateNow">
+              <ng-container
+                *ngIf="
+                  event.startAt < eventService.dateNow &&
+                  eventService.dateNow < event.exitAt
+                "
+              >
                 <ng-container *ngIf="!event.price || (paidUser$ | async)">
                   <button
                     mat-raised-button
@@ -193,6 +198,10 @@
               予約すると自分のカレンダーに表示されるようになります❤️
             </p>
             <button
+              *ngIf="
+                event.startAt < eventService.dateNow &&
+                eventService.dateNow < event.exitAt
+              "
               mat-raised-button
               class="actions__submit"
               (click)="openInfoDialog()"
