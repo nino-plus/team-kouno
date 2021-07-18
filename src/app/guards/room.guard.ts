@@ -13,7 +13,6 @@ import { map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { AgoraService } from '../services/agora.service';
 import { AuthService } from '../services/auth.service';
-import { ConnectionNetworkService } from '../services/connection-network.service';
 
 @Injectable({
   providedIn: 'root',
@@ -25,8 +24,7 @@ export class RoomGuard implements CanDeactivate<EventRoomComponent> {
     private eventService: EventService,
     private router: Router,
     private agoraServicr: AgoraService,
-    private authService: AuthService,
-    private connectionService: ConnectionNetworkService
+    private authService: AuthService
   ) {}
   canDeactivate(component: EventRoomComponent): Observable<boolean> | boolean {
     if (component.isJoin) {
