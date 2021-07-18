@@ -12,6 +12,8 @@ import { EventstandComponent } from './eventstand/eventstand.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { AboutComponent } from './about/about.component';
+import { IntlComponent } from './intl/intl.component';
+import { FooterModule } from '../footer/footer.module';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,14 @@ import { AboutComponent } from './about/about.component';
     HelpComponent,
     EventstandComponent,
     AboutComponent,
+    IntlComponent,
   ],
-  imports: [CommonModule, IntlRoutingModule, MatButtonModule, MatIconModule],
+  imports: [
+    CommonModule,
+    IntlRoutingModule,
+    MatButtonModule,
+    MatIconModule,
+    FooterModule,
+  ],
 })
 export class IntlModule {}

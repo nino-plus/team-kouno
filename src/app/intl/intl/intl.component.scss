@@ -1,0 +1,30 @@
+.intl {
+  min-height: 100vh;
+  background: linear-gradient(to right bottom, #121212, #303030);
+  &__logo {
+    width: 160px;
+    height: 40px;
+    font-size: 24px;
+    img {
+      width: 160px;
+      height: 40px;
+    }
+  }
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100vw;
+  height: 56px;
+  display: flex;
+  text-align: left;
+  align-items: center;
+  padding: 8px 16px;
+  align-items: center;
+  min-height: 56px;
+  box-sizing: border-box;
+  background-color: #121212;
+}

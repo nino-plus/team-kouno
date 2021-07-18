@@ -98,7 +98,8 @@ export class UserListComponent implements OnInit, OnDestroy {
             return;
           }
           this.lastUserDoc = lastDoc;
-          userDatas.map((doc) => this.allUsers.push(doc));
+          const distinctUsers = userDatas.filter((doc) => doc.name !== null);
+          distinctUsers.map((doc) => this.allUsers.push(doc));
           this.isLoadingForAllUsers = false;
         }
       });
@@ -121,7 +122,8 @@ export class UserListComponent implements OnInit, OnDestroy {
             return;
           }
           this.lastOnlineUserDoc = lastDoc;
-          userDatas.map((doc) => this.onlineUsers.push(doc));
+          const distinctUsers = userDatas.filter((doc) => doc.name !== null);
+          distinctUsers.map((doc) => this.onlineUsers.push(doc));
           this.isLoadingForOnlineUsers = false;
         }
       });
@@ -144,7 +146,8 @@ export class UserListComponent implements OnInit, OnDestroy {
               return;
             }
             this.lastFollowingDoc = lastDoc;
-            userDatas.map((doc) => this.followings.push(doc));
+            const distinctUsers = userDatas.filter((doc) => doc.name !== null);
+            distinctUsers.map((doc) => this.followings.push(doc));
             this.isLoadingForFollowings = false;
           }
         });

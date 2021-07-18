@@ -59,13 +59,13 @@ export class UserService {
       if (startAt) {
         return ref
           .where('isPrivate', '==', false)
-          .orderBy('createdAt', 'desc')
+          .orderBy('lastChangedAt', 'desc')
           .startAfter(startAt)
           .limit(6);
       } else {
         return ref
           .where('isPrivate', '==', false)
-          .orderBy('createdAt', 'desc')
+          .orderBy('lastChangedAt', 'desc')
           .limit(6);
       }
     });

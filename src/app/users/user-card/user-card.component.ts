@@ -24,7 +24,7 @@ export class UserCardComponent implements OnInit {
     private fns: AngularFireFunctions,
     private meetingService: MeetingService,
     private authService: AuthService,
-    private router: Router,
+    private router: Router
   ) {}
 
   ngOnInit(): void {}
@@ -48,7 +48,9 @@ export class UserCardComponent implements OnInit {
   }
 
   async enterWaitingRoom(targetUid: string): Promise<void> {
-    const roomId = await this.meetingService.createEmptyRoom(this.authService.uid);
+    const roomId = await this.meetingService.createEmptyRoom(
+      this.authService.uid
+    );
     this.router.navigate(['waiting', roomId, { targetUid: targetUid }]);
   }
 }

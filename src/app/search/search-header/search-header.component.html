@@ -18,12 +18,14 @@
         <mat-icon>search</mat-icon>
       </button>
 
-      <button
-        mat-mini-fab
-        [matMenuTriggerFor]="userMenu"
-        [style.background-image]="'url(' + user?.avatarURL + ')'"
-        class="header__icon"
-      ></button>
+      <ng-container *ngIf="!(authService.isGuest$ | async)">
+        <button
+          mat-mini-fab
+          [matMenuTriggerFor]="userMenu"
+          [style.background-image]="'url(' + user?.avatarURL + ')'"
+          class="header__icon"
+        ></button>
+      </ng-container>
     </div>
     <mat-menu #userMenu="matMenu" class="header__menu">
       <a mat-menu-item [routerLink]="user.uid">
@@ -43,5 +45,48 @@
         <span>ログアウト</span>
       </button>
     </mat-menu>
+  </ng-container>
+
+  <ng-container *ngIf="authService.isGuest$ | async">
+    <app-auto-open-login-menu class="tablet-none"
+      ><div trigger>登録 ／ ログイン</div>
+      <div content class="header__login-contents">
+        <button
+          class="header__login-item header__login-item--signup"
+          routerLink="/welcome/signup"
+        >
+          新規登録
+        </button>
+        <ng-container *ngFor="let item of snsList">
+          <button
+            class="header__login-item"
+            [ngClass]="item"
+            (click)="authService.login(item)"
+          >
+            {{ item }}でログイン
+          </button>
+        </ng-container>
+      </div></app-auto-open-login-menu
+    >
+    <div class="pc-none">
+      <button
+        mat-flat-button
+        class="header__login-button"
+        [matMenuTriggerFor]="loginMenu"
+      >
+        登録 ／ ログイン
+      </button>
+      <mat-menu #loginMenu class="login-menu">
+        <ng-container *ngFor="let item of snsList">
+          <button
+            class="header__login-item"
+            [ngClass]="item"
+            (click)="authService.login(item)"
+          >
+            {{ item }}でログイン
+          </button>
+        </ng-container>
+      </mat-menu>
+    </div>
   </ng-container>
 </header>

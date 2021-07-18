@@ -11,7 +11,7 @@ import { UserService } from './user.service';
   providedIn: 'root',
 })
 export class AuthService {
-  afUser$: Observable<any> = this.afAuth.user;
+  afUser$: Observable<firebase.User> = this.afAuth.user;
   uid: string;
   user$ = this.afAuth.authState.pipe(
     switchMap((afUser) => {
@@ -23,6 +23,11 @@ export class AuthService {
       }
     }),
     shareReplay(1)
+  );
+  isGuest$: Observable<boolean> = this.afUser$.pipe(
+    map((user) => {
+      return user.isAnonymous;
+    })
   );
   linkedProviders$: Observable<string[]>;
 
@@ -62,6 +67,9 @@ export class AuthService {
     provider.setCustomParameters({ prompt: 'select_account' });
     this.afAuth
       .signInWithPopup(provider)
+      .then(() => {
+        this.router.navigateByUrl('/');
+      })
       .finally(() => {
         this.snackBar.open('ログインしました');
       })
@@ -70,11 +78,26 @@ export class AuthService {
       });
   }
 
+  async guestLogin(): Promise<void> {
+    firebase
+      .auth()
+      .signInAnonymously()
+      .then(() => {
+        this.router.navigateByUrl('/');
+      })
+      .finally(() => {
+        this.snackBar.open('ゲストとしてログインしました');
+      })
+      .catch(() => {
+        this.snackBar.open('エラーが発生しました。');
+      });
+  }
+
   async logout(): Promise<void> {
     this.afAuth
       .signOut()
       .finally(() => {
-        this.router.navigateByUrl('/');
+        this.router.navigateByUrl('/welcome');
       })
       .then(() => {
         this.snackBar.open('ログアウトしました');
