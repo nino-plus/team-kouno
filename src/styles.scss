@@ -160,9 +160,12 @@ img {
     max-width: 600px;
   }
   &--footer {
-    max-width: 960px;
+    max-width: 1200px;
     padding: 64px 48px;
     margin: 0 auto;
+    @include sp {
+      padding: 64px 16px;
+    }
   }
 }
 

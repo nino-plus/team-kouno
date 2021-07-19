@@ -1,11 +1,12 @@
-<div class="top">
-  <img class="top__img" src="/assets/images/hero.svg" alt="" />
+<div class="header">
+  <img class="header__logo" src="/assets/images/logo-02.svg" alt="" />
 </div>
-<div class="top__overlay">
-  <p class="top__heading">遊っびーましょ。</p>
-  <p class="top__sub">オンラインイベントSNS</p>
-
-  <a routerLink="signup" class="top__btn">今すぐ登録する</a>
+<div class="top" [style.backgroundImage]="'url(/assets/images/hero.svg)'">
+  <div class="top__overlay">
+    <p class="top__heading">遊っびーましょ。</p>
+    <p class="top__sub">オンラインイベントSNS</p>
+    <a routerLink="signup" class="top__btn">今すぐ登録する</a>
+  </div>
 </div>
 
 <div class="block">
@@ -42,7 +43,7 @@
   <img src="/assets/images/welcome-07.svg" alt="" class="block__img" />
 </div>
 
-<div class="block">
+<div class="block block--last">
   <div class="block__heading">
     <p class="block__top">今すぐ始める</p>
     <p class="block__sub">イベントを楽しもう。</p>
@@ -56,4 +57,8 @@
     <a routerLink="signup" class="block__btn">今すぐ登録する</a>
     <a (click)="authService.guestLogin()" class="block__btn">イベントを探す</a>
   </div>
+</div>
+
+<div class="footer">
+  <app-footer></app-footer>
 </div>

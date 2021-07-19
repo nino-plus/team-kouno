@@ -1,21 +1,44 @@
 @import 'mixins';
 @import 'custom-style';
 
+.header {
+  width: 100vw;
+  height: 56px;
+  &__logo {
+    width: 200px;
+    height: 50px;
+    display: block;
+    margin: 0 auto;
+  }
+}
+
 .top {
   position: relative;
   width: 100%;
   background: center / cover no-repeat;
+  height: 640px;
+  display: grid;
+  place-items: center;
+  @include sp {
+    height: 500px;
+  }
   &__img {
     width: 100%;
     height: 640px;
     object-fit: cover;
+    @include sp {
+      width: 100vw;
+      height: 240px;
+    }
   }
   &__overlay {
-    top: 240px;
-    position: absolute;
-    z-index: 1;
     display: flex;
     flex-flow: column;
+    transform: translateY(80px);
+    @include sp {
+      position: inherit;
+      top: 0;
+    }
   }
   &__heading {
     display: inline-block;
@@ -23,11 +46,13 @@
     font-weight: 700;
     letter-spacing: 0.2rem;
     color: white;
-    background: rgba(#303030, 0.96);
-    padding: 0 24px 0 48px;
+    background: rgba(#303030, 0.88);
+    padding: 0 0 0 24px;
     margin-bottom: 24px;
     @include sp {
       font-size: 28px;
+      padding: 0 0 0 12px;
+      margin-bottom: 8px;
     }
     @include sp-s {
       font-size: 24px;
@@ -38,9 +63,10 @@
     font-size: 24px;
     letter-spacing: 0.2rem;
     color: white;
-    background: rgba(#303030, 0.8);
-    padding: 8px 24px 8px 48px;
-    margin-bottom: 48px;
+    background: rgba(#303030, 0.88);
+    padding: 8px 24px 8px 24px;
+    margin-bottom: 80px;
+    text-align: center;
     @include sp {
       font-size: 16px;
     }
@@ -56,10 +82,14 @@
     background: $color-accent;
     font-size: 20px;
     color: #fafafa;
-    margin-left: 48px;
     cursor: pointer;
     transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.3s;
     text-align: center;
+    margin: 0 auto;
+    @include sp {
+      width: 200px;
+      padding: 12px 24px;
+    }
     &:hover {
       transform: scale(1.1);
     }
@@ -70,6 +100,13 @@
   height: 600px;
   background: #212121;
   text-align: center;
+  @include sp {
+    height: 400px;
+    padding-bottom: 120px;
+    &--last {
+      height: 600px;
+    }
+  }
   &__btns-wrap {
     width: 600px;
     display: grid;
@@ -77,6 +114,10 @@
     gap: 24px;
     margin: 0 auto;
     place-items: center;
+    @include sp {
+      width: 100vw;
+      grid-template-columns: 1fr;
+    }
   }
   &__heading {
     text-align: center;
@@ -85,9 +126,15 @@
   &__top {
     font-size: 48px;
     font-weight: 800;
+    @include sp {
+      font-size: 28px;
+    }
   }
   &__sub {
     font-size: 18px;
+    @include sp {
+      font-size: 16px;
+    }
   }
   &__btn {
     width: 240px;
@@ -98,6 +145,10 @@
     color: #fafafa;
     cursor: pointer;
     transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.3s;
+    @include sp {
+      width: 200px;
+      padding: 12px 24px;
+    }
     &:hover {
       transform: scale(1.1);
     }
@@ -109,5 +160,13 @@
       width: 200px;
       height: 160px;
     }
+    @include sp {
+      width: 100vw;
+      height: 240px;
+    }
   }
+}
+
+.footer {
+  background: #000;
 }
