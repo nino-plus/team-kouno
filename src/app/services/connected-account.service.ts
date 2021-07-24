@@ -36,15 +36,17 @@ export class ConnectedAccountService {
       .then((res) => res.url);
   }
 
-  async getStripeTransfers(): Promise<any> {
+  async getStripeTransfers(connectedAccountId: string): Promise<any> {
     const callable = this.fns.httpsCallable('getStripeTransfers');
-    return callable({})
+    return callable({
+      stripeAccount: connectedAccountId,
+    })
       .toPromise()
       .then((res) => {
         if (res === null) {
           return;
         }
-        res.data as TransferWithCharge[];
+        return res.data as TransferWithCharge[];
       });
   }
 
