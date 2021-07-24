@@ -7,7 +7,7 @@
 >
   <h1 class="header__logo">
     <a routerLink="/" class="header__logo-link"
-      ><img src="./assets/images/logo.svg" alt="EventStand"
+      ><img src="./assets/images/logo-02.svg" alt="EventStand"
     /></a>
   </h1>
   <app-search-box></app-search-box>
@@ -77,6 +77,12 @@
         登録 ／ ログイン
       </button>
       <mat-menu #loginMenu class="login-menu">
+        <button
+          class="header__login-item header__login-item--signup"
+          routerLink="/welcome/signup"
+        >
+          新規登録
+        </button>
         <ng-container *ngFor="let item of snsList">
           <button
             class="header__login-item"
