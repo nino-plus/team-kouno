@@ -67,8 +67,11 @@
   }
   &__search {
     display: none;
-    @include sp {
+    @include tablet {
       display: block;
+    }
+    @include sp {
+      display: none;
     }
   }
   &__icon {
@@ -80,6 +83,7 @@
     cursor: pointer;
     font-weight: 500;
     color: rgba(#000, 0.8);
+    background: #fafafa;
   }
   &__login-contents {
     width: 280px;
